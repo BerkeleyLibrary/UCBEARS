@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+<collection xmlns='http://www.loc.gov/MARC21/slim' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xsi:schemaLocation='http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd'>
+  <record>
+    <leader>Z 22 4500</leader>
+    <datafield ind1=' ' ind2=' ' tag='010'>
+      <subfield code='a'>XRF 23017419//r</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='035'>
+      <subfield code='a'>GLADN130315</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='040'>
+      <subfield code='a'>DLC</subfield>
+      <subfield code='c'>MUL</subfield>
+      <subfield code='d'>m/c</subfield>
+      <subfield code='d'>WAU</subfield>
+      <subfield code='d'>CUY</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='043'>
+      <subfield code='a'>n-cn---</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='050'>
+      <subfield code='a'>S133</subfield>
+      <subfield code='b'>.A3467</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='090'>
+      <subfield code='a'>S133</subfield>
+      <subfield code='b'>.A6</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='130'>
+      <subfield code='a'>Pamphlet (Canada. Dept. of Agriculture)</subfield>
+    </datafield>
+    <datafield ind1='0' ind2='0' tag='245'>
+      <subfield code='a'>Pamphlet.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='260'>
+      <subfield code='a'>Ottawa,</subfield>
+      <subfield code='c'>1922-1935.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='300'>
+      <subfield code='a'>168 v.</subfield>
+      <subfield code='b'>ill.</subfield>
+      <subfield code='c'>20-25 cm.</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='362'>
+      <subfield code='a'>New ser. no. 1-168.</subfield>
+    </datafield>
+    <datafield ind1='1' ind2=' ' tag='490'>
+      <subfield code='a'>Publication</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='515'>
+      <subfield code='a'>Some nos. issued in revised editions.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='555'>
+      <subfield code='a'>No. 1-100, issued as Pamphlet no. 122.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='580'>
+      <subfield code='a'>Continues the pamphlets formerly issued by the various branches of the Dept.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='597'>
+      <subfield code='a'>Available online through HathiTrust Emergency Access Service. Click the HathiTrust button on
+        the right and log in to access this book online
+      </subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='650'>
+      <subfield code='a'>Agriculture</subfield>
+      <subfield code='z'>Canada.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='650'>
+      <subfield code='a'>Agriculture.</subfield>
+    </datafield>
+    <datafield ind1='1' ind2='0' tag='710'>
+      <subfield code='a'>Canada.</subfield>
+      <subfield code='b'>Department of Agriculture.</subfield>
+    </datafield>
+    <datafield ind1='0' ind2='0' tag='785'>
+      <subfield code='t'>Publication (Canada. Dept. of Agriculture)</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='830'>
+      <subfield code='a'>Publication (Canada. Department of Agriculture)</subfield>
+    </datafield>
+    <datafield ind1='4' ind2=' ' tag='856'>
+      <subfield code='z'>Request an electronic copy from NRLF</subfield>
+      <subfield code='u'>https://www.lib.berkeley.edu/nrlf-electronic-copy/b11996535</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='935'>
+      <subfield code='a'>GLADN130315</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='957'>
+      <subfield code='a'>OCLC xref loaded 20130407</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='993'>
+      <subfield code='a'>20201217 HathiTrust Emergency Access Service</subfield>
+    </datafield>
+  </record>
+</collection>

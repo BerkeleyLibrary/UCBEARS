@@ -1,0 +1,151 @@
+/*
+TODO: Tweak this so we can use table tags rather than div tags
+
+Responsive Table SCSS (rts)
+
+Bunch of SCSS to format a series of HTML divs into a
+decent looking responsive table.
+
+
+A few config/styling classes:
+  rts-c    : centers content in table view
+  rts-w100 : sets width of cell to 100px in table view
+  rts-w150 : sets width of cell to 150px in table view
+  rts-w400 : sets width of cell to 400px in table view
+
+
+Example:
+<div class="rts-table">
+    <!-- header row that will disappear for small screens --> 
+    <div class="rts-header">
+      <div class="rts-row">
+        <!-- Note the warning bottom of page - these headers need to be set in the label section -->
+        <div class="rts-cell rts-w100 rts-c">#</div>
+        <div class="rts-cell rts-w400">Type</div>
+        <div class="rts-cell rts-w150">Fee / Fine</div>
+      </div>
+    </div>
+      <!-- body of "table" -->
+      <div class="rts-rowgrp">
+        <div class="rts-row">
+          <div class="rts-cell rts-w100 rts-c">1</div>
+          <div class="rts-cell rts-w400">Overdue book</div>
+          <div class="rts-cell rts-w150">$23,000.00</div>
+        </div>
+      </div>
+  </div>
+
+*/
+
+/*
+TABLE MODE - FOR LARGE SCREENS
+*/
+
+// Behave like a "row"
+.rts-table, .rts-cell {
+  display: inline;
+}
+
+.rts-header {
+  font-weight: 700;
+}
+
+.rts-row {
+  border-bottom: 1px solid rgb(91, 91, 91);
+  display: flex;
+}
+
+.rts-cell {
+  position: relative;
+  min-width: 50px;
+  padding: 0 10px;
+}
+
+.rts-w100 {
+  width: 100px;
+}
+
+.rts-w150 {
+  width: 150px;
+}
+
+.rts-w400 {
+  width: 400px;
+}
+
+.rts-c {
+  text-align: center;
+}
+
+.hidden_label {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/*
+COLUMN MODE - FOR SMALL SCREENS
+*/
+@media only screen 
+  and (max-width: 760px), (min-device-width: 768px) 
+  and (max-device-width: 1024px)  {
+
+  // Force table to not be like tables anymore
+  .rts-table, .rts-rowgrp, .rts-row, .rts-cell, .rts-header {
+    display: block;
+  }
+
+  // Hide headers (but not display: none;, for accessibility)
+  .rts-header {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  // Behave  like a "row"
+  .rts-cell {
+    border: none;
+    border-bottom: 1px solid white;
+    position: relative;
+    padding-left: 50%;
+  }
+  
+  .rts-row {
+    margin: 0 0 1rem 0;
+    background: whitesmoke;
+    border-top: 1px solid rgb(91, 91, 91);
+  }
+    
+  .rts-c {
+    text-align: left;
+  }
+
+  .rts-w100, .rts-w150, .rts-w400 {
+    width: 100%;
+  }
+
+  // Now like a table header
+  // Top/left values mimic padding
+  .rts-cell:before {
+    position: absolute;
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  // Label the data
+  /* 
+  WARNING - currently this section must be hard-coded for your table...
+            not sure if there's a way of using some sort of dynamic SCSS
+            wizardry to auto-populate these from the header. I'll tinker 
+            and update if I figure out a way!
+  */
+  .rts-cell:nth-of-type(1):before { content: "#"; }
+  .rts-cell:nth-of-type(2):before { content: "Type"; }
+  .rts-cell:nth-of-type(3):before { content: "Owner"; }
+  .rts-cell:nth-of-type(4):before { content: "Fee/Fine"; }
+  .rts-cell:nth-of-type(5):before { content: "Date"; }
+  .rts-cell:nth-of-type(6):before { content: "Pay"; }
+}

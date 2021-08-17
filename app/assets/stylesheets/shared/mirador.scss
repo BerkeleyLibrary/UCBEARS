@@ -1,0 +1,14 @@
+/*
+ *= require mirador
+ */
+
+// TODO: Why doesn't Mirador config hide this
+.hud-container {
+  display: none;
+}
+
+.mirador-container {
+  a.mirador-icon-view-type {
+    display: none;
+  }
+}

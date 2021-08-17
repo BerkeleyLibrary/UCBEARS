@@ -1,0 +1,16 @@
+---
+provider: calnet
+uid: danschmidt5189
+info:
+  name: Dan Schmidt
+  email: danschmidt5189@berkeley.edu
+extra:
+  displayName: Daniel C. Schmidt
+  employeeNumber: '18273645'
+  givenName: Daniel
+  surname: Schmidt
+  uid: '00000005'
+  berkeleyEduIsMemberOf:
+  - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF

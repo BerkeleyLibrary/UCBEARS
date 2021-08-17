@@ -1,0 +1,55 @@
+<span class="flex-heading">
+  <h1 class="inline-title">Search the Proxy Borrower Card Database</h1>
+  <%= link_to 'Admin Home',  forms_proxy_borrower_admin_path, class: "title-link text-nowrap" %>
+</span>
+<%= form_with url: "/forms/proxy-borrower/admin_search", method: :get, local: true do %>
+  <div class="form-group pt-3">
+    <div class="form-inline">
+      <div class="form-group mb-2">
+        <%= label_tag(:search_term, "Search Criteria:", class: "pr-2") %>
+        <%= text_field_tag(:search_term, nil, size: 40, placeholder: "name or date (mm/dd/yyyy)", autofocus: true, required: true, class: 'form-control mr-2') %>
+      </div>
+      <input type="submit" class="btn btn-primary mb-2" value="Search">
+    </div>
+    <small id="searchHelpBlock" class="form-text text-muted">
+      Search Faculty, Student, DSP Rep or Proxy by <b>name</b> or search by date request was made or date proxy card is to expire <b>(mm/dd/yyyy)</b>
+    </small>
+    <small id="searchHelpBlock" class="form-text text-muted">
+    </small>
+  </div>
+<% end %>
+<!-- IF WE HAVE ANY RESULTS LIST THEM BELOW -->
+<% if @requests %>
+  <!-- Check if we have actual results -->
+  <% if @requests.length > 0 %>
+    <h2 class="mt-5">Search Results:</h2>
+    <table class="table table-bordered mt-4">
+      <!-- the header row -->
+      <thead class="thead-light">
+        <tr>
+          <th scope="col"><%= sortable "faculty_name", "Faculty/Academic Staff", "#{@search_term_param}" %></th>
+          <th scope="col"><%= sortable "student_name", "DSP Participant", "#{@search_term_param}" %></th>
+          <th scope="col"><%= sortable "research_last", "Proxy (Research Assistant)", "#{@search_term_param}" %></th>
+          <th scope="col"><%= sortable "dsp_rep", "DSP Rep", "#{@search_term_param}" %></th>
+          <th scope="col"><%= sortable "created_at", "Date of Request", "#{@search_term_param}" %></th>
+          <th scope="col"><%= sortable "date_term", "Date proxy expires", "#{@search_term_param}" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @requests.each do |r| %>
+          <tr>
+            <td><%= r.faculty_name %></td>
+            <td><%= r.student_name %></td>
+            <td><%= r.full_name %></td>
+            <td><%= r.dsp_rep %></td>
+            <td><%= r.created_at.to_s(:short) %></td>
+            <td><%= r.date_term.to_s(:short) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <!-- If no results let the user know -->
+    <h2 class="mt-5">Sorry, we could not find any results...</h2>
+  <% end %>
+<% end %>

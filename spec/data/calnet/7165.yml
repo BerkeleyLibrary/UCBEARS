@@ -1,0 +1,29 @@
+---
+provider: calnet
+uid: fake.lisa
+info:
+  nickname: fake.lisa
+credentials:
+  ticket: ST-453090-YyyitqXSTyOqNIbPWBlvCHz18B8auth-p2
+extra:
+  user: fake.lisa
+  isFromNewLogin: 'true'
+  bypassMultifactorAuthentication: 'false'
+  authenticationDate: 2021-04-14T10:34:37.587-07:00[America/Los_Angeles]
+  authnContextClass: mfa-duo
+  displayName: Fake Lisa
+  givenName: Fake
+  successfulAuthenticationHandlers: mfa-duo
+  employeeNumber: '7165'
+  samlAuthenticationStatementAuthMethod: urn:oasis:names:tc:SAML:1.0:am:unspecified
+  credentialType: DuoCredential
+  uid: '7165'
+  authenticationMethod: mfa-duo
+  surname: Lisa
+  departmentNumber: KPADM
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:org:libr:framework:LIBR-framework-admins,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF
+  berkeleyEduOfficialEmail: fake.lisa@berkeley.edu
+  longTermAuthenticationRequestTokenUsed: 'false'

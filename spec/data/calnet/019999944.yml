@@ -1,0 +1,15 @@
+---
+provider: calnet
+uid: '212387'
+info:
+  name: EMP-STAFF TEST
+  displayName: EMP-STAFF TEST
+  email: test-212387@berkeley.edu
+extra:
+  displayName: EMP-STAFF TEST
+  employeeNumber: '019999944'
+  uid: '212387'
+  berkeleyEduIsMemberOf:
+  - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF

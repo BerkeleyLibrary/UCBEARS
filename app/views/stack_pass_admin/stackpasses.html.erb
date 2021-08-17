@@ -1,0 +1,45 @@
+<!-- Header and Admin Link -->
+<span class="flex-heading">
+  <span>
+    <h1 class="inline-title">All Stack Pass Requests:</h1>
+  </span>
+  <span>
+    <%= link_to 'Admin Home',
+      forms_stack_pass_admin_path,
+      class: "title-link text-nowrap" %>
+  </span>
+</span>
+<table class="table table-bordered mt-5">
+  <!-- the header row -->
+  <thead class="thead-light">
+    <tr>
+      <th scope="col" style="text-align: center">Link</th>
+      <th scope="col"><%= sortable "name", "Name" %></th>
+      <th scope="col"><%= sortable "email", "Email" %></th>
+      <th scope="col"><%= sortable "pass_date", "Pass Date" %></th>
+      <th scope="col"><%= sortable "approvedeny", "Status" %></th>
+      <th scope="col"><%= sortable "created_at", "Request Date" %></th>
+    </tr>
+  </thead>
+  <!-- Layout all those beautiful requests -->
+  <tbody>
+    <% @requests.each do |r| %>
+      <tr>
+        <td style="text-align: center">
+          <%= link_to raw("&#x1F517"), stack_pass_form_path(r.id), class: "no-link-style" %>
+        </td>
+        <td><%= r.name %></td>
+        <td><%= r.email %></td>
+        <td><%= r.pass_date.to_s(:short) %></td>
+        <% if r.approvedeny.nil? %>
+          <td>Unprocessed</td>
+        <% elsif r.approvedeny == true %>
+          <td>Approved</td>
+        <% else %>
+          <td>Denied</td>
+        <% end %>
+        <td><%= r.created_at.to_s(:short) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

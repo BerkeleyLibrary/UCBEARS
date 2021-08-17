@@ -1,0 +1,29 @@
+{
+  "id": "3260566220006532",
+  "type": {
+    "value": "LOSTITEMPROCESSFEE",
+    "desc": "Lost item process fee"
+  },
+  "status": {
+    "value": "ACTIVE",
+    "desc": "Active"
+  },
+  "user_primary_id": {
+    "value": "10335026",
+    "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026"
+  },
+  "balance": 10.0,
+  "remaining_vat_amount": 0.0,
+  "original_amount": 10.0,
+  "original_vat_amount": 0.0,
+  "creation_time": "2021-04-03T20:00:17.777Z",
+  "status_time": "2021-04-03T20:00:17.777Z",
+  "comment": null,
+  "owner": {
+    "value": "MAIN",
+    "desc": "Doe Library"
+  },
+  "title": null,
+  "barcode": null,
+  "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026/fees/3260566220006532"
+}

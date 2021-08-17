@@ -1,0 +1,123 @@
+{
+  "fee": [
+    {
+      "id": "3260561070006532",
+      "type": {
+        "value": "LOSTITEMREPLACEMENTFEE",
+        "desc": "Lost item replacement fee"
+      },
+      "status": {
+        "value": "ACTIVE",
+        "desc": "Active"
+      },
+      "user_primary_id": {
+        "value": "10335026",
+        "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026"
+      },
+      "balance": 150.0,
+      "remaining_vat_amount": 0.0,
+      "original_amount": 150.0,
+      "original_vat_amount": 0.0,
+      "creation_time": "2021-04-03T20:00:03.295Z",
+      "status_time": "2021-04-03T20:00:03.295Z",
+      "comment": null,
+      "owner": {
+        "value": "MAIN",
+        "desc": "Doe Library"
+      },
+      "title": null,
+      "barcode": null,
+      "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026/fees/3260561070006532"
+    },
+    {
+      "id": "3260566220006532",
+      "type": {
+        "value": "LOSTITEMPROCESSFEE",
+        "desc": "Lost item process fee"
+      },
+      "status": {
+        "value": "ACTIVE",
+        "desc": "Active"
+      },
+      "user_primary_id": {
+        "value": "10335026",
+        "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026"
+      },
+      "balance": 10.0,
+      "remaining_vat_amount": 0.0,
+      "original_amount": 10.0,
+      "original_vat_amount": 0.0,
+      "creation_time": "2021-04-03T20:00:17.777Z",
+      "status_time": "2021-04-03T20:00:17.777Z",
+      "comment": null,
+      "owner": {
+        "value": "MAIN",
+        "desc": "Doe Library"
+      },
+      "title": null,
+      "barcode": null,
+      "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026/fees/3260566220006532"
+    },
+    {
+      "id": "3260575710006532",
+      "type": {
+        "value": "DIGITIZATIONFEE",
+        "desc": "Digitization fee"
+      },
+      "status": {
+        "value": "ACTIVE",
+        "desc": "Active"
+      },
+      "user_primary_id": {
+        "value": "10335026",
+        "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026"
+      },
+      "balance": 25.0,
+      "remaining_vat_amount": 0.0,
+      "original_amount": 25.0,
+      "original_vat_amount": 0.0,
+      "creation_time": "2021-04-03T20:00:31.652Z",
+      "status_time": "2021-04-03T20:00:31.652Z",
+      "comment": null,
+      "owner": {
+        "value": "MAIN",
+        "desc": "Doe Library"
+      },
+      "title": null,
+      "barcode": null,
+      "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026/fees/3260575710006532"
+    },
+    {
+      "id": "3260656920006532",
+      "type": {
+        "value": "CARDRENEWAL",
+        "desc": "Card renewal"
+      },
+      "status": {
+        "value": "ACTIVE",
+        "desc": "Active"
+      },
+      "user_primary_id": {
+        "value": "10335026",
+        "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026"
+      },
+      "balance": 50.0,
+      "remaining_vat_amount": 0.0,
+      "original_amount": 50.0,
+      "original_vat_amount": 0.0,
+      "creation_time": "2021-04-03T20:00:44.292Z",
+      "status_time": "2021-04-03T20:00:44.292Z",
+      "comment": null,
+      "owner": {
+        "value": "01UCS_BER",
+        "desc": "University of California Berkeley"
+      },
+      "title": null,
+      "barcode": null,
+      "link": "https://api-na.hosted.exlibrisgroup.com/almaws/v1/users/10335026/fees/3260656920006532"
+    }
+  ],
+  "total_record_count": 4,
+  "total_sum": 235.0,
+  "currency": "USD"
+}

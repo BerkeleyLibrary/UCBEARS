@@ -1,0 +1,55 @@
+<section class="record">
+  <%
+    if item.persisted?
+      # TODO: see if this is simpler if we use directory as ID
+      url = lending_update_path(directory: item.directory)
+      submit_label = 'Save Changes'
+    else
+      url = lending_path
+      submit_label = 'Add Item'
+    end
+
+  %>
+  <%= form_with(model: item, url: url, local: true) do |form| %>
+    <table>
+      <tbody>
+      <tr>
+        <th>Title</th>
+        <td><%= item.title %></td>
+      </tr>
+
+      <tr>
+        <th>Author</th>
+        <td><%= item.author %></td>
+      </tr>
+
+      <tr>
+        <th><%= form.label(:copies, class: 'control-label') %></th>
+        <td><%= form.text_field(:copies, class: 'form-control add-required') %></td>
+      </tr>
+      <tr>
+        <th><%= form.label(:active, class: 'control-label') %></th>
+        <td>
+          <ul>
+            <li>
+              <%= form.radio_button(:active, 1, checked: item.active?, value: true) %>
+              <%= label(:lending_item_active, 1, 'Active') %>
+            </li>
+            <li>
+              <%= form.radio_button(:active, 0, checked: !item.active?, value: false) %>
+              <%= label(:lending_item_active, 0, 'Inactive') %>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <th class="action">
+          <input type="submit" class="btn btn-primary" value="<%= submit_label %>">
+        </th>
+      </tr>
+      </tfoot>
+    </table>
+  <% end %>
+</section>

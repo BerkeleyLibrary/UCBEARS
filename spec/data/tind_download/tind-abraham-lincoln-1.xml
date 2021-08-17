@@ -1,0 +1,333 @@
+<response>
+  <total>6</total>
+  <search_id>DnF1ZXJ5VGhlbkZldGNoBQAAAAABsY</search_id>
+  <collection xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+  <controlfield tag="001">52211</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00182876</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln to Secretary of Interior [Smith] regarding Dr. Stephen, congressional librarian.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">September 25, 1861</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1861-09-25</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">1 letter</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">228732</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52211/files/brk00013223_24a_k.jpg</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q2x</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00182876.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+    <record>
+  <controlfield tag="001">52212</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00182877</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">James Wilson to Abraham Lincoln regarding endorsement of Thomas Gray.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">August 27, 1861</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1861-08-27</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">1 letter</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">218330</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52212/files/brk00013216_24a_k.jpg</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q3g</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00182877.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+    <record>
+  <controlfield tag="001">52213</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00182880</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">Appointment of David Cheeseman as Treasurer of Mint at San Francisco.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">July 15, 1861</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1861-07-15</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">1 certificate</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">219328</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52213/files/brk00013230_24a_k.jpg</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q64</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00182880.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+    <record>
+  <controlfield tag="001">52214</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00182879</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">Milton Latham to Abraham Lincoln regarding endorsement of Stephen Feld.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">February 20-23, 1863</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1863-02-20</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="b">1863-02-23</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">1 letter</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">340758</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52214/files/brk00013222_24a_k.jpg</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q5k</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00182879.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+    <record>
+  <controlfield tag="001">52215</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00182881</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">George Burr to Secretary of War [Stanton] regarding endorsement of Abraham Lincoln.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">January 29, 1863</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1863-01-29</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">1 letter</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">231288</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52215/files/brk00013226_24a_k.jpg</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q7p</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00182881.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+    <record>
+  <controlfield tag="001">52216</controlfield>
+  <controlfield tag="005">20200213221027.0</controlfield>
+  <datafield tag="024" ind1="8" ind2="0">
+    <subfield code="a">BANC MSS C-A 350</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">banc_cubanc_16_2_00184458</subfield>
+  </datafield>
+  <datafield tag="041" ind1=" " ind2=" ">
+    <subfield code="a">eng</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">Petition to Abraham Lincoln by San Francisco citizens for appointment of Theodore A. Mudge as Commissary in the US Army.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="c">Oct. 22, 1861</subfield>
+  </datafield>
+  <datafield tag="269" ind1=" " ind2=" ">
+    <subfield code="a">1861-10-22</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">Image</subfield>
+  </datafield>
+  <datafield tag="540" ind1=" " ind2=" ">
+    <subfield code="a">Researchers may make free and open use of the UC Berkeley Library’s digitized public domain materials. However, some materials in our online collections may be protected by U.S. copyright law (Title 17, U.S.C.). Use or reproduction of materials protected by copyright beyond that allowed by fair use (Title 17, U.S.C. § 107) requires permission from the copyright owners. The use or reproduction of some materials may also be restricted by terms of University of California gift or purchase agreements, privacy and publicity rights, or trademark law. Responsibility for determining rights status and permissibility of any use or reproduction rests exclusively with the researcher. To learn more or make inquiries, please see our permissions policies (https://www.lib.berkeley.edu/about/permissions-policies).</subfield>
+  </datafield>
+  <datafield tag="852" ind1=" " ind2=" ">
+    <subfield code="c">The Bancroft Library</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">235531</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52216/files/brk00013218_24a_k.jpg</subfield>
+    <subfield code="y">Outside: Petition to Abraham Lincoln by San Francisco citizens for appointment of Theodore A. Mudge as Commissary in the US Army.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2=" ">
+    <subfield code="s">204845</subfield>
+    <subfield code="u">http://digicoll.lib.berkeley.edu/record/52216/files/brk00013219_24a_k.jpg</subfield>
+    <subfield code="y">Inside: Petition to Abraham Lincoln by San Francisco citizens for appointment of Theodore A. Mudge as Commissary in the US Army.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="u">http://www.oac.cdlib.org/findaid/ark:/13030/hb1x0nb4xw</subfield>
+    <subfield code="y">View collection guide</subfield>
+  </datafield>
+  <datafield tag="901" ind1=" " ind2=" ">
+    <subfield code="a">ark:/28722/bk0013g0q41</subfield>
+    <subfield code="g">16:2</subfield>
+  </datafield>
+  <datafield tag="902" ind1=" " ind2=" ">
+    <subfield code="f">cubanc_16_2_00184458.xml</subfield>
+  </datafield>
+  <datafield tag="980" ind1=" " ind2=" ">
+    <subfield code="a">Banc: Abraham Lincoln</subfield>
+  </datafield>
+  <datafield tag="982" ind1=" " ind2=" ">
+    <subfield code="a">Abraham Lincoln Papers</subfield>
+    <subfield code="b">Abraham Lincoln Collection of Papers, 1861-1865</subfield>
+  </datafield>
+</record>
+  </collection>
+</response>

@@ -1,0 +1,111 @@
+services:
+  app:
+    build:
+      context: .
+      target: development
+    depends_on:
+      - db
+      - selenium
+      - selenium-chrome
+    environment: &app-environment
+      FRAMEWORK_ALMA_API_URL: ${FRAMEWORK_ALMA_API_URL}
+      FRAMEWORK_ALMA_API_KEY: ${FRAMEWORK_ALMA_API_KEY}
+      LIT_TIND_API_KEY: ${LIT_TIND_API_KEY}
+      LIT_TIND_BASE_URL: ${LIT_TIND_BASE_URL}
+      LIT_LENDING_ROOT: spec/data/lending
+      LIT_IIIF_BASE_URL: http://ucbears-iiif/iiif/
+    init: true
+    networks:
+      default:
+        aliases:
+          - app.test
+    volumes:
+      - ./:/opt/app
+    ports:
+      - 3000:3000
+    restart: always
+
+#  ucbears-collector:
+#    build:
+#      context: .
+#      target: development
+#    environment:
+#      LIT_LENDING_ROOT: spec/data/lending
+#      LIT_LENDING_COLLECTOR_INTERVAL: 5
+#      LIT_LENDING_COLLECTOR_STOP_FILE: collector-dev.stop
+#    ports: []
+#    command: bin/lending/collect.rb
+#    restart: "no"
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+    image: postgres:12.2
+    networks:
+      default:
+        aliases:
+          - db.test
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./:/build:rw
+
+  ucbears-iiif:
+    image: containers.lib.berkeley.edu/lap/iiip-nginx-single/master:latest
+    init: true
+    environment:
+      - VERBOSITY=6
+      - LOGFILE=/dev/stdout
+      - FILESYSTEM_PREFIX=/data/
+      - CORS=*
+    volumes:
+      - type: bind
+        source: ./spec/data/lending/final
+        target: /data
+    ports:
+      - 8180:80
+    networks:
+      default:
+        aliases:
+          - ucbears-iiif.test
+    entrypoint: ["/iipsrv-entrypoint.sh"]
+
+  selenium:
+    image: selenium/hub
+    networks:
+      default:
+        aliases:
+          - selenium.test
+    ports:
+      - 4444:4444
+    volumes:
+      - ./:/build:rw
+
+  selenium-chrome:
+    depends_on:
+      - selenium
+    environment:
+      HUB_HOST: selenium
+    image: selenium/node-chrome-debug
+    ports:
+      # @note Use `open vnc://localhost:55900` to view the chrome session.
+      #       Doesn't work if you pass the "headless" option via Capybara.
+      #       Password = "secret"
+      - 55900:5900
+    volumes:
+      - /dev/shm:/dev/shm:rw
+      - ./:/build:rw
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data: { }
+
+version: '3.8'

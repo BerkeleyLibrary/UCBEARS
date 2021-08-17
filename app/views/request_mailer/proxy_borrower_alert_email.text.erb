@@ -1,0 +1,14 @@
+(subject) Proxy Borrower Card alert email
+Proxy Borrower Card Request Submission:
+facultyName: <%= @proxy_request.faculty_name %>
+department: <%= @proxy_request.department %>
+facultyID: <%= @proxy_request.faculty_id %>
+studentName: <%= @proxy_request.student_name %>
+studentDSP: <%= @proxy_request.student_dsp %>
+dspRep: <%= @proxy_request.dsp_rep %>
+researchLast: <%= @proxy_request.research_last %>
+researchFirst: <%= @proxy_request.research_first %>
+researchMiddle: <%= @proxy_request.research_middle %>
+dateRequest: <%= @proxy_request.created_at %>
+dateTerm: <%= @proxy_request.date_term %>
+renewal: <%= @proxy_request.renewal == 1 ? 'True' : 'False' %>

@@ -1,0 +1,123 @@
+<span class="flex-heading">
+  <h1 class="inline-title">Stack Pass Approval</h1>
+  <%= link_to 'Stack Pass Administration',  forms_stack_pass_admin_path, class: "title-link text-nowrap" %>
+</span>
+<% if @req.approvedeny == nil && @req.denial_reason == nil %>
+  <%= form_for(@form, :url=> {:action => "update"}, :method => "patch", class: 'needs-validation') do |f| %>
+    <h3>This request needs to be processed.</h3>
+    <div class="frame" style="border: 1px solid black; padding: 1.5rem">
+      <h5>Details about the request</h5>
+      <table width="100%">
+        <tr>
+          <td>Email: </td>
+          <td><%= @req.email %></td>
+        </tr>
+        <tr>
+          <td>Name:</td>
+          <td><%= @req.name %></td>
+        </tr>
+        <tr>
+          <td>Telephone:</td>
+          <td><%= @req.phone %></td>
+        </tr>
+        <tr>
+          <td>Catalog information:</td>
+          <td><%= @req.local_id %></td>
+        </tr>
+        <tr>
+          <td>Pass date:</td>
+          <td><%= @req.pass_date.to_s(:short) %></td>
+        </tr>
+        <tr>
+          <td>Passes requested and approved:</td>
+          <td><%= @approvals %></td>
+        </tr>
+        <tr>
+          <td>Passes requested and denied:</td>
+          <td><%= @denials %></td>
+        </tr>
+      </table>
+    </div>
+    <br />
+    <div class="form-group m-0 required">
+      <fieldset class="form-group m-0 p-0">
+        <div class="mb-4 form-group">
+          <%= radio_button_tag(:stack_pass_approve_deny, 1, false, id: 'stack_pass_approve', name: 'stack_pass_[approve_deny]', onchange: 'checkStackPassInputs()') %>
+          <%= label_tag(:stack_pass_approve_deny_0, "Approve") %>
+          <br />
+          <%= radio_button_tag(:stack_pass_approve_deny, 0, false, id: 'stack_pass_deny', name: 'stack_pass_[approve_deny]', onchange: 'checkStackPassInputs()') %>
+          <%= label_tag(:stack_pass_form_main_stack_1, "Deny") %>
+          <!-- DENIAL REASON SELECT -->
+          <%= select(:stack_pass_denial,
+            'denial_reason',
+            ['Item listed at another library',
+             'Too many passes requested',
+             'Item at NRLF',
+             'Other'],
+            {prompt: 'Select reason for denial'},
+            {:class => 'custom-select custom-select-sm col-md-4',
+             :onchange => 'checkStackPassInputs()',
+             :style => 'display: none'}) %> <br />
+          <div id="other_denial" class="mt-2 mb-4 form-group" style="display: none">
+            <%= label_tag(:denial_reason, "Denial Reason:", class: "control-label") %> <br />
+            <%= text_field_tag(:denial_reason, '', placeholder: "Enter the reason for denial...", class: "form-control", onkeyup: 'checkStackPassInputs()') %>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="mb-4 form-group required">
+      <%= label_tag(:processed_by, "Processed by (enter your name):", class: "control-label") %> <br />
+      <%= text_field_tag(:processed_by, @current_user.display_name, placeholder: "Enter your name", class: "form-control", required: true) %>
+    </div>
+    <div>
+      <input id="process_btn" type="submit" class="btn btn-primary" value="Process Request" disabled=true>
+    </div>
+  <% end %>
+<% else %>
+  <h2>This request has been processed</h2>
+  <div class="frame" style="border: 1px solid black; padding: 1.5rem">
+    <h5>Details about the request</h5>
+    <table width="100%">
+      <tr>
+        <td>Email: </td>
+        <td><%= @req.email %></td>
+      </tr>
+      <tr>
+        <td>Name:</td>
+        <td><%= @req.name %></td>
+      </tr>
+      <tr>
+        <td>Telephone:</td>
+        <td><%= @req.phone %></td>
+      </tr>
+      <tr>
+        <td>Catalog information:</td>
+        <td><%= @req.local_id %></td>
+      </tr>
+      <tr>
+        <td>Pass date:</td>
+        <td><%= @req.pass_date.to_s(:short) %></td>
+      </tr>
+      <tr>
+        <td>Passes requested and approved:</td>
+        <td><%= @approvals %></td>
+      </tr>
+      <tr>
+        <td>Passes requested and denied:</td>
+        <td><%= @denials %></td>
+      </tr>
+      <tr>
+        <td>Status:</td>
+        <td><%= @req.approvedeny ? "Approved" : "Denied" %></td>
+      </tr>
+      <tr>
+        <td>Denied Reason:</td>
+        <td><%= @req.denial_reason %></td>
+      </tr>
+      <tr>
+        <td>Processed By:</td>
+        <td><%= @req.processed_by %></td>
+      </tr>
+    </table>
+  </div>
+<% end %>

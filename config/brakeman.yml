@@ -1,0 +1,18 @@
+---
+# config/brakeman.yml
+#
+# Brakeman is an automated security/vulnerability scanner for Ruby.
+#
+# Docs:
+#   https://brakemanscanner.org/docs/brakeman_as_a_library/
+
+:collapse_mass_assignment: false
+:exit_on_warn: false
+:min_confidence: 2
+:output_files:
+  - /dev/stdout
+  - artifacts/brakeman/index.html
+:print_report: true
+:report_progress: false
+:report_routes: true
+:run_all_checks: true

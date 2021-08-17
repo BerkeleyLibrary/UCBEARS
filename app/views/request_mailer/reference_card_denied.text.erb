@@ -1,0 +1,13 @@
+<% if @reference_card_form.denial_reason == 'Item listed at another library' %>
+  Denied - Item listed at other library
+  Your request for a Reference Card has been denied. The item that you have listed <%= @reference_card_form.local_id %> is not in the Main (Gardner) Stacks. Please recheck <%= link_to 'UC Library Search', 'https://search.library.berkeley.edu' %> to see where it is located.
+<% elsif @reference_card_form.denial_reason == '3-month maximum exceeded' %>
+  Denied - 3-month maximum exceeded
+  Your request for a Reference Card has been denied. The maximum allowed Reference Card term is 3 months in one year. You have exceeded the term limit.
+<% elsif @reference_card_form.denial_reason == 'Item at NRLF' %>
+  Denied - Item at NRLF
+  Your request for a Reference Card has been denied. The item that you have listed  <%= @reference_card_form.local_id %>  is not located in the Main (Gardner) Stacks, it is located off site at the <%= link_to 'Northern Regional Library Facility (NRLF)', 'https://www.lib.berkeley.edu/libraries/nrlf' %>. You may contact NRLF to request to have the item pulled so you may view it on-site at NRLF. Alternatively, if you would like to view this item on the UC Berkeley campus, please call the <%= link_to 'Main Circulation Desk', 'https://www.lib.berkeley.edu/libraries/doe-library' %> to request to have the item sent from NRLF to campus.
+<% else %>
+  Denied - Other
+  Your request for a Reference Card has been denied for the following reason: <%= @reference_card_form.denial_reason %>.
+<% end %>

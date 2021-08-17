@@ -1,0 +1,16 @@
+---
+provider: calnet
+uid: test-212381
+info:
+  name: Registered Test Student
+  email: test-212381@berkeley.edu
+extra:
+  givenName: Registered
+  surname: Test Student
+  displayName: Registered Test Student
+  berkeleyEduStuID: '99999997'
+  uid: '00000003'
+  berkeleyEduIsMemberOf:
+  - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - STUDENT-TYPE-REGISTERED

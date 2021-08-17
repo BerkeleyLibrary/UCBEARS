@@ -1,0 +1,20 @@
+<h1>List of Fines + Fees</h1>
+<!-- Need descriptive text-->
+<% if @fines.fines.length > 0 %>
+  <p>Please select the fees you plan to pay. You will be asked to confirm before you are taken to the PayPal payment page. If you have any questions about the listed fees, please contact the <%= link_to 'Privileges Desk', 'https://www.lib.berkeley.edu/using-the-libraries/privileges-desk' %>.</p>
+  <!-- Payment Form -->
+  <%= form_with url: "/fines/payment", method: :post, local:true do |form| %>
+    <%= form.hidden_field :alma_id, :value => @fines.alma_id %>
+    <%= form.hidden_field :jwt, :value => @jwt %>
+    <!-- rts : responsive table scss -->
+    <%= render "fines/fines_table", freeze_pay_column: false %>
+    <div class="d-flex justify-content-end pt-2">
+      <input type="button" name="reset" class="btn btn-link" value="Select All" onclick="selectAllFines();">
+    </div>
+    <div class="d-flex justify-content-center pt-3 pb-5">
+      <%= form.submit("Confirm Payment", {:class => 'btn btn-primary'}) %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No fees were found.</p>
+<% end %>

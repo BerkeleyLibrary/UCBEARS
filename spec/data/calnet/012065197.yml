@@ -1,0 +1,15 @@
+---
+provider: calnet
+uid: jlsilva
+info:
+  name: Jackie Silva
+  displayName: Jackie Silva
+  email: jlsilva@berkeley.edu
+extra:
+  displayName: Jackie Silva
+  employeeNumber: '012065197'
+  uid: '00000009'
+  berkeleyEduIsMemberOf:
+  - cn=edu:berkeley:org:libr:framework:LIBR-framework-admins,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF

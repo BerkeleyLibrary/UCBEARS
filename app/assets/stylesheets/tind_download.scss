@@ -1,0 +1,45 @@
+section#tind-download-form {
+
+  //display: grid;
+  //grid-template-columns: max-content max-content;
+  //grid-auto-rows: min-content;
+  //grid-column-gap: 1em;
+  //margin-top: 1.5em;
+  //
+  //p.required-note {
+  //  grid-column-start: 1;
+  //  grid-column-end: 3;
+  //}
+  //
+  //div.form-label {
+  //  grid-column-start: 1;
+  //  grid-column-end: 2;
+  //}
+
+  div.form-input {
+    //grid-column-start: 2;
+    //grid-column-end: 3;
+    //position: relative;
+
+    input[type=text] {
+      width: 100%;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0.5em;
+
+      label {
+        margin-left: 0.25em;
+      }
+    }
+
+    img.spinner {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      z-index: 1;
+      // TODO: make this display properly
+    }
+  }
+}

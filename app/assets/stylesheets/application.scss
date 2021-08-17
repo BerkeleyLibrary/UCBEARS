@@ -1,0 +1,139 @@
+/*
+*= require jquery-ui
+*/
+@import "bootstrap";
+
+$required-color: #ee0000;
+$required-indicator: "*";
+
+.form-group.required .control-label:after {
+  content: $required-indicator;
+  color: $required-color;
+  margin-left: 0.25em;
+}
+
+p.required-note {
+  color: $required-color;
+
+  &::before {
+    content: $required-indicator;
+    color: $required-color;
+    margin-right: 0.25em;
+  }
+}
+
+a, a:link, a:visited {
+  box-shadow: inset 0 -4px 0 #FDB515;
+  transition: background 0.25s ease-in-out, color 0.25s ease-in-out;
+  text-decoration: none;
+  color: black;
+
+    &.no-link-style {
+        box-shadow: none;
+    }
+
+    li & {
+        box-shadow: inset 0 -2px 0 #FDB515;
+
+        .navbar-nav & {
+            box-shadow: none;
+        }
+    }
+}
+
+a:hover, a:active, a:focus {
+  background: #FDB515;
+
+    &.no-link-style {
+        background: none;
+    }
+}
+
+//Used for main page skip links per WebAIM recommendations
+.visually-hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+.tblheader	{
+  font-weight:bold;
+  color:blue;
+}
+
+.btn-white-text {
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.btn-link {
+  color: #1310ff;
+}
+
+.btn-link:hover {
+  text-decoration: none;
+}
+
+.btn.btn-primary:disabled {
+  background-color: lightgrey;
+  border-color: lightgrey;
+}
+
+.flex-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-link {
+  max-height: 1.5rem;
+}
+
+.blue_bg {
+  background-color: #0275d8;
+}
+
+.inline-title {
+  display: inline;
+}
+
+.table-header {
+  background-color: #e5e7e9;
+  color: #3b3b3b;
+  font-weight: 700;
+  margin: 0;
+}
+
+th .asc::after {
+  content: "▲";
+  padding-left: 3px;
+  color: gray;
+}
+
+th .desc::after {
+  content: "▼";
+  padding-left: 3px;
+  color: gray;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color:  #1310ff;
+  border-color: #0f0cd4 ;
+}
+
+section.exception-details {
+  h2 {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  section.backtrace {
+    code.trace {
+      display: block;
+      font-size: 14px;
+      line-height: 16px;
+      padding-left: 14px;
+      text-indent: -14px;
+    }
+  }
+}

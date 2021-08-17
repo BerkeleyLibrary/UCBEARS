@@ -1,0 +1,38 @@
+---
+# config/altmedia.yml
+
+default: &default
+  expect_url: <%= ENV["PATRON_UPDATE_URL"] || "ssh://altmedia@vm161.lib.berkeley.edu/home/altmedia/bin/mkcallnote" %>
+  mail_admin_email: <%= ENV["ADMIN_EMAIL"] || "prntscan@lists.berkeley.edu" %>
+  mail_confirm_email: <%= ENV["CONFIRM_EMAIL"] || "baker@library.berkeley.edu" %>
+  mail_privdesk_email: <%= ENV["PRIVDESK_EMAIL"] || "privdesk@library.berkeley.edu" %>
+  mail_smtp_password: <%= ENV["MAIL_PASSWORD"] %>
+  mail_smtp_username: <%= ENV["MAIL_USERNAME"] || "lib-noreply@berkeley.edu" %>
+  # $PATRON_API_URL is set in https://git.lib.berkeley.edu/ops/docker-swarm/blob/master/files/production/swarm/stacks/framework.yml
+  patron_url: <%= ENV["PATRON_API_URL"] || "https://dev-oskicatp.berkeley.edu:54620/PATRONAPI/" %>
+  alma_api_url: <%= ENV["FRAMEWORK_ALMA_API_URL"] || 'https://api-na.hosted.exlibrisgroup.com/almaws/v1/' %>
+  alma_api_key: <%= ENV["FRAMEWORK_ALMA_API_KEY"] %>
+  paypal_payflow_url: <%= ENV["PAYPAL_PAYFLOW_URL"] || 'https://payflowlink.paypal.com' %>
+  paypal_payflow_login: <%= ENV["PAYPAL_PAYFLOW_LOGIN"] || 'ucblibrary' %>
+  tind_base_uri: <%= ENV["LIT_TIND_BASE_URL"] || 'https://digicoll.lib.berkeley.edu/' %>
+  tind_api_key: <%= ENV["LIT_TIND_API_KEY"] %>
+
+  # Root directory for lending processing -- see Lending::ENV_ROOT
+  lending_root_dir: <%= ENV["LIT_LENDING_ROOT"] %>
+
+  # Image server root directory (shared volume)
+  # TODO: remove this once stacks all have LENDING_ROOT
+  iiif_final_dir: <%= ENV["IIIF_FINAL_DIR"] %>
+
+  # Base URL for image server
+  # TODO: remove IMAGE_SERVER_BASE_URL once stacks all have LIT_IIIF_BASE_URL
+  image_server_base_uri: <%= ENV["LIT_IIIF_BASE_URL"] || ENV["IMAGE_SERVER_BASE_URL"] %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

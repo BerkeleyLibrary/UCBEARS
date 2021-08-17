@@ -1,0 +1,77 @@
+<% content_for(:page_title, "UC BEARS") %>
+
+<h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
+
+<%
+  # TODO: use Rails i18n
+  state_to_title = {
+    inactive: 'New or inactive items',
+    active: 'Active items',
+    incomplete: 'Incomplete items'
+  }
+%>
+
+<ul>
+  <% state_to_title.each do |state, state_title| %>
+    <li><a href="#lending-<%= state %>"><%= state_title %></a></li>
+  <% end %>
+</ul>
+
+<% state_to_title.each do |state, state_title| %>
+  <section id="lending-<%= state %>" class="lending-index">
+    <h2><%= state_title %></h2>
+
+    <% LendingItem.send(state).each do |item| %>
+      <section class="lending-item" id="<%= format_html_id(item.directory) %>">
+        <% presenter = LendingItemIndexPresenter.new(self, item) %>
+
+        <!-- <%= format_html_id(item.directory) %> (<%= item.status %>) -->
+
+        <h3><%= presenter.title %></h3>
+
+        <ul class="actions">
+          <% presenter.actions.each do |action| %>
+            <li class="action"><%= action %></li>
+          <% end %>
+        </ul>
+
+        <p>
+          <span class="author-name"><%= presenter.author %></span>
+          <% presenter.marc_fields.each_value do |v| %>
+            <%= v %>
+          <% end %>
+        </p>
+
+        <details>
+          <summary>Details</summary>
+          <table class="lending-metadata">
+            <% (tabular_fields = presenter.tabular_fields).each_with_index do |(l, v), i| %>
+              <% if i.even? %>
+                <tr>
+              <% end %>
+              <th class="lending-metadata"><%= l %>:</th>
+              <td><%= format_value(v) %></td>
+              <% if i.odd? || (i + 1 > tabular_fields.size) %></tr>
+              <% end %>
+            <% end %>
+          </table>
+
+          <table class="lending-metadata">
+            <% presenter.long_fields.each do |l, v| %>
+              <tr>
+                <th class="lending-metadata"><%= l %>:</th>
+                <td><%= format_value(v) %></td>
+              </tr>
+            <% end %>
+          </table>
+
+          <% if (reason_incomplete = item.reason_incomplete) %>
+            <h4>Problems:</h4>
+            <p class="problems"><%= reason_incomplete %></p>
+          <% end %>
+        </details>
+
+      </section>
+    <% end %>
+  </section>
+<% end %>

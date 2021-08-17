@@ -1,0 +1,24 @@
+<h1>Confirm Fees to Pay</h1>
+<!-- Need description -->
+<p>Below are the fees that were selected to be paid, if this is correct, please click the Pay Now button. You will be redirected to PayPal to enter your credit card information. If you would like to change what was selected, please click the back link. If you have any questions about the listed fees, please contact the <%= link_to 'Privileges Desk', 'https://www.lib.berkeley.edu/using-the-libraries/privileges-desk' %>.</p>
+<!-- rts : responsive table scss -->
+<%= render "fines/fines_table", freeze_pay_column: true %>
+<!-- Show Total Payment -->
+<div class="pt-3 d-flex justify-content-center">
+  <h5>
+    Total Payment: $<%= sprintf('%.2f',@fines.total_amount) %>
+  </h5>
+</div>
+<!-- Send them over to Paypal -->
+<form method="POST" action="<%= Rails.application.config.paypal_payflow_url %>">
+  <input type="hidden" name="LOGIN" value="<%= Rails.application.config.paypal_payflow_login %>">
+  <input type="hidden" name="PARTNER" value="PayPal">
+  <input type="hidden" name="AMOUNT" value="<%= sprintf('%.2f',@fines.total_amount) %>">
+  <input type="hidden" name="TYPE" value="S">
+  <input type="hidden" name="USER1" value="<%= @fines.alma_id %>">
+  <input type="hidden" name="USER2" value="<%= @fines.fine_ids %>">
+  <div class="d-flex justify-content-center pt-3 pb-5">
+    <%= image_submit_tag("paynow.gif", alt: "Pay Now", class: 'mt-2')%>
+    <a href="javascript:window.history.back();" class="ml-3 mt-2 pl-2 pr-2 title-link">back</a>
+  </div>
+</form>

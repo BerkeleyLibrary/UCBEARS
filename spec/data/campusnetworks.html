@@ -1,0 +1,1164 @@
+
+<!DOCTYPE html><html lang="en" class=" ltr " data-doctype="true" dir="ltr"><head><title> Service at UC Berkeley</title><meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"></meta><meta http-equiv="cache-control" content="public"></meta><meta name="viewport" content="initial-scale=1.0"></meta><script type="text/javascript" data-description="globals population">
+	window.NOW = window.NOW || {};
+	var g_loadTime = new Date();
+	var lastActivity = new Date();
+	var g_lang = 'en';
+	var g_system_lang = 'en';
+	var g_enhanced_activated = 'true';
+	  var g_popup_timeout = parseInt(100);
+	var g_export_warn_threshold = parseInt(10000);
+	  var g_event_handler_ids = {};
+	var g_event_handlers = [];
+	var g_event_handlers_onLoad = [];
+	var g_event_handlers_onSubmit = [];
+	var g_event_handlers_onChange = [];
+	var g_event_handlers_onCellEdit = {};
+	var g_event_handlers_localCache = {};
+	var g_event_handlers_queryTracking = true;
+	var g_user_date_time_format = "yyyy-MM-dd HH:mm:ss";
+	var g_user_date_format = "yyyy-MM-dd";
+	var g_user_decimal_separator = ".";
+	var g_user_grouping_separator = ",";
+	var g_glide_list_separator = ", ";
+	var g_tz_offset = -25200000;
+	  var g_tz_user_offset = true;
+	var g_first_day_of_week = parseInt(1, 10);
+	var g_date_picker_first_day_of_week = parseInt(0, 10);
+	  var g_full_calendar_edit = true;
+	var g_submitted = false;
+	var g_max_table_length = 80;
+	var g_fontSizePreference = "";
+	var g_fontSize = "10pt";
+	// use to be the sys_property glide.ui.js_error_notify, hard coded for PRB603998
+	var g_jsErrorNotify = "true";
+	var g_cancelPreviousTransaction = true;
+	var g_text_direction = "ltr";
+	var g_glide_list_filter_max_length =  parseInt("0", 10);
+	var g_accessibility = false;
+	var g_accessibility_visual_patterns = false;
+	var g_detail_row = false;
+	// default values to be used in absence of user preferences are hard coded below
+	// as well as in keyboardShortcuts.js and keyboard_preference_changer.xml
+	window.g_keyboard_shortcuts = {};
+	window.g_keyboard_shortcuts.allow_in_input_fields = false;
+	window.g_keyboard_shortcuts.enabled = true;
+	window.g_keyboard_shortcuts.global_search = {};
+	window.g_keyboard_shortcuts.global_search.enabled = true;
+	window.g_keyboard_shortcuts.global_search.key_combination = 'ctrl+alt+g';
+	window.g_keyboard_shortcuts.main_frame = {};
+	window.g_keyboard_shortcuts.main_frame.enabled = true;
+	window.g_keyboard_shortcuts.main_frame.key_combination = 'ctrl+alt+p';
+	window.g_keyboard_shortcuts.navigator_toggle = {};
+	window.g_keyboard_shortcuts.navigator_toggle.enabled = true;
+	window.g_keyboard_shortcuts.navigator_toggle.key_combination = 'ctrl+alt+c';
+	window.g_keyboard_shortcuts.navigator_filter = {};
+	window.g_keyboard_shortcuts.navigator_filter.enabled = true;
+	window.g_keyboard_shortcuts.navigator_filter.key_combination = 'ctrl+alt+f';
+	window.g_keyboard_shortcuts.impersonator = {}
+	window.g_keyboard_shortcuts.impersonator.enabled = true;
+	window.g_keyboard_shortcuts.impersonator.key_combination = 'ctrl+alt+i';
+	var g_concourse_onmessage_enforce_same_origin = 'true'.toLowerCase() === 'true';
+	var g_concourse_onmessage_enforce_same_origin_whitelist = '';
+	window.g_load_functions = [];
+	window.g_render_functions = [];
+	window.g_late_load_functions = [];
+	
+	
+	var g_ck = '110de90fdb24c81897e5d144ce96192ffe72bcd10b95de01670c2de45818b0fd28eb191b';
+	
+
+	
+	var g_acWaitTime = parseInt(250);
+	
+
+	var g_autoRequest = '';
+
+	try {
+		window.NOW.dateFormat = JSON.parse("{\"timeAgo\": false, \"dateBoth\": false}");
+	} catch (e) {
+		window.NOW.dateFormat = {timeAgo: false, dateBoth: false};
+	}
+
+	window.NOW.dateFormat.dateStringFormat = "yyyy-MM-dd";
+	window.NOW.dateFormat.timeStringFormat = "HH:mm:ss";
+	window.NOW.shortDateFormat = false;
+	window.NOW.listTableWrap = true;
+	window.NOW.compact = false;
+  	window.NOW.templateToggle = false;
+	window.NOW.tabbed = false;
+	window.NOW.permalink = true;
+	window.NOW.useSimpleStorage = true;
+	window.NOW.simpleStorageSynch = "a518a33edb9cc81497e5d144ce96190d";
+	window.NOW.language =  'en';
+	window.NOW.listOpenInAppTab = false;
+	window.NOW.floatingScrollbars = false;
+	
+	window.NOW.user = {};
+	window.NOW.user.preferences = [];
+	window.NOW.user.roles = '';
+	window.NOW.user.allRoles = '';
+	window.NOW.user.userID = '5136503cc611227c0183e96598c4f706';
+	window.NOW.user.departmentID = '';
+	window.NOW.user.firstName = '';
+	window.NOW.user.lastName = 'Guest';
+	window.NOW.user.name = 'guest';
+    window.NOW.batch_glide_ajax_requests = 'true' === 'true';
+    window.NOW.batch_glide_ajax_requests_max_time_in_queue = ~~'50';
+    window.NOW.batch_glide_ajax_disable_time = ~~'1000';
+
+	window.NOW.currency = {};
+    window.NOW.currency.code = 'USD';
+    window.NOW.locale = {};
+	window.NOW.locale.code = 'en_US';
+  </script><script data-comment="GlideUser initialization">(function() {
+		 g_render_functions.push(setGlideUser);
+		function setGlideUser() {
+			if (window.g_user || !window.GlideUser)
+		return;
+
+		window.g_user = new GlideUser(NOW.user.name,
+			  NOW.user.firstName,
+			  NOW.user.lastName,
+			  NOW.user.roles,
+			  NOW.user.userID,
+			  NOW.user.departmentID);
+		window.g_user.setRoles(NOW.user.allRoles, true);
+		}
+	})();</script><script data-description="NOW glide web analytics siteid and url">window.snWebaConfig = window.snWebaConfig || {};
+		// glide web analytics config
+		window.snWebaConfig.siteId = "0";
+		window.snWebaConfig.trackerURL = "";
+		window.snWebaConfig.webaScriptPath = "scripts/piwik-2.16/thirdparty/piwik.min.js";
+		window.snWebaConfig.ambClient = (window.g_ambClient) ? window.g_ambClient : ((window.amb)? window.amb.getClient(): "");
+		window.snWebaConfig.subscribed = false;</script><script type="text/javascript" src="/ConditionalFocus.jsdbx?v=06-05-2019_1042&amp;c=20_421"></script><link href="favicon.ico?v=4" rel="shortcut icon"></link><script>// window.performance in Chrome, Firefox, and Internet Explorer 9+ (not Safari)
+				window.NOW.xperf = window.performance || {};
+				if (!NOW.xperf.now) {
+					NOW.xperf.now = function() { return new Date().getTime(); };
+				}
+				NOW.xperf.parseBegin = NOW.xperf.now(); 
+				NOW.xperf.cssBegin = NOW.xperf.now();</script><link type="text/css" rel="stylesheet" href="/styles/css_includes_doctype.cssx?v=06-05-2019_1042&amp;c=2015-08-22_14:42:14_b518ef7edb9cc81497e5d144ce96192e&amp;theme=system"></link><link type="text/css" rel="stylesheet" href="/styles/heisenberg/source_sans_pro.cssx?v=06-05-2019_1042&amp;c=2015-08-22_14:42:14_b518ef7edb9cc81497e5d144ce96192e&amp;theme=system"></link><link type="text/css" rel="stylesheet" href="/styles/heisenberg/heisenberg_all.cssx?v=06-05-2019_1042&amp;c=2015-08-22_14:42:14_b518ef7edb9cc81497e5d144ce96192e&amp;theme=system"></link><script>NOW.xperf.cssEnd = NOW.xperf.now();
+			NOW.xperf.scriptBegin = NOW.xperf.now();</script><script type="text/javascript" src="/scripts/doctype/js_includes_doctype.jsx?v=06-05-2019_1042&amp;lp=Tue_Oct_08_19_35_56_PDT_2019&amp;c=20_421"></script><script type="text/javascript" src="/scripts/js_includes_customer.jsx?v=06-05-2019_1042&amp;lp=Tue_Oct_08_19_35_56_PDT_2019&amp;c=20_421"></script><script>NOW.xperf.scriptEnd = NOW.xperf.now();
+				NOW.xperf.parseEnd = NOW.xperf.now();  
+				$j(function() {
+					var x = NOW.xperf;
+					var last = x.lastDoctypeEnd - x.lastDoctypeBegin;
+					if (window.console) {
+						console.log("+-- Parse times");
+						console.log("| CSS parse: " + (x.cssEnd - x.cssBegin));
+						console.log("| JS  doctype: " + (x.scriptEnd - x.scriptBegin));
+						console.log("| JS at end of page: " + last);
+						console.log("+-- All parsing: " + (x.parseEnd - x.parseBegin + last));	
+					}
+					
+					var ms = Math.round(x.parseEnd - x.parseBegin + last);
+					CustomEvent.fire('page_timing', { name: 'PARS', ms: ms, win: window });
+					
+					if (window.performance && performance.timing) {
+						NOW.xperf.z = new Date().getTime();
+						setTimeout(function () {
+						   var x = performance.timing.loadEventEnd - performance.timing.domContentLoadedEventStart;
+						   CustomEvent.fire('page_timing', { name: 'DOMC', ms: x, win: window });
+						   x = performance.timing.loadEventStart - NOW.xperf.z;
+						   CustomEvent.fire('page_timing', { name: 'PROC', ms: x, win: window });
+						}, 250);  // has to be done after the loadEvent ends
+					}
+				})</script><script type="text/javascript" src="/scripts/doctype/js_includes_legacy.jsx?v=06-05-2019_1042&amp;lp=Tue_Oct_08_19_35_56_PDT_2019&amp;c=20_421"></script><script type="text/javascript" data-comment="navpage layout preferences, onfocus observation">/**
+	* Every window needs to observe these events.
+	*/
+	if (Prototype.Browser.IE && !isMSIE9) {
+		document.onfocusout = function() { CustomEvent.fireTop(GlideEvent.WINDOW_BLURRED, window); };
+		document.onfocusin = function() { CustomEvent.fireTop(GlideEvent.WINDOW_FOCUSED, window); };
+	} else {
+		Event.observe(window, 'blur', function() { CustomEvent.fireTop(GlideEvent.WINDOW_BLURRED, window); });
+		Event.observe(window, 'focus', function() { CustomEvent.fireTop(GlideEvent.WINDOW_FOCUSED, window); });
+	}</script><script type="text/javascript">g_swLoadTime = new StopWatch(g_loadTime);
+
+    if (window.CustomEvent){
+        CustomEvent.fireAll("ck_updated", "110de90fdb24c81897e5d144ce96192ffe72bcd10b95de01670c2de45818b0fd28eb191b");
+	    CustomEvent.fireTop("navigation.complete", window);
+	}
+
+    addLoadEvent( function() {
+
+		if (isValidTouchDevice())
+			addTouchScrollClassToBody();
+
+      if (typeof g_ck != 'undefined') {
+        CustomEvent.observe("ck_updated", function(ck) { g_ck = ck; });
+        CustomEvent.fireAll("ck_updated", "110de90fdb24c81897e5d144ce96192ffe72bcd10b95de01670c2de45818b0fd28eb191b");}try {
+              var helpico = getTopWindow().document.getElementById("help_ico");
+
+              if (helpico) {
+                var urlname=window.location.pathname.split("?");
+                var search_str = window.location.search;
+                
+                // if this is a form, extract the record's sys_id...
+                var sys_id_loc = search_str.search(/sys_id=[0-9a-f]{32}/i);
+                var sys_id_str = (sys_id_loc != -1) ? search_str.substr(sys_id_loc, 39) : null;
+                
+                // make the URL to our context help processor...
+                var url_search = "?sysparm_url=" + urlname[0];
+                if (sys_id_loc != -1)
+                   url_search += "&" + sys_id_str;
+
+               	helpico.href="context_help.do" + url_search;                	
+              }
+            } catch (exception) {}
+
+      synchCache();
+      pageLoaded();
+    });
+    
+    function synchCache() {
+      try {
+        var w = getTopWindow();
+        if (w.g_cache_message)
+          w.g_cache_message.stamp("a518a33edb9cc81497e5d144ce96190d");
+  
+        if (w.g_cache_td)
+          w.g_cache_td.stamp("432d6903db64c81897e5d144ce9619cd");
+      } catch(e) {}
+    }
+
+    function isValidTouchDevice() {
+		var navigator = window.navigator || {};
+		var devices;
+		try {
+			devices = 'iPad,Android'.split(',');
+		} catch(ex) {
+			devices = [];
+		}
+		return devices.some(function(item) {return item.trim() === navigator.platform;});
+	}
+
+	function addTouchScrollClassToBody() {
+		if ('ontouchstart' in window ||
+				(navigator.maxTouchPoints !== 'undefined' && navigator.maxTouchPoints > 0) ||
+				(navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
+			if (typeof document.body != undefined) {
+				document.body.classList.add('touch_scroll');
+			}
+		}
+	}
+  </script><!--googleoff: all--><noscript>This site requires JavaScript to be enabled</noscript> <!--googleon: all--><script type="text/javascript" src="/scripts/app.guided_tours/js_guided_tours_includes.jsx?v=06-05-2019_1042"></script></head><body ontouchend="CustomEvent.fireAll('body_clicked', event);" onclick="CustomEvent.fireAll('body_clicked', event);" class="        chrome      " data-formName="ui_page_render"><span class="sr-only"><span id="html_page_aria_live_polite" role="region" aria-live="polite"></span><span id="html_page_aria_live_assertive" role="region" aria-live="assertive"></span></span><div class="outputmsg_div"><div id="output_messages" class="outputmsg_container outputmsg_hide"><h2 class="sr-only">Notifications</h2><button aria-label="Close Messages" id="close-messages-btn" class="btn btn-icon close icon-cross" onclick="GlideUI.get().clearOutputMessages(this); return false;"></button><div class="outputmsg_div" aria-live="polite" role="region" data-server-messages="false"></div></div><script>addRenderEvent(function() {CustomEvent.fire('glide_optics_inspect_update_watchfield', '');});
+
+			var accessibilityEnabled = Boolean(false);
+			if (accessibilityEnabled) {
+				$j(function() {
+					$j('#output_messages .btn.btn-icon.close').focus();
+				});
+			}</script></div><script type="text/javascript" src="/scripts/lib/jquery_includes.jsx?v=06-05-2019_1042"></script><link type="text/css" rel="stylesheet" href="/styles/knowledge.ng/css_includes_knowledge.cssx?v=06-05-2019_1042&amp;c=2015-08-22_14:42:14_b518ef7edb9cc81497e5d144ce96192e&amp;theme=system"></link><script type="text/javascript" src="/scripts/classes/timeAgo.jsx?v=06-05-2019_1042"></script><link href="b3ba3821d73221004792a1737e610382.cssdbx?v=06-05-2019_1042" type="text/css" rel="stylesheet"></link><script>//  
+
+		if('UC Berkeley Campus Networks' != ''){
+			$j("title").html('IT'+ " - " + 'UC Berkeley Campus Networks');
+		}
+		var kbConfig = {
+			canContribute: 'false',
+			historyRowCount: 0,
+			i18n: {
+				STATUS_MSG: {
+					draft: 'This knowledge item has been created',
+					review: 'This knowledge item has been published',
+					published: 'This knowledge item has been published',
+					pending_retirement: 'This knowledge item has been retired',
+					retired: 'This knowledge item has been retired',
+					delete_failed: 'This article could not be deleted'
+				},
+				TXT_PLACEHOLDER: 'Add content',
+				NOT_RETIRED: 'Article not retired',
+				NOT_PUBLISHED: 'Article not published',
+				NOT_SAVED: 'Article not saved',
+				SAVED: 'Article saved',
+				DISCARDED: 'Article changes discarded',
+				SUBMITTED: 'Your article has been submitted',
+				PREVIEW: ' preview ',
+				PREVIEW_HINT: 'Preview changes',
+				CONFIRM_DELETE: 'Confirm deletion of this article?',
+				DELETE: 'Delete',
+				TITLE_RETIRE: 'Retire',
+				MESSAGE_RETIRE: 'Retire this article?',
+				TITLE_CANCEL: 'Cancel changes',
+				MESSAGE_CANCEL: 'Discard all changes?'
+			}
+		};
+
+		$j(function() {
+			if (parent.document) {
+				// fix iframe resize issue for CMS service portal
+				parent.CustomEvent.fire('content_frame.resized', window.name, parent.document.body.scrollHeight);
+			}
+		});
+	
+//</script><script>// variables for tinymce init
+				var g_tinymce_lang = "en";
+				var g_tinymce_remove_script_host = true;
+				var tinymce_toolbar_line1 = "bold,italic,underline,undo,redo,|,fontselect,fontsizeselect,table,|,forecolor,backcolor,link,unlink,|,image,media,code,|,alignleft,aligncenter,alignright,|,bullist,numlist,fullscreen";
+				var tinymce_toolbar_line2 = "";
+				var tinymce_fonts = "Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Journal=journal;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats;";
+
+				addLoadEvent(function() {
+					if (typeof g_sc_form == "undefined") if (typeof g_form != "undefined") {
+						g_sc_form = g_form;
+					}
+				});</script><script type="text/javascript" src="/KnowledgeFunctions.jsdbx?v=06-05-2019_1042&amp;c=20_421"></script><script type="text/javascript" src="/KBViewArticle.jsdbx?v=06-05-2019_1042&amp;c=20_421&amp;cache=2019-05-28 11:12:50"></script><div class="snc-article-hidden-fields" aria-hidden="true"><input id="articleId" type="hidden" value="7ac6712adb856b8c775617e15b9619a7"></input><input type="hidden" aria-hidden="true" id="ts_queryId" value=""></input><input id="articleWorkflowState" type="hidden" value="published"></input><input id="articleTitleTemplate" type="hidden" value=""></input><input id="articleTemplate" type="hidden" value=""></input><input id="articleTitleOld" type="hidden" value="UC Berkeley Campus Networks"></input><input id="articleOriginal" type="hidden" value="&lt;p&gt;The following is a list of networks used by the University of California at Berkeley Campus and some offsite locations. This list is for informative purposes and does not attempt to document all networks in use by Cal Berkeley as some are not managed or provided by IST Network Services.&lt;/p&gt;
+&lt;p&gt;This list can be used to restrict access from specific networks, but be aware that network address are unreliable as a method of data protection.&lt;/p&gt;
+&lt;h2 style=&quot;color: #022648; font-size: 1.3em;&quot;&gt;Full List of Campus Networks&lt;/h2&gt;
+&lt;p style=&quot;color: #022648;&quot;&gt;This is the list of networks used by Cal Berkeley and managed by the IST Network Services group.&lt;/p&gt;
+&lt;table style=&quot;color: #022648;&quot; border=&quot;2&quot; width=&quot;90%&quot; align=&quot;center&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot; align=&quot;center&quot;&gt;&lt;strong&gt;IP Address Range&lt;/strong&gt;&lt;/td&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Comment&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;From:&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;To:&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;128.32.0.0/16&lt;/td&gt;
+&lt;td&gt;128.32.0.0&lt;/td&gt;
+&lt;td&gt;128.32.255.255&lt;/td&gt;
+&lt;td&gt;Berkeley Campus and Some Remote Sites&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.0.0/16&lt;/td&gt;
+&lt;td&gt;136.152.0.0&lt;/td&gt;
+&lt;td&gt;136.152.255.255&lt;/td&gt;
+&lt;td&gt;Berkeley Campus and Some Remote Sites&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;169.229.0.0/16&lt;/td&gt;
+&lt;td&gt;169.229.0.0&lt;/td&gt;
+&lt;td&gt;169.229.255.255&lt;/td&gt;
+&lt;td&gt;Berkeley Campus and Some Remote Sites&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.31.95.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.31.95.0&lt;/td&gt;
+&lt;td&gt;192.31.95.255&lt;/td&gt;
+&lt;td&gt;Berkeley at San Diego Super Computer Center&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.31.105.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.31.105.0&lt;/td&gt;
+&lt;td&gt;192.31.105.255&lt;/td&gt;
+&lt;td&gt;Berkeley Campus and Some Remote Sites&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.31.161.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.31.161.0&lt;/td&gt;
+&lt;td&gt;192.31.161.255&lt;/td&gt;
+&lt;td&gt;Berkeley at San Diego Super Computer Center&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.58.221.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.58.221.0&lt;/td&gt;
+&lt;td&gt;192.58.221.255&lt;/td&gt;
+&lt;td&gt;Berkeley at San Diego Super Computer Center&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.101.42.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.101.42.0&lt;/td&gt;
+&lt;td&gt;192.101.42.255&lt;/td&gt;
+&lt;td&gt;Berkeley at San Diego Super Computer Center&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.107.102.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.107.102.0&lt;/td&gt;
+&lt;td&gt;192.107.102.255&lt;/td&gt;
+&lt;td&gt;Berkeley at San Diego Super Computer Center&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.0.0.0/8&lt;strong&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;10.0.0.0&lt;/td&gt;
+&lt;td&gt;10.255.255.255&lt;/td&gt;
+&lt;td&gt;Non-Internet Routable &lt;a style=&quot;color: #116673;&quot; href=&quot;https://nettools.net.berkeley.edu/pubtools/info/rfc1918.html&quot;&gt;RFC 1918 Address Space&lt;/a&gt; used at Berkeley&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2607:f140::/32&lt;strong&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;2607:f140::0&lt;/td&gt;
+&lt;td&gt;2607:f140:ffff:ffff:ffff:ffff:ffff:ffff&lt;/td&gt;
+&lt;td&gt;UC Berkeley IPv6 Allocation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 style=&quot;color: #022648; font-size: 1.3em;&quot;&gt;Campus Wireless Networks&lt;/h2&gt;
+&lt;table style=&quot;color: #022648;&quot; border=&quot;2&quot; width=&quot;90%&quot; align=&quot;center&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot; align=&quot;center&quot;&gt;&lt;strong&gt;IP Address Range&lt;/strong&gt;&lt;/td&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Comment&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;From:&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;To:&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;4&quot;&gt;&lt;strong&gt;AirBears2 and eduroam Wireless Networks&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.142.0.0/16&lt;/td&gt;
+&lt;td&gt;10.142.0.0&lt;/td&gt;
+&lt;td&gt;10.142.255.255&lt;/td&gt;
+&lt;td&gt;Client Cal Berkeley Local Campus Access Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.28.0/22&lt;/td&gt;
+&lt;td&gt;136.152.28.0&lt;/td&gt;
+&lt;td&gt;136.152.31.255&lt;/td&gt;
+&lt;td&gt;Client Internet Access Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.36.0/22&lt;/td&gt;
+&lt;td&gt;136.152.36.0&lt;/td&gt;
+&lt;td&gt;136.152.39.255&lt;/td&gt;
+&lt;td&gt;Client Internet Access Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.142.0/24&lt;/td&gt;
+&lt;td&gt;136.152.142.0&lt;/td&gt;
+&lt;td&gt;136.152.142.255&lt;/td&gt;
+&lt;td&gt;Client Internet Access Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.145.0/24&lt;/td&gt;
+&lt;td&gt;136.152.145.0&lt;/td&gt;
+&lt;td&gt;136.152.145.255&lt;/td&gt;
+&lt;td&gt;Client Internet Access Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.148.0/22&lt;/td&gt;
+&lt;td&gt;136.152.148.0&lt;/td&gt;
+&lt;td&gt;136.152.151.255&lt;/td&gt;
+&lt;td&gt;Client Internet Access Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2607:f140:400::/48&lt;/td&gt;
+&lt;td&gt;2607:f140:400::0&lt;/td&gt;
+&lt;td&gt;2607:f140:400:ffff:ffff:ffff:ffff:ffff&lt;/td&gt;
+&lt;td&gt;Client IPv6 Public Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;4&quot;&gt;&lt;strong&gt;CalVisitor Wireless Networks&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.105.128.0/17&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;10.105.128.128&lt;/td&gt;
+&lt;td&gt;10.105.255.255&lt;/td&gt;
+&lt;td&gt;Client Campus Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;192.31.105.0/24&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;192.31.105.128&lt;/td&gt;
+&lt;td&gt;192.31.105.255&lt;/td&gt;
+&lt;td&gt;Client Public Network (NAT Pool)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2607:f140:6000::/48&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;2607:f140:6000::0&lt;/td&gt;
+&lt;td&gt;2607:f140:6000:ffff:ffff:ffff:ffff:ffff&lt;/td&gt;
+&lt;td&gt;Client IPv6 Public Networks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 style=&quot;color: #022648; font-size: 1.3em;&quot;&gt;Campus Remote Access VPN Networks&lt;/h2&gt;
+&lt;table style=&quot;color: #022648;&quot; border=&quot;2&quot; width=&quot;90%&quot; align=&quot;center&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;4&quot;&gt;&lt;strong&gt;Campus Legacy UCBVPN Client Networks&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot; align=&quot;center&quot;&gt;&lt;strong&gt;IP Address Range&lt;/strong&gt;&lt;/td&gt;
+&lt;td rowspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Comment&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;From:&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;To:&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.136.0.0/16&lt;/td&gt;
+&lt;td&gt;10.136.0.0&lt;/td&gt;
+&lt;td&gt;10.136.255.255&lt;/td&gt;
+&lt;td&gt;Spit Tunnel Client Local Campus Access&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.208.0/23&lt;/td&gt;
+&lt;td&gt;136.152.208.0&lt;/td&gt;
+&lt;td&gt;136.152.209.255&lt;/td&gt;
+&lt;td&gt;Full Tunnel Client Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.210.0/23&lt;/td&gt;
+&lt;td&gt;136.152.210.0&lt;/td&gt;
+&lt;td&gt;136.152.211.255&lt;/td&gt;
+&lt;td&gt;Full Tunnel Client Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2607:f140:800:80::/64&lt;/td&gt;
+&lt;td&gt;2607:f140:800:80::0&lt;/td&gt;
+&lt;td&gt;2607:f140:800:80:ffff:ffff:ffff:ffff&lt;/td&gt;
+&lt;td&gt;IPv6 Client Network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;table style=&quot;color: #022648;&quot; border=&quot;2&quot; width=&quot;90%&quot; align=&quot;center&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;4&quot;&gt;&lt;strong&gt;bSecure Remote Access VPN Client Networks &lt;/strong&gt;(bSecure Firewall Object &quot;UCB-bSecure-Remote-Access&quot;)&lt;strong&gt;&lt;br /&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;IPv4 Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;&lt;strong&gt;IPv6 Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot; align=&quot;center&quot; valign=&quot;middle&quot;&gt;&lt;strong&gt;Comment&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.136.128.0/18&lt;/td&gt;
+&lt;td&gt;2607:f140:800:3::/64&lt;/td&gt;
+&lt;td&gt;Split Tunnel Client Networks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.16.0/20&lt;/td&gt;
+&lt;td&gt;2607:f140:800:1::/64&lt;/td&gt;
+&lt;td&gt;Full, Library, and Auto Tunnel Networks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;136.152.210.0/23&lt;/td&gt;
+&lt;td&gt;2607:f140:800:2::/64&lt;/td&gt;
+&lt;td&gt;Restricted Tunnel Networks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p style=&quot;color: #022648;&quot;&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;strong&gt;*&lt;/strong&gt;Access to library resources is estimated only and provided as a guide&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;strong&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/strong&gt;This network or address range does not have access to Library resources&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;strong&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/strong&gt;Some address ranges within the network do not have access to Library resources&lt;/p&gt;"></input><input id="articleTextType" type="hidden"></input><textarea id="articleWikiText" style="display:none" aria-label="Article wiki text"></textarea><input id="articleInPopUp" type="hidden" value="false"></input><input id="articleDirty" type="hidden" value="Changes have been made. Continuing will discard the changes."></input><input id="articleIsNew" type="hidden"></input><input id="articleModified" type="hidden" value="false"></input><input id="articleEditMode" type="hidden" value="false"></input><input id="articleVersion" type="hidden" value="3"></input><input id="articleDisplayAttachments" type="hidden" value="false"></input><input id="articleShowKBCreateIncident" type="hidden" value="true"></input><input id="articleVersioningInstalled" type="hidden" value="true"></input><input id="articleKnowledgeBase" type="hidden" value="42876ccd6f840600d7a2be7cbb3ee4f2"></input><input id="articleKnowledgeBaseName" type="hidden" value="IT"></input><input id="articleNumber" type="hidden" value="KB0011960"></input><input id="createIncidentLinkLocation" type="hidden" value="incident.do?sys_id=-1&amp;sysparm_query=active=true^comments=(Created after Knowledge search: UC Berkeley Campus Networks)&amp;sysparm_stack=knowledge_home_launcher.do"></input><input id="attachFields" type="hidden" value="comments"></input><input id="canShowKBFeedback" type="hidden" value="true"></input><input id="isLiveFeedEnabled" type="hidden" value="true"></input></div><div class="row navbar navbar-default snc-article-header-toolbar" role="navigation"><div class="col-xs-7 kb-container-fluid"><div class="row kb-navbar-header"><div class="col-xs-2 head-back-n-star"><button role="link" id="backButton" title="Back" aria-label="Back" class="btn btn-default icon-chevron-left navbar-btn snc-article-toolbar-btn pull-left"></button>
+	
+	<div class="modal" id="createFavoritesModal" aria-labelledby="favorite_modal_title" name="create_favorites_modal" role="dialog">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<header class="modal-header clearfix">
+					<button data-dismiss="modal" class="btn btn-icon close icon-cross">
+						<span class="sr-only">Close</span></button>
+					<h1 id="favorite_modal_title" class="modal-title pull-left h4">Create Favorite</h1></header>
+				<form class="create-favorite" name="create_favorite_form">
+					<div class="modal-body clearfix">
+						<div id="favorite_preview"><span></span></div>
+						<input type="text" id="create_favorite_title" name="title" class="form-control" value="" aria-label="Name" placeholder="Bookmark title"></input>
+						<input type="hidden" name="url" value=""></input>
+						<input type="hidden" name="window_name" value=""></input>
+						<input type="hidden" name="id" value=""></input>
+						<input type="hidden" name="color" value=""></input>
+						<div class="color-picker">
+							<fieldset id="icon_colors">
+								<legend class="sr-only">Color</legend></fieldset></div>
+						<input type="hidden" name="icon" value=""></input>
+						<div class="icon-picker">
+							<fieldset id="icon_picker" class="nav-edit-favorites-icon-grid">
+								<legend class="sr-only">Icon</legend></fieldset></div></div>
+					<div class="modal-footer">
+						<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+						<button type="submit" class="btn btn-primary">Done</button></div></form>
+				<script type="text/javascript">
+					
+						window.MagellanCreateFavorites = {
+							navColors : ["purple","blue","cyan","aquamarine","green","yellow","orange","burnt-orange","red","pink","fuschia","white"],
+							navIcons : ["article-document","user","user-group","lightbulb","home","mobile","comment","mail","locked","database","book","drawer","folder","catalog","tab","cards","tree-right","tree","book-open","paperclip","edit","trash","image","search","power","cog","star","star-empty","new-ticket","dashboard","cart-full","view","label","filter","calendar","script","add","delete","help","check-circle","alert","sort-ascending","console","list","form","livefeed","key","hr"],
+							paramBlackList : ["sysparm_no_stack","sysparm_userpref_module","sysparm_record_target","sysparm_record_row","sysparm_record_rows","sysparm_record_list"]
+						};
+					</script>
+				<script type="text/javascript" src="/scripts/thirdparty/radio/radioButton.jsx?v=06-05-2019_1042"></script>
+				<script type="text/javascript" src="/scripts/thirdparty/radio/radioGroup.jsx?v=06-05-2019_1042"></script>
+				<script type="text/javascript" src="/scripts/magellan.CreateFavoriteModal.jsx?v=06-05-2019_1042"></script></div></div></div><script>(function() {
+									var historyData = {
+										title: 'UC Berkeley Campus Networks',
+										isTable: false,
+										url: '/kb_view.do?sysparm_article=KB0011960'
+									};
+									CustomEvent.fire('magellanNavigator.sendHistoryEvent', historyData);
+									CustomEvent.fireUp('magellanNavigator.permalink.set', { title : historyData.title, relativePath: historyData.url });
+								})();
+								function showCreateFavoriteModal() {
+									if (MagellanCreateFavorites && MagellanCreateFavorites.addFavorite) {
+										MagellanCreateFavorites.addFavorite({
+										title : 'UC Berkeley Campus Networks',
+										icon : 'book',
+										url: '/kb_view.do?sysparm_article=KB0011960'
+									});
+									}
+								}</script><button onclick="showCreateFavoriteModal()" class="btn btn-icon icon-star pull-left" title="Create Favorite" aria-label="Create Favorite"></button></div><div class="col-xs-10 head-bc"><ol class="breadcrumb kb_view_breadcrumb"><li><a href="knowledge_home_launcher.do">Home</a></li><li><a href="$knowledge.do?sysparm_kb=42876ccd6f840600d7a2be7cbb3ee4f2&amp;sysparm_category=d46f677e6f0f6a00ac19e76e6b3ee450&amp;browse_type=categories">Network, Voice and Connectivity</a></li></ol></div></div></div><div class="col-xs-5 snc-kb-navbar-right"><div class="header-bar-btn-group" id="header-bar-button-group"><button id="createIncident" title="Create Incident" aria-label="Create Incident" class="btn btn-default navbar-btn snc-article-header-toolbar-button pull-right">Create Incident</button><button id="moreInformation" title="Information" aria-label="Information" class="btn btn-default navbar-btn snc-article-header-toolbar-button pull-right"><span class="icon icon-view"></span></button></div></div></div><div id="kb_confirmationDlg" tabindex="-1" aria-hidden="true" class="modal" role="dialog" aria-labelledby="modal1_title"><div class="modal-dialog modal-sm modal-alert"><div class="modal-content" tabindex="0" aria-label="Cancel changes confirmation dialog"><header class="modal-header"><h4 id="modal1_title" class="modal-title">Cancel changes</h4></header><div class="modal-body" tab-index="0" aria-label="Discard all changes?" aria-role="question"><p>Discard all changes?</p></div><footer class="modal-footer flex"><button data-dismiss="modal" aria-label="No" class="btn btn-default kb-no-btn" onclick="$j('#kb_confirmationDlg').hide()">No</button><button data-dismiss="modal" aria-label="Yes" class="btn btn-danger kb-yes-btn">Yes</button></footer></div></div></div><div id="unSubscribe" aria-hidden="true" class="modal" role="dialog" aria-labelledby="modal2_title"><div class="modal-dialog modal-sm"><div class="modal-content"><header class="modal-header"><h4 id="modal2_title" class="modal-title">Unsubscribe</h4></header><div class="modal-body"><p>In order to unsubscribe from this article, you will need to unsubscribe from the parent Knowledge Base: IT.</p><p><b>Would you like to unsubscribe from IT ?</b></p></div><footer class="modal-footer flex"><button data-dismiss="modal" class="btn btn-default kb-no-btn">No</button><button id="unsubscribeDialog" data-dismiss="modal" class="btn btn-primary kb-yes-btn">Yes</button></footer></div></div></div><div class="kb-view-content-wrapper"><div id="messageBox" class="snc-article-header-message outputmsg_container" aria-live="assertive" role="alert"><div class="outputmsg_div"><div id="messageType" class="outputmsg outputmsg_info notification notification-info" style="width:100%; display:inline-flex;" role="status"><div style="width:100%;" id="ariaNotification"><img class="outputmsg_image" id="info_outputmsg_image" title="Informational Message" aria-label="Informational Message" src="images/outputmsg_info_24.gifx"></img><span id="articleText" class="outputmsg_text"></span><script>document.getElementById("info_outputmsg_image").setAttribute('alt', "Informational Message");</script></div><button id="closeMessageBox" title="Close Messages" class="btn btn-icon close icon-cross" onclick="$j('#messageBox').hide()"><span class="sr-only">Close Messages</span></button></div></div></div><div class="snc-article-header-title"><input id="articleTitleEditable" type="text" aria-label="Article title" value="UC Berkeley Campus Networks" class="snc-article-header-title-editable" placeholder="Add title" style="display:none" autofocus="true"></input><h1 id="articleTitleReadonly" class="snc-article-header-title-readonly" style="display:none">UC Berkeley Campus Networks</h1><div id="articleNumberReadonly" class="snc-article-header-number-readonly" style="display:none">
+					KB0011960
+
+					
+						&nbsp;-&nbsp;
+						 <a id="versionNumber" href="javascript:void(0)" aria-label="Click this link to see article version history" title="Latest Version" data-toggle="collapse" data-target="#versions-list">Latest Version</a></div></div><script>
+				function KbStarRatingClass() {
+					var currentId = '7ac6712adb856b8c775617e15b9619a7';
+					var currentRating = 0;
+					function ajaxPost(value) {
+						if (currentId) {
+							var ajax = new GlideAjax('KBAjaxSNC');
+							ajax.addParam('sysparm_type', 'saveStarRating');
+							ajax.addParam('sysparm_rating', value);
+							ajax.addParam('sysparm_id', currentId);
+							var query = $j('#sysparm_search');
+							var ts_queryId = "";
+							ajax.addParam('sysparm_search', (query.length) ? escape(query.val()) : '');
+							ajax.addParam("ts_queryId", ts_queryId);
+							ajax.getXMLAnswer(postRatingDone);
+						}
+					}
+					function postRatingDone(answer){
+						var data = answer.evalJSON(true);
+						if (!data) {
+							return kbViewArticle.showErrorMessage('Article rating not submitted');
+						}
+						if (!data.success) {
+							return kbViewArticle.showErrorMessage(data.message);
+						}
+					}
+					function setStarsRating(value) {
+						if (!isNaN(value)) {
+							currentRating = Math.round(value);
+						}
+						if (currentRating > 0) {
+							var ratingMessage = getUIMessage([currentRating]);
+							$j('#articleStarRatingGroup').attr("title", ratingMessage);
+							$j('#articleStarRatingGroup').attr("data-original-title", ratingMessage);
+							$j('.kb-star-rating label').filter(function() {
+							return $j(this).attr('data-index') <= currentRating;
+							}).addClass('kb-active-star');
+							if(this.selfRated) {
+								$j('.kb-star-rating label.kb-active-star').addClass('kb-active-star-self').removeClass('kb-active-star');
+							}
+						}
+						else{
+							var message = "This article has not been rated yet. Use up and down arrow keys to select and submit the rating.";
+							$j('#articleStarRatingGroup').attr("title", message);
+							$j('#articleStarRatingGroup').attr("data-original-title", message);
+						}
+					}
+					function saveRating(value) {
+						ajaxPost(value);
+						this.selfRated = true;
+					}
+					return {
+						setStarsRating: setStarsRating,
+						saveRating: saveRating
+					};
+				}
+				$j(function() {
+					// As the hex values of the Heisenberg icons keep changing it's impossible to reliably set the "content" CSS
+					// attribute of the :hover:before pseudo class in the stylesheet in order to display a full star instead of an
+					// empty one when hovering over with the mouse.
+					// Instead we set the pseudo to fetch its "content" from a "data-content" attribute. (see .kb-star-rating)
+					var ele = $j('#placeholder-icon-star')[0];
+					if(ele && window.getComputedStyle) {
+						var content;
+						var contentStyle = getComputedStyle(ele,':before');
+						if(!contentStyle) {
+							//Happens for FF in popovers
+							contentStyle = window.parent.getComputedStyle(ele,':before');
+						}
+						content = contentStyle.getPropertyValue('content');
+						if(content && content != 'none') {
+							content = content.replace(/"/g, '');
+							$j('.kb-star-rating .icon-star-empty').attr('data-content', content);
+						}else if(content == 'none'){
+							//This happens for popovers in IE
+							useIconStarImageClassess();
+						}
+					}
+					// create an instance
+					var kbArticleRating = new KbStarRatingClass();
+					kbArticleRating.setStarsRating();
+					$j('.kb-star-rating label').click(function (event) {
+						var targetIndex = $j(event.currentTarget).attr('data-index');
+						kbArticleRating.setStarsRating(targetIndex);
+						$j('#rated_value').val(targetIndex);
+						kbArticleRating.saveRating(targetIndex);
+						updateCurrentStarRatingForAria(targetIndex);
+					});
+					$j('.kb-star-rating input').on("focus",function(e) {
+						var id = e.target.id;
+						id = parseInt(id[id.length-1]);
+						$j('.kb-star-rating label').filter(function() {
+								return $j(this).attr('data-index') <= id;
+						}).addClass('kb-hover-star');
+					});
+					$j('.kb-star-rating input').on("blur",function(e) {
+						$j('.kb-star-rating label').removeClass('kb-hover-star');
+					});
+					$j('.kb-star-rating').on("keydown",function(e) {	
+						var id = e.target.id;
+						var int_id = parseInt(id[id.length-1]);
+						if(e.keyCode == 40) {
+							int_id %= 5;
+							if(int_id == 0){
+								$j(this).find('label').removeClass('kb-hover-star');
+							}
+							$j('.kb-star-rating label').filter(function() {
+								return $j(this).attr('data-index') <= int_id+1;
+							}).addClass('kb-hover-star');
+						}
+						else if(e.keyCode == 38) {
+							$j('.kb-star-rating label').filter(function() {
+								return $j(this).attr('data-index') >= int_id;
+							}).removeClass('kb-hover-star');
+							if(int_id == 1){
+								$j(this).find('label').addClass('kb-hover-star');
+							}
+						}
+						 else if(e.keyCode == 13) {
+							kbArticleRating.setStarsRating(int_id);
+							$j('#rated_value').val(int_id);
+							kbArticleRating.saveRating(int_id);
+							updateCurrentStarRatingForAria(int_id);
+						}
+						else if(e.keyCode == 9) {
+							$j(this).find('label').removeClass('kb-hover-star');
+						}
+					});
+					$j('.kb-star-rating').on("mouseenter focusin", function(){
+						removeToolTipForRatingParent("remove");
+						$j('.kb-star-rating label.kb-active-star').removeClass('kb-active-star');
+						$j('.kb-star-rating label.kb-active-star-self').removeClass('kb-active-star-self');
+					});
+					$j('.kb-star-rating').on("mouseleave focusout",function() {
+						kbArticleRating.setStarsRating();
+					});
+					$j('.kb-star-rating label.icon-star-empty').on("mouseenter focusin", function(){
+						$j(this).addClass('kb-hover-star').prevAll().addClass('kb-hover-star');
+					});
+					$j('.kb-star-rating label.icon-star-empty').on("mouseleave focusout",function() {
+						$j(this).removeClass('kb-hover-star').prevAll().removeClass('kb-hover-star');
+					});
+					
+					function useIconStarImageClassess(){
+						$j('.kb-star-rating').addClass('kb-star-image');
+						$j('.icon-star-empty').mouseover(function() {
+							$j(this).addClass('kb-hover-star').prevAll().addClass('kb-hover-star');
+						}).mouseout(function() {
+							$j(this).removeClass('kb-hover-star').prevAll().removeClass('kb-hover-star');
+						});
+					}
+					updateCurrentStarRatingForAria();
+				});
+					function getUIMessage(params) {
+						var message = "This article has {0} star rating.Use up and down arrow keys to select and submit the rating.";
+						return message.replace(/\{(\d+)\}/g, function() {
+						return params[arguments[1]];
+						});
+					};
+				
+					function removeToolTipForRatingParent(){
+						$j('#articleStarRatingGroup').removeAttr("title","");
+						$j('#articleStarRatingGroup').removeAttr("data-original-title","");
+					}
+					
+					function updateCurrentStarRatingForAria(currentRating){
+						if(currentRating)
+							$j('#articleStarRatingGroup').attr("aria-label", getUIMessage([Math.round(currentRating)]));
+						else $j('#articleStarRatingGroup').attr("aria-label","This article has not been rated yet.Use up and down arrow keys to select and submit the rating." );
+						if(false){
+							$j('#articleStarRatingGroup').attr('tabindex', '0');
+						}
+					}
+				</script><input id="rating_value" type="hidden" value=""></input><input id="num_ratings" type="hidden" value="0"></input><input id="rated_value" type="hidden"></input><div role="application" id="articleStarRatingGroup" class="accessibility-disabled" style="display:inline-flex"><span class="rating kb-star-rating "><input type="radio" class="rating-input" id="rating-input-1-1" name="rating-input-1" aria-label="1-star rating" title="1-star rating"></input><label data-index="1" for="rating-input-1-1" class="rating-star icon-star-empty" title="1-star rating"></label><input type="radio" class="rating-input" id="rating-input-1-2" name="rating-input-1" aria-label="2-star rating" title="2-star rating"></input><label data-index="2" for="rating-input-1-2" class="rating-star icon-star-empty" title="2-star rating"></label><input type="radio" class="rating-input" id="rating-input-1-3" name="rating-input-1" aria-label="3-star rating" title="3-star rating"></input><label data-index="3" for="rating-input-1-3" class="rating-star icon-star-empty" title="3-star rating"></label><input type="radio" class="rating-input" id="rating-input-1-4" name="rating-input-1" aria-label="4-star rating" title="4-star rating"></input><label data-index="4" for="rating-input-1-4" class="rating-star icon-star-empty" title="4-star rating"></label><input type="radio" class="rating-input" id="rating-input-1-5" name="rating-input-1" aria-label="5-star rating" title="5-star rating"></input><label data-index="5" for="rating-input-1-5" class="rating-star icon-star-empty" title="5-star rating"></label></span><span id="placeholder-icon-star" class="icon-star" style="visibility:hidden; position: absolute;"></span></div><div class="kb-article-view-count">294 views</div><div id="versions-list" class="collapse snc-article-versions-history-list"><p><b>3.0&nbsp;-&nbsp;Updated on 2018-10-12 by Sean Schluntz</b></p><p><a aria-label="Click this link to visit article version 2.0" href="kb_view.do?sys_kb_id=59a3b952db09a78c775617e15b961934&amp;sysparm_class_name=kb_knowledge">2.0</a>&nbsp;-&nbsp;Updated on 2018-10-11 by Sean Schluntz</p><p><a aria-label="Click this link to visit article version 1.0" href="kb_view.do?sys_kb_id=c9912125db094700e6cd7a8eaf961967&amp;sysparm_class_name=kb_knowledge">1.0</a>&nbsp;-&nbsp;Authored on 2018-05-09 by Sean Schluntz</p></div><div id="article" class="snc-article-content-text row"><p>The following is a list of networks used by the University of California at Berkeley Campus and some offsite locations. This list is for informative purposes and does not attempt to document all networks in use by Cal Berkeley as some are not managed or provided by IST Network Services.</p>
+<p>This list can be used to restrict access from specific networks, but be aware that network address are unreliable as a method of data protection.</p>
+<h2 style="color: #022648; font-size: 1.3em;">Full List of Campus Networks</h2>
+<p style="color: #022648;">This is the list of networks used by Cal Berkeley and managed by the IST Network Services group.</p>
+<table style="color: #022648;" border="2" width="90%" align="center">
+<tbody>
+<tr>
+<td rowspan="2" align="center" valign="middle"><strong>Network</strong></td>
+<td colspan="2" align="center"><strong>IP Address Range</strong></td>
+<td rowspan="2" align="center" valign="middle"><strong>Comment</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>From:</strong></td>
+<td align="left"><strong>To:</strong></td>
+</tr>
+<tr>
+<td>128.32.0.0/16</td>
+<td>128.32.0.0</td>
+<td>128.32.255.255</td>
+<td>Berkeley Campus and Some Remote Sites</td>
+</tr>
+<tr>
+<td>136.152.0.0/16</td>
+<td>136.152.0.0</td>
+<td>136.152.255.255</td>
+<td>Berkeley Campus and Some Remote Sites</td>
+</tr>
+<tr>
+<td>169.229.0.0/16</td>
+<td>169.229.0.0</td>
+<td>169.229.255.255</td>
+<td>Berkeley Campus and Some Remote Sites</td>
+</tr>
+<tr>
+<td>192.31.95.0/24<strong><sup>1</sup></strong></td>
+<td>192.31.95.0</td>
+<td>192.31.95.255</td>
+<td>Berkeley at San Diego Super Computer Center</td>
+</tr>
+<tr>
+<td>192.31.105.0/24<strong><sup>1</sup></strong></td>
+<td>192.31.105.0</td>
+<td>192.31.105.255</td>
+<td>Berkeley Campus and Some Remote Sites</td>
+</tr>
+<tr>
+<td>192.31.161.0/24<strong><sup>1</sup></strong></td>
+<td>192.31.161.0</td>
+<td>192.31.161.255</td>
+<td>Berkeley at San Diego Super Computer Center</td>
+</tr>
+<tr>
+<td>192.58.221.0/24<strong><sup>1</sup></strong></td>
+<td>192.58.221.0</td>
+<td>192.58.221.255</td>
+<td>Berkeley at San Diego Super Computer Center</td>
+</tr>
+<tr>
+<td>192.101.42.0/24<strong><sup>1</sup></strong></td>
+<td>192.101.42.0</td>
+<td>192.101.42.255</td>
+<td>Berkeley at San Diego Super Computer Center</td>
+</tr>
+<tr>
+<td>192.107.102.0/24<strong><sup>1</sup></strong></td>
+<td>192.107.102.0</td>
+<td>192.107.102.255</td>
+<td>Berkeley at San Diego Super Computer Center</td>
+</tr>
+<tr>
+<td>10.0.0.0/8<strong><sup>2</sup></strong></td>
+<td>10.0.0.0</td>
+<td>10.255.255.255</td>
+<td>Non-Internet Routable <a style="color: #116673;" href="https://nettools.net.berkeley.edu/pubtools/info/rfc1918.html">RFC 1918 Address Space</a> used at Berkeley</td>
+</tr>
+<tr>
+<td>2607:f140::/32<strong><sup>2</sup></strong></td>
+<td>2607:f140::0</td>
+<td>2607:f140:ffff:ffff:ffff:ffff:ffff:ffff</td>
+<td>UC Berkeley IPv6 Allocation</td>
+</tr>
+</tbody>
+</table>
+<h2 style="color: #022648; font-size: 1.3em;">Campus Wireless Networks</h2>
+<table style="color: #022648;" border="2" width="90%" align="center">
+<tbody>
+<tr>
+<td rowspan="2" align="center" valign="middle"><strong>Network</strong></td>
+<td colspan="2" align="center"><strong>IP Address Range</strong></td>
+<td rowspan="2" align="center" valign="middle"><strong>Comment</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>From:</strong></td>
+<td align="left"><strong>To:</strong></td>
+</tr>
+<tr>
+<td colspan="4"><strong>AirBears2 and eduroam Wireless Networks</strong></td>
+</tr>
+<tr>
+<td>10.142.0.0/16</td>
+<td>10.142.0.0</td>
+<td>10.142.255.255</td>
+<td>Client Cal Berkeley Local Campus Access Network</td>
+</tr>
+<tr>
+<td>136.152.28.0/22</td>
+<td>136.152.28.0</td>
+<td>136.152.31.255</td>
+<td>Client Internet Access Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>136.152.36.0/22</td>
+<td>136.152.36.0</td>
+<td>136.152.39.255</td>
+<td>Client Internet Access Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>136.152.142.0/24</td>
+<td>136.152.142.0</td>
+<td>136.152.142.255</td>
+<td>Client Internet Access Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>136.152.145.0/24</td>
+<td>136.152.145.0</td>
+<td>136.152.145.255</td>
+<td>Client Internet Access Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>136.152.148.0/22</td>
+<td>136.152.148.0</td>
+<td>136.152.151.255</td>
+<td>Client Internet Access Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>2607:f140:400::/48</td>
+<td>2607:f140:400::0</td>
+<td>2607:f140:400:ffff:ffff:ffff:ffff:ffff</td>
+<td>Client IPv6 Public Network</td>
+</tr>
+<tr>
+<td colspan="4"><strong>CalVisitor Wireless Networks</strong></td>
+</tr>
+<tr>
+<td>10.105.128.0/17<strong><sup>1</sup></strong></td>
+<td>10.105.128.128</td>
+<td>10.105.255.255</td>
+<td>Client Campus Network</td>
+</tr>
+<tr>
+<td>192.31.105.0/24<strong><sup>1</sup></strong></td>
+<td>192.31.105.128</td>
+<td>192.31.105.255</td>
+<td>Client Public Network (NAT Pool)</td>
+</tr>
+<tr>
+<td>2607:f140:6000::/48<strong><sup>1</sup></strong></td>
+<td>2607:f140:6000::0</td>
+<td>2607:f140:6000:ffff:ffff:ffff:ffff:ffff</td>
+<td>Client IPv6 Public Networks</td>
+</tr>
+</tbody>
+</table>
+<h2 style="color: #022648; font-size: 1.3em;">Campus Remote Access VPN Networks</h2>
+<table style="color: #022648;" border="2" width="90%" align="center">
+<tbody>
+<tr>
+<td colspan="4"><strong>Campus Legacy UCBVPN Client Networks</strong></td>
+</tr>
+<tr>
+<td rowspan="2" align="center" valign="middle"><strong>Network</strong></td>
+<td colspan="2" align="center"><strong>IP Address Range</strong></td>
+<td rowspan="2" align="center" valign="middle"><strong>Comment</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>From:</strong></td>
+<td align="left"><strong>To:</strong></td>
+</tr>
+<tr>
+<td>10.136.0.0/16</td>
+<td>10.136.0.0</td>
+<td>10.136.255.255</td>
+<td>Spit Tunnel Client Local Campus Access</td>
+</tr>
+<tr>
+<td>136.152.208.0/23</td>
+<td>136.152.208.0</td>
+<td>136.152.209.255</td>
+<td>Full Tunnel Client Network</td>
+</tr>
+<tr>
+<td>136.152.210.0/23</td>
+<td>136.152.210.0</td>
+<td>136.152.211.255</td>
+<td>Full Tunnel Client Network</td>
+</tr>
+<tr>
+<td>2607:f140:800:80::/64</td>
+<td>2607:f140:800:80::0</td>
+<td>2607:f140:800:80:ffff:ffff:ffff:ffff</td>
+<td>IPv6 Client Network</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<table style="color: #022648;" border="2" width="90%" align="center">
+<tbody>
+<tr>
+<td colspan="4"><strong>bSecure Remote Access VPN Client Networks </strong>(bSecure Firewall Object "UCB-bSecure-Remote-Access")<strong><br /></strong></td>
+</tr>
+<tr>
+<td align="center" valign="middle"><strong>IPv4 Network</strong></td>
+<td align="center"><strong>IPv6 Network</strong></td>
+<td colspan="2" align="center" valign="middle"><strong>Comment</strong></td>
+</tr>
+<tr>
+<td>10.136.128.0/18</td>
+<td>2607:f140:800:3::/64</td>
+<td>Split Tunnel Client Networks</td>
+</tr>
+<tr>
+<td>136.152.16.0/20</td>
+<td>2607:f140:800:1::/64</td>
+<td>Full, Library, and Auto Tunnel Networks</td>
+</tr>
+<tr>
+<td>136.152.210.0/23</td>
+<td>2607:f140:800:2::/64</td>
+<td>Restricted Tunnel Networks</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p style="color: #022648;"><strong>Notes:</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;<strong>*</strong>Access to library resources is estimated only and provided as a guide<br />&nbsp;&nbsp;&nbsp;&nbsp;<strong><sup>1</sup></strong>This network or address range does not have access to Library resources<br />&nbsp;&nbsp;&nbsp;&nbsp;<strong><sup>2</sup></strong>Some address ranges within the network do not have access to Library resources</p></div></div><script type="text/javascript">function openAttachment(url, name) {
+			window.open(url, name, "toolbar=no,menubar=no,personalbar=no,width=800,height=600," +
+						"scrollbars=yes,resizable=yes");
+			
+		}</script><div class="snc-article-header-author"><div class="snc-article-author"><div id="authorGhost" class="icon-user-profile snc-article-header-author-ghost"></div><div class="author-info"><div id="articleAuthor" class="snc-article-footer-metadata-published" style="display: block;padding-top: 5px">Revised by Sean Schluntz</div><div id="articleModifiedLabel" class="snc-article-footer-metadata-published">Last modified 2018-10-12 09:44:44</div></div></div></div><div id="articleFooterSection" class="snc-article-footer-section" style="display: none;"><div class="snc-article-footer-section-ratings"><script>function KbArticleRatingClass() {
+						var THANK_YOU = "Thank you";
+						var currentId = '7ac6712adb856b8c775617e15b9619a7';
+
+						function ajaxPost(value) {
+							if (currentId) {
+								var ajax = new GlideAjax('KBAjaxSNC');
+								ajax.addParam('sysparm_type', 'saveUseful');
+								ajax.addParam('sysparm_useful', value);
+								ajax.addParam("sysparm_article_id", currentId);
+								var query = $j('#sysparm_search');
+								ajax.addParam('sysparm_search', (query.length) ? escape(query.val()) : '');
+								ajax.addParam("ts_queryId", "");
+								ajax.getXMLAnswer(postUsefulCallback);
+							}
+						}
+
+						function postUsefulCallback(answer) {
+							var data = answer.evalJSON(true);
+							if (!data) {
+								return kbViewArticle.showErrorMessage('Useful rating not submitted');
+							}
+							if (!data.success) {
+								return kbViewArticle.showErrorMessage(data.message);
+							}
+						}
+
+						function feedback(value) {
+							// animation
+							$j('.kb-article-yn-box').hide();
+							$j('.kb_box_centered').removeAttr("tabindex");
+							var label = $j('.kb-article-yn-label');
+							label.animate({opacity: 0}, 600, function() {
+								label.text(THANK_YOU);
+							}).animate({opacity: 1}, 600, function() {
+								setTimeout(function(){	
+									$j('.snc-article-footer-section-ratings').animate({
+										height: 0,
+										opacity: 0
+									}, 600);
+								$j('.kb_box_centered').attr('aria-hidden',"true");
+								$j('.kb-article-yn-label').remove();
+								}, 1250);
+							});
+
+							ajaxPost(value);
+						}
+
+						return {
+							feedback: feedback
+						};
+					}
+
+					// create an instance
+					var kbArticleRating = new KbArticleRatingClass();</script><div class="kb_box_centered" role="section"><span class="sr-only">Is this article helpful?</span><span id="kb_helpful_yn_label" class="kb-article-yn-label" aria-live="polite"><span aria-hidden="true">Helpful?</span></span><span role="group" aria-labelledby="kb_helpful_yn_label" class="kb-article-yn-box"><button class="btn btn-success-subdued kb-article-yes-btn" onclick="kbArticleRating.feedback('yes')">Yes</button><button class="btn btn-destructive-subdued kb-article-no-btn" onclick="kbArticleRating.feedback('no')">No</button><span class="kb-article-yn-percentage" aria-hidden="true"></span></span></div></div><div id="kbCommentsAndLiveFeedDisplay" class="snc-comments-live-feed-cntnr"><div class="snc-kb-layout"><input type="hidden" aria-hidden="true" id="sys_id" value="7ac6712adb856b8c775617e15b9619a7"></input><input type="hidden" aria-hidden="true" id="article_flag" value=""></input><input type="hidden" aria-hidden="true" id="view_id" value=""></input><input type="hidden" aria-hidden="true" id="sysparm_search" value=""></input><input type="hidden" aria-hidden="true" id="ts_query_id" value=""></input><div id="comments_section" class="snc-comments-section" style="display:;"><div class="snc-kb-comment"><div class="snc-kb-comment-by"><img src="images/icons/feedback.gifx" alt="Feedback" aria-label="Feedback"></img><span class="snc-kb-comment-by-title">&nbsp;Posted by</span><span class="snc-kb-comment-by-user">&nbsp;Kathleen DURKIN</span><span class="snc-kb-comment-by-title">&nbsp;5 months ago</span></div><div class="snc-kb-comment-by-text">This list is not current.</div></div></div><div id="comment_link_div" class="snc-kb-comment-link" style="display: ;"><span class="pointerhand" onclick="showComments()">Leave a comment...</span></div><div id="comment_link_div_cancel" class="snc-kb-comment-link" style="display: none;margin-bottom:0.3em;"><span class="pointerhand" onclick="hideComments()">Leave a comment</span></div><div id="commentsdiv_empty" class="snc-kb-comment-div-empty">Please type feedback before submitting</div><div id="commentsdiv_done" class="snc-kb-comment-div-done" style="display:none">Your feedback has been submitted, thank you</div><div id="commentsdiv_flagmsg" class="snc-kb-comment-div-flagmsg">Please submit descriptive feedback after flagging an article, or it will not be modified</div><div id="commentsdiv" class="snc-kb-comment-div" style="display: none;"><div><textarea name="article_comments" id="article_comments" aria-label="Article comments" class="snc-kb-comments-entry form-control"></textarea></div><div><button name="not_important" class="btn btn-primary" style="margin-top:0.3em" id="feedback_button" type="submit" value="sysverb_feedback" aria-label="Comment" onClick="return kbFeedback2('article_comments');">Comment</button></div></div></div></div></div><div id="articleFooter" class="snc-article-footer"><div class="snc-article-footer-metadata-permalink"><a href="#" id="permalink" aria-label="Copy Permalink">Copy Permalink</a></div><script language="javascript">$j('#permalink').click(
+			function(){
+				//generate direct url to this article, by getting the domain and adding sysparm_article=NUMBER_OF_ARTICLE
+				copyToClipboard(window.location.origin + '/kb_view.do?sysparm_article=KB0011960');
+				return false;
+			}
+		);</script></div><script language="javascript" src="KnowledgeIframeFix.jsdbx">//  
+
+//</script><div style="border:none; visibility:hidden"><form name="sys_personalize" style="display:inline" method="GET" action="slushbucket.do"><input type="hidden" name="sysparm_referring_url" value="kb_view.do?sysparm_article=KB0011960"></input><input type="hidden" name="sysparm_view" value=""></input></form></div><script>(function() {
+        addLateLoadEvent(throwFrameLoaded);
+        // find if padding is needed
+        var pad = (isMSIE6 || isMSIE7 || navigator.userAgent.indexOf('MSIE 8') != -1) ? 1 : 0;
+        function throwFrameLoaded() {
+            try {
+                if (window.parent.CustomEvent) {
+                    // history suggests that if we don't size it down on page load,
+                    // when we check the height it will show the previous page's height
+                    window.parent.CustomEvent.fire('content_frame.loaded', self.name, 10);
+                    window.parent.CustomEvent.fire('content_frame.loaded', self.name, getPageHeight());
+                }
+            } catch (e) {}
+        }
+        function throwFrameSized() {
+            try {
+                if (window.parent.CustomEvent) {
+                    // IE9/IE10: resize events will be continuously triggered when there is a difference between document.body.scrollHeight and window.frameElement.height
+                    // to solve this issue, we do not fire event if the height we are going to set is the same as the height obtained after the previous fired event
+                    var previousHeight = window["g_iframe_height"];
+                    var pageHeight = getPageHeight();
+                    if (previousHeight != pageHeight) {
+                        window.parent.CustomEvent.fire('content_frame.resized', self.name, pageHeight);
+                        // IE9/IE10: page height may be changed again after the above firing. So we have to call getPageHeight() to get the new height after the above event has been fired.
+                        window["g_iframe_height"] = getPageHeight();
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function throwFrameSizedSmaller(){
+            try {
+                if (window.parent.CustomEvent) {
+                    window.parent.CustomEvent.fire('content_frame.loaded', self.name, getPageHeight(true));
+                }
+            } catch (e) {}
+        }
+
+        /**
+         * Simply speaking, scrollHeight and offsetHeight work differently on different browsers
+         * and in and out of quirks mode. IE9 has bugs that do not report them correctly even if
+         * you pick the right one, so we've built some extra controls.
+         */
+        function getPageHeight(resizeSmall) {
+            var popupElement, popupHeight;
+            // first, look for popups
+            var popups = $$('body > div.popup, .modal.in > .modal-dialog');
+            if (popups.length > 0) {
+                popupElement = popups[0];
+                popupHeight = popupElement.scrollHeight + popupElement.offsetTop;
+                //padding is needed or else the bottom border of the popup will be missing
+                return (document.body.scrollHeight > popupHeight ? document.body.scrollHeight : popupHeight) + pad;
+            }
+            // then, look for form elements
+            // use more specific selector to reduce browser response time
+            if ($$('body > div.section_header_content_no_scroll').length > 0) {
+                var mainContentHeight = $$('body > div.section_header_content_no_scroll')[0].scrollHeight;
+                
+                // we use the form_title class to distinguish between UI15+ where the form title actually adds to the height
+                var header = $$('body > div.section_header_div_no_scroll.form_title');
+                var headerHeight = header.length == 0 ? 0 : header[0].scrollHeight;
+                return mainContentHeight + headerHeight;
+            }
+            // then, look for touch scroll elements *CALGARY and forward*
+            if ($$('body > .touch_scroll').length > 0)
+                return $$('body > .touch_scroll')[0].scrollHeight;
+            // then, get the normal page height
+            if (document.body.scrollHeight || document.documentElement.scrollHeight) {
+                if (!resizeSmall){
+                    if(document.body.scrollHeight > document.documentElement.scrollHeight)
+                        return document.body.scrollHeight;
+                    else
+                        return document.documentElement.scrollHeight;
+                }
+                else{
+                    if(document.documentElement.scrollHeight > document.body.scrollHeight)
+                        return document.body.scrollHeight;
+                    else
+                        return document.documentElement.scrollHeight;
+                }
+            }
+            return document.body.offsetHeight;
+        }
+        // start observing only after page has been loaded to avoid handling large number of resize events especially on IE 7 and IE 8
+        addAfterPageLoadedEvent(function() {
+            CustomEvent.observe('frame.resized', throwFrameSized);
+            CustomEvent.observe('frame.resized.smaller', throwFrameSizedSmaller);
+            CustomEvent.observe('partial.page.reload', throwFrameLoaded); // specifically, reports and lists that cause the page to shrink
+            Event.observe(document.onresize ? document : window, "resize", throwFrameSized);
+            _frameChanged();
+        });
+    })();</script><span style="display:none" data-comments="js_includes_last_doctype"></span><script>NOW.xperf.lastDoctypeBegin = NOW.xperf.now();</script><script type="text/javascript" src="/scripts/doctype/js_includes_last_doctype.jsx?v=06-05-2019_1042&amp;lp=Tue_Oct_08_19_35_56_PDT_2019&amp;c=20_421"></script><script type="text/javascript" src="/scripts/heisenberg/heisenberg_all.jsx?v=06-05-2019_1042"></script><script type="text/javascript" src="/scripts/js_includes_list_edit_doctype.jsx?v=06-05-2019_1042&amp;lp=Tue_Oct_08_19_35_56_PDT_2019&amp;c=20_421"></script><script type="text/javascript" src="/scripts/transaction_scope_includes.jsx?v=06-05-2019_1042"></script><script>if ('') 
+			GlideTransactionScope.setTransactionScope('');
+		if ('') 
+			GlideTransactionScope.setRecordScope('');
+		if (typeof g_form != 'undefined')
+			$(g_form.getFormElement()).fire('glidescope:initialized', {gts : GlideTransactionScope});</script><span style="display:none" data-comments="requires"></span><script>NOW.xperf.lastDoctypeEnd = NOW.xperf.now();</script><span style="display:none" data-comments="db_context_menu_script"></span><script>NOW.xperf.dbContextBegin = NOW.xperf.now();</script><script>NOW.xperf.dbContextEnd = NOW.xperf.now();</script><span style="display:none" data-comments="db_context_menu_script"></span><script type="text/javascript" src="/scripts/doctype/z_last_include.jsx?v=06-05-2019_1042"></script></body><script type="text/html" id="popup_template"><div class="popup popup_form" style=""><iframe src="$src" style=""></iframe></div></script></html>

@@ -1,0 +1,28 @@
+<!-- TODO: Eventually update this and SCSS to use table tags rather than divs -->
+<div class="rts-table">
+  <div class="rts-header">
+    <div class="rts-row">
+      <div class="rts-cell rts-w100 rts-c">#</div>
+      <div class="rts-cell rts-w400">Type</div>
+      <div class="rts-cell rts-w400">Owner Title</div>
+      <div class="rts-cell rts-w150">Fee / Fine</div>
+      <div class="rts-cell rts-w400">Date</div>
+      <div class="rts-cell rts-c">Pay</div>
+    </div>
+  </div>
+  <% @fines.fines.each_with_index do |fine, idx| %>
+    <div class="rts-rowgrp">
+      <div class="rts-row">
+        <div class="rts-cell rts-w100 rts-c"><%= idx += 1 %></div>
+        <div class="rts-cell rts-w400"><%= fine.type %></div>
+        <div class="rts-cell rts-w400"><%= fine.owner %></div>
+        <div class="rts-cell rts-w150">$<%= fine.balance %></div>
+        <div class="rts-cell rts-w400"><%= fine.date.to_s(:long) %></div>
+        <div class="rts-cell rts-c">
+          <label for="fine_payment_<%= fine.id %>" class="hidden_label"><%= fine.type %></label>
+          <%= freeze_pay_column ? check_box("fine", "payment_#{fine.id}", {:disabled => true, :checked => true} ) : check_box("fine", "payment", {:multiple => true}, fine.id, nil ) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

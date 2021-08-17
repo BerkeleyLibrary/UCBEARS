@@ -1,0 +1,78 @@
+---
+provider: calnet
+uid: jane.doe
+info:
+  nickname: jane.doe
+credentials:
+  ticket: ST-453090-8B81zHCvlBWPbINqOyTSXqtiyyYauth-p2
+extra:
+  user: jane.doe
+  isFromNewLogin: 'true'
+  bypassMultifactorAuthentication: 'false'
+  authenticationDate: 2019-08-14T10:34:37.587-07:00[America/Los_Angeles]
+  authnContextClass: mfa-duo
+  displayName: Jane R Doe
+  givenName: Jane
+  successfulAuthenticationHandlers: mfa-duo
+  employeeNumber: '10163146'
+  samlAuthenticationStatementAuthMethod: urn:oasis:names:tc:SAML:1.0:am:unspecified
+  credentialType: DuoCredential
+  uid: '1551190'
+  berkeleyEduStuID: '3032640236'
+  berkeleyEduCSID: '3032640236'
+  authenticationMethod: mfa-duo
+  surname: Doe
+  departmentNumber: KPADM
+  berkeleyEduIsMemberOf:
+  - cn=edu:berkeley:app:2StepTest:Allow2StepViewTest,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:Majors:Undergraduate-Majors:16288,ou=campus
+    groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:calnet:calnet-spa-access:calnet-spa-app-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:webapp-default:webapp-default-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:org:libr:exproxy:ezproxy_access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:current-campus-community,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:undergrad-students-via-programs,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:titlecode:important-titlecode-groups,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:2Step:Require2Step,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:employees:staff:all-staff,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:adobecc:adobecc-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:rans:Remote-Access-Full,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:titlecode:groups:TC-004921,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:emp-aff-stu-no-retirees,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:Employees-and-UCPath-Affiliates,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:fom-cchem:fom-cchem-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:rans:Remote-Access-Core,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:2Step:Enforce2Step,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:all-accounts,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:Employees-Students-UCPath-Affiliates,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:dept:DepartmentNumber-groups:DN-KPADM,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:wifi:WiFi-Users,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:box_app:box_app-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:registered-students,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:all-students,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:g_suite:g_suite-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:auth-cas:lib_asktico:lib_asktico-access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:calmessages:students,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:titlecode:groups:TC-004920,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:dept:UCPath-DepartmentNumber-groups:UC-KPADM,ou=campus
+    groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:Employees-and-HCM-Affiliates-no-retirees,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:bcon:adobe_console_licensing:adobe-console-students,ou=campus
+    groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:Bargaining-Unit:B-U-Emp-Groups:BU-99,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:calmessages:undergrad-students,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:employees:staff:student-staff,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:org:libr:ezproxy:ezproxy_access,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:2StepTest:Enforce2StepTest,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:employees:student-employees,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:undergraduate-students,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:2Step:Allow2StepView,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:employees:all-emp,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:app:calmessages:CM-Student-Staff,ou=campus groups,dc=berkeley,dc=edu
+  - cn=edu:berkeley:official:students:Programs:Undergrad:16288U,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF
+  - STUDENT-TYPE-REGISTERED
+  berkeleyEduOfficialEmail: jrdoe@berkeley.edu
+  longTermAuthenticationRequestTokenUsed: 'false'

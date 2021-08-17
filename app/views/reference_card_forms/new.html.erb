@@ -1,0 +1,62 @@
+<%= form_for(@form, class: 'needs-validation') do |f| %>
+  <h1>Request for Reference Card - Main (Gardner) Stacks</h1>
+  <p>The UC Berkeley Library is comprised of many campus libraries and a portion of the collection is shelved off-campus. The requested description of the researcher's needs enables us to help you confirm if the MAIN Stacks has the materials you seek. Most other campus library collections are accessible for browsing without a pass or advanced approval. MAIN Stacks also offers a <%= link_to 'one-day pass', new_stack_pass_form_path %> for short-term needs.</p>
+  <p>Researchers requiring extended access to the on-site collections of the Main (Gardner) Stacks may apply for a Reference Card by completing this form. Responses are generally provided within a week of submission. If approved, the requester will receive a reply with an approval document as a PDF attachment. The requestor may print out the approval document or save it to their phone and bring it to the <%= link_to 'Library Privileges Desk', 'https://www.lib.berkeley.edu/using-the-libraries/privileges-desk' %> (Doe Library, Gardner Stacks Level A) along with a government-issued photo ID (passport, driver license, or state ID).</p>
+  <!-- FORM START -->
+  <p style="color: #ee0000">* Required</p>
+  <!-- name, affiliation, email, research description -->
+  <%= field_for(f, :name, required: true) %>
+  <%= field_for(f, :affiliation) %>
+  <%= field_for(f, :email, required: true) %>
+  <%= field_for(f, :research_desc, required: true) %>
+  <!-- local_id : Location of item -->
+  <%= field_for(f, :local_id, required: true) %>
+  <small id="searchHelpBlock" class="form-text text-muted">
+    Location should read 'MAIN (Gardner) Stacks' and Status: 'Available'
+  </small>
+  <br/>
+  <!-- pass_date : Ref Card Start Date -->
+  <div class="form-group m-0 required">
+    <%= label_tag(:reference_card_form_pass_date, "Requested access start date", class: "control-label mb-2") %>
+    <%= text_field_tag(:pass_date, nil, class: "form-control w-25 mb-0", placeholder: "mm/dd/yyyy", required: true, id: 'reference_card_form_pass_date', name: 'reference_card_form[pass_date]') %>
+    <% if ! f.object.errors.messages[:pass_date].empty? %>
+      <% if f.object.inspect %>
+        <script>
+          document.getElementById("reference_card_form_pass_date").style.borderColor = 'red';
+        </script>
+      <% end %>
+    <% end %>
+    <br/>
+  </div>
+  <!-- pass_date_end : Ref Card End Date -->
+  <div class="form-group m-0 required">
+    <%= label_tag(:reference_card_form_pass_date_end, "Requested access end date", class: "control-label mb-2") %>
+    <%= text_field_tag(:pass_date_end, nil, class: "form-control w-25 mb-0", placeholder: "mm/dd/yyyy", required: true, id: 'reference_card_form_pass_date_end', name: 'reference_card_form[pass_date_end]') %>
+    <% if ! f.object.errors.messages[:pass_date_end].empty? %>
+      <% if f.object.inspect %>
+        <script>
+          document.getElementById("reference_card_form_pass_date_end").style.borderColor = 'red';
+        </script>
+      <% end %>
+    <% end %>
+    <br/>
+  </div>
+  <!-- Recaptcha -->
+  <div class="form-group">
+    <%= recaptcha_tags %>
+  </div>
+  <!-- Submit/Reset Buttons -->
+  <p>
+    <input id="submit_btn" type="submit" class="btn btn-primary" value="Submit">
+    <input type="button" name="reset" class="btn btn-link" value="Reset" onclick="formReset('reference-card');">
+  </p>
+  <!-- FORM END -->
+<% end %>
+<script>
+  $(function() {
+    $( "#reference_card_form_pass_date" ).datepicker();
+  });
+  $(function() {
+    $( "#reference_card_form_pass_date_end" ).datepicker();
+  });
+</script>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>      Z   22        4500</leader>
+    <datafield ind1=" " ind2=" " tag="010">
+      <subfield code="a">XRF 00030887</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="020">
+      <subfield code="a">0312237340 (cloth)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="020">
+      <subfield code="a">0312237359 (pbk.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="035">
+      <subfield code="a">GLADN51045748</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="a">DLC</subfield>
+      <subfield code="c">DLC</subfield>
+      <subfield code="d">C#P</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="042">
+      <subfield code="a">pcc</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="043">
+      <subfield code="a">e------</subfield>
+    </datafield>
+    <datafield ind1="0" ind2="0" tag="050">
+      <subfield code="a">HC240</subfield>
+      <subfield code="b">.C518 2000</subfield>
+    </datafield>
+    <datafield ind1="0" ind2="0" tag="082">
+      <subfield code="a">338.5/42</subfield>
+      <subfield code="2">21</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="090">
+      <subfield code="a">HC240</subfield>
+      <subfield code="b">.C518 2000</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">Clavin, Patricia.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="4" tag="245">
+      <subfield code="a">The great depression in Europe, 1929-1939 /</subfield>
+      <subfield code="c">Patricia Clavin.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="260">
+      <subfield code="a">New York :</subfield>
+      <subfield code="b">St. Martin's Press,</subfield>
+      <subfield code="c">2000.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">viii, 244 p. :</subfield>
+      <subfield code="b">ill. ;</subfield>
+      <subfield code="c">23 cm.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="504">
+      <subfield code="a">Includes bibliographical references (p. 222-236) and index.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Depressions</subfield>
+      <subfield code="y">1929</subfield>
+      <subfield code="z">Europe.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Europe</subfield>
+      <subfield code="x">Economic conditions</subfield>
+      <subfield code="y">1918-1945.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="935">
+      <subfield code="a">GLADN51045748</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="935">
+      <subfield code="a">.b9577993</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="957">
+      <subfield code="a">OCLC xref loaded 20210523</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="991">
+      <subfield code="a">bb9577993</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="994">
+      <subfield code="a">92</subfield>
+      <subfield code="b">CUY</subfield>
+    </datafield>
+  </record>
+</collection>

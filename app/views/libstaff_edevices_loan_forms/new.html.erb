@@ -1,0 +1,99 @@
+<%= form_for(@form, class: 'needs-validation') do |f| %>
+  <h1>Library Staff Electronic Devices Loan - Terms and Conditions</h1>
+
+  <% if @form.errors.any? %>
+    <div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+      <h5>Validation Failed</h5>
+
+      <p>We identified the following errors in your submission:</p>
+
+      <ul>
+        <% @form.errors.full_messages.each do |attribute, msg| %>
+          <li><%= "#{attribute} #{msg}" %></li>
+        <% end %>
+      </ul>
+
+      <p>Please correct these and resubmit the form.</p>
+    </div>
+  <% end %>
+
+  <div class="alert alert-warning"><strong>Eligibility:</strong> This service is available to Library staff only.</div>
+
+  <p>Users must be library staff in good standing (no fines, no overdue recalls, and no blocks) in order to borrow a laptop computer or tablet from the UC Berkeley Library. Users must provide their valid Cal 1 Card to borrow; desk staff must be able to scan card barcode at check-out. Devices for library staff are available at the Main Circulation Desk in Doe Library.</p>
+
+  <p>Revised 7/23/2021</p>
+
+  <hr />
+
+  <p style="color: #ee0000">* Required</p>
+
+  <h2>Borrowing Guidelines</h2>
+
+  <ul>
+    <li>The current academic year Electronic Devices Staff Agreement form must be signed in person or electronically prior to checking out a laptop.</li>
+    <li>Devices are holdable/reservable through UC Library Search; devices are not subject to recall.</li>
+    <li>Short-term devices: all files and data are erased at shutdown or when restarted - save all work to a portable USB storage device or to cloud-based storage.</li>
+    <li>Long term devices: all files and data are erased after check-in - save all work to a portable USB storage device or to cloud-based storage prior to returning.</li>
+    <li>Devices must be returned in person at the Main Circulation Desk in Doe Library with all accessories; devices cannot be returned via book drop.</li>
+  </ul>
+
+  <div class="check-heading" style="font-size: 1.5rem";>Borrowing Guidelines<span style="color: #ee0000">*</span></div>
+
+  <div> <%= f.check_box :borrow_check, {required: true}, "checked", "unchecked" %> <%= f.label :borrow_check, "I have read and I understand the borrowing guidelines" %> </div>
+
+  <br />
+
+  <h2>Library Staff Lending Program Loan Periods</h2>
+
+  <ul>
+    <li>Short-term (4-hour): Due exactly 4 hours from loan time. One renewal allowed, if no other holds on the device. Devices circulate with bag, charger, and mouse. Holds will be cancelled if not picked up within one day.</li>
+    <li> Long-term (14-day): Due 14 days from date of check out (or next open day). Devices circulate with bag, charger, and mouse. One renewal allowed, if no other holds on the device. Holds will be cancelled if not picked up within two days.</li>
+  </ul>
+
+  <div class="check-heading" style="font-size: 1.5rem";>Library Staff Lending Program Loan Periods <span style="color: #ee0000">*</span></div>
+
+  <div> <%= f.check_box :lending_check, {required: true}, "checked", "unchecked" %> <%= f.label :lending_check, "I have read and I understand the staff lending program loan periods." %> </div>
+
+  <br />
+
+  <h2>Fines and Liability</h2>
+
+  <ul>
+    <li>We will check all equipment to ensure completeness and proper working order when you borrow and when you return.</li>
+    <li>Borrowers assume responsibility for any damage to, loss of, and/or theft of the laptop while charged out to their library account.</li>
+    <li>Replacement costs: $2,000 for laptops, $1,200 for iPads, $95 for MacBook chargers, $80 for Dell chargers, $30 for laptop bags, and $20 for tablet bags. No billing/processing fee will be assessed. More information on replacement costs can be found at <a href="http://lib.berkeley.edu/using-the-libraries/fines" target="_blank">lib.berkeley.edu/using-the-libraries/fines</a>.</li>
+    <li>No actual equipment replacement accepted.</li>
+    <li>Standard hourly inspection/repair rate is $75 (damage inspection cost begins at $75).</li>
+    <li>All fines and fees, including replacement costs and overdue charges, will be assessed at the library’s discretion, are non-negotiable, and will not be waived under any circumstance.</li>
+  </ul>
+
+  <div class="check-heading" style="font-size: 1.5rem";>Fines and Liability <span style="color: #ee0000">*</span></div>
+
+  <div> <%= f.check_box :fines_check, {required: true}, "checked", "unchecked" %> <%= f.label :fines_check, "I have read and I understand the fines and liability." %> </div>
+
+<br />
+
+  <%= field_for(f, :display_name, required: true, readonly: true) %>
+  <%= field_for(f, :patron_email, required: true, readonly: true) %>
+
+<br />
+
+  <h2>Electronic Devices Loan Agreement</h2>
+
+  <p>I have read the loan terms and conditions. When I check out the item, I have verified that it is in good working order. By signing below, I take full responsibility for any damage repairs or for the replacement cost. I also understand that the replacement cost is non-negotiable.</p>
+
+  <div class="emphasis" style="font-size: 1.5rem";>By checking this box, I am submitting an electronic signature that I agree with, and will adhere to, the policies and procedures stated above.<span style="color: #ee0000">*</span></div>
+
+  <div> <%= f.check_box :edevices_check, {required: true}, "checked", "unchecked" %> <%= f.label :edevices_check, "I agree to this Electronic Devices Loan Agreement." %> </div>
+
+
+  <br />
+
+  <div class="btn-group" role="group">
+    <%= f.submit(class: "btn btn-primary") %>
+  </div>
+<% end %>

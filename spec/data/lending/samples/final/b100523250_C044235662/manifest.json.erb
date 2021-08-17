@@ -1,0 +1,83 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "<%= manifest_uri %>",
+  "@type": "sc:Manifest",
+  "label": "The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery",
+  "metadata": [
+    {
+      "label": "Title",
+      "value": "The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery"
+    },
+    {
+      "label": "Author",
+      "value": "Horn, Walter, 1908-1995."
+    }
+  ],
+  "sequences": [
+    {
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "<%= manifest_uri %>/canvas/p100",
+          "@type": "sc:Canvas",
+          "label": "Page 100",
+          "width": 2136,
+          "height": 2791,
+          "images": [
+            {
+              "@id": "<%= image_dir_uri %>/00000100.tif/annotation/p100-image",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "<%= manifest_uri %>/canvas/p100",
+              "resource": {
+                "@id": "<%= image_dir_uri %>/00000100.tif/full/!1024,1024/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "width": 2136,
+                "height": 2791,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "<%= image_dir_uri %>/00000100.tif",
+                  "profile": "http://iiif.io/api/image/2/level1.json"
+                }
+              }
+            }
+          ],
+          "metadata": [
+            {
+              "label": "Transcript",
+              "value": "The Plan of St. Gall voLtumeE1\n\n \n\n \n\n \n\n \n\n \n\n \n\n \n\n \n\n1g 24\nen eo er ee ca. 1:800\n\nROME. THEATER OF MARCELLUS\n\n51.B [after Calza-Bini, 1953, facing p. 15]\nPlan showing substructure and two lower tiers of seating. The memorial was built by Augustus, and dedicated to Marcellus in 13 B.C.\n\n51.C [after Calza-Bini, 1953, p. 14]\n\nPlan showing two upper tiers of seating and gallery.\n\n66\n''"
+            }
+          ]
+        },
+        {
+          "@id": "<%= manifest_uri %>/canvas/p195",
+          "@type": "sc:Canvas",
+          "label": "Page 195",
+          "width": 4088,
+          "height": 5342,
+          "images": [
+            {
+              "@id": "<%= image_dir_uri %>/00000195.tif/annotation/p195-image",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "<%= manifest_uri %>/canvas/p195",
+              "resource": {
+                "@id": "<%= image_dir_uri %>/00000195.tif/full/!1024,1024/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "width": 4088,
+                "height": 5342,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "<%= image_dir_uri %>/00000195.tif",
+                  "profile": "http://iiif.io/api/image/2/level1.json"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

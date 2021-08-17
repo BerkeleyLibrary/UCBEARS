@@ -1,0 +1,111 @@
+<?xml version='1.0'?>
+<collection xmlns='http://www.loc.gov/MARC21/slim' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xsi:schemaLocation='http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd'>
+  <record>
+    <leader>Z 22 4500</leader>
+    <datafield ind1=' ' ind2=' ' tag='010'>
+      <subfield code='a'>XRF 71118844</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='035'>
+      <subfield code='a'>CUBU24158267-B</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='035'>
+      <subfield code='a'>GLADN16811687</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='090'>
+      <subfield code='d'>f</subfield>
+      <subfield code='a'>BX2659.S32</subfield>
+      <subfield code='b'>.H67</subfield>
+    </datafield>
+    <datafield ind1='1' ind2='0' tag='100'>
+      <subfield code='a'>Horn, Walter,</subfield>
+      <subfield code='d'>1908-1995.</subfield>
+    </datafield>
+    <datafield ind1='1' ind2='4' tag='245'>
+      <subfield code='a'>The Plan of St. Gall :</subfield>
+      <subfield code='b'>a study of the architecture &amp; economy of life in a paradigmatic Carolingian monastery /
+      </subfield>
+      <subfield code='c'>by Walter Horn and Ernest Born ; with a foreword by Wolfgang Braunfels ; a translation into
+        English by Charles W. Jones of the Directives of Adalhard, 753-826, the Ninth Abbot of Corbie ; and with a note
+        by A. Hunter Dupree on the Significance of the Plan of St. Gall to the history of measurement
+      </subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='260'>
+      <subfield code='a'>Berkeley :</subfield>
+      <subfield code='b'>University of California Press,</subfield>
+      <subfield code='c'>1979</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='300'>
+      <subfield code='a'>3 v. :</subfield>
+      <subfield code='b'>ill. ;</subfield>
+      <subfield code='c'>37 cm</subfield>
+    </datafield>
+    <datafield ind1='1' ind2=' ' tag='490'>
+      <subfield code='a'>California studies in the history of art ;</subfield>
+      <subfield code='v'>19</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='500'>
+      <subfield code='a'>The Plan is in the library of the former monastery of St. Gall (Stiftsbibliothek, Ms. 1092)
+      </subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='500'>
+      <subfield code='a'>Errata slip for v. 3 inserted</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='500'>
+      <subfield code='a'>Includes index</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='504'>
+      <subfield code='a'>Bibliography: v. 3, p. 167-200</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='590'>
+      <subfield code='a'>BANC; fBX2659.S32.H67: Bancroft owns prospectus</subfield>
+    </datafield>
+    <datafield ind1='2' ind2='0' tag='610'>
+      <subfield code='a'>Kloster St. Gallen.</subfield>
+    </datafield>
+    <datafield ind1='0' ind2='0' tag='630'>
+      <subfield code='a'>St. Galler Klosterplan.</subfield>
+    </datafield>
+    <datafield ind1='0' ind2='0' tag='700'>
+      <subfield code='a'>Adalard,</subfield>
+      <subfield code='c'>Saint,</subfield>
+      <subfield code='d'>-826.</subfield>
+      <subfield code='t'>Consuetudines corbeienses. English. 1979.</subfield>
+    </datafield>
+    <datafield ind1='1' ind2='0' tag='700'>
+      <subfield code='a'>Born, Ernest,</subfield>
+      <subfield code='d'>1898-1992.</subfield>
+    </datafield>
+    <datafield ind1='2' ind2='0' tag='710'>
+      <subfield code='a'>Stiftsbibliothek Sankt Gallen.</subfield>
+      <subfield code='k'>Manuscript.</subfield>
+      <subfield code='n'>1092.</subfield>
+    </datafield>
+    <datafield ind1='2' ind2='0' tag='710'>
+      <subfield code='a'>University of California Press.</subfield>
+      <subfield code='e'>Book producer.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='752'>
+      <subfield code='a'>United States</subfield>
+      <subfield code='b'>California</subfield>
+      <subfield code='d'>Berkeley</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='830'>
+      <subfield code='a'>California studies in the history of art ;</subfield>
+      <subfield code='v'>19.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='935'>
+      <subfield code='a'>GLADN16811687</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='935'>
+      <subfield code='a'>GLADN50632482</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='954'>
+      <subfield code='a'>20120801</subfield>
+      <subfield code='b'>Marcive Authority Bib</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='957'>
+      <subfield code='a'>OCLC xref loaded 20190804</subfield>
+    </datafield>
+  </record>
+</collection>

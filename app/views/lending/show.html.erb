@@ -1,0 +1,15 @@
+<% content_for(:page_title, "UC BEARS: #{@lending_item.title}") %>
+
+<h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
+
+<%# TODO: style navigation properly %>
+<nav><%= link_to 'Index', lending_path %></nav>
+
+<%=
+  render(
+    partial: 'record',
+    locals: {
+      presenter:LendingItemShowPresenter.new(self, @lending_item)
+    }
+  )
+%>

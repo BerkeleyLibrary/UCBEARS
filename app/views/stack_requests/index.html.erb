@@ -1,0 +1,14 @@
+<h3>Stack Pass and Reference Card</h3>
+<p>Allows the general public to request one-day access to the Main (Gardner) Stacks via a Stack Pass or extended access via a Reference Card.</p>
+<br />
+<!-- Stack Pass Form -->
+<%= link_to "Stack Pass", new_stack_pass_form_path %>
+<br />
+<!-- Reference Card Form -- COMING SOON -->
+<%= link_to "Reference Card", new_reference_card_form_path %>
+<br />
+<!-- Admin page only visible for administrators -->
+<% if @user_is_admin %>
+  <%= link_to "Admin User", forms_stack_pass_admin_path %>
+  <br />
+<% end %>

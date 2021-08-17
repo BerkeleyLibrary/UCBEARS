@@ -1,0 +1,25 @@
+University of California, Berkeley
+<%= page_header %>
+Updated <%= Time.current.strftime('%I:%M:%S %p %Z %b %d %Y') %><%# TODO: why the custom format? %>
+
+
+VERSION 1 (comma delimited)
+============================================
+<%= networks.select(&:ipv4?).map(&:to_vendor_star_format).sort.join(', ') %>
+
+
+VERSION 2 (same as above, but not comma delimited)
+============================================
+<%= networks.select(&:ipv4?).map(&:to_vendor_star_format).sort.join("\n") %>
+
+
+VERSION 3 (the format preferred by some publishers)
+============================================
+<%= networks.select(&:ipv4?).map(&:to_vendor_range_format).sort.join("\n") %>
+
+Each "*" means the range from 0 to 255
+
+
+IP Version 6
+============================================
+<%= @generated.sort.join("\n") %>

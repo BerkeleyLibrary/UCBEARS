@@ -1,0 +1,29 @@
+---
+provider: calnet
+uid: jona.jonsdottir
+info:
+  nickname: jona.jonsdottir
+credentials:
+  ticket: ST-453090-8B81zHCvlBWPbINqOyTSXqtiyyYauth-p2
+extra:
+  user: jona.jonsdottir
+  isFromNewLogin: 'true'
+  bypassMultifactorAuthentication: 'false'
+  authenticationDate: 2019-08-14T10:34:37.587-07:00[America/Los_Angeles]
+  authnContextClass: mfa-duo
+  displayName: Jona J Jonsdottir
+  givenName: Jona
+  successfulAuthenticationHandlers: mfa-duo
+  employeeNumber: '5551213'
+  samlAuthenticationStatementAuthMethod: urn:oasis:names:tc:SAML:1.0:am:unspecified
+  credentialType: DuoCredential
+  uid: '5555551213'
+  authenticationMethod: mfa-duo
+  surname: Jonsdottir
+  departmentNumber: KPADM
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+  - EMPLOYEE-TYPE-STAFF
+  berkeleyEduOfficialEmail: jjonsdot@berkeley.edu
+  longTermAuthenticationRequestTokenUsed: 'false'

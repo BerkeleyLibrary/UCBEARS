@@ -1,0 +1,1 @@
+--plugin minitest --private app/**/*.rb test/**/*_test.rb

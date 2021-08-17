@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="us-en">
+  <head>
+    <title><%= page_title %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= render(partial: 'controller_assets') %>
+
+    <%= yield :head_additional %>
+  </head>
+  <body>
+    <main id="main">
+      <a href="#main" class="visually-hidden focusable skip-link">Skip to main content</a>
+      <div id="app" class="container">
+        <%= render "layouts/navbar" %>
+        <%= alerts %>
+        <%= yield %>
+        <%= render "layouts/footer" %>
+      </div>
+    </main>
+  </body>
+</html>
