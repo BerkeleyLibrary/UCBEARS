@@ -4,8 +4,8 @@
 
 <%# TODO: style navigation properly %>
 <nav>
-<%= link_to 'Index', lending_path(directory: @lending_item.directory) %> |
-<%= link_to 'Back', lending_path %>
+<%= link_to 'Index', index_path(directory: @lending_item.directory) %> |
+<%= link_to 'Back', index_path %>
 </nav>
 
 <%= render(partial: 'form', locals: { item: @lending_item }) %>

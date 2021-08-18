@@ -84,7 +84,7 @@ describe LendingController, type: :system do
     context 'without any items' do
       describe :index do
         it 'shows an empty list' do
-          visit lending_path
+          visit index_path
 
           expect(page.title).to include('UC BEARS')
           expect_no_alerts
@@ -102,7 +102,7 @@ describe LendingController, type: :system do
 
       describe :index do
         before(:each) do
-          visit lending_path
+          visit index_path
         end
 
         def find_item_section(item)

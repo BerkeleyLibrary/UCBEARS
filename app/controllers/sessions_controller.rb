@@ -12,7 +12,7 @@
 class SessionsController < ApplicationController
   # Redirect the user to Calnet for authentication
   def new
-    redirect_args = { origin: params[:url] || home_path }.to_query
+    redirect_args = { origin: params[:url] || index_path }.to_query
     redirect_to "/auth/calnet?#{redirect_args}"
   end
 
@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
 
     sign_in @user
 
-    redirect_to request.env['omniauth.origin'] || home_path
+    redirect_to request.env['omniauth.origin'] || index_path
   end
 
   # Logout the user by redirecting to CAS logout screen

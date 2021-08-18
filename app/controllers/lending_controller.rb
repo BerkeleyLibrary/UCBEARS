@@ -112,7 +112,7 @@ class LendingController < ApplicationController
       @lending_item.update!(active: true)
       flash[:success] = 'Item now active.'
     end
-    redirect_to(:lending)
+    redirect_to(:index)
   end
 
   def deactivate
@@ -122,7 +122,7 @@ class LendingController < ApplicationController
       flash[:success] = 'Item now inactive.'
     end
 
-    redirect_to(:lending)
+    redirect_to(:index)
   end
 
   def destroy
@@ -133,7 +133,7 @@ class LendingController < ApplicationController
       flash[:success] = 'Item deleted.'
     end
 
-    redirect_to(:lending)
+    redirect_to(:index)
   end
 
   # ------------------------------------------------------------

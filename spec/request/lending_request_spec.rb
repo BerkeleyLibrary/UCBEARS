@@ -54,7 +54,7 @@ describe LendingController, type: :request do
     context 'without any items' do
       describe :index do
         it 'shows an empty list' do
-          get lending_path
+          get index_path
           expect(response).to be_successful
         end
       end
@@ -63,7 +63,7 @@ describe LendingController, type: :request do
         it 'displays the form' do
           get lending_new_path
           expect(response).to be_successful
-          expect(response.body).to include(lending_path)
+          expect(response.body).to include(index_path)
         end
       end
 
@@ -71,7 +71,7 @@ describe LendingController, type: :request do
         it 'creates items' do
           valid_item_attributes.each do |item_attributes|
             expect do
-              post lending_path, params: { lending_item: item_attributes }
+              post index_path, params: { lending_item: item_attributes }
             end.to change(LendingItem, :count).by(1)
 
             directory = item_attributes[:directory]
@@ -105,7 +105,7 @@ describe LendingController, type: :request do
 
           it 'does not create items' do
             invalid_item_attributes.each do |item_attributes|
-              expect { post lending_path, params: { lending_item: item_attributes } }
+              expect { post index_path, params: { lending_item: item_attributes } }
                 .not_to change(LendingItem, :count)
               expect(response.status).to eq(422) # unprocessable entity
             end
@@ -124,7 +124,7 @@ describe LendingController, type: :request do
 
       describe :index do
         it 'lists the items' do
-          get lending_path
+          get index_path
           expect(response).to be_successful
 
           body = response.body
@@ -143,7 +143,7 @@ describe LendingController, type: :request do
             end
           end
 
-          get lending_path
+          get index_path
           body = response.body
           loans.each do |loan|
             date = loan.due_date
@@ -164,7 +164,7 @@ describe LendingController, type: :request do
             end
           end
 
-          get lending_path
+          get index_path
           body = response.body
 
           loans.each do |loan|
@@ -256,7 +256,7 @@ describe LendingController, type: :request do
           item.update!(active: false)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -267,7 +267,7 @@ describe LendingController, type: :request do
 
         it 'is successful for an already active item' do
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item already active.')
@@ -280,7 +280,7 @@ describe LendingController, type: :request do
           item.update!(active: false, copies: 0)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -294,7 +294,7 @@ describe LendingController, type: :request do
       describe :deactivate do
         it 'deactivates an active item' do
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item now inactive.')
@@ -308,7 +308,7 @@ describe LendingController, type: :request do
 
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
 
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item already inactive.')
@@ -338,7 +338,7 @@ describe LendingController, type: :request do
 
           delete lending_destroy_path(directory: item.directory)
 
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Item deleted.')
@@ -350,7 +350,7 @@ describe LendingController, type: :request do
           expect(item).to be_complete # just to be sure
 
           delete lending_destroy_path(directory: item.directory)
-          expect(response).to redirect_to lending_path
+          expect(response).to redirect_to index_path
 
           follow_redirect!
           expect(response.body).to include('Only incomplete items can be deleted.')
