@@ -1,5 +1,3 @@
-require 'lending/path_utils'
-require 'lending/tileizer'
 require 'iiif/presentation'
 require 'ucblit/util/uris'
 

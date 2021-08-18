@@ -1,5 +1,3 @@
-require 'lending/path_utils'
-
 module Lending
   class MarcMetadata
 

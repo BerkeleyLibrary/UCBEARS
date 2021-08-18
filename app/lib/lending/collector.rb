@@ -1,7 +1,4 @@
 require 'ucblit/logging'
-require 'lending/path_utils'
-require 'lending/processor'
-require 'lending/iiif_manifest'
 
 module Lending
   class Collector
@@ -33,7 +30,7 @@ module Lending
     class << self
       def from_environment
         Collector.new(
-          lending_root: ensure_env(Lending::ENV_ROOT),
+          lending_root: ensure_env(Lending::Config::ENV_ROOT),
           stop_file: ensure_env(ENV_STOP_FILE)
         )
       end

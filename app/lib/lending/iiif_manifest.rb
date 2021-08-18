@@ -1,5 +1,3 @@
-require 'lending/tileizer'
-require 'lending/page'
 require 'ucblit/util/uris'
 
 module Lending

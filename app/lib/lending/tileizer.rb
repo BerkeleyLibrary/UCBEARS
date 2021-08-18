@@ -1,8 +1,6 @@
 require 'vips'
 require 'pathname'
 require 'ucblit/logging'
-require 'lending/path_utils'
-require 'lending/tileize_failed'
 
 module Lending
   class Tileizer

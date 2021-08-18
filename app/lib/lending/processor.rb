@@ -1,8 +1,5 @@
 require 'ucblit/marc'
 require 'ucblit/logging'
-require 'lending/tileizer'
-require 'lending/path_utils'
-require 'lending/marc_metadata'
 
 module Lending
   class Processor
