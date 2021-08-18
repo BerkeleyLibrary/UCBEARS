@@ -9,10 +9,10 @@ class LendingController < ApplicationController
   # ------------------------------------------------------------
   # Hooks
 
+  before_action(:authenticate!)
+  before_action(:require_lending_admin!, except: %i[view manifest check_out return])
   before_action(:ensure_lending_item!, except: %i[index new create profile])
   before_action(:require_processed_item!, only: [:manifest])
-  before_action(:require_lending_admin!, except: %i[view manifest check_out return])
-  before_action(:authenticate!)
 
   # ------------------------------------------------------------
   # Controller actions
@@ -36,6 +36,7 @@ class LendingController < ApplicationController
     end
   end
 
+  # TODO: get rid of this
   def new
     @lending_item = LendingItem.new(copies: 0)
   end
@@ -46,6 +47,7 @@ class LendingController < ApplicationController
   def show; end
 
   # Patron view
+  # TODO: move to a LoanController?
   # rubocop:disable Metrics/AbcSize
   def view
     ensure_lending_item_loan!
@@ -249,7 +251,7 @@ class LendingController < ApplicationController
   end
 
   def ensure_lending_item!
-    @lending_item ||= LendingItem.find_by(directory: directory)
+    @lending_item ||= LendingItem.find_by!(directory: directory)
   end
 
   def ensure_lending_item_loan!

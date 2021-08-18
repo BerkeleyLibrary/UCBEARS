@@ -207,6 +207,11 @@ describe LendingController, type: :request do
           end
         end
 
+        it 'returns 404 not found for nonexistent items' do
+          get lending_show_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
+
         xit 'only shows the viewer for complete items'
         xit 'shows a message for incomplete items'
       end
@@ -220,6 +225,11 @@ describe LendingController, type: :request do
             expect(response.body).to include(update_path)
           end
         end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_edit_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
       end
 
       describe :manifest do
@@ -230,6 +240,11 @@ describe LendingController, type: :request do
 
             # TODO: validate manifest contents
           end
+        end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_manifest_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
         end
       end
 
@@ -253,6 +268,11 @@ describe LendingController, type: :request do
             item.reload
             new_attributes.each { |attr, val| expect(item.send(attr)).to eq(val) }
           end
+        end
+
+        it 'returns 404 not found for nonexistent items' do
+          patch lending_update_path(directory: 'not_a_directory'), params: { lending_item: new_attributes }
+          expect(response.status).to eq(404)
         end
       end
 
@@ -294,6 +314,11 @@ describe LendingController, type: :request do
           expect(item.active?).to eq(true)
           expect(item.copies).to eq(1)
         end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_activate_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
       end
 
       describe :deactivate do
@@ -334,6 +359,11 @@ describe LendingController, type: :request do
 
           expect(item.lending_item_loans.active).to be_empty
         end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_deactivate_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
       end
 
       describe :destroy do
@@ -362,6 +392,11 @@ describe LendingController, type: :request do
 
           expect(LendingItem.find(item.id)).to eq(item)
         end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_destroy_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
       end
     end
   end
@@ -384,6 +419,11 @@ describe LendingController, type: :request do
         get lending_show_path(directory: item.directory)
         expect(response.status).to eq(403)
       end
+
+      it 'returns 403 forbidden even for nonexistent items' do
+        get lending_deactivate_path(directory: 'not_a_directory')
+        expect(response.status).to eq(403)
+      end
     end
 
     describe :view do
@@ -394,6 +434,11 @@ describe LendingController, type: :request do
         expect(response.body).to include('Check out')
         expect(response.body).not_to include('Return')
         expect(response).to be_successful
+      end
+
+      it 'returns 404 not found for nonexistent items' do
+        get lending_view_path(directory: 'not_a_directory')
+        expect(response.status).to eq(404)
       end
 
       it 'shows a loan if one exists' do
@@ -519,6 +564,11 @@ describe LendingController, type: :request do
         expect(response).to redirect_to(expected_path)
 
         expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+      end
+
+      it 'returns 404 not found for nonexistent items' do
+        get lending_check_out_path(directory: 'not_a_directory')
+        expect(response.status).to eq(404)
       end
 
       it 'fails if this user has already checked out the item' do
@@ -662,6 +712,12 @@ describe LendingController, type: :request do
         expected_path = lending_view_path(directory: item.directory)
         expect(response).to redirect_to(expected_path)
       end
+
+      it 'returns 404 not found for nonexistent items' do
+        get lending_return_path(directory: 'not_a_directory')
+        expect(response.status).to eq(404)
+      end
+
     end
 
     describe :manifest do
@@ -674,6 +730,11 @@ describe LendingController, type: :request do
       it 'returns 403 Forbidden if the item has not been checked out' do
         get lending_manifest_path(directory: item.directory)
         expect(response.status).to eq(403)
+      end
+
+      it 'returns 404 not found for nonexistent items' do
+        get lending_manifest_path(directory: 'not_a_directory')
+        expect(response.status).to eq(404)
       end
     end
 
@@ -689,31 +750,46 @@ describe LendingController, type: :request do
         get lending_edit_path(directory: item.directory)
         expect(response.status).to eq(403)
       end
+
+      it 'returns 403 forbidden even for nonexistent items' do
+        get lending_edit_path(directory: 'not_a_directory')
+        expect(response.status).to eq(403)
+      end
     end
 
     describe :activate do
       it 'returns 403 forbidden' do
-        get lending_edit_path(directory: item.directory)
+        get lending_activate_path(directory: item.directory)
         expect(response.status).to eq(403)
       end
 
       it "doesn't activate the item" do
         item.update!(active: false)
 
-        get lending_edit_path(directory: item.directory)
+        get lending_activate_path(directory: item.directory)
 
         item.reload
         expect(item.active).to eq(false)
+      end
+
+      it 'returns 403 forbidden even for nonexistent items' do
+        get lending_activate_path(directory: 'not_a_directory')
+        expect(response.status).to eq(403)
       end
     end
 
     describe :inactivate do
       it 'returns 403 forbidden' do
-        get lending_edit_path(directory: item.directory)
+        get lending_deactivate_path(directory: item.directory)
         expect(response.status).to eq(403)
 
         item.reload
         expect(item.active).to eq(true)
+      end
+
+      it 'returns 403 forbidden even for nonexistent items' do
+        get lending_deactivate_path(directory: 'not_a_directory')
+        expect(response.status).to eq(403)
       end
     end
   end
