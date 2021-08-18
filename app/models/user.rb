@@ -34,7 +34,7 @@ class User
 
       new(
         uid: auth['extra']['uid'],
-        affiliations: auth['extra']['affiliations'],
+        affiliations: auth['extra']['berkeleyEduAffiliations'],
         cal_groups: (auth['extra']['berkeleyEduIsMemberOf'] || []) & User::KNOWN_CAL_GROUPS
       )
     end
