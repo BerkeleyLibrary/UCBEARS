@@ -1,4 +1,4 @@
-require 'calnet_helper'
+require 'rails_helper'
 
 describe LendingController, type: :request do
   before(:each) do
@@ -49,7 +49,7 @@ describe LendingController, type: :request do
   after(:each) { logout! }
 
   context 'with lending admin credentials' do
-    before(:each) { mock_calnet_login(CalNet::LENDING_ADMIN_UID) }
+    before(:each) { mock_login(:lending_admin) }
 
     context 'without any items' do
       describe :index do
@@ -365,13 +365,14 @@ describe LendingController, type: :request do
     attr_reader :user, :item
 
     before(:each) do
-      patron_id = Patron::Type.sample_id_for(Patron::Type::UNDERGRAD)
-      @user = login_as_patron(patron_id)
+      @user = mock_login(:student)
       @items = valid_item_attributes.map do |item_attributes|
         LendingItem.create!(**item_attributes)
       end
       @item = items.find(&:available?)
     end
+
+    after(:each) { logout! }
 
     describe :show do
       it 'returns 403 Forbidden' do
@@ -771,14 +772,12 @@ describe LendingController, type: :request do
   end
 
   describe 'with ineligible patron' do
-    around(:each) do |example|
-      patron_id = Patron::Type.sample_id_for(Patron::Type::VISITING_SCHOLAR)
-      with_patron_login(patron_id) { example.run }
-    end
-
     before(:each) do
       @item = LendingItem.create(**valid_item_attributes.last)
+      mock_login(:student)
     end
+
+    after(:each) { logout! }
 
     it 'GET lending_manifest_path returns 403 Forbidden' do
       get lending_manifest_path(directory: item.directory)

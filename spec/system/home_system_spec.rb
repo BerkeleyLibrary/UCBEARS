@@ -1,5 +1,5 @@
 require 'capybara_helper'
-require 'calnet_helper'
+require 'rails_helper'
 
 describe :home, type: :system do
   describe :health do

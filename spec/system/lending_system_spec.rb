@@ -1,5 +1,4 @@
 require 'capybara_helper'
-require 'calnet_helper'
 
 describe LendingController, type: :system do
 
@@ -79,7 +78,7 @@ describe LendingController, type: :system do
   # Tests
 
   context 'as lending admin' do
-    before(:each) { mock_calnet_login(CalNet::LENDING_ADMIN_UID) }
+    before(:each) { mock_login(:lending_admin) }
 
     context 'without any items' do
       describe :index do
@@ -296,12 +295,13 @@ describe LendingController, type: :system do
     attr_reader :item
 
     before(:each) do
-      patron_id = Patron::Type.sample_id_for(Patron::Type::UNDERGRAD)
-      @user = login_as_patron(patron_id)
+      @user = mock_login(:student)
       @items = valid_item_attributes.map do |item_attributes|
         LendingItem.create!(**item_attributes)
       end
     end
+
+    after(:each) { logout! }
 
     context 'with available item' do
       before(:each) do

@@ -1,3 +1,0 @@
-<BODY>ERRNUM=1<BR>
-ERRMSG=Requested record not found<BR>
-</BODY>

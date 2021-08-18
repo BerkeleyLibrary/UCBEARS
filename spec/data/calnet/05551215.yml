@@ -1,0 +1,17 @@
+# simulated lending administrator
+provider: calnet
+uid: rroe
+info:
+  name: Rachel Roe
+  email: rroe@berkeley.test
+extra:
+  givenName: Rachel
+  surname: Roe
+  displayName: Rachel J. Roe
+  berkeleyEduUCPathID: '5551215'
+  uid: '05551215'
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+    - cn=edu:berkeley:org:libr:framework:LIBR-framework-lending-admins,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+    - EMPLOYEE-TYPE-STAFF

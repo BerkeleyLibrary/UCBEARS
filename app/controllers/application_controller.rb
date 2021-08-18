@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   #
   # @return [User]
   def current_user
-    @current_user ||= User.new(session[:user] || {})
+    @current_user ||= User.from_session(session)
   end
 
   # Log an exception

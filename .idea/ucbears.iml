@@ -533,6 +533,7 @@
                   <RakeTaskImpl description="Run specs in framework_user_system_spec.rb" fullCommand="spec:system:framework_user" id="framework_user" />
                   <RakeTaskImpl description="Run specs in galc_request_forms_system_spec.rb" fullCommand="spec:system:galc_request_forms" id="galc_request_forms" />
                   <RakeTaskImpl description="Run specs in home_system_spec.rb" fullCommand="spec:system:home" id="home" />
+                  <RakeTaskImpl description="Run specs in lending_system_spec.rb" fullCommand="spec:system:lending" id="lending" />
                   <RakeTaskImpl description="Run specs in libstaff_edevices_loan_forms_system_spec.rb" fullCommand="spec:system:libstaff_edevices_loan_forms" id="libstaff_edevices_loan_forms" />
                   <RakeTaskImpl description="Run specs in proxy_borrower_dsp_system_spec.rb" fullCommand="spec:system:proxy_borrower_dsp" id="proxy_borrower_dsp" />
                   <RakeTaskImpl description="Run specs in proxy_borrower_faculty_system_spec.rb" fullCommand="spec:system:proxy_borrower_faculty" id="proxy_borrower_faculty" />

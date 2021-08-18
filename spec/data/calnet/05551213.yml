@@ -1,0 +1,16 @@
+# simulated faculty member
+provider: calnet
+uid: nnoe
+info:
+  name: Natalie Noe
+  email: nnoe@berkeley.test
+extra:
+  givenName: Natalie
+  surname: Noe
+  displayName: Natalie M. Noe
+  berkeleyEduUCPathID: '5551213'
+  uid: '05551213'
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+    - EMPLOYEE-TYPE-ACADEMIC

@@ -7,47 +7,45 @@ class User
   # ------------------------------------------------------------
   # Constants
 
-  FRAMEWORK_ADMIN_GROUP = 'cn=edu:berkeley:org:libr:framework:LIBR-framework-admins,ou=campus groups,dc=berkeley,dc=edu'.freeze
   LENDING_ADMIN_GROUP = 'cn=edu:berkeley:org:libr:framework:LIBR-framework-lending-admins,ou=campus groups,dc=berkeley,dc=edu'.freeze
 
   # if we capture all the CalGroups, we'll blow out the session cookie store, so we just
   # keep the ones we care about
-  KNOWN_CAL_GROUPS = [User::FRAMEWORK_ADMIN_GROUP, User::LENDING_ADMIN_GROUP].freeze
+  KNOWN_CAL_GROUPS = [LENDING_ADMIN_GROUP].freeze
+
+  # ------------------------------------------------------------
+  # Initializer
+
+  # @param uid The CalNet UID
+  # @param affiliations Affiliations per CalNet (attribute `berkeleyEduAffiliations` e.g.
+  #        `EMPLOYEE-TYPE-FACULTY`, `STUDENT-TYPE-REGISTERED`).
+  # @param cal_groups CalNet LDAP groups (attribute `berkeleyEduIsMemberOf`). Note that
+  #        in #from_omniauth we ignore any groups not in #KNOWN_CAL_GROUPS
+  def initialize(uid: nil, affiliations: nil, cal_groups: nil)
+    super(uid: uid, affiliations: affiliations, cal_groups: cal_groups)
+  end
 
   # ------------------------------------------------------------
   # Class methods
 
   class << self
-
-    AUTH_EXTRA_KEYS = {
-      affiliations: 'berkeleyEduAffiliations',
-      cs_id: 'berkeleyEduCSID',
-      department_number: 'departmentNumber',
-      display_name: 'displayName',
-      email: 'berkeleyEduOfficialEmail',
-      employee_id: 'employeeNumber',
-      given_name: 'givenName',
-      student_id: 'berkeleyEduStuID',
-      surname: 'surname',
-      ucpath_id: 'berkeleyEduUCPathID',
-      uid: 'uid'
-    }.freeze
-
-    # Returns a new user object from the given "omniauth.auth" hash. That's a
-    # hash of all data returned by the auth provider (in our case, calnet).
-    #
-    # @see https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema OmniAuth Schema
-    # @see https://git.lib.berkeley.edu/lap/altmedia/issues/16#note_5549 Sample Calnet Response
-    # @see https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/how-ldap-organized/people-ou/people-attribute-schema CalNet LDAP
     def from_omniauth(auth)
       ensure_valid_provider(auth['provider'])
 
-      auth_extra = auth['extra']
-      params = AUTH_EXTRA_KEYS.each_with_object({}) { |(p, k), pp| pp[p] = auth_extra[k] }
-      params[:uid] ||= auth['uid']
-      params[:cal_groups] = (auth_extra['berkeleyEduIsMemberOf'] || []) & User::KNOWN_CAL_GROUPS
+      new(
+        uid: auth['extra']['uid'],
+        affiliations: auth['extra']['affiliations'],
+        cal_groups: (auth['extra']['berkeleyEduIsMemberOf'] || []) & User::KNOWN_CAL_GROUPS
+      )
+    end
 
-      new(**params)
+    def from_session(session)
+      attrs = OpenStruct.new((session && session[:user]) || {})
+      new(
+        uid: attrs.uid,
+        affiliations: attrs.affiliations,
+        cal_groups: attrs.cal_groups
+      )
     end
 
     private
@@ -70,37 +68,6 @@ class User
   # @return [String]
   attr_accessor :affiliations
 
-  # "Unique identifier from Campus Solutions (Emplid)" per CalNet docs.
-  # For students, should be the same value as berkeleyEduStuID.
-  #
-  # @see https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/ldap-simplification-and-standardization CalNet docs
-  # @return [String]
-  attr_accessor :cs_id
-
-  # @return [String]
-  attr_accessor :department_number
-
-  # @return [String]
-  attr_accessor :display_name
-
-  # @return [String]
-  attr_accessor :email
-
-  # @return [String]
-  attr_accessor :employee_id
-
-  # @return [String]
-  attr_accessor :given_name
-
-  # @return [String]
-  attr_accessor :student_id
-
-  # @return [String]
-  attr_accessor :surname
-
-  # @return [String]
-  attr_accessor :ucpath_id
-
   # @return [String]
   attr_accessor :uid
 
@@ -121,21 +88,6 @@ class User
     !uid.nil?
   end
 
-  def primary_patron_record
-    @primary_patron_record ||= find_primary_record
-  end
-
-  def role?(role)
-    # First check if user is a hardcoded admin
-    return true if FrameworkUsers.hardcoded_admin?(uid)
-
-    # If user is not, then check if the user was added to the DB as an admin:
-    user = FrameworkUsers.find_by(lcasid: uid)
-    return unless user
-
-    user.assignments.exists?(role: role)
-  end
-
   def ucb_faculty?
     affiliations&.include?('EMPLOYEE-TYPE-ACADEMIC')
   end
@@ -152,12 +104,6 @@ class User
     %w[STUDENT-TYPE-REGISTERED STUDENT-TYPE-NOT-REGISTERED].any? { |a9n| affiliations.include?(a9n) }
   end
 
-  # Whether the user is a member of the Framework admin CalGroup
-  # @return [Boolean]
-  def framework_admin?
-    cal_groups.include?(FRAMEWORK_ADMIN_GROUP)
-  end
-
   # Whether the user is a member of the Framework lending admin CalGroup
   # @return [Boolean]
   def lending_admin?
@@ -167,42 +113,5 @@ class User
   def lending_id
     # TODO: something more secure
     uid
-  end
-
-  # ------------------------------------------------------------
-  # Private methods
-
-  private
-
-  # The user's employee patron record
-  # @return [Patron::Record, nil]
-  def employee_patron_record
-    @employee_patron_record ||= Patron::Record.find_if_active(employee_id)
-  end
-
-  # The user's student patron record (if they have a student ID)
-  # @return [Patron::Record, nil]
-  def student_patron_record
-    @student_patron_record ||= Patron::Record.find_if_active(student_id)
-  end
-
-  # The user's Campus Solutions patron record (if they have a Campus Solutions ID)
-  # @return [Patron::Record, nil]
-  def csid_patron_record
-    @csid_patron_record ||= Patron::Record.find_if_active(cs_id)
-  end
-
-  # The user's UC Path patron record (if they have a UC Path ID)
-  # @return [Patron::Record, nil]
-  def ucpath_patron_record
-    @ucpath_patron_record ||= Patron::Record.find_if_active(ucpath_id)
-  end
-
-  def find_primary_record
-    return student_patron_record if student_patron_record
-    return csid_patron_record if csid_patron_record
-    return ucpath_patron_record if ucpath_patron_record
-
-    employee_patron_record
   end
 end

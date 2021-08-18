@@ -1,0 +1,16 @@
+# simulated lending administrator
+provider: calnet
+uid: lloe
+info:
+  name: Laura Loe
+  email: lloe@berkeley.test
+extra:
+  givenName: Laura
+  surname: Loe
+  displayName: Laura J. Loe
+  berkeleyEduUCPathID: '5551215'
+  uid: '05551215'
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+    - EMPLOYEE-TYPE-STAFF

@@ -1,0 +1,16 @@
+# simulated lending administrator
+provider: calnet
+uid: ccoe
+info:
+  name: Claire Coe
+  email: ccoe@berkeley.test
+extra:
+  givenName: Claire
+  surname: Coe
+  displayName: Claire J. Coe
+  berkeleyEduUCPathID: '5551216'
+  uid: '05551216'
+  berkeleyEduIsMemberOf:
+    - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
+  berkeleyEduAffiliations:
+    - AFFILIATE-TYPE-STAFF RETIREE

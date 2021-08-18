@@ -6,7 +6,7 @@ require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 
-require 'patron_helper'
+require 'calnet_helper'
 
 # ------------------------------------------------------------
 # RSpec configuration

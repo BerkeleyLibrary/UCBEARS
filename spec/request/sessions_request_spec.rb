@@ -1,4 +1,4 @@
-require 'calnet_helper'
+require 'rails_helper'
 
 describe SessionsController, type: :request do
   before(:each) do
@@ -14,8 +14,7 @@ describe SessionsController, type: :request do
     logger = UCBLIT::Logging::Loggers.new_json_logger(logdev)
     allow_any_instance_of(SessionsController).to receive(:logger).and_return(logger)
 
-    patron_id = Patron::FRAMEWORK_ADMIN_ID
-    with_patron_login(patron_id) { get admin_path }
+    user = mock_login(:student) { get admin_path }
     lines = logdev.string.lines
 
     expected_msg = 'Received omniauth callback'
@@ -24,6 +23,6 @@ describe SessionsController, type: :request do
     expect(result['msg']).to eq(expected_msg)
     omniauth_hash = result['omniauth']
     expect(omniauth_hash['provider']).to eq('calnet') # just a smoke test
-    expect(omniauth_hash['extra']['employeeNumber']).to eq(patron_id)
+    expect(omniauth_hash['extra']['uid']).to eq(user.uid)
   end
 end
