@@ -28,28 +28,5 @@ module ApplicationHelper
 
   def page_title
     return content_for :page_title if content_for?(:page_title)
-
-    t_action = action_name == 'show' ? params[:id].to_s : action_name
-    t_path = "#{controller_path.tr('/', '.')}.#{t_action}.page_title"
-    t(t_path, default: :site_name)
-  end
-
-  def field_for(builder, attribute, type: :text_field, required: false, readonly: false)
-    field_builder = FieldBuilder.new(
-      tag_helper: self,
-      builder: builder,
-      attribute: attribute,
-      type: type,
-      required: required,
-      readonly: readonly
-    )
-    field_builder.build
-  end
-
-  def sortable(column, title = nil, param = nil)
-    title ||= column.titleize
-    css_class = column == sort_column ? "current #{sort_direction} no-link-style" : 'no-link-style'
-    direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
-    link_to title, { sort: column, direction: direction, param: param }, { class: css_class }
   end
 end

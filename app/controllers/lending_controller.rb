@@ -2,11 +2,6 @@
 class LendingController < ApplicationController
 
   # ------------------------------------------------------------
-  # Configuration
-
-  self.support_email = 'helpbox@library.berkeley.edu'
-
-  # ------------------------------------------------------------
   # Helpers
 
   helper_method :sort_column, :sort_direction, :lending_admin?, :manifest_url

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'lending'
 
 module Lending
   describe Processor do

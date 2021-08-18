@@ -7,12 +7,12 @@ module Lending
     ENV_ROOT = 'LIT_LENDING_ROOT'.freeze
 
     class << self
-      def lending_root_path
-        @lending_root_path ||= Pathname.new(env_lending_root)
-      end
-
       def iiif_base_uri
         @iiif_base_uri ||= URI.parse(env_iiif_base)
+      end
+
+      def lending_root_path
+        @lending_root_path ||= Pathname.new(env_lending_root)
       end
 
       private
