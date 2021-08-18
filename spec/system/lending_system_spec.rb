@@ -78,16 +78,12 @@ describe LendingController, type: :system do
   # Tests
 
   context 'as lending admin' do
-    before(:each) { mock_login(:lending_admin) }
 
-    context 'without any items' do
-      describe :index do
-        it 'shows an empty list' do
-          visit index_path
-
-          expect(page.title).to include('UC BEARS')
-          expect_no_alerts
-        end
+    describe :login do
+      it 'redirects to the index' do
+        mock_login(:lending_admin)
+        expect(page.title).to include('UC BEARS')
+        expect_no_alerts
       end
     end
 
@@ -97,6 +93,8 @@ describe LendingController, type: :system do
           LendingItem.create!(**item_attributes)
         end
         @item = items.first
+
+        mock_login(:lending_admin)
       end
 
       describe :index do
