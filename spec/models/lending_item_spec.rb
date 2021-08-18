@@ -2,7 +2,12 @@ require 'rails_helper'
 
 describe LendingItem, type: :model do
   before(:each) do
-    allow(Rails.application.config).to receive(:iiif_final_dir).and_return('spec/data/lending/samples/final')
+    {
+      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
+    }.each do |getter, val|
+      allow(Lending::Config).to receive(getter).and_return(val)
+    end
   end
 
   attr_reader :items, :processed, :incomplete, :active
@@ -10,7 +15,9 @@ describe LendingItem, type: :model do
   context 'without existing items' do
     describe :scan_for_new_items! do
       it 'creates new items' do
-        expected_dirs = Pathname.new(LendingItem.iiif_final_root).children.select { |d| Lending::PathUtils.item_dir?(d) }
+        expected_dirs = Lending
+          .stage_root_path(:final).children
+          .select { |d| Lending::PathUtils.item_dir?(d) }
         items = LendingItem.scan_for_new_items!
         expect(items.size).to eq(expected_dirs.size)
       end

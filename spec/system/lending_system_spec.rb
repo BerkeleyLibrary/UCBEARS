@@ -60,7 +60,12 @@ describe LendingController, type: :system do
   end
 
   before(:each) do
-    allow(Rails.application.config).to receive(:iiif_final_dir).and_return('spec/data/lending/samples/final')
+    {
+      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
+    }.each do |getter, val|
+      allow(Lending::Config).to receive(getter).and_return(val)
+    end
   end
 
   after(:each) do

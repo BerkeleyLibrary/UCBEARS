@@ -1,4 +1,3 @@
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.acronym('IIIF')
-  inflect.acronym('UCBLIT')
+  %w[IIIF UCBLIT UCBEARS].each { |a| inflect.acronym(a) }
 end

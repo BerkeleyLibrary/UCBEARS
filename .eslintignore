@@ -1,3 +1,2 @@
 # ignore generated files
 app/assets/javascripts/application.js
-app/assets/javascripts/cable.js

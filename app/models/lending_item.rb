@@ -64,33 +64,21 @@ class LendingItem < ActiveRecord::Base
     end
 
     def scan_for_new_items!
-      known_directories = LendingItem.pluck(:directory)
+      Lending.each_final_dir do |dir_path|
+        basename = dir_path.basename.to_s
+        next if exists?(directory: basename)
 
-      item_dirs = Lending::PathUtils.each_item_dir(iiif_final_root).to_a
-
-      item_dirs.filter_map do |item_dir|
-        stem = Lending::PathUtils.stem(item_dir).to_s
-        next if known_directories.include?(stem)
-
-        create_from(stem)
+        create_from(basename)
       end
     end
 
     def create_from(directory)
-      return unless (item_dir = Pathname.new(iiif_final_root).join(directory)).directory?
-      return unless (marc_path = item_dir.join(Lending::Processor::MARC_XML_NAME)).exist?
+      return unless Lending.final_dir_path_for(directory).directory?
+      return unless (marc_path = Lending.marc_path_for(directory)).exist?
 
       metadata = Lending::MarcMetadata.from_file(marc_path)
       item = LendingItem.create(directory: directory, title: metadata.title, author: metadata.author, copies: 0)
       return item if item.persisted?
-    end
-
-    # TODO: move this to a helper
-    def iiif_final_root
-      Rails.application.config.iiif_final_dir.tap do |dir|
-        raise ArgumentError, 'iiif_final_dir not set' if dir.blank?
-        raise ArgumentError, "iiif_final_dir #{dir} is not a directory" unless File.directory?(dir)
-      end
     end
 
   end
@@ -119,7 +107,7 @@ class LendingItem < ActiveRecord::Base
   end
 
   def to_json_manifest(manifest_uri)
-    iiif_manifest.to_json(manifest_uri, image_server_base_uri)
+    iiif_manifest.to_json(manifest_uri, Lending::Config.iiif_base_uri)
   end
 
   # ------------------------------------------------------------
@@ -292,14 +280,7 @@ class LendingItem < ActiveRecord::Base
 
   # TODO: move this to a helper
   def iiif_final_root
-    LendingItem.iiif_final_root
-  end
-
-  # TODO: move this to a helper
-  def image_server_base_uri
-    UCBLIT::Util::URIs.uri_or_nil(Rails.application.config.image_server_base_uri).tap do |uri|
-      raise ArgumentError, 'image_server_base_uri not set' unless uri
-    end
+    Lending.stage_root_path(:final)
   end
 
   def marc_path

@@ -168,7 +168,7 @@ module Lending
     end
 
     describe :from_environment do
-      let(:env_vars) { [Lending::ENV_ROOT, Collector::ENV_STOP_FILE] }
+      let(:env_vars) { [Lending::Config::ENV_ROOT, Collector::ENV_STOP_FILE] }
 
       before(:each) do
         @env_vals = env_vars.each_with_object({}) { |var, vals| vals[var] = ENV[var] }
@@ -184,7 +184,7 @@ module Lending
             FileUtils.mkdir(File.join(lending_root, stage.to_s))
           end
 
-          ENV[Lending::ENV_ROOT] = lending_root
+          ENV[Lending::Config::ENV_ROOT] = lending_root
           ENV[Collector::ENV_STOP_FILE] = 'stop.stop'
 
           collector = Collector.from_environment

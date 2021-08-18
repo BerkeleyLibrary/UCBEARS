@@ -31,13 +31,6 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
-
-  # Fake sending of emails
-  config.action_mailer.delivery_method = :test
-  config.action_mailer.perform_caching = false
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -61,10 +54,6 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  # Configure the default host - this is used by Stack Pass's mailer, to create a link
-  # back to the application (directly to the approval form for an pass request):
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   default_headers = config.action_dispatch.default_headers ||= {}
   default_headers['Access-Control-Allow-Origin'] = '*'

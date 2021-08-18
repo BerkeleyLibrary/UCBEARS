@@ -2,7 +2,12 @@ require 'rails_helper'
 
 describe LendingController, type: :request do
   before(:each) do
-    allow(Rails.application.config).to receive(:iiif_final_dir).and_return('spec/data/lending/samples/final')
+    {
+      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
+    }.each do |getter, val|
+      allow(Lending::Config).to receive(getter).and_return(val)
+    end
   end
 
   let(:valid_item_attributes) do
@@ -774,7 +779,7 @@ describe LendingController, type: :request do
   describe 'with ineligible patron' do
     before(:each) do
       @item = LendingItem.create(**valid_item_attributes.last)
-      mock_login(:student)
+      mock_login(:retiree)
     end
 
     after(:each) { logout! }

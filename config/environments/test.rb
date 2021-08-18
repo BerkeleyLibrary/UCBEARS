@@ -28,30 +28,9 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  # Store uploaded files on the local file system in a temporary directory
-  config.active_storage.service = :test
-
-  config.action_mailer.perform_caching = false
-
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-
-  config.action_mailer.delivery_method = :test
-
-  # Tell ActiveJob not to actually perform delayed jobs
-  config.active_job.queue_adapter = :test
-
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
   # Test mode short-circuits the entire auth flow
   OmniAuth.config.test_mode = true
-
-  # Configure the default host - this is used by Stack Pass's mailer, to create a link
-  # back to the application (directly to the approval form for an pass request):
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
-
-  config.image_server_base_uri = 'http://iipsrv/'
-  config.iiif_final_dir = 'spec/data/lending/final'
 end
