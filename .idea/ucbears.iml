@@ -302,49 +302,6 @@
       <RakeTaskImpl id="rake">
         <subtasks>
           <RakeTaskImpl description="List versions of all Rails frameworks and the environment" fullCommand="about" id="about" />
-          <RakeTaskImpl id="action_mailbox">
-            <subtasks>
-              <RakeTaskImpl id="ingress">
-                <subtasks>
-                  <RakeTaskImpl description="Relay an inbound email from Exim to Action Mailbox (URL and INGRESS_PASSWORD required)" fullCommand="action_mailbox:ingress:exim" id="exim" />
-                  <RakeTaskImpl description="Relay an inbound email from Postfix to Action Mailbox (URL and INGRESS_PASSWORD required)" fullCommand="action_mailbox:ingress:postfix" id="postfix" />
-                  <RakeTaskImpl description="Relay an inbound email from Qmail to Action Mailbox (URL and INGRESS_PASSWORD required)" fullCommand="action_mailbox:ingress:qmail" id="qmail" />
-                  <RakeTaskImpl description="" fullCommand="action_mailbox:ingress:environment" id="environment" />
-                </subtasks>
-              </RakeTaskImpl>
-              <RakeTaskImpl description="Copy over the migration" fullCommand="action_mailbox:install" id="install" />
-              <RakeTaskImpl description="" fullCommand="action_mailbox:copy_migrations" id="copy_migrations" />
-              <RakeTaskImpl id="install">
-                <subtasks>
-                  <RakeTaskImpl description="" fullCommand="action_mailbox:install:migrations" id="migrations" />
-                </subtasks>
-              </RakeTaskImpl>
-              <RakeTaskImpl description="" fullCommand="action_mailbox:run_installer" id="run_installer" />
-            </subtasks>
-          </RakeTaskImpl>
-          <RakeTaskImpl id="action_text">
-            <subtasks>
-              <RakeTaskImpl description="Copy over the migration, stylesheet, and JavaScript files" fullCommand="action_text:install" id="install" />
-              <RakeTaskImpl description="" fullCommand="action_text:copy_migrations" id="copy_migrations" />
-              <RakeTaskImpl id="install">
-                <subtasks>
-                  <RakeTaskImpl description="" fullCommand="action_text:install:migrations" id="migrations" />
-                </subtasks>
-              </RakeTaskImpl>
-              <RakeTaskImpl description="" fullCommand="action_text:run_installer" id="run_installer" />
-            </subtasks>
-          </RakeTaskImpl>
-          <RakeTaskImpl id="active_storage">
-            <subtasks>
-              <RakeTaskImpl description="Copy over the migration needed to the application" fullCommand="active_storage:install" id="install" />
-              <RakeTaskImpl id="install">
-                <subtasks>
-                  <RakeTaskImpl description="" fullCommand="active_storage:install:migrations" id="migrations" />
-                </subtasks>
-              </RakeTaskImpl>
-              <RakeTaskImpl description="" fullCommand="active_storage:update" id="update" />
-            </subtasks>
-          </RakeTaskImpl>
           <RakeTaskImpl id="app">
             <subtasks>
               <RakeTaskImpl description="Applies the template supplied by LOCATION=(/path/to/template) or URL" fullCommand="app:template" id="template" />
@@ -520,29 +477,13 @@
           <RakeTaskImpl description="Run all specs in spec directory (excluding plugin specs)" fullCommand="spec" id="spec" />
           <RakeTaskImpl id="spec">
             <subtasks>
-              <RakeTaskImpl description="Run the code examples in spec/jobs" fullCommand="spec:jobs" id="jobs" />
               <RakeTaskImpl description="Run the code examples in spec/lib" fullCommand="spec:lib" id="lib" />
-              <RakeTaskImpl description="Run the code examples in spec/mailers" fullCommand="spec:mailers" id="mailers" />
               <RakeTaskImpl description="Run the code examples in spec/models" fullCommand="spec:models" id="models" />
               <RakeTaskImpl description="Run the code examples in spec/request" fullCommand="spec:request" id="request" />
               <RakeTaskImpl description="Run the code examples in spec/system" fullCommand="spec:system" id="system" />
               <RakeTaskImpl id="system">
                 <subtasks>
-                  <RakeTaskImpl description="Run specs in affiliate_borrow_request_forms_system_spec.rb" fullCommand="spec:system:affiliate_borrow_request_forms" id="affiliate_borrow_request_forms" />
-                  <RakeTaskImpl description="Run specs in doemoff_study_room_user_forms_system_spec.rb" fullCommand="spec:system:doemoff_study_room_user_forms" id="doemoff_study_room_user_forms" />
-                  <RakeTaskImpl description="Run specs in framework_user_system_spec.rb" fullCommand="spec:system:framework_user" id="framework_user" />
-                  <RakeTaskImpl description="Run specs in galc_request_forms_system_spec.rb" fullCommand="spec:system:galc_request_forms" id="galc_request_forms" />
-                  <RakeTaskImpl description="Run specs in home_system_spec.rb" fullCommand="spec:system:home" id="home" />
                   <RakeTaskImpl description="Run specs in lending_system_spec.rb" fullCommand="spec:system:lending" id="lending" />
-                  <RakeTaskImpl description="Run specs in libstaff_edevices_loan_forms_system_spec.rb" fullCommand="spec:system:libstaff_edevices_loan_forms" id="libstaff_edevices_loan_forms" />
-                  <RakeTaskImpl description="Run specs in proxy_borrower_dsp_system_spec.rb" fullCommand="spec:system:proxy_borrower_dsp" id="proxy_borrower_dsp" />
-                  <RakeTaskImpl description="Run specs in proxy_borrower_faculty_system_spec.rb" fullCommand="spec:system:proxy_borrower_faculty" id="proxy_borrower_faculty" />
-                  <RakeTaskImpl description="Run specs in reference_card_forms_system_spec.rb" fullCommand="spec:system:reference_card_forms" id="reference_card_forms" />
-                  <RakeTaskImpl description="Run specs in scan_request_forms_system_spec.rb" fullCommand="spec:system:scan_request_forms" id="scan_request_forms" />
-                  <RakeTaskImpl description="Run specs in service_article_request_forms_system_spec.rb" fullCommand="spec:system:service_article_request_forms" id="service_article_request_forms" />
-                  <RakeTaskImpl description="Run specs in stack_pass_forms_system_spec.rb" fullCommand="spec:system:stack_pass_forms" id="stack_pass_forms" />
-                  <RakeTaskImpl description="Run specs in student_edevices_loan_forms_system_spec.rb" fullCommand="spec:system:student_edevices_loan_forms" id="student_edevices_loan_forms" />
-                  <RakeTaskImpl description="Run specs in tind_download_system_spec.rb" fullCommand="spec:system:tind_download" id="tind_download" />
                 </subtasks>
               </RakeTaskImpl>
               <RakeTaskImpl description="" fullCommand="spec:prepare" id="prepare" />
@@ -625,26 +566,6 @@
             </subtasks>
           </RakeTaskImpl>
           <RakeTaskImpl description="" fullCommand="routes" id="routes" />
-          <RakeTaskImpl description="" fullCommand="test" id="test" />
-          <RakeTaskImpl id="test">
-            <subtasks>
-              <RakeTaskImpl description="" fullCommand="test:channels" id="channels" />
-              <RakeTaskImpl description="" fullCommand="test:controllers" id="controllers" />
-              <RakeTaskImpl description="" fullCommand="test:db" id="db" />
-              <RakeTaskImpl description="" fullCommand="test:functionals" id="functionals" />
-              <RakeTaskImpl description="" fullCommand="test:generators" id="generators" />
-              <RakeTaskImpl description="" fullCommand="test:helpers" id="helpers" />
-              <RakeTaskImpl description="" fullCommand="test:integration" id="integration" />
-              <RakeTaskImpl description="" fullCommand="test:jobs" id="jobs" />
-              <RakeTaskImpl description="" fullCommand="test:mailboxes" id="mailboxes" />
-              <RakeTaskImpl description="" fullCommand="test:mailers" id="mailers" />
-              <RakeTaskImpl description="" fullCommand="test:models" id="models" />
-              <RakeTaskImpl description="" fullCommand="test:prepare" id="prepare" />
-              <RakeTaskImpl description="" fullCommand="test:run" id="run" />
-              <RakeTaskImpl description="" fullCommand="test:system" id="system" />
-              <RakeTaskImpl description="" fullCommand="test:units" id="units" />
-            </subtasks>
-          </RakeTaskImpl>
           <RakeTaskImpl description="" fullCommand="tmp" id="tmp" />
           <RakeTaskImpl description="" fullCommand="tmp/cache" id="tmp/cache" />
           <RakeTaskImpl description="" fullCommand="tmp/cache/assets" id="tmp/cache/assets" />

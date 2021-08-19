@@ -2,7 +2,7 @@ require 'pathname'
 
 module Lending
   module PathUtils
-    DIRNAME_RE = /(?<record_id>[Bb]?[0-9]{8,}+)_(?<barcode>.+)/.freeze
+    DIRNAME_RE = /^(?<record_id>[^_]+)_(?<barcode>.+)$/.freeze
     MSG_BAD_DIRNAME = 'Item directory %s should be in the form <record_id>_<barcode>'.freeze
 
     def all_item_dirs(parent)
