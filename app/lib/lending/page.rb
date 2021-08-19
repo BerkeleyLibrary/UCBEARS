@@ -1,5 +1,5 @@
 require 'iiif/presentation'
-require 'ucblit/util/uris'
+require 'berkeley_library/util/uris'
 
 module Lending
   # rubocop:disable Metrics/ClassLength
@@ -141,20 +141,20 @@ module Lending
 
     def canvas_uri_for(manifest_uri)
       # TODO: get the 'manifest' path element out of these URIs
-      UCBLIT::Util::URIs.append(manifest_uri, "canvas/p#{number}")
+      BerkeleyLibrary::Util::URIs.append(manifest_uri, "canvas/p#{number}")
     end
 
     def annotation_id_for(manifest_uri)
       # TODO: get the 'manifest' path element out of these URIs
-      UCBLIT::Util::URIs.append(manifest_uri, "annotation/p#{number}-image")
+      BerkeleyLibrary::Util::URIs.append(manifest_uri, "annotation/p#{number}-image")
     end
 
     def tiff_uri_for(image_dir_uri)
-      UCBLIT::Util::URIs.append(image_dir_uri, basename)
+      BerkeleyLibrary::Util::URIs.append(image_dir_uri, basename)
     end
 
     def resource_id_for(tiff_uri)
-      UCBLIT::Util::URIs.append(tiff_uri, "/full/!#{VIEW_W},#{VIEW_H}/0/default.jpg")
+      BerkeleyLibrary::Util::URIs.append(tiff_uri, "/full/!#{VIEW_W},#{VIEW_H}/0/default.jpg")
     end
 
     # # TODO: something less clunky

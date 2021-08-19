@@ -1,7 +1,7 @@
-require 'ucblit/logging'
+require 'berkeley_library/logging'
 
 class LendingItemPresenterBase
-  include UCBLIT::Logging
+  include BerkeleyLibrary::Logging
 
   attr_reader :view_context, :item
 

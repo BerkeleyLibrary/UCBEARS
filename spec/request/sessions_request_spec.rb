@@ -11,7 +11,7 @@ describe SessionsController, type: :request do
 
   it 'logs CalNet/Omniauth parameters as JSON' do
     logdev = StringIO.new
-    logger = UCBLIT::Logging::Loggers.new_json_logger(logdev)
+    logger = BerkeleyLibrary::Logging::Loggers.new_json_logger(logdev)
     allow_any_instance_of(SessionsController).to receive(:logger).and_return(logger)
 
     user = mock_login(:student) { get admin_path }

@@ -5,6 +5,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 gem 'awesome_print', '>=1.8.0'
+gem 'berkeley_library-logging', '~> 0.2'
+gem 'berkeley_library-marc', '~> 0.2'
+gem 'berkeley_library-tind', '~> 0.4'
 gem 'bootsnap', '~> 1.7', '>= 1.7.4', require: false
 gem 'bootstrap'
 gem 'faraday'
@@ -33,9 +36,6 @@ gem 'ruby-vips', '~> 2.0'
 gem 'turbolinks', '~> 5'
 gem 'typesafe_enum', '~> 0.3'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'ucblit-logging', git: 'https://git.lib.berkeley.edu/lap/ucblit-logging.git', branch: 'main'
-gem 'ucblit-marc', git: 'https://git.lib.berkeley.edu/lap/ucblit-marc.git', branch: 'main'
-gem 'ucblit-tind', '>= 0.3.3', git: 'https://git.lib.berkeley.edu/lap/ucblit-tind.git', branch: 'main'
 gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do

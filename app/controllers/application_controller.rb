@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
 
   # Log an exception
   def log_error(error)
-    # TODO: should UCBLIT::Logging take care of this?
+    # TODO: should BerkeleyLibrary::Logging take care of this?
     msg = {
       msg: error.message,
       error: error.inspect.to_s,

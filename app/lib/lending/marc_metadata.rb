@@ -14,7 +14,7 @@ module Lending
     end
 
     class << self
-      include UCBLIT::Logging
+      include BerkeleyLibrary::Logging
 
       def from_file(marc_path)
         nil.tap do

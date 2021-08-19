@@ -1,7 +1,7 @@
 require 'active_support/inflector'
 require 'capybara/rspec'
 require 'selenium-webdriver'
-require 'ucblit/logging'
+require 'berkeley_library/logging'
 require 'docker'
 
 require 'rails_helper'
@@ -66,7 +66,7 @@ module CapybaraHelper
   end
 
   class Configurator
-    include UCBLIT::Logging
+    include BerkeleyLibrary::Logging
 
     DEFAULT_CHROME_ARGS = ['--window-size=2560,1344'].freeze
 

@@ -41,7 +41,7 @@ module Lending
 
         # local, passed to template via binding
         # noinspection RubyUnusedLocalVariable
-        image_dir_uri = UCBLIT::Util::URIs.append(img_root_url, ERB::Util.url_encode(manifest.dir_basename))
+        image_dir_uri = BerkeleyLibrary::Util::URIs.append(img_root_url, ERB::Util.url_encode(manifest.dir_basename))
 
         actual = ERB.new(expected_erb).result(binding)
         expect(actual.strip).to eq(expected_manifest.strip)

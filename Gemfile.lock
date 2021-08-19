@@ -1,39 +1,4 @@
 GIT
-  remote: https://git.lib.berkeley.edu/lap/ucblit-logging.git
-  revision: 7e52bbe2f36c1ae6fcb7378b1538b0c46c8ec7e8
-  branch: main
-  specs:
-    ucblit-logging (0.1.1)
-      activesupport (~> 6.0)
-      amazing_print (~> 1.1)
-      lograge (~> 0.11)
-      ougai (~> 1.8)
-
-GIT
-  remote: https://git.lib.berkeley.edu/lap/ucblit-marc.git
-  revision: 999089c69695a8df24cb2a7ea221990df7dac1c1
-  branch: main
-  specs:
-    ucblit-marc (0.1.1)
-      marc (~> 1.0)
-      parslet (~> 2.0)
-
-GIT
-  remote: https://git.lib.berkeley.edu/lap/ucblit-tind.git
-  revision: aee4dc5b5794cc68d38e67e673f3c55f32c6f383
-  branch: main
-  specs:
-    ucblit-tind (0.3.3)
-      ice_nine (~> 0.11)
-      marc (~> 1.0)
-      rchardet (~> 1.8)
-      rest-client (~> 2.1)
-      rubyzip (~> 2.3)
-      typesafe_enum (~> 0.3)
-      ucblit-logging (~> 0.1, >= 0.1.1)
-      ucblit-marc (~> 0.1)
-
-GIT
   remote: https://github.com/dlindahl/omniauth-cas.git
   revision: 7087bda829e14c0f7cab2aece5045ad7015669b1
   ref: 7087bda829e14c0f7cab2aece5045ad7015669b1
@@ -120,6 +85,23 @@ GEM
     autoprefixer-rails (10.2.4.0)
       execjs
     awesome_print (1.9.2)
+    berkeley_library-logging (0.2.0)
+      activesupport (~> 6.0)
+      amazing_print (~> 1.1)
+      lograge (~> 0.11)
+      ougai (~> 1.8)
+    berkeley_library-marc (0.2.0)
+      marc (~> 1.0)
+      parslet (~> 2.0)
+    berkeley_library-tind (0.4.0)
+      berkeley_library-logging (~> 0.2)
+      berkeley_library-marc (~> 0.2)
+      ice_nine (~> 0.11)
+      marc (~> 1.0)
+      rchardet (~> 1.8)
+      rest-client (~> 2.1)
+      rubyzip (~> 2.3)
+      typesafe_enum (~> 0.3)
     bindex (0.8.1)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
@@ -408,6 +390,9 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print (>= 1.8.0)
+  berkeley_library-logging (~> 0.2)
+  berkeley_library-marc (~> 0.2)
+  berkeley_library-tind (~> 0.4)
   bootsnap (~> 1.7, >= 1.7.4)
   bootstrap
   brakeman
@@ -454,9 +439,6 @@ DEPENDENCIES
   turbolinks (~> 5)
   typesafe_enum (~> 0.3)
   tzinfo-data
-  ucblit-logging!
-  ucblit-marc!
-  ucblit-tind (>= 0.3.3)!
   uglifier (>= 1.3.0)
   vcr
   web-console (>= 3.3.0)

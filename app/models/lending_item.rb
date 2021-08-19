@@ -1,5 +1,5 @@
 require 'lending'
-require 'ucblit/util/uris'
+require 'berkeley_library/util/uris'
 
 # rubocop:disable Metrics/ClassLength
 class LendingItem < ActiveRecord::Base

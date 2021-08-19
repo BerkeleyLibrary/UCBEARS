@@ -11,7 +11,7 @@
         <div class="viewer">
           <%
             # TODO: make this a method on IIIFItem or something
-            canvas_id = UCBLIT::Util::URIs.append(manifest_url, '/canvas/p1').to_s
+            canvas_id = BerkeleyLibrary::Util::URIs.append(manifest_url, '/canvas/p1').to_s
           %>
           <%=
             # TODO: do all this by hand in a $(document).ready()

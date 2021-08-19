@@ -1,8 +1,8 @@
-require 'ucblit/logging'
+require 'berkeley_library/logging'
 
 module Lending
   class Collector
-    include UCBLIT::Logging
+    include BerkeleyLibrary::Logging
 
     # ------------------------------------------------------------
     # Constants

@@ -1,9 +1,9 @@
 require 'iiif/presentation'
-require 'ucblit/util/uris'
+require 'berkeley_library/util/uris'
 
 module Lending
   class IIIFManifest
-    include UCBLIT::Logging
+    include BerkeleyLibrary::Logging
 
     MANIFEST_NAME = 'manifest.json'.freeze
     MANIFEST_TEMPLATE_NAME = "#{MANIFEST_NAME}.erb".freeze
@@ -45,7 +45,7 @@ module Lending
     def to_json(manifest_uri, image_root_uri)
       raise ArgumentError, "#{record_id}_#{barcode}: manifest template not found at #{erb_path}" unless has_template?
 
-      image_dir_uri = UCBLIT::Util::URIs.append(
+      image_dir_uri = BerkeleyLibrary::Util::URIs.append(
         image_root_uri,
         ERB::Util.url_encode(dir_basename)
       )

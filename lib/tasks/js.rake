@@ -1,7 +1,7 @@
 require 'rspec/core/rake_task'
 require 'docker'
 
-module UCBLIT
+module BerkeleyLibrary
   class ESLintRunner
     include FileUtils
 
@@ -103,7 +103,7 @@ namespace :js do
 
   desc 'check JavaScript syntax, find problems, and enforce code style'
   task eslint: ['yarn:install'] do
-    runner = UCBLIT::ESLintRunner.default_runner
+    runner = BerkeleyLibrary::ESLintRunner.default_runner
     runner.write_report do |exit_status|
       next if exit_status == 0
 
@@ -117,7 +117,7 @@ namespace :js do
   desc 'Automatically fix problems detected by ESLint'
   namespace :eslint do
     task fix: ['yarn:install'] do
-      runner = UCBLIT::ESLintRunner.default_runner
+      runner = BerkeleyLibrary::ESLintRunner.default_runner
       runner.fix do |exit_status|
         next if exit_status == 0
 

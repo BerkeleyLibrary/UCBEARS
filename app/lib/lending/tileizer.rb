@@ -1,6 +1,6 @@
 require 'vips'
 require 'pathname'
-require 'ucblit/logging'
+require 'berkeley_library/logging'
 
 module Lending
   class Tileizer
@@ -38,7 +38,7 @@ module Lending
     end
 
     class << self
-      include UCBLIT::Logging
+      include BerkeleyLibrary::Logging
 
       def tileize_all(indir, outdir, skip_existing: false, fail_fast: false)
         indir_path, outdir_path = [indir, outdir].map { |d| PathUtils.ensure_dirpath(d) }

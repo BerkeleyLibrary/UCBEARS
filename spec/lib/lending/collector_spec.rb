@@ -39,8 +39,8 @@ module Lending
           expect(processing_dir).to exist
         end
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/processing.*#{item_dirname}/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/moving.*#{item_dirname}/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/processing.*#{item_dirname}/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/moving.*#{item_dirname}/).ordered
 
         [processing_dir, final_dir]
       end
@@ -61,7 +61,7 @@ module Lending
       before(:each) do
         @collector = Collector.new(lending_root: lending_root, stop_file: stop_file)
 
-        allow(UCBLIT::Logging.logger).to receive(:debug) do |msg|
+        allow(BerkeleyLibrary::Logging.logger).to receive(:debug) do |msg|
           warn(msg)
         end
       end
@@ -69,8 +69,8 @@ module Lending
       it 'processes nothing if stopped' do
         collector.stop!
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/stopped/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/stopped/).ordered
         expect(Processor).not_to receive(:new)
         collector.collect!
       end
@@ -79,17 +79,17 @@ module Lending
         stop_file_path = collector.stop_file_path
         FileUtils.touch(stop_file_path.to_s)
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/stop file .* found/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/stop file .* found/).ordered
         expect(Processor).not_to receive(:new)
 
         collector.collect!
       end
 
       it 'processes files' do
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
         processing_dir, final_dir = expect_to_process('b12345678_c12345678')
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
         collector.collect!
 
         expect(processing_dir).not_to exist
@@ -101,7 +101,7 @@ module Lending
         processing_dirs = []
         final_dirs = []
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
 
         %w[b12345678_c12345678 b86753090_c86753090].each do |item_dir|
           pdir, fdir = expect_to_process(item_dir)
@@ -109,7 +109,7 @@ module Lending
           final_dirs << fdir
         end
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
         collector.collect!
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
@@ -121,7 +121,7 @@ module Lending
         processing_dirs = []
         final_dirs = []
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
 
         %w[b15727973x_B4966136 B20858884x_C111734561 b14716039x_C061248265].each do |item_dir|
           pdir, fdir = expect_to_process(item_dir)
@@ -129,7 +129,7 @@ module Lending
           final_dirs << fdir
         end
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
         collector.collect!
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
@@ -141,7 +141,7 @@ module Lending
         processing_dirs = []
         final_dirs = []
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
 
         %w[9912504843806531_C122697563 991000862729706532_C110089769].each do |item_dir|
           pdir, fdir = expect_to_process(item_dir)
@@ -149,7 +149,7 @@ module Lending
           final_dirs << fdir
         end
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
         collector.collect!
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
@@ -174,9 +174,9 @@ module Lending
         error_message = 'Oops'
         expect(bad_processor).to(receive(:process!)).and_raise(error_message)
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/processing/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:error).with(/Processing.*failed/, an_object_satisfying do |obj|
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/processing/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:error).with(/Processing.*failed/, an_object_satisfying do |obj|
           obj.is_a?(Lending::ProcessingFailed)
           obj.message.include?(error_message)
         end).ordered
@@ -184,7 +184,7 @@ module Lending
         good_item_dir = 'b86753090_c86753090'
         good_processing_dir, good_final_dir = expect_to_process(good_item_dir)
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
 
         collector.collect!
 
@@ -200,8 +200,8 @@ module Lending
       it 'exits cleanly in the event of some random error' do
         FileUtils.remove_dir(lending_root.to_s)
 
-        expect(UCBLIT::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(UCBLIT::Logging.logger).to receive(:error).with(/exiting due to error/, a_kind_of(StandardError))
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:error).with(/exiting due to error/, a_kind_of(StandardError))
         collector.collect!
       end
     end

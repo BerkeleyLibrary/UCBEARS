@@ -1,9 +1,9 @@
-require 'ucblit/marc'
-require 'ucblit/logging'
+require 'berkeley_library/marc'
+require 'berkeley_library/logging'
 
 module Lending
   class Processor
-    include UCBLIT::Logging
+    include BerkeleyLibrary::Logging
 
     MARC_XML_NAME = 'marc.xml'.freeze
     MILLENNIUM_RECORD_RE = /^(?<bib>b[0-9]{8})(?<check>[0-9a-z])?$/.freeze
