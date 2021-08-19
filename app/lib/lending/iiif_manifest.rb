@@ -1,3 +1,4 @@
+require 'iiif/presentation'
 require 'ucblit/util/uris'
 
 module Lending
