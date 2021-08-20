@@ -1,8 +1,12 @@
-# Developer guidelines for contributing to Framework
+# Developer guidelines for contributing to UCBEARS
+
+> ## TODO:
+> 
+> - Switch to a publicly accessible IIPImage distribution 
+> - Stop hard-coding Berkeley-specific SSO configuration
 
 ## Table of Contents
 
-- [Working with git](#working-with-git)
 - [Maintaining code quality](#maintaining-code-quality)
 - [Setting up a Docker development environment](#setting-up-a-docker-development-environment)
    - [Requirements](#requirements)
@@ -15,17 +19,6 @@
    - [Requirements](#requirements-1)
    - [Instructions](#instructions-1)
       - [Accessing the server](#accessing-the-server-1)
-
-## Working with git
-
-Create a [feature
-branch](https://martinfowler.com/bliki/FeatureBranch.html) for any
-development, ideally tied to a JIRA ticket (e.g.
-`LIT-1234-frob-patron-whatnots`). When the feature is complete, make a
-[merge request](https://martinfowler.com/bliki/PullRequest.html) to the
-[mainline
-branch](https://martinfowler.com/articles/branching-patterns.html#mainline)
-(currently `master`).
 
 ## Maintaining code quality
 
@@ -167,8 +160,7 @@ easier to navigate to the server Capybara starts.
     the database URL between test and development environments.
 - For system tests: [ChromeDriver](https://chromedriver.chromium.org/)
   and [Google Chrome](https://www.google.com/chrome)
-- For controlled digital lending: [IIPImage](https://github.com/ruven/iipsrv)
-  or another IIIF-compatible image server
+- [IIPImage](https://github.com/ruven/iipsrv) or another IIIF-compatible image server
 
 MacOS developers should consider installing [Homebrew](https://brew.sh),
 which makes downloading and installing these other tools much simpler.
@@ -176,8 +168,15 @@ which makes downloading and installing these other tools much simpler.
 Windows developers should considering installing the [Windows
 Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/).
 
-### Instructions
+### Environment variables
 
+| Variable            | Format                                                | Purpose                         |
+| ---                 | ---                                                   | ---                             |
+| `DATABASE_URL`      | `postgres://<user>:<password>@<host>/<database-name>` | application database            |
+| `LIT_LENDING_ROOT`  | directory path                                        | root directory for UCBEARS data |
+| `LIT_IIIF_BASE_URL` | HTTP or HTTPS URL                                     | IIIF service URL                |
+
+### Instructions
 
 1. Set up the development database:
 
@@ -196,8 +195,6 @@ Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/).
 However, you may run into issues using the same database for development and
 testing. You can work around this using Docker for just the database -- see 
 below.
-
-> #### TODO: Document LIT_IIIF_BASE_URL config, incl. hybrid w/Dockerized image server
 
 ##### Using a Dockerized database for local development
 
@@ -221,4 +218,4 @@ create dev and test databases in the Dockerized Postgres.
 
 #### Accessing the server
 
-Navigate to [`http://localhost:3000/home`](http://localhost:3000/home).
+Navigate to [`http://localhost:3000/`](http://localhost:3000/).
