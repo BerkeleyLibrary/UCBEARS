@@ -23,6 +23,9 @@ end
 # ------------------------------------------------------------
 # Defaults
 
+# Silence VIPS warnings -- see config/initializers/vips_logging
+ENV['VIPS_LOGGING'] = '1'
+
 # Clear Minitest default :test tasks
 %w[test test:db test:system].each { |t| Rake::Task[t].clear if Rake::Task.task_defined?(t) }
 

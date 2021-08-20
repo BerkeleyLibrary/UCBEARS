@@ -4,6 +4,9 @@
 $stdout.sync = true
 $stderr.sync = true
 
+# Silence VIPS warnings -- see config/initializers/vips_logging
+ENV['VIPS_LOGGING'] = '1'
+
 # Require gems
 require 'bundler/setup'
 
