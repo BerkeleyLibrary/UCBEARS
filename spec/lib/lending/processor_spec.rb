@@ -2,29 +2,28 @@ require 'rails_helper'
 
 module Lending
   describe Processor do
+    attr_reader :item, :ready_dir, :expected_dir, :tmpdir, :directory, :indir, :outdir, :processor
 
-    let(:item) do
-      attributes_for(:active_item).tap do |attrs|
+    before(:all) do
+      @item = attributes_for(:active_item).tap do |attrs|
         record_id, barcode = attrs[:directory].split('_')
         attrs[:record_id] = record_id
         attrs[:barcode] = barcode
       end
-    end
-    let(:ready_dir) { 'spec/data/lending/ready' }
 
-    attr_reader :tmpdir, :processor
+      @ready_dir =  'spec/data/lending/ready'
+      @expected_dir = Pathname.new('spec/data/lending/final').join(item[:directory])
 
-    before(:each) do
       @tmpdir = Dir.mktmpdir(File.basename(__FILE__, '.rb'))
 
-      directory = item[:directory]
-      indir = File.join(ready_dir, directory)
-      outdir = File.join(tmpdir, directory)
+      @directory = item[:directory]
+      @indir = File.join(ready_dir, directory)
+      @outdir = File.join(tmpdir, directory)
       Dir.mkdir(outdir)
       @processor = Processor.new(indir, outdir)
     end
 
-    after(:each) do
+    after(:all) do
       FileUtils.remove_dir(tmpdir, true)
     end
 
@@ -45,9 +44,7 @@ module Lending
     end
 
     describe :process do
-      let(:expected_dir) { Pathname.new('spec/data/lending/final').join(item[:directory]) }
-
-      before(:each) do
+      before(:all) do
         processor.process!
       end
 
@@ -79,6 +76,25 @@ module Lending
 
         expect(actual_template.read.strip).to eq(expected_template.read.strip)
       end
+    end
+
+    it 'handles MARCXML names by bib number with a check digit mismatch' do
+      Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmp_ready|
+        FileUtils.cp_r(indir, tmp_ready)
+        tmp_indir = File.join(tmp_ready, File.basename(indir))
+
+        marc_xml_name = item[:record_id].sub(/\d$/, '.xml')
+        FileUtils.mv(File.join(tmp_indir, 'marc.xml'), File.join(tmp_indir, marc_xml_name))
+
+        @processor = Processor.new(tmp_indir, outdir)
+        processor.process!
+      end
+
+      expected_template = expected_dir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
+      actual_template = processor.outdir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
+      expect(actual_template.exist?).to eq(true)
+
+      expect(actual_template.read.strip).to eq(expected_template.read.strip)
     end
   end
 end
