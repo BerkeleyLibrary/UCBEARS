@@ -42,6 +42,7 @@ class LendingItem < ActiveRecord::Base
   MSG_NO_PAGE_IMAGES = 'The item directory has no page images'.freeze
   MSG_NO_MANIFEST_TEMPLATE = 'The item directory does not have a IIIF manifest template'.freeze
   MSG_NO_MARC_XML = "The item directory does not contain a #{Lending::Processor::MARC_XML_NAME} file".freeze
+  MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
 
   # TODO: make this configurable
   MAX_CHECKOUTS_PER_PATRON = 1
@@ -224,7 +225,7 @@ class LendingItem < ActiveRecord::Base
   def correct_directory_format
     return if directory && directory.split('_').size == 2
 
-    errors.add(:base, CGI.escapeHTML('directory should be in the format <bibliographic record id>_<item barcode>.'))
+    errors.add(:base, CGI.escapeHTML(MSG_INVALID_DIRECTORY))
   end
 
   def active_items_have_copies

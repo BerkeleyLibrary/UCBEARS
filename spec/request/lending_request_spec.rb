@@ -236,21 +236,35 @@ describe LendingController, type: :request do
           end
         end
 
-        it 'returns 422 for invalid updates' do
-          item = incomplete.find { |it| !it.active? }
-          expect(item).not_to be_nil # just to be sure
+        describe 'invalid updates' do
+          it 'returns 422 for activating an inactive item' do
+            item = incomplete.find { |it| !it.active? }
+            expect(item).not_to be_nil # just to be sure
 
-          patch lending_update_path(directory: item.directory), params: { lending_item: { active: true, copies: 17 } }
-          expect(response.status).to eq(422)
+            patch lending_update_path(directory: item.directory), params: { lending_item: { active: true, copies: 17 } }
+            expect(response.status).to eq(422)
 
-          item.reload
-          expect(item).not_to be_active
-          expect(item.copies).not_to eq(17)
-        end
+            item.reload
+            expect(item).not_to be_active
+            expect(item.copies).not_to eq(17)
+          end
 
-        it 'returns 404 not found for nonexistent items' do
-          patch lending_update_path(directory: 'not_a_directory'), params: { lending_item: { active: true, copies: 17 } }
-          expect(response.status).to eq(404)
+          it 'returns 422 for an invalid number of copies' do
+            item = inactive.first
+            expect(item).not_to be_nil # just to be sure
+
+            patch lending_update_path(directory: item.directory), params: { lending_item: { active: true, copies: -1 } }
+            expect(response.status).to eq(422)
+
+            item.reload
+            expect(item).not_to be_active
+            expect(item.copies).not_to eq(-1)
+          end
+
+          it 'returns 404 not found for nonexistent items' do
+            patch lending_update_path(directory: 'not_a_directory'), params: { lending_item: { active: true, copies: 17 } }
+            expect(response.status).to eq(404)
+          end
         end
       end
 

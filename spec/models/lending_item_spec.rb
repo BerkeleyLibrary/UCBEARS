@@ -22,6 +22,18 @@ describe LendingItem, type: :model do
     end
   end
 
+  describe 'validation' do
+    it 'requires a parseable directory' do
+      attributes = attributes_for(:active_item).tap do |attrs|
+        attrs[:directory] = 'I am not a valid directory'
+      end
+      item = LendingItem.create(attributes)
+      expect(item.persisted?).to eq(false)
+      messages = item.errors.full_messages.map { |msg| CGI.unescapeHTML(msg) }
+      expect(messages).to include(LendingItem::MSG_INVALID_DIRECTORY)
+    end
+  end
+
   context 'without existing items' do
     before(:each) do
       expect(LendingItem.count).to eq(0) # just to be sure
