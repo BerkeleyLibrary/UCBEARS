@@ -89,6 +89,9 @@ RUN apk --update --no-cache add \
 # Drop back to altmedia.
 USER altmedia
 
+# Use a recent version of Bundler
+RUN gem install bundler -v 2.2.14
+
 # Install gems. We don't enforce the validity of the Gemfile.lock until the
 # final (production) stage.
 COPY --chown=altmedia:altmedia Gemfile* ./
