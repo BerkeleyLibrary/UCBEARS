@@ -107,7 +107,7 @@ class LendingItem < ActiveRecord::Base
   end
 
   def to_json_manifest(manifest_uri)
-    iiif_manifest.to_json(manifest_uri, Lending::Config.iiif_base_uri)
+    iiif_manifest.to_json_manifest(manifest_uri, Lending::Config.iiif_base_uri)
   end
 
   # ------------------------------------------------------------
@@ -158,7 +158,8 @@ class LendingItem < ActiveRecord::Base
   end
 
   def copies_available
-    (copies - lending_item_loans.where(loan_status: :active).count)
+    total_copies = copies || 0 # TODO: make this non-nullable
+    (total_copies - lending_item_loans.where(loan_status: :active).count)
   end
 
   def due_dates

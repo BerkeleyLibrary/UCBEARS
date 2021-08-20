@@ -1,5 +1,0 @@
-spec/data/lending/ready/** filter=lfs diff=lfs merge=lfs -text
-spec/data/lending/final/** filter=lfs diff=lfs merge=lfs -text
-
-"spec/data/lending/ready/b11996535_B 3 106 704/**" filter=none binary
-"spec/data/lending/final/b11996535_B 3 106 704/**" filter=none binary

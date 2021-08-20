@@ -1,9 +1,8 @@
 require 'rails_helper'
-require 'lending/page'
 
 module Lending
   describe Page do
-    let(:tiff_path) { 'spec/data/lending/samples/final/b100523250_C044235662/00000100.tif' }
+    let(:tiff_path) { 'spec/data/lending/final/b135297126_C068087930/00000004.tif' }
 
     describe :new do
       it 'accepts a string path' do
@@ -31,7 +30,7 @@ module Lending
 
       describe :number do
         it 'extracts the page number as an int' do
-          expect(page.number).to eq(100)
+          expect(page.number).to eq(4)
         end
       end
 

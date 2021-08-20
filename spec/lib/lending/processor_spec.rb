@@ -3,46 +3,25 @@ require 'rails_helper'
 module Lending
   describe Processor do
 
-    let(:items) do
-      [
-        {
-          title: 'The great depression in Europe, 1929-1939',
-          author: 'Clavin, Patricia.',
-          directory: 'b135297126_C068087930',
-          record_id: 'b135297126',
-          barcode: 'C068087930'
-        },
-        {
-          title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-          author: 'Horn, Walter, 1908-1995.',
-          directory: 'b100523250_C044235662',
-          record_id: 'b100523250',
-          barcode: 'C044235662'
-        },
-        {
-          title: 'Pamphlet.',
-          author: 'Canada. Department of Agriculture.',
-          directory: 'b11996535_B 3 106 704',
-          record_id: 'b11996535',
-          barcode: 'B 3 106 704'
-        }
-      ]
+    let(:item) do
+      attributes_for(:active_item).tap do |attrs|
+        record_id, barcode = attrs[:directory].split('_')
+        attrs[:record_id] = record_id
+        attrs[:barcode] = barcode
+      end
     end
+    let(:ready_dir) { 'spec/data/lending/ready' }
 
-    let(:ready_dir) { 'spec/data/lending/samples/ready' }
-
-    attr_reader :tmpdir, :processors
+    attr_reader :tmpdir, :processor
 
     before(:each) do
       @tmpdir = Dir.mktmpdir(File.basename(__FILE__, '.rb'))
 
-      @processors = items.map do |item|
-        directory = item[:directory]
-        indir = File.join(ready_dir, directory)
-        outdir = File.join(tmpdir, directory)
-        Dir.mkdir(outdir)
-        Processor.new(indir, outdir)
-      end
+      directory = item[:directory]
+      indir = File.join(ready_dir, directory)
+      outdir = File.join(tmpdir, directory)
+      Dir.mkdir(outdir)
+      @processor = Processor.new(indir, outdir)
     end
 
     after(:each) do
@@ -50,40 +29,25 @@ module Lending
     end
 
     it 'extracts the record ID' do
-      items.each_with_index do |item, i|
-        processor = processors[i]
-        expect(processor.record_id).to eq(item[:record_id])
-      end
+      expect(processor.record_id).to eq(item[:record_id])
     end
 
     it 'extracts the barcode' do
-      items.each_with_index do |item, i|
-        processor = processors[i]
-        expect(processor.barcode).to eq(item[:barcode])
-      end
+      expect(processor.barcode).to eq(item[:barcode])
     end
 
     it 'extracts the author' do
-      items.each_with_index do |item, i|
-        processor = processors[i]
-        expect(processor.author).to eq(item[:author])
-      end
+      expect(processor.author).to eq(item[:author])
     end
 
     it 'extracts the title' do
-      items.each_with_index do |item, i|
-        processor = processors[i]
-        expect(processor.title).to eq(item[:title])
-      end
+      expect(processor.title).to eq(item[:title])
     end
 
     describe :process do
-      let(:expected_dir) { Pathname.new('spec/data/lending/samples/final/b100523250_C044235662') }
-
-      attr_reader :processor
+      let(:expected_dir) { Pathname.new('spec/data/lending/final').join(item[:directory]) }
 
       before(:each) do
-        @processor = processors.find { |p| p.indir.basename == expected_dir.basename }
         processor.process!
       end
 

@@ -20,11 +20,9 @@ Rails.application.routes.draw do
   end
 
   defaults format: 'html' do
-    post '/', to: 'lending#create'
-
+    # TODO: don't include this in production
     get '/profile', to: 'lending#profile', as: :lending_profile
 
-    get '/new', to: 'lending#new', as: :lending_new
     get '/:directory/edit', to: 'lending#edit', as: :lending_edit
     get '/:directory', to: 'lending#show', as: :lending_show
     get '/:directory/view', to: 'lending#view', as: :lending_view

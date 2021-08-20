@@ -14,7 +14,7 @@ module ExceptionHandling
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
     rescue_from Error::ForbiddenError do |error|
-      log_error(error)
+      logger.error(error)
       render :forbidden, status: :forbidden, locals: { exception: error }
     end
 
@@ -26,7 +26,7 @@ module ExceptionHandling
     end
 
     def handle_not_found(error)
-      log_error(error)
+      logger.error(error)
       render :not_found, status: :not_found, locals: { exception: error }
     end
   end

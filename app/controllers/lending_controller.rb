@@ -36,11 +36,6 @@ class LendingController < ApplicationController
     end
   end
 
-  # TODO: get rid of this
-  def new
-    @lending_item = LendingItem.new(copies: 0)
-  end
-
   def edit; end
 
   # Admin view
@@ -67,16 +62,10 @@ class LendingController < ApplicationController
   # ------------------------------
   # Form handlers
 
-  def create
-    @lending_item = LendingItem.create(lending_item_params)
-    return render_422(:new, @lending_item.errors, locals: { item: @lending_item }) unless @lending_item.persisted?
-
-    flash[:success] = 'Item created.'
-    redirect_to lending_show_url(directory: @lending_item.directory)
-  end
-
   def update
-    return render_422(:edit, errors) unless @lending_item.update(lending_item_params)
+    unless @lending_item.update(lending_item_params)
+      return render_with_errors(:edit, @lending_item.errors, "Updating #{@lending_item.directory} failed")
+    end
 
     flash[:success] = 'Item updated.'
     redirect_to lending_show_url(directory: directory)
@@ -84,7 +73,9 @@ class LendingController < ApplicationController
 
   def check_out
     @lending_item_loan = @lending_item.check_out_to(patron_identifier)
-    return render_422(:view, @lending_item_loan.errors) unless @lending_item_loan.persisted?
+    unless @lending_item_loan.persisted?
+      return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed")
+    end
 
     flash[:success] = 'Checkout successful.'
     redirect_to lending_view_url(directory: directory)
@@ -148,11 +139,6 @@ class LendingController < ApplicationController
   # Private methods
 
   private
-
-  def render_422(view, errors, locals: {})
-    flash.now[:danger] = errors.full_messages
-    render(view, status: :unprocessable_entity, locals: locals)
-  end
 
   # ------------------------------
   # Private accessors

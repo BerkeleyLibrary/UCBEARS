@@ -25,25 +25,9 @@ RSpec.configure do |config|
 end
 
 # ------------------------------------------------------------
-# Helper methods
+# FactoryBot
 
-# Temporarily redirects log output to a StringIO object, runs
-# the specified block, and returns the captured log output.
-#
-# @param &block The block to run
-# @return [String] The log output
-def capturing_log(&block)
-  logdev = Rails.logger.instance_variable_get(:@logdev)
-  dev_actual = logdev.instance_variable_get(:@dev)
-  dev_tmp = StringIO.new
-  begin
-    logdev.instance_variable_set(:@dev, dev_tmp)
-    block.call
-  ensure
-    logdev.instance_variable_set(:@dev, dev_actual)
-  end
-  dev_tmp.string
-end
+require 'support/factory_bot'
 
 # ------------------------------------------------------------
 # Calnet

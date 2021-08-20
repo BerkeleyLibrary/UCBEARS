@@ -10,15 +10,8 @@ describe LendingController, type: :request do
     end
   end
 
-  let(:valid_item_attributes) do
+  let(:item_attrs) do
     [
-      {
-        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-        author: 'Horn, Walter',
-        directory: 'b100523250_C044235662',
-        copies: 1,
-        active: true
-      },
       {
         title: 'The great depression in Europe, 1929-1939',
         author: 'Clavin, Patricia.',
@@ -27,11 +20,19 @@ describe LendingController, type: :request do
         active: true
       },
       {
+        title: 'Cultural atlas of Ancient Egypt',
+        author: 'Baines, John,',
+        directory: 'B135491460_C106083325',
+      },
+      {
+        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
+        author: 'Horn, Walter',
+        directory: 'b100523250_C044235662'
+      },
+      {
         title: 'Villette',
         author: 'Brontë, Charlotte',
-        directory: 'b155001346_C044219363',
-        copies: 0,
-        active: false
+        directory: 'b155001346_C044219363'
       }
     ]
   end
@@ -40,7 +41,8 @@ describe LendingController, type: :request do
   attr_reader :item
 
   def active
-    items.select(&:active?)
+    # TODO: separate "activated" flag from "active" (= activated AND complete) determination
+    complete.select(&:active?)
   end
 
   def complete
@@ -63,68 +65,13 @@ describe LendingController, type: :request do
           expect(response).to be_successful
         end
       end
-
-      describe :new do
-        it 'displays the form' do
-          get lending_new_path
-          expect(response).to be_successful
-          expect(response.body).to include(index_path)
-        end
-      end
-
-      describe :create do
-        it 'creates items' do
-          valid_item_attributes.each do |item_attributes|
-            expect do
-              post index_path, params: { lending_item: item_attributes }
-            end.to change(LendingItem, :count).by(1)
-
-            directory = item_attributes[:directory]
-            expect(response).to redirect_to lending_show_path(directory: directory)
-
-            item = LendingItem.find_by(directory: directory)
-            expect(item).not_to be_nil
-
-            item_attributes.each do |attr, val|
-              expect(item.send(attr)).to eq(val)
-              expect(item.copies_available).to eq(item.copies)
-            end
-          end
-        end
-
-        describe 'with invalid attributes' do
-          let(:invalid_item_attributes) do
-            valid_attributes = valid_item_attributes[0]
-            [].tap do |invalid_item_attributes|
-              %i[directory title author].each do |attr|
-                invalid_attributes = valid_attributes.dup
-                invalid_attributes.delete(attr)
-                invalid_item_attributes << invalid_attributes
-              end
-
-              invalid_attributes = valid_attributes.dup
-              invalid_attributes[:copies] = -1
-              invalid_item_attributes << invalid_attributes
-            end
-          end
-
-          it 'does not create items' do
-            invalid_item_attributes.each do |item_attributes|
-              expect { post index_path, params: { lending_item: item_attributes } }
-                .not_to change(LendingItem, :count)
-              expect(response.status).to eq(422) # unprocessable entity
-            end
-          end
-        end
-      end
     end
 
     context 'with items' do
       before(:each) do
-        @items = valid_item_attributes.map do |item_attributes|
-          LendingItem.create!(**item_attributes)
-        end
-        @item = items.first
+        # NOTE: we're deliberately not validating here, because we want some invalid items
+        @items = item_attrs.map { |attrs| LendingItem.new(**attrs).tap { |i| i.save!(validate: false) } }
+        @item = active.first
       end
 
       describe :index do
@@ -406,7 +353,7 @@ describe LendingController, type: :request do
 
     before(:each) do
       @user = mock_login(:student)
-      @items = valid_item_attributes.map do |item_attributes|
+      @items = item_attrs.map do |item_attributes|
         LendingItem.create!(**item_attributes)
       end
       @item = items.find(&:available?)
@@ -738,13 +685,6 @@ describe LendingController, type: :request do
       end
     end
 
-    describe :new do
-      it 'returns 403 forbidden' do
-        get lending_new_path
-        expect(response.status).to eq(403)
-      end
-    end
-
     describe :edit do
       it 'returns 403 forbidden' do
         get lending_edit_path(directory: item.directory)
@@ -796,17 +736,11 @@ describe LendingController, type: :request do
 
   describe 'without login' do
     before(:each) do
-      @item = LendingItem.create(**valid_item_attributes.last)
+      @item = LendingItem.create(**item_attrs.last)
     end
 
     it 'GET lending_manifest_path redirects to login' do
       get(path = lending_manifest_path(directory: item.directory))
-      login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
-      expect(response).to redirect_to(login_with_callback_url)
-    end
-
-    it 'GET lending_new_path redirects to login' do
-      get(path = lending_new_path)
       login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
       expect(response).to redirect_to(login_with_callback_url)
     end
@@ -854,7 +788,7 @@ describe LendingController, type: :request do
 
   describe 'with ineligible patron' do
     before(:each) do
-      @item = LendingItem.create(**valid_item_attributes.last)
+      @item = LendingItem.create(**item_attrs.last)
       mock_login(:retiree)
     end
 

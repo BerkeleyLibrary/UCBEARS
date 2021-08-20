@@ -117,46 +117,6 @@ module Lending
         expect(collector.stopped?).to eq(false)
       end
 
-      it 'handles Millennium bib numbers with x check digits' do
-        processing_dirs = []
-        final_dirs = []
-
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-
-        %w[b15727973x_B4966136 B20858884x_C111734561 b14716039x_C061248265].each do |item_dir|
-          pdir, fdir = expect_to_process(item_dir)
-          processing_dirs << pdir
-          final_dirs << fdir
-        end
-
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
-        collector.collect!
-
-        processing_dirs.each { |pdir| expect(pdir).not_to exist }
-        final_dirs.each { |fdir| expect(fdir).to exist }
-        expect(collector.stopped?).to eq(false)
-      end
-
-      it 'handles Alma record IDs' do
-        processing_dirs = []
-        final_dirs = []
-
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-
-        %w[9912504843806531_C122697563 991000862729706532_C110089769].each do |item_dir|
-          pdir, fdir = expect_to_process(item_dir)
-          processing_dirs << pdir
-          final_dirs << fdir
-        end
-
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
-        collector.collect!
-
-        processing_dirs.each { |pdir| expect(pdir).not_to exist }
-        final_dirs.each { |fdir| expect(fdir).to exist }
-        expect(collector.stopped?).to eq(false)
-      end
-
       it 'skips single-item processing failures' do
         bad_item_dir = 'b12345678_c12345678'
 

@@ -3,30 +3,30 @@ require 'rails_helper'
 module Lending
   describe IIIFManifest do
 
-    let(:manifest_url) { 'https://ucbears.example.edu/lending/b11996535_B%203%20106%20704/manifest' }
+    let(:manifest_url) { 'https://ucbears.example.edu/lending/b135297126_C068087930/manifest' }
     let(:img_root_url) { 'https://ucbears.example.edu/iiif/' }
 
-    let(:expected_manifest) { File.read('spec/data/lending/samples/manifest-b11996535.json') }
+    let(:expected_manifest) { File.read('spec/data/lending/samples/final/b135297126_C068087930/manifest.json') }
 
     attr_reader :manifest
 
     before(:each) do
       @manifest = IIIFManifest.new(
-        title: 'Pamphlet',
-        author: 'Canada. Department of Agriculture.',
-        dir_path: 'spec/data/lending/final/b11996535_B 3 106 704'
+        title: 'The great depression in Europe, 1929-1939',
+        author: 'Clavin, Patricia.',
+        dir_path: 'spec/data/lending/final/b135297126_C068087930'
       )
     end
 
-    describe :to_json do
+    describe :to_json_manifest do
       it 'creates a manifest' do
-        actual = manifest.to_json(manifest_url, img_root_url)
+        actual = manifest.to_json_manifest(manifest_url, img_root_url)
         expect(actual.strip).to eq(expected_manifest.strip)
       end
     end
 
     describe :to_erb do
-      let(:expected_erb) { File.read('spec/data/lending/final/b11996535_B 3 106 704/manifest.json.erb') }
+      let(:expected_erb) { File.read('spec/data/lending/final/b135297126_C068087930/manifest.json.erb') }
 
       it 'can create an ERB' do
         expected = expected_erb
@@ -57,12 +57,12 @@ module Lending
         @tmpdir_path = Pathname.new(tmpdir)
 
         dir_path_orig = manifest.dir_path
-        @dir_path_upcase = tmpdir_path.join(dir_path_orig.basename.to_s.gsub('b11996535', 'b11996535'.upcase))
+        @dir_path_upcase = tmpdir_path.join(dir_path_orig.basename.to_s.gsub('b135297126', 'b135297126'.upcase))
         FileUtils.ln_s(dir_path_orig.realpath, dir_path_upcase)
 
         @manifest = IIIFManifest.new(
-          title: 'Pamphlet',
-          author: 'Canada. Department of Agriculture.',
+          title: 'The great depression in Europe, 1929-1939',
+          author: 'Clavin, Patricia.',
           dir_path: dir_path_upcase.to_s
         )
       end
@@ -83,11 +83,11 @@ module Lending
         end
       end
 
-      describe :to_json do
+      describe :to_json_manifest do
         it 'generates a manifest with the correct image path' do
-          manifest_url_upcase = manifest_url.gsub('b11996535', 'b11996535'.upcase)
-          expected = expected_manifest.gsub('b11996535', 'b11996535'.upcase).strip
-          actual = manifest.to_json(manifest_url_upcase, img_root_url).strip
+          manifest_url_upcase = manifest_url.gsub('b135297126', 'b135297126'.upcase)
+          expected = expected_manifest.gsub('b135297126', 'b135297126'.upcase).strip
+          actual = manifest.to_json_manifest(manifest_url_upcase, img_root_url).strip
           expect(actual).to eq(expected)
         end
       end

@@ -42,7 +42,7 @@ module Lending
     # rubocop:enable Naming/PredicateName
 
     # noinspection RubyUnusedLocalVariable
-    def to_json(manifest_uri, image_root_uri)
+    def to_json_manifest(manifest_uri, image_root_uri)
       raise ArgumentError, "#{record_id}_#{barcode}: manifest template not found at #{erb_path}" unless has_template?
 
       image_dir_uri = BerkeleyLibrary::Util::URIs.append(

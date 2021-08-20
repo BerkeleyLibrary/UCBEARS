@@ -43,16 +43,14 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.from_session(session)
   end
 
-  # Log an exception
-  def log_error(error)
-    # TODO: should BerkeleyLibrary::Logging take care of this?
-    msg = {
-      msg: error.message,
-      error: error.inspect.to_s,
-      cause: error.cause.inspect.to_s
-    }
-    msg[:backtrace] = error.backtrace if Rails.logger.level < Logger::INFO
-    logger.error(msg)
+  def render_with_errors(view, errors, log_message)
+    logger.error(log_message, nil, errors.full_messages)
+    return render_422(view, errors)
+  end
+
+  def render_422(view, errors, locals: {})
+    flash.now[:danger] = errors.full_messages
+    render(view, status: :unprocessable_entity, locals: locals)
   end
 
   # Sign in the user by storing their data in the session

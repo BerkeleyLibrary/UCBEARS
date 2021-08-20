@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+  <leader>01572nam a22004574a 4500</leader>
+  <controlfield tag="001">42780471</controlfield>
+  <controlfield tag="003">CU</controlfield>
+  <controlfield tag="005">20010628  TAPE PRVY0628: 0489</controlfield>
+  <controlfield tag="008">010613s2000    nyuab    b    001 0 eng  </controlfield>
+  <controlfield tag="009">Reclvl: f Addate: 010613 Addid: INN Moddate: 090116 Modid: MMF</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">   99057588</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">0816040362</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">.b135491460</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">DLC</subfield>
+    <subfield code="c">DLC</subfield>
+    <subfield code="d">GSN</subfield>
+    <subfield code="d">C#P</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+    <subfield code="a">pcc</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+    <subfield code="a">f-ua---</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+    <subfield code="a">DT60</subfield>
+    <subfield code="b">.B34 2000</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="0">
+    <subfield code="a">932</subfield>
+    <subfield code="2">21</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+    <subfield code="a">DT60</subfield>
+    <subfield code="b">.B34 2000</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Baines, John,</subfield>
+    <subfield code="d">1946-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">Cultural atlas of Ancient Egypt /</subfield>
+    <subfield code="c">by John Baines and Jaromir Malek ; [editor, Graham Speake].</subfield>
+  </datafield>
+  <datafield tag="250" ind1=" " ind2=" ">
+    <subfield code="a">Rev. ed.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">New York :</subfield>
+    <subfield code="b">Checkmark Books,</subfield>
+    <subfield code="c">c2000.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">240 p. :</subfield>
+    <subfield code="b">ill. (some col.), col. maps ;</subfield>
+    <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="597" ind1=" " ind2=" ">
+    <subfield code="a">Available online through HathiTrust Emergency Access Service. Click the HathiTrust button on the right and log in to access this book online</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+    <subfield code="a">"An andromeda book"--T.p. verso.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+    <subfield code="a">Includes bibliographical references (p. 231-233) and index.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+    <subfield code="a">Egypt</subfield>
+    <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+    <subfield code="a">Egypt</subfield>
+    <subfield code="x">Civilization</subfield>
+    <subfield code="y">To 332 B.C.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+    <subfield code="a">Egypt</subfield>
+    <subfield code="x">Civilization</subfield>
+    <subfield code="y">332 B.C.-638 A.D.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">MÃ¡lek, JaromÃ­r.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Speake, Graham,</subfield>
+    <subfield code="d">1946-</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+    <subfield code="b">ark:/28722/h2445hk6c</subfield>
+  </datafield>
+</record>
+</collection>
