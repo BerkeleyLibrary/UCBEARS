@@ -2,22 +2,19 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.2'
+ruby '2.7.4'
 
 gem 'awesome_print', '>=1.8.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.1'
 gem 'berkeley_library-marc', '~> 0.2'
-gem 'berkeley_library-tind', '~> 0.4'
+gem 'berkeley_library-tind', '~> 0.4' # TODO: extract BerkeleyLibrary::Util::URIs into separate gem
 gem 'bootsnap', '~> 1.7', '>= 1.7.4', require: false
 gem 'bootstrap'
-gem 'faraday'
 gem 'iiif-presentation', '~> 1.0'
-gem 'ipaddress'
-gem 'jaro_winkler', '~> 1.5.4'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'jwt', '~> 1.5', '>= 1.5.4'
+gem 'listen' # TODO: what actually uses this?
 gem 'lograge', '>=0.11.2'
 gem 'mirador_rails', git: 'https://github.com/sul-dlss/mirador_rails.git', ref: 'e021335'
 gem 'netaddr', '~> 1.5', '>= 1.5.1'
@@ -27,10 +24,8 @@ gem 'omniauth-cas',
     ref: '7087bda829e14c0f7cab2aece5045ad7015669b1'
 gem 'ougai', '>=1.8.2'
 gem 'pg', '~> 1.2'
-gem 'prawn', '~> 2.3.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 6.0.3'
-gem 'recaptcha', '~> 4.13'
 gem 'ruby-prof', '~> 0.17.0' # TODO: move this back to dev/test
 gem 'ruby-vips', '~> 2.0'
 gem 'turbolinks', '~> 5'
