@@ -178,7 +178,7 @@ module CapybaraHelper
       super
 
       RSpec.configure do |config|
-        # Note: this *has* to be done in a before(:each) hook, or it'll get clobbered
+        # NOTE: this *has* to be done in a before(:each) hook, or it'll get clobbered
         # by ActionDispatch::SystemTesting::TestHelpers::SetupAndTeardown#before_setup
         #
         # TODO: this is fixed in Rails 6.1

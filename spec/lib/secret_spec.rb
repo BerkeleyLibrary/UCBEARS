@@ -29,7 +29,7 @@ describe Docker::Secret do
     end
 
     after(:each) do
-      expected_secrets.keys.each { |k| ENV.delete(k) }
+      expected_secrets.each_key { |k| ENV.delete(k) }
     end
 
     it 'injects secrets into the environment' do

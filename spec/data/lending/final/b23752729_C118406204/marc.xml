@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+  <leader>03313cam a2200469Ii 4500</leader>
+  <controlfield tag="001">951949581</controlfield>
+  <controlfield tag="003">CU</controlfield>
+  <controlfield tag="005">20170508073039.9</controlfield>
+  <controlfield tag="008">160617t20172017nyua     b    001 0 eng d</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">  2016943976</subfield>
+  </datafield>
+  <datafield tag="019" ind1=" " ind2=" ">
+    <subfield code="a">951925588</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">9780500292754</subfield>
+    <subfield code="q">(pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">0500292752</subfield>
+    <subfield code="q">(pbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">.b237527297</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">BTCTA</subfield>
+    <subfield code="b">eng</subfield>
+    <subfield code="e">rda</subfield>
+    <subfield code="c">BTCTA</subfield>
+    <subfield code="d">BDX</subfield>
+    <subfield code="d">YDXCP</subfield>
+    <subfield code="d">CPE</subfield>
+    <subfield code="d">OCLCF</subfield>
+    <subfield code="d">YDX</subfield>
+    <subfield code="d">UAB</subfield>
+    <subfield code="d">ORU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+    <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+    <subfield code="a">CUYM</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+    <subfield code="a">N5370</subfield>
+    <subfield code="b">.B26 2017</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+    <subfield code="a">709.35</subfield>
+    <subfield code="2">23</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Bahrani, Zainab,</subfield>
+    <subfield code="d">1962-</subfield>
+    <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+    <subfield code="a">Art of Mesopotamia /</subfield>
+    <subfield code="c">Zainab Bahrani.</subfield>
+  </datafield>
+  <datafield tag="264" ind1=" " ind2="1">
+    <subfield code="a">New York, New York :</subfield>
+    <subfield code="b">Thames &amp; Hudson Inc.,</subfield>
+    <subfield code="c">[2017]</subfield>
+  </datafield>
+  <datafield tag="264" ind1=" " ind2="4">
+    <subfield code="c">Â©2017</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">376 pages :</subfield>
+    <subfield code="b">illustrations (chiefly color) ;</subfield>
+    <subfield code="c">28 cm</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">text</subfield>
+    <subfield code="b">txt</subfield>
+    <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+    <subfield code="a">still image</subfield>
+    <subfield code="b">sti</subfield>
+    <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield tag="337" ind1=" " ind2=" ">
+    <subfield code="a">unmediated</subfield>
+    <subfield code="b">n</subfield>
+    <subfield code="2">rdamedia</subfield>
+  </datafield>
+  <datafield tag="338" ind1=" " ind2=" ">
+    <subfield code="a">volume</subfield>
+    <subfield code="b">nc</subfield>
+    <subfield code="2">rdacarrier</subfield>
+  </datafield>
+  <datafield tag="597" ind1=" " ind2=" ">
+    <subfield code="a">Available online through HathiTrust Emergency Access Service. Click the HathiTrust button on the right and log in to access this book online</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+    <subfield code="a">Contains bibliographical references (pages 365-366) and index.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2="0">
+    <subfield code="t">Introduction : becoming art --</subfield>
+    <subfield code="t">The search for Origins : Mesopotamia and the cradle of civilization --</subfield>
+    <subfield code="t">Uruk : the arts of civilization --</subfield>
+    <subfield code="t">Early Dynastic Sumer : images for people, temples for gods --</subfield>
+    <subfield code="t">Early Dynastic Sumer : art for eternity --</subfield>
+    <subfield code="t">Art of the Akkadian Dynasty --</subfield>
+    <subfield code="t">Gudea : royal portraits and the lifespan of images --</subfield>
+    <subfield code="t">The third Dynasty of Ur --</subfield>
+    <subfield code="t">The age of Hammurabi --</subfield>
+    <subfield code="t">Kassite and Assyrian art at the end of the Bronze Age --</subfield>
+    <subfield code="t">Assyrian art : narrative and empire --</subfield>
+    <subfield code="t">Assyrian art in context --</subfield>
+    <subfield code="t">Babylonian art --</subfield>
+    <subfield code="t">Achaemenid Persian art --</subfield>
+    <subfield code="t">Alexander in Babylon and Hellenism in Mesopotamia : Seleucid and Parthian art --</subfield>
+    <subfield code="t">Epilogue : the past in the present.</subfield>
+  </datafield>
+  <datafield tag="520" ind1=" " ind2=" ">
+    <subfield code="a">Mesopotamia is considered the cradle of Western civilization, and the diverse societies that flourished there, nestled around the Tigris and Euphrates rivers, were as culturally rich as this attribution would suggest. Spanning a significant historical period, from 8000 BCE to the arrival of Islam in 636 CE, Art of Mesopotamia explores spectacular structures and objects, as well as the techniques artists used, in order to gain insight into the beliefs and practices of ancient peoples. The volume also introduces the archaeologists who discovered these sites more than a thousand years later. Richly illustrated with more than 400 full-color photographs, Art of Mesopotamia is an astounding record by award-winning author Zainab Bahrani of artworks from this region, many of which have in recent years been damaged or destroyed by war, and as such is of particular and lasting importance. It includes the most up-to-date scholarship and reflects significant new approaches to Mesopotamian art over the past few decades.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Art, Assyro-Babylonian.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Art, Ancient</subfield>
+    <subfield code="z">Iraq.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+    <subfield code="a">Art, Ancient.</subfield>
+    <subfield code="2">fast</subfield>
+    <subfield code="0">(OCoLC)fst00815925</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+    <subfield code="a">Art, Assyro-Babylonian.</subfield>
+    <subfield code="2">fast</subfield>
+    <subfield code="0">(OCoLC)fst00815966</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+    <subfield code="a">Iraq.</subfield>
+    <subfield code="2">fast</subfield>
+    <subfield code="0">(OCoLC)fst01205757</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+    <subfield code="b">ark:/28722/h2z31nq9v</subfield>
+  </datafield>
+</record>
+</collection>

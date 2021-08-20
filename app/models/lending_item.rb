@@ -64,23 +64,26 @@ class LendingItem < ActiveRecord::Base
     end
 
     def scan_for_new_items!
-      Lending.each_final_dir do |dir_path|
+      Lending.each_final_dir.map do |dir_path|
         basename = dir_path.basename.to_s
         next if exists?(directory: basename)
 
         create_from(basename)
-      end
+      end.compact
     end
 
     def create_from(directory)
-      return unless Lending.final_dir_path_for(directory).directory?
-      return unless (marc_path = Lending.marc_path_for(directory)).exist?
+      logger.info("Creating item for directory #{directory}")
 
-      metadata = Lending::MarcMetadata.from_file(marc_path)
+      marc_path = Lending.marc_path_for(directory)
+      logger.error("Unable to read MARC record from #{marc_path}") && return unless (metadata = Lending::MarcMetadata.from_file(marc_path))
+
       item = LendingItem.create(directory: directory, title: metadata.title, author: metadata.author, copies: 0)
       return item if item.persisted?
-    end
 
+      logger.error("Creating item for directory #{directory} failed", nil, item.errors.full_messages)
+      nil
+    end
   end
 
   # ------------------------------------------------------------
@@ -173,9 +176,10 @@ class LendingItem < ActiveRecord::Base
   end
 
   def iiif_manifest
-    return unless has_iiif_dir? && has_page_images?
+    return unless has_iiif_dir?
 
-    Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_dir)
+    manifest = Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_dir)
+    return manifest if manifest.has_template?
   end
 
   def marc_metadata
@@ -213,7 +217,7 @@ class LendingItem < ActiveRecord::Base
 
   # rubocop:disable Naming/PredicateName
   def has_page_images?
-    return false unless iiif_dir
+    return false unless has_iiif_dir?
 
     Dir.entries(iiif_dir).any? { |e| Lending::Page.page_number?(e) }
   end
@@ -244,6 +248,18 @@ class LendingItem < ActiveRecord::Base
     lending_item_loans.active.order(:due_date)
   end
 
+  # rubocop:disable Naming/PredicateName
+  def has_marc_record?
+    !marc_path.nil? && marc_path.file?
+  end
+  # rubocop:enable Naming/PredicateName
+
+  # rubocop:disable Naming/PredicateName
+  def has_manifest_template?
+    !iiif_manifest.nil? && iiif_manifest.has_template?
+  end
+  # rubocop:enable Naming/PredicateName
+
   # ------------------------------------------------------------
   # Private methods
 
@@ -254,18 +270,6 @@ class LendingItem < ActiveRecord::Base
       Rails.logger.warn("No MARC metadata found in #{marc_path}") unless md
     end
   end
-
-  # rubocop:disable Naming/PredicateName
-  def has_marc_record?
-    marc_path&.file?
-  end
-  # rubocop:enable Naming/PredicateName
-
-  # rubocop:disable Naming/PredicateName
-  def has_manifest_template?
-    iiif_manifest&.has_template?
-  end
-  # rubocop:enable Naming/PredicateName
 
   def return_loans_if_inactive
     return if active?

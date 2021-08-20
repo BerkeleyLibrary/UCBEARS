@@ -11,7 +11,7 @@ require 'rspec-rails'
 namespace :spec do
   namespace :system do
     suffix = '_system_spec.rb'
-    Dir.glob('spec/system/*' + suffix).each do |spec|
+    Dir.glob("spec/system/*#{suffix}").each do |spec|
       basename = File.basename(spec)
       shortname = basename.sub(suffix, '')
 

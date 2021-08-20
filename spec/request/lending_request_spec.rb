@@ -1,9 +1,21 @@
 require 'rails_helper'
 
 describe LendingController, type: :request do
+  let(:factory_names) do
+    %i[
+      complete_item
+      active_item
+      incomplete_no_directory
+      incomplete_no_images
+      incomplete_no_marc
+      incomplete_no_manifest
+      incomplete_marc_only
+    ]
+  end
+
   before(:each) do
     {
-      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
@@ -22,7 +34,7 @@ describe LendingController, type: :request do
       {
         title: 'Cultural atlas of Ancient Egypt',
         author: 'Baines, John,',
-        directory: 'B135491460_C106083325',
+        directory: 'B135491460_C106083325'
       },
       {
         title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
@@ -40,17 +52,25 @@ describe LendingController, type: :request do
   attr_reader :items
   attr_reader :item
 
+  def complete
+    items.values.select(&:complete?)
+  end
+
+  def incomplete
+    items.values.reject(&:complete?)
+  end
+
   def active
     # TODO: separate "activated" flag from "active" (= activated AND complete) determination
     complete.select(&:active?)
   end
 
-  def complete
-    items.select(&:complete?)
+  def inactive
+    complete.reject(&:active?)
   end
 
-  def incomplete
-    items.reject(&:complete?)
+  def available
+    items.values.select(&:available?)
   end
 
   after(:each) { logout! }
@@ -69,8 +89,11 @@ describe LendingController, type: :request do
 
     context 'with items' do
       before(:each) do
+        expect(LendingItem.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
-        @items = item_attrs.map { |attrs| LendingItem.new(**attrs).tap { |i| i.save!(validate: false) } }
+        @items = factory_names.each_with_object({}) do |fn, items|
+          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+        end
         @item = active.first
       end
 
@@ -80,7 +103,7 @@ describe LendingController, type: :request do
           expect(response).to be_successful
 
           body = response.body
-          items.each do |item|
+          items.each_value do |item|
             expect(body).to include(CGI.escapeHTML(item.title))
             expect(body).to include(item.author)
             expect(body).to include(item.directory)
@@ -148,7 +171,7 @@ describe LendingController, type: :request do
 
       describe :show do
         it 'shows an item' do
-          items.each do |item|
+          items.each_value do |item|
             get lending_show_path(directory: item.directory)
             expect(response).to be_successful
           end
@@ -165,7 +188,7 @@ describe LendingController, type: :request do
 
       describe :edit do
         it 'displays the form' do
-          items.each do |item|
+          items.each_value do |item|
             get lending_edit_path(directory: item.directory)
             expect(response).to be_successful
             update_path = lending_update_path(directory: item.directory)
@@ -196,14 +219,10 @@ describe LendingController, type: :request do
       end
 
       describe :update do
-        let(:new_attributes) do
-          {
-            copies: 2
-          }
-        end
-
         it 'updates an item' do
-          items.each do |item|
+          new_attributes = { copies: 2 }
+
+          complete.each do |item|
             directory = item.directory
 
             expect do
@@ -217,8 +236,20 @@ describe LendingController, type: :request do
           end
         end
 
+        it 'returns 422 for invalid updates' do
+          item = incomplete.find { |it| !it.active? }
+          expect(item).not_to be_nil # just to be sure
+
+          patch lending_update_path(directory: item.directory), params: { lending_item: { active: true, copies: 17 } }
+          expect(response.status).to eq(422)
+
+          item.reload
+          expect(item).not_to be_active
+          expect(item.copies).not_to eq(17)
+        end
+
         it 'returns 404 not found for nonexistent items' do
-          patch lending_update_path(directory: 'not_a_directory'), params: { lending_item: new_attributes }
+          patch lending_update_path(directory: 'not_a_directory'), params: { lending_item: { active: true, copies: 17 } }
           expect(response.status).to eq(404)
         end
       end
@@ -353,10 +384,12 @@ describe LendingController, type: :request do
 
     before(:each) do
       @user = mock_login(:student)
-      @items = item_attrs.map do |item_attributes|
-        LendingItem.create!(**item_attributes)
+      expect(LendingItem.count).to eq(0) # just to be sure
+      # NOTE: we're deliberately not validating here, because we want some invalid items
+      @items = factory_names.each_with_object({}) do |fn, items|
+        items[fn] = build(fn).tap { |it| it.save!(validate: false) }
       end
-      @item = items.find(&:available?)
+      @item = available.first
     end
 
     after(:each) { logout! }
@@ -530,79 +563,86 @@ describe LendingController, type: :request do
         expect(response.body).to include(LendingItem::MSG_CHECKED_OUT)
       end
 
-      it 'fails if this user has already hit the checkout limit' do
-        max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
-        expect(active.size).to be > max_checkouts # just to be sure
-        max_checkouts.times { |i| active[i].check_out_to!(user.lending_id) }
-        item = active[max_checkouts] # next active item
-
-        expect do
-          get lending_check_out_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-
-        expect(response.status).to eq(422) # unprocessable entity
-        expect(response.body).to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
-      end
-
-      it 'allows a checkout if the user previously checked something out, but returned it' do
-        max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
-        expect(active.size).to be > max_checkouts # just to be sure
-        max_checkouts.times do |i|
-          loan = active[i].check_out_to!(user.lending_id)
-          loan.return!
+      context 'checkout limits' do
+        before(:each) do
+          # make sure we actually have multiple possible checkouts
+          inactive.each { |it| it.update!(copies: 2, active: true) }
         end
 
-        item = active[max_checkouts] # next active item
+        it 'fails if this user has already hit the checkout limit' do
+          max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
+          expect(active.size).to be > max_checkouts # just to be sure
+          max_checkouts.times { |i| active[i].check_out_to!(user.lending_id) }
+          item = active[max_checkouts] # next active item
 
-        # TODO: share these assertions
-        expect do
-          get lending_check_out_path(directory: item.directory)
-        end.to change(LendingItemLoan, :count).by(1)
+          expect do
+            get lending_check_out_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
 
-        loan = LendingItemLoan.find_by(
-          lending_item_id: item.id,
-          patron_identifier: user.lending_id
-        )
-        expect(loan).to be_active
-        expect(loan.loan_date).to be <= Time.current
-        expect(loan.due_date).to be > Time.current
-        expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
-
-        expected_path = lending_view_path(directory: item.directory)
-        expect(response).to redirect_to(expected_path)
-
-        expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
-      end
-
-      it 'allows a checkout if the user previously checked something out, but it was auto-returned' do
-        max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
-        expect(active.size).to be > max_checkouts # just to be sure
-        max_checkouts.times do |i|
-          loan = active[i].check_out_to!(user.lending_id)
-          loan.due_date = Time.current.utc - 1.days
-          loan.save!
+          expect(response.status).to eq(422) # unprocessable entity
+          expect(response.body).to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
         end
 
-        item = active[max_checkouts] # next active item
+        it 'allows a checkout if the user previously checked something out, but returned it' do
+          max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
+          expect(active.size).to be > max_checkouts # just to be sure
+          max_checkouts.times do |i|
+            loan = active[i].check_out_to!(user.lending_id)
+            loan.return!
+          end
 
-        # TODO: share these assertions
-        expect do
-          get lending_check_out_path(directory: item.directory)
-        end.to change(LendingItemLoan, :count).by(1)
+          item = active[max_checkouts] # next active item
 
-        loan = LendingItemLoan.find_by(
-          lending_item_id: item.id,
-          patron_identifier: user.lending_id
-        )
-        expect(loan).to be_active
-        expect(loan.loan_date).to be <= Time.current
-        expect(loan.due_date).to be > Time.current
-        expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
+          # TODO: share these assertions
+          expect do
+            get lending_check_out_path(directory: item.directory)
+          end.to change(LendingItemLoan, :count).by(1)
 
-        expected_path = lending_view_path(directory: item.directory)
-        expect(response).to redirect_to(expected_path)
+          loan = LendingItemLoan.find_by(
+            lending_item_id: item.id,
+            patron_identifier: user.lending_id
+          )
+          expect(loan).to be_active
+          expect(loan.loan_date).to be <= Time.current
+          expect(loan.due_date).to be > Time.current
+          expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
 
-        expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+          expected_path = lending_view_path(directory: item.directory)
+          expect(response).to redirect_to(expected_path)
+
+          expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+        end
+
+        it 'allows a checkout if the user previously checked something out, but it was auto-returned' do
+          max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
+          expect(active.size).to be > max_checkouts # just to be sure
+          max_checkouts.times do |i|
+            loan = active[i].check_out_to!(user.lending_id)
+            loan.due_date = Time.current.utc - 1.days
+            loan.save!
+          end
+
+          item = active[max_checkouts] # next active item
+
+          # TODO: share these assertions
+          expect do
+            get lending_check_out_path(directory: item.directory)
+          end.to change(LendingItemLoan, :count).by(1)
+
+          loan = LendingItemLoan.find_by(
+            lending_item_id: item.id,
+            patron_identifier: user.lending_id
+          )
+          expect(loan).to be_active
+          expect(loan.loan_date).to be <= Time.current
+          expect(loan.due_date).to be > Time.current
+          expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
+
+          expected_path = lending_view_path(directory: item.directory)
+          expect(response).to redirect_to(expected_path)
+
+          expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+        end
       end
 
       it 'fails if there are no copies available' do
@@ -736,7 +776,7 @@ describe LendingController, type: :request do
 
   describe 'without login' do
     before(:each) do
-      @item = LendingItem.create(**item_attrs.last)
+      @item = create(:item)
     end
 
     it 'GET lending_manifest_path redirects to login' do
@@ -763,8 +803,6 @@ describe LendingController, type: :request do
       expect(response).to redirect_to(login_with_callback_url)
     end
 
-    xit 'POST endpoints redirects to login'
-
     it 'DELETE lending_destroy_path redirects to login' do
       delete(path = lending_destroy_path(directory: item.directory))
       login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
@@ -788,7 +826,7 @@ describe LendingController, type: :request do
 
   describe 'with ineligible patron' do
     before(:each) do
-      @item = LendingItem.create(**item_attrs.last)
+      @item = create(:item)
       mock_login(:retiree)
     end
 
@@ -796,11 +834,6 @@ describe LendingController, type: :request do
 
     it 'GET lending_manifest_path returns 403 Forbidden' do
       get lending_manifest_path(directory: item.directory)
-      expect(response.status).to eq(403)
-    end
-
-    it 'GET lending_new_path returns 403 Forbidden' do
-      get lending_new_path
       expect(response.status).to eq(403)
     end
 
@@ -813,8 +846,6 @@ describe LendingController, type: :request do
       get lending_view_path(directory: item.directory)
       expect(response.status).to eq(403)
     end
-
-    xit 'POST endpoints returns 403 Forbidden'
 
     it 'DELETE lending_destroy_path returns 403 Forbidden' do
       delete lending_destroy_path(directory: item.directory)

@@ -20,8 +20,8 @@ gem 'jquery-ui-rails'
 gem 'jwt', '~> 1.5', '>= 1.5.4'
 gem 'lograge', '>=0.11.2'
 gem 'mirador_rails', git: 'https://github.com/sul-dlss/mirador_rails.git', ref: 'e021335'
-gem 'net-ssh'
 gem 'netaddr', '~> 1.5', '>= 1.5.1'
+gem 'net-ssh'
 gem 'omniauth-cas',
     git: 'https://github.com/dlindahl/omniauth-cas.git',
     ref: '7087bda829e14c0f7cab2aece5045ad7015669b1'
@@ -42,6 +42,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'colorize'
   gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 5.0'
 end
 
 group :development do
@@ -57,7 +58,7 @@ group :test do
   gem 'concurrent-ruby', '~> 1.1'
   gem 'database_cleaner-active_record', '~> 2.0'
   gem 'rspec', '~> 3.10'
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec_junit_formatter'
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.21', require: false
   gem 'simplecov-rcov', '~> 0.2', require: false

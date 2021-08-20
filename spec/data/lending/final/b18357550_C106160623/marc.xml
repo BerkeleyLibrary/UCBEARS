@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+  <leader>01702cam a2200409 a 4500</leader>
+  <controlfield tag="001">642625018</controlfield>
+  <controlfield tag="003">CU</controlfield>
+  <controlfield tag="005">20110315153243.0</controlfield>
+  <controlfield tag="008">100618s2010    cauab    b    001 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">  2010025667</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">9781606060360 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">1606060368 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">9781606060308 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">1606060309 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">.b183575507</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">DLC</subfield>
+    <subfield code="b">eng</subfield>
+    <subfield code="c">DLC</subfield>
+    <subfield code="d">YDX</subfield>
+    <subfield code="d">YDXCP</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+    <subfield code="a">f-ua---</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+    <subfield code="a">DT62.M7</subfield>
+    <subfield code="b">C67 2010</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="0">
+    <subfield code="a">932</subfield>
+    <subfield code="2">22</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Corcoran, Lorelei Hilda,</subfield>
+    <subfield code="d">1953-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">Herakleides :</subfield>
+    <subfield code="b">a portrait mummy from Roman Egypt /</subfield>
+    <subfield code="c">Lorelei H. Corcoran and Marie Svoboda ; with an appendix by Marc Walton.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">Los Angeles :</subfield>
+    <subfield code="b">J. Paul Getty Museum,</subfield>
+    <subfield code="c">c2010.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">112 p. :</subfield>
+    <subfield code="b">ill. (some col.), col. map ;</subfield>
+    <subfield code="c">24 cm.</subfield>
+  </datafield>
+  <datafield tag="597" ind1=" " ind2=" ">
+    <subfield code="a">Available online through HathiTrust Emergency Access Service. Click the HathiTrust button on the right and log in to access this book online</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+    <subfield code="a">Includes bibliographical references and index.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+    <subfield code="a">Mummy portraits and portrait mummies -- Description of the mummy of Herakleides -- The portrait of Herakleides -- Physical properties analyses -- Imaging Herakleides -- Dating the mummy of Herakleides -- Herakleides and Romano-Egyptian mummies.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="0">
+    <subfield code="a">Herakleides,</subfield>
+    <subfield code="d">active 2nd century.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Mummies</subfield>
+    <subfield code="z">Egypt.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Mummy portraits</subfield>
+    <subfield code="z">Egypt.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Svoboda, Marie.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Walton, Marc Sebastian,</subfield>
+    <subfield code="d">1973-</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+    <subfield code="b">ark:/28722/h24m91c67</subfield>
+  </datafield>
+</record>
+</collection>

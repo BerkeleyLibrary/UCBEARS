@@ -5,37 +5,43 @@ describe LendingController, type: :system do
   # ------------------------------------------------------------
   # Fixture
 
+  let(:factory_names) do
+    %i[
+      inactive_item
+      active_item
+      incomplete_no_directory
+      incomplete_no_images
+      incomplete_no_marc
+      incomplete_no_manifest
+      incomplete_marc_only
+    ]
+  end
+
   let(:states) { %i[active inactive incomplete] }
 
-  let(:valid_item_attributes) do
+  let(:item_attrs) do
     [
-      {
-        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-        author: 'Horn, Walter',
-        directory: 'b100523250_C044235662',
-        copies: 3,
-        active: true
-      },
       {
         title: 'The great depression in Europe, 1929-1939',
         author: 'Clavin, Patricia.',
         directory: 'b135297126_C068087930',
-        copies: 1,
-        active: false
+        copies: 2,
+        active: true
+      },
+      {
+        title: 'Cultural atlas of Ancient Egypt',
+        author: 'Baines, John,',
+        directory: 'B135491460_C106083325'
+      },
+      {
+        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
+        author: 'Horn, Walter',
+        directory: 'b100523250_C044235662'
       },
       {
         title: 'Villette',
         author: 'Brontë, Charlotte',
-        directory: 'b155001346_C044219363',
-        copies: 0,
-        active: false
-      },
-      {
-        title: 'Pamphlet.',
-        author: 'Canada. Department of Agriculture.',
-        directory: 'b11996535_B 3 106 704',
-        copies: 0,
-        active: false
+        directory: 'b155001346_C044219363'
       }
     ]
   end
@@ -43,25 +49,30 @@ describe LendingController, type: :system do
   attr_reader :items
   attr_reader :item
 
-  def processed
-    items.select(&:complete?)
+  def complete
+    items.values.select(&:complete?)
   end
 
   def incomplete
-    items.reject(&:complete?)
+    items.values.reject(&:complete?)
   end
 
   def active
-    processed.select(&:active?)
+    # TODO: separate "activated" flag from "active" (= activated AND complete) determination
+    complete.select(&:active?)
   end
 
   def inactive
-    processed.reject(&:active?)
+    complete.reject(&:active?)
+  end
+
+  def available
+    items.values.select(&:available?)
   end
 
   before(:each) do
     {
-      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
@@ -94,10 +105,12 @@ describe LendingController, type: :system do
 
     context 'with items' do
       before(:each) do
-        @items = valid_item_attributes.map do |item_attributes|
-          LendingItem.create!(**item_attributes)
+        expect(LendingItem.count).to eq(0) # just to be sure
+        # NOTE: we're deliberately not validating here, because we want some invalid items
+        @items = factory_names.each_with_object({}) do |fn, items|
+          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
         end
-        @item = items.first
+        @item = active.first
 
         mock_login(:lending_admin)
       end
@@ -116,7 +129,7 @@ describe LendingController, type: :system do
           expect_no_alerts
 
           aggregate_failures :items do
-            items.each do |item|
+            items.each_value do |item|
               expect(page).to have_content(item.title)
             end
           end
@@ -146,7 +159,7 @@ describe LendingController, type: :system do
         end
 
         it 'has show and edit buttons for all items' do
-          items.each do |item|
+          items.each_value do |item|
             item_section = find_item_section(item)
             show_path = lending_show_path(directory: item.directory)
             show_link = item_section.find_link('Show')
@@ -159,7 +172,7 @@ describe LendingController, type: :system do
         end
 
         it 'has "make active" only for processed, inactive items with copies' do
-          items.each do |item|
+          items.each_value do |item|
             item_section = find_item_section(item)
             expect(item_section).to have_content(item.title)
 
@@ -175,7 +188,7 @@ describe LendingController, type: :system do
         end
 
         it 'has "make inactive" only for processed, active items' do
-          items.each do |item|
+          items.each_value do |item|
             item_section = find_item_section(item)
             deactivate_path = lending_deactivate_path(directory: item.directory)
             if item.incomplete? || !item.active?
@@ -188,7 +201,7 @@ describe LendingController, type: :system do
         end
 
         it 'has "delete" only for incomplete items' do
-          items.each do |item|
+          items.each_value do |item|
             item_section = find_item_section(item)
             delete_path = lending_destroy_path(directory: item.directory)
             if item.incomplete?
@@ -203,7 +216,7 @@ describe LendingController, type: :system do
 
         describe 'Show' do
           it 'shows the item preview' do
-            item = items.first
+            item = active.first
             item_section = find_item_section(item)
 
             show_path = lending_show_path(directory: item.directory)
@@ -218,7 +231,7 @@ describe LendingController, type: :system do
 
         describe 'Edit' do
           it 'shows the edit screen' do
-            item = items.first
+            item = active.find { |it| it.copies > 0 }
             item_section = find_item_section(item)
 
             edit_path = lending_edit_path(directory: item.directory)
@@ -232,6 +245,11 @@ describe LendingController, type: :system do
         end
 
         describe 'Make Active' do
+          before(:each) do
+            inactive.first.update(copies: 2)
+            visit index_path
+          end
+
           it 'activates an item' do
             item = inactive.find { |it| it.copies > 0 }
             item_section = find_item_section(item)
@@ -299,8 +317,10 @@ describe LendingController, type: :system do
 
     before(:each) do
       @user = mock_login(:student)
-      @items = valid_item_attributes.map do |item_attributes|
-        LendingItem.create!(**item_attributes)
+      expect(LendingItem.count).to eq(0) # just to be sure
+      # NOTE: we're deliberately not validating here, because we want some invalid items
+      @items = factory_names.each_with_object({}) do |fn, items|
+        items[fn] = build(fn).tap { |it| it.save!(validate: false) }
       end
     end
 
@@ -308,7 +328,7 @@ describe LendingController, type: :system do
 
     context 'with available item' do
       before(:each) do
-        @item = items.find(&:available?)
+        @item = active.find(&:available?)
       end
 
       describe :view do
@@ -386,7 +406,7 @@ describe LendingController, type: :system do
 
     context 'with inactive item' do
       before(:each) do
-        @item = items.find(&:unavailable?)
+        @item = inactive.first
       end
 
       describe :view do
@@ -406,7 +426,7 @@ describe LendingController, type: :system do
           alert = page.find('.alert-danger')
           expect(alert).to have_text('This item is not in active circulation.')
 
-          available_item = items.find(&:available?)
+          available_item = available.first
           visit lending_view_path(directory: available_item.directory)
 
           expect(page).to have_link('Check out')

@@ -43,14 +43,12 @@ class LendingController < ApplicationController
 
   # Patron view
   # TODO: move to a LoanController?
-  # rubocop:disable Metrics/AbcSize
   def view
     ensure_lending_item_loan!
     flash.now[:danger] ||= []
     flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.auto_returned? # TODO: something less awkward
     flash.now[:danger] << reason_unavailable unless available?
   end
-  # rubocop:enable Metrics/AbcSize
 
   def manifest
     require_active_loan! unless lending_admin?
@@ -73,9 +71,7 @@ class LendingController < ApplicationController
 
   def check_out
     @lending_item_loan = @lending_item.check_out_to(patron_identifier)
-    unless @lending_item_loan.persisted?
-      return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed")
-    end
+    return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed") unless @lending_item_loan.persisted?
 
     flash[:success] = 'Checkout successful.'
     redirect_to lending_view_url(directory: directory)
@@ -233,7 +229,7 @@ class LendingController < ApplicationController
   def ensure_lending_items!
     LendingItemLoan.overdue.find_each(&:return!)
     LendingItem.scan_for_new_items!
-    @lending_items = LendingItem.order(sort_column + ' ' + sort_direction)
+    @lending_items = LendingItem.order("#{sort_column} #{sort_direction}")
   end
 
   def ensure_lending_item!

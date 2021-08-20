@@ -71,14 +71,14 @@ module Lending
     end
 
     describe :tileize_all do
-      ready_root = 'spec/data/lending/ready'
+      sample_root = 'spec/data/lending/samples'
 
       context 'with TIFF files' do
-        include_examples :tileize_all_examples, File.join(ready_root, 'b135297126_C068087930_TIFF')
+        include_examples :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_TIFF')
       end
 
       context 'with JPEG files' do
-        include_examples :tileize_all_examples, File.join(ready_root, 'b135297126_C068087930_JPEG')
+        include_examples :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_JPEG')
       end
     end
   end

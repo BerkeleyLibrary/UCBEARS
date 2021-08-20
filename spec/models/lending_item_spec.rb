@@ -1,23 +1,40 @@
 require 'rails_helper'
 
 describe LendingItem, type: :model do
+  let(:factory_names) do
+    %i[
+      inactive_item
+      active_item
+      incomplete_no_directory
+      incomplete_no_images
+      incomplete_no_marc
+      incomplete_no_manifest
+      incomplete_marc_only
+    ]
+  end
+
   before(:each) do
     {
-      lending_root_path: Pathname.new('spec/data/lending/samples'),
+      lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
     end
   end
 
-  attr_reader :items, :processed, :incomplete, :active
-
   context 'without existing items' do
+    before(:each) do
+      expect(LendingItem.count).to eq(0) # just to be sure
+    end
+
     describe :scan_for_new_items! do
       it 'creates new items' do
         expected_dirs = Lending
           .stage_root_path(:final).children
-          .select { |d| Lending::PathUtils.item_dir?(d) }
+          .select do |d|
+            Lending::PathUtils.item_dir?(d) &&
+              d.join(Lending::MARC_XML_NAME).file?
+          end
         items = LendingItem.scan_for_new_items!
         expect(items.size).to eq(expected_dirs.size)
       end
@@ -25,88 +42,137 @@ describe LendingItem, type: :model do
   end
 
   context 'with existing items' do
+    attr_reader :items
 
     before(:each) do
-      @items = [
-        {
-          title: 'Villette',
-          author: 'Brontë, Charlotte',
-          directory: 'b155001346_C044219363',
-          copies: 1
-        },
-        {
-          title: 'The Great Depression in Europe, 1929-1939',
-          author: 'Clavin, Patricia',
-          directory: 'b135297126_C068087930',
-          copies: 3
-        },
-        {
-          title: 'The Plan of St. Gall',
-          author: 'Horn, Walter',
-          directory: 'b100523250_C044235662',
-          copies: 6,
-          active: true
-        },
-        {
-          title: 'Pamphlet',
-          author: 'Canada. Department of Agriculture.',
-          directory: 'b11996535_B 3 106 704',
-          copies: 2
-        }
-      ].map { |item_attributes| LendingItem.create!(**item_attributes) }
+      expect(LendingItem.count).to eq(0) # just to be sure
+      # NOTE: we're deliberately not validating here, because we want some invalid items
+      @items = factory_names.each_with_object({}) do |fn, items|
+        items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+      end
+    end
 
-      @processed = items.select(&:complete?)
-      @incomplete = items.reject(&:complete?)
-      @active = @processed.select(&:active?)
+    describe :active? do
+      it 'returns true for active items' do
+        item = items[:active_item]
+        expect(item.active).to eq(true) # just to be sure
+        expect(item).to be_active
+      end
+
+      it 'returns false for inactive items' do
+        item = items[:inactive_item]
+        expect(item.active).to eq(false) # just to be sure
+        expect(item.copies).to eq(0) # just to be sure
+        expect(item).not_to be_active
+      end
+
+      it 'returns false for inactive items with copies' do
+        item = items[:inactive_item]
+        expect(item.active).to eq(false) # just to be sure
+        expect(item.copies).to eq(0) # just to be sure
+        item.update!(copies: 2)
+        expect(item).not_to be_active
+      end
     end
 
     describe :complete? do
-      it 'returns true only items with manifest templates and populated image directories' do
-        items.each do |item|
-          should_be_complete = item.has_iiif_dir? && item.has_page_images? && item.iiif_manifest.has_template?
-          expect(item.complete?).to eq(should_be_complete)
+      it 'returns false for items without IIIF directories' do
+        item = items[:incomplete_no_directory]
+        expect(item.has_iiif_dir?).to eq(false)
+        expect(item.has_page_images?).to eq(false)
+        expect(item.has_marc_record?).to eq(false)
+        expect(item.has_manifest_template?).to eq(false)
+        expect(item).not_to be_complete
+      end
 
-          if should_be_complete
-            expect(item.reason_incomplete).to be_nil
-          else
-            expect(item.reason_incomplete).not_to be_nil
-          end
+      it 'returns false for items without page images' do
+        item = items[:incomplete_no_images]
+        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.has_page_images?).to eq(false)
+        expect(item.has_marc_record?).to eq(true)
+        expect(item.has_manifest_template?).to eq(true)
+        expect(item).not_to be_complete
+      end
+
+      it 'returns false for items without MARC records' do
+        item = items[:incomplete_no_marc]
+        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.has_page_images?).to eq(true)
+        expect(item.has_marc_record?).to eq(false)
+        expect(item.has_manifest_template?).to eq(true)
+        expect(item).not_to be_complete
+      end
+
+      it 'returns false for items without manifest templates' do
+        item = items[:incomplete_no_manifest]
+        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.has_page_images?).to eq(true)
+        expect(item.has_marc_record?).to eq(true)
+        expect(item.has_manifest_template?).to eq(false)
+        expect(item).not_to be_complete
+      end
+
+      it 'returns false for items without manifest templates or page images' do
+        item = items[:incomplete_marc_only]
+        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.has_page_images?).to eq(false)
+        expect(item.has_marc_record?).to eq(true)
+        expect(item.has_manifest_template?).to eq(false)
+        expect(item).not_to be_complete
+      end
+
+      it 'returns true for complete items' do
+        %i[inactive_item active_item].each do |fn|
+          item = items[fn]
+
+          expect(item.has_iiif_dir?).to eq(true)
+          expect(item.has_page_images?).to eq(true)
+          expect(item.has_marc_record?).to eq(true)
+          expect(item.has_manifest_template?).to eq(true)
+          expect(item).to be_complete
         end
-        expect(processed).not_to be_empty
       end
     end
 
     describe :available? do
       it 'returns true if there are copies available' do
-        active.each do |item|
-          expect(item.available?).to eq(true)
-        end
+        item = items[:active_item]
+        expect(item.copies_available).to be > 0 # just to be sure
+        expect(item).to be_available
       end
 
       it 'returns false if there are no copies available' do
-        active.each do |item|
-          item.copies = 0
-          expect(item.available?).to eq(false)
+        item = items[:active_item]
+        item.copies_available.times do |i|
+          item.check_out_to("patron-#{i}")
+        end
+        expect(item.copies_available).to eq(0) # just to be sure
+        expect(item).not_to be_available
+      end
+
+      it 'returns false if the item is incomplete' do
+        items.each_value.reject(&:complete?).each do |item|
+          expect(item).not_to be_available
         end
       end
 
-      it 'returns false if the item has not been processed' do
-        incomplete.each do |item|
-          expect(item.available?).to eq(false)
-        end
-      end
+      it 'returns false if the item is inactive' do
+        item = items[:inactive_item]
+        expect(item.copies_available).to eq(0) # just to be sure
+        expect(item).not_to be_available
 
-      it 'returns false if all copies are checked out' do
-        active.each do |item|
-          item.copies.times { |i| item.check_out_to!("patron-#{i}") }
-          expect(item.available?).to eq(false)
-        end
+        item.update!(copies: 2)
+        expect(item.copies_available).to be > 0 # just to be sure
+        expect(item).not_to be_available
       end
     end
 
     describe :iiif_manifest do
-      it 'returns the IIIFItem if the item has been processed' do
-        processed.each do |item|
+      let(:with_manifest) { %i[inactive_item active_item incomplete_no_images incomplete_no_marc] }
+
+      it 'returns the manifest if the item has one' do
+        with_manifest.each do |fn|
+          item = items[fn]
           iiif_item = item.iiif_manifest
           expect(iiif_item).to be_a(Lending::IIIFManifest)
           expect(iiif_item.title).to eq(item.title)
@@ -115,84 +181,50 @@ describe LendingItem, type: :model do
         end
       end
 
-      it 'returns nil if the item is has no IIIF directory or no page images' do
-        unmanifestable = items.reject { |item| item.has_iiif_dir? && item.has_page_images? }
-        expect(unmanifestable).not_to be_nil
+      it 'returns nil if the item has no IIIF directory or no manifest' do
+        items.each do |fn, item|
+          next if with_manifest.include?(fn)
 
-        unmanifestable.each { |item| expect(item.iiif_manifest).to be_nil }
+          expect(item.iiif_manifest).to be_nil
+        end
       end
     end
 
-  end
-
-  describe :states do
-    attr_reader :items
-
-    before(:each) do
-      @items = [
-        {
-          title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-          author: 'Horn, Walter',
-          directory: 'b100523250_C044235662',
-          copies: 3,
-          active: true
-        },
-        {
-          title: 'The great depression in Europe, 1929-1939',
-          author: 'Clavin, Patricia.',
-          directory: 'b135297126_C068087930',
-          copies: 1,
-          active: false
-        },
-        {
-          title: 'Villette',
-          author: 'Brontë, Charlotte',
-          directory: 'b155001346_C044219363',
-          copies: 0,
-          active: false
-        },
-        {
-          title: 'Pamphlet.',
-          author: 'Canada. Department of Agriculture.',
-          directory: 'b11996535_B 3 106 704',
-          copies: 0,
-          active: false
-        }
-      ].map { |item_attributes| LendingItem.create!(**item_attributes) }
-    end
-
-    def processed
-      items.select(&:complete?)
-    end
-
-    def incomplete
-      items.reject(&:complete?)
-    end
-
-    def active
-      processed.select(&:active?)
-    end
-
-    def inactive
-      processed.reject(&:active?)
-    end
-
-    describe :active do
-      it 'returns the active items' do
-        expect(active).not_to be_empty
+    describe :states do
+      def complete
+        items.values.select(&:complete?)
       end
-    end
 
-    describe :inactive do
-      it 'returns the active items' do
-        expect(inactive).not_to be_empty
+      def incomplete
+        items.values.reject(&:complete?)
       end
-    end
 
-    describe :incomplete do
-      it 'returns the incomplete items' do
-        expect(incomplete).not_to be_empty
+      def active
+        complete.select(&:active?)
       end
+
+      def inactive
+        complete.reject(&:active?)
+      end
+
+      describe :active do
+        it 'returns the active items' do
+          expect(active).not_to be_empty
+        end
+      end
+
+      describe :inactive do
+        it 'returns the active items' do
+          expect(inactive).not_to be_empty
+        end
+      end
+
+      describe :incomplete do
+        it 'returns the incomplete items' do
+          expect(incomplete).not_to be_empty
+        end
+      end
+
     end
 
     describe :marc_metadata do
@@ -202,11 +234,12 @@ describe LendingItem, type: :model do
       before(:each) do
         @items_with_marc = []
         @items_without_marc = []
-        items.each do |item|
+        items.each_value do |item|
           marc_xml = File.join(item.iiif_dir, 'marc.xml')
           (File.exist?(marc_xml) ? @items_with_marc : @items_without_marc) << item
         end
       end
+
       it 'returns the MARC metadata for items that have it' do
         expect(items_with_marc).not_to be_empty # just to be sure
 
@@ -226,7 +259,6 @@ describe LendingItem, type: :model do
             expect(md).to be_nil, "Expected MARC metadata for item #{item.directory} to be nil, got #{md.inspect}"
           end
         end
-
       end
     end
   end
