@@ -79,10 +79,9 @@ class LendingItem < ActiveRecord::Base
       logger.error("Unable to read MARC record from #{marc_path}") && return unless (metadata = Lending::MarcMetadata.from_file(marc_path))
 
       item = LendingItem.create(directory: directory, title: metadata.title, author: metadata.author, copies: 0)
-      return item if item.persisted?
+      logger.error("Creating item for directory #{directory} failed", nil, item.errors.full_messages) if item.errors.any?
 
-      logger.error("Creating item for directory #{directory} failed", nil, item.errors.full_messages)
-      nil
+      item if item.persisted?
     end
   end
 
@@ -126,10 +125,6 @@ class LendingItem < ActiveRecord::Base
 
   def available?
     active? && complete? && copies_available > 0
-  end
-
-  def unavailable?
-    !available?
   end
 
   def inactive?

@@ -4,7 +4,6 @@ require 'berkeley_library/logging'
 
 module Lending
   class Tileizer
-
     # vips tiffsave <infile> <outfile> --tile --pyramid --compression jpeg --tile-width 256 --tile-height 256
     VIPS_OPTIONS = {
       tile: true,
@@ -24,10 +23,6 @@ module Lending
       @outfile_path = PathUtils.ensure_non_directory(outfile).tap do |outfile_path|
         raise ArgumentError, "Not a TIFF file: #{outfile_path}" unless PathUtils.tiff_ext?(outfile_path)
       end
-    end
-
-    def tileized?
-      @tileized ||= false
     end
 
     def tileize!
@@ -54,14 +49,9 @@ module Lending
       end
 
       # @param infile_path [String, Pathname] the input file path
-      # @param outfile_path [String, Pathname] the output file or directory path. If a directory,
-      #   the actual file will be created based on the input filename.
+      # @param outfile_path [String, Pathname] the output file
       def tileize(infile_path, outfile_path, skip_existing: false, fail_fast: false)
         infile_path, outfile_path = PathUtils.ensure_pathnames(infile_path, outfile_path)
-        if outfile_path.directory?
-          stem = infile_path.basename(infile_path.extname)
-          outfile_path = outfile_path.join("#{stem}.tif")
-        end
         if skip_existing && outfile_path.exist?
           logger.info("Skipping existing file #{outfile_path}")
           return
