@@ -1,11 +1,3 @@
-# Ignore monster test files (see .gitattributes)
-spec/data/lending/ready/
-spec/data/lending/final/
-
-# But include the small ones
-!spec/data/lending/ready/b11996535_B 3 106 704/*
-!spec/data/lending/final/b11996535_B 3 106 704/*
-
 # Ignore .env
 .env
 
