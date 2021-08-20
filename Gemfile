@@ -34,6 +34,8 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do
+  gem 'brakeman'
+  gem 'bundle-audit'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'colorize'
   gem 'factory_bot_rails'
