@@ -114,4 +114,9 @@ class User
     # TODO: something more secure
     uid
   end
+
+  def inspect
+    attrs = [:uid, :affiliations, :cal_groups].map { |attr| "#{attr}: #{send(attr).inspect}" }.join(', ')
+    "User@#{object_id}(#{attrs})"
+  end
 end
