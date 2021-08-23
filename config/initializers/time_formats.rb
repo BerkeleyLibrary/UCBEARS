@@ -5,7 +5,7 @@
 #
 # TODO: Figure out how this is *really* supposed to work
 
-module Framework
+module UCBEARS
   module TimeFormats
     class << self
       KEY_TO_FMTS = { date: Date::DATE_FORMATS, time: Time::DATE_FORMATS }.freeze
@@ -31,4 +31,4 @@ module Framework
   end
 end
 
-Framework::TimeFormats.copy_from_locales!
+UCBEARS::TimeFormats.copy_from_locales!
