@@ -20,7 +20,10 @@ require 'sprockets/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Framework
+# Read .env file, but only in local (non-Docker) development
+require 'dotenv/load' if Rails.env.development? && !Docker.running_in_container?
+
+module UCBEARS
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
