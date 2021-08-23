@@ -42,10 +42,13 @@ module CalnetHelper
   }.freeze
 
   def mock_login(type)
-    raise ArgumentError, "Unknown user type: #{type.inspect}" unless (id = IDS[type])
-
-    auth_hash = auth_hash_for(id)
+    auth_hash = mock_auth_hash(type)
     mock_omniauth_login(auth_hash)
+  end
+
+  def mock_user_without_login(type)
+    auth_hash = mock_auth_hash(type)
+    User.from_omniauth(auth_hash)
   end
 
   def mock_omniauth_login(auth_hash)
@@ -56,6 +59,12 @@ module CalnetHelper
     do_get omniauth_callback_path(:calnet)
 
     User.from_omniauth(auth_hash)
+  end
+
+  def mock_auth_hash(type)
+    raise ArgumentError, "Unknown user type: #{type.inspect}" unless (id = IDS[type])
+
+    auth_hash_for(id)
   end
 
   def auth_hash_for(uid)
