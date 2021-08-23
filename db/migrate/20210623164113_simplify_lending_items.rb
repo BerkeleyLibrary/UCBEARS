@@ -1,3 +1,6 @@
+# Ensure migration can run without error even if we delete/rename the models
+class LendingItem < ActiveRecord::Base; end unless defined?(LendingItem)
+
 class SimplifyLendingItems < ActiveRecord::Migration[6.0]
   DROPPED_COLUMNS = [:millennium_record, :alma_record, :barcode, :iiif_dir]
 
