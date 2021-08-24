@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_13_194033) do
+ActiveRecord::Schema.define(version: 2021_08_24_224520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 2021_07_13_194033) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "active", default: false, null: false
     t.index ["directory"], name: "index_lending_items_on_directory", unique: true
+  end
+
+  create_table "session_counters", force: :cascade do |t|
+    t.string "uid"
+    t.boolean "student"
+    t.boolean "staff"
+    t.boolean "faculty"
+    t.boolean "admin"
+    t.integer "count"
   end
 
   add_foreign_key "lending_item_loans", "lending_items"

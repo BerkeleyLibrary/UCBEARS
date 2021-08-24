@@ -8,8 +8,8 @@ extra:
   givenName: Laura
   surname: Loe
   displayName: Laura J. Loe
-  berkeleyEduUCPathID: '5551215'
-  uid: '05551215'
+  berkeleyEduUCPathID: '5551214'
+  uid: '05551214'
   berkeleyEduIsMemberOf:
     - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
   berkeleyEduAffiliations:

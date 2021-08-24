@@ -26,6 +26,16 @@ describe SessionsController, type: :request do
     expect(omniauth_hash['extra']['uid']).to eq(user.uid)
   end
 
+  it "increments the user's session count" do
+    uid = uid_for(:staff)
+    count_before = (counter = SessionCounter.find_by(uid: uid, staff: true)) && counter.count || 0
+
+    mock_login(:staff)
+    counter = SessionCounter.find_by(uid: uid)
+    expect(counter.staff?).to eq(true)
+    expect(counter.count).to eq(count_before + 1)
+  end
+
   describe :sign_in do
     before(:each) do
       {

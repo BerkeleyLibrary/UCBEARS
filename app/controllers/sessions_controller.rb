@@ -27,9 +27,7 @@ class SessionsController < ApplicationController
 
     sign_in @user
 
-    # NOTE: We explicitly log as user.to_s, not the full object,
-    #       we want to be sure not to log borrower_id
-    logger.debug({ msg: 'Signed in user', user: session[:user].to_s })
+    log_signin(@user)
 
     redirect_to request.env['omniauth.origin'] || index_path # TODO: better default redirect path
   end
@@ -42,6 +40,20 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def log_signin(user)
+    # NOTE: We explicitly log as user.to_s, not the full object,
+    #       because we want to be sure not to log borrower_id
+    logger.debug({ msg: 'Signed in user', user: user.to_s })
+
+    counter = SessionCounter.find_or_create_by!(
+      uid: user.uid,
+      student: user.ucb_student?,
+      staff: user.ucb_staff?,
+      faculty: user.ucb_faculty?
+    )
+    counter.increment!(:count)
+  end
 
   def auth_params
     request.env['omniauth.auth']
