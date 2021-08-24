@@ -30,6 +30,14 @@ module Lending
 
     alias eql? ==
 
+    def to_s
+      token_str
+    end
+
+    def inspect
+      "BorrowerToken@#{object_id}(#{token_str})"
+    end
+
     class << self
       include BerkeleyLibrary::Logging
 
@@ -64,9 +72,7 @@ module Lending
       private
 
       def hmac_secret
-        @hmac_secret ||= Rails.application.secrets.fetch(:secret_key_base) do
-          raise ArgumentError, 'Rails secret_key_base not set'
-        end
+        @hmac_secret ||= Rails.application.secrets.fetch(:secret_key_base) { raise ArgumentError, 'Rails secret_key_base not set' }
       end
 
       def decode(token_str)

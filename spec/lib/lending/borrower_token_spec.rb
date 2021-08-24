@@ -140,5 +140,19 @@ module Lending
         expect(token.as_json).not_to include(token.borrower_id)
       end
     end
+
+    describe :inspect do
+      it 'does not include the borrower ID as plaintext' do
+        token = BorrowerToken.new_token_for(uid)
+        expect(token.inspect).not_to include(token.borrower_id)
+      end
+    end
+
+    describe :to_s do
+      it 'does not include the borrower ID as plaintext' do
+        token = BorrowerToken.new_token_for(uid)
+        expect(token.to_s).not_to include(token.borrower_id)
+      end
+    end
   end
 end

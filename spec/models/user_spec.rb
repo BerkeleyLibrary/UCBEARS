@@ -59,4 +59,11 @@ describe User do
       expect(user.borrower_token).not_to eq(new_token)
     end
   end
+
+  describe :inspect do
+    it 'does not include the borrower ID' do
+      user = mock_user_without_login(:student)
+      expect(user.inspect).not_to include(user.borrower_id)
+    end
+  end
 end

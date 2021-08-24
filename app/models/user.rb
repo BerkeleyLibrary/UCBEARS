@@ -129,7 +129,7 @@ class User
   end
 
   def inspect
-    attrs = %i[uid affiliations cal_groups].map { |attr| "#{attr}: #{send(attr).inspect}" }.join(', ')
+    attrs = %i[uid affiliations cal_groups borrower_token].map { |attr| "#{attr}: #{send(attr).inspect}" }.join(', ')
     "User@#{object_id}(#{attrs})"
   end
 end
