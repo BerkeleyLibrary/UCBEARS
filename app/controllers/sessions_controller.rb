@@ -27,6 +27,10 @@ class SessionsController < ApplicationController
 
     sign_in @user
 
+    # NOTE: We explicitly log as user.to_s, not the full object,
+    #       we want to be sure not to log borrower_id
+    logger.debug({ msg: 'Signed in user', user: session[:user].to_s })
+
     redirect_to request.env['omniauth.origin'] || index_path # TODO: better default redirect path
   end
 

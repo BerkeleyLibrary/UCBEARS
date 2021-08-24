@@ -51,6 +51,7 @@ class LendingController < ApplicationController
       ensure_lending_item_loan!
       populate_view_flash
     else
+      # TODO: can we get Rails to just parameterize the token as a string?
       token_str = current_user.borrower_token.token_str
       redirect_to lending_view_path(directory: directory, token: token_str)
     end
@@ -80,7 +81,9 @@ class LendingController < ApplicationController
     return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed") unless @lending_item_loan.persisted?
 
     flash[:success] = 'Checkout successful.'
-    redirect_to lending_view_url(directory: directory)
+    # TODO: can we get Rails to just parameterize the token as a string?
+    token_str = current_user.borrower_token.token_str
+    redirect_to lending_view_url(directory: directory, token: token_str)
   end
 
   def return
@@ -214,6 +217,7 @@ class LendingController < ApplicationController
   def update_user_token(token_str)
     if (new_token = Lending::BorrowerToken.from_string(token_str, uid: current_user.uid))
       current_user.borrower_token = new_token
+      sign_in(current_user) # TODO: something less hacky
     else
       logger.warn("Token #{token_str.inspect} not valid for user #{current_user.uid}")
     end

@@ -388,7 +388,7 @@ describe LendingController, type: :system do
           expect(user.uid).to eq(original_user.uid) # just to be sure
           expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
 
-          visit lending_view_path(token: original_user.borrower_token)
+          visit lending_view_path(directory: item.directory, token: original_user.borrower_token.token_str)
           expect(page).to have_selector('div#iiif_viewer')
         end
 
@@ -396,16 +396,19 @@ describe LendingController, type: :system do
           original_user = user
           item.check_out_to(original_user.borrower_id)
 
+          expected_path = lending_view_path(directory: item.directory, token: original_user.borrower_token.token_str)
+
           logout!
           user = mock_login(:student)
           expect(user.uid).to eq(original_user.uid) # just to be sure
           expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
 
-          visit lending_view_path(token: original_user.borrower_token)
-          expect(user.borrower_id).to eq(original_user.borrower_id)
+          visit expected_path
 
-          visit lending_view_path
+          visit lending_view_path(directory: item.directory)
           expect(page).to have_selector('div#iiif_viewer')
+
+          expect(page.current_url).to include(expected_path)
         end
 
         it 'displays a warning when loan has expired' do

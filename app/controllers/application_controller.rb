@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.from_session(session)
   end
+  helper_method :current_user
 
   def render_with_errors(view, errors, log_message)
     logger.error(log_message, nil, errors.full_messages)
@@ -59,10 +60,6 @@ class ApplicationController < ActionController::Base
   # @return [void]
   def sign_in(user)
     session[:user] = user
-
-    # NOTE: We explicitly log as user.to_s, not the full object,
-    #       we want to be sure not to log borrower_id
-    logger.debug({ msg: 'Signed in user', user: session[:user].to_s })
   end
 
   # Sign out the current user by clearing all session data

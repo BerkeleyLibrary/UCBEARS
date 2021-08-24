@@ -24,11 +24,17 @@ class LendingItemViewPresenter < LendingItemPresenterBase
   def additional_fields
     @additional_fields ||= {}.tap do |ff|
       add_loan_info(ff) if loan.persisted?
-      next if loan.active?
-
-      ff['Available?'] = to_yes_or_no(item.available?)
-      add_next_due_date(ff) unless item.available?
+      if loan.active?
+        add_permalink(ff)
+      else
+        ff['Available?'] = to_yes_or_no(item.available?)
+        add_next_due_date(ff) unless item.available?
+      end
     end
+  end
+
+  def borrower_token_str
+    current_user.borrower_token.token_str
   end
 
   private
@@ -38,6 +44,11 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     ff['Checked out'] = loan.loan_date
     ff['Due'] = loan.due_date if loan.active?
     ff['Returned'] = loan.return_date if loan.complete?
+  end
+
+  def add_permalink(ff)
+    view_url = lending_view_url(directory: directory, token: borrower_token_str)
+    ff['Permanent link to this checkout'] = link_to(view_url, view_url, target: '_blank')
   end
 
   def add_next_due_date(ff)

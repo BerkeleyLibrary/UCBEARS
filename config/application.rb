@@ -16,6 +16,9 @@ require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
 
+# TODO: figure out why Bundler.require() doesn't pick this up
+require 'berkeley_library/logging/railtie'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

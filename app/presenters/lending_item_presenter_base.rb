@@ -26,10 +26,6 @@ class LendingItemPresenterBase
     @fields ||= build_fields
   end
 
-  def directory
-    item.directory
-  end
-
   def viewer_title
     'View'
   end
@@ -40,6 +36,10 @@ class LendingItemPresenterBase
 
   def to_yes_or_no(b)
     b ? 'Yes' : 'No'
+  end
+
+  def directory
+    item.directory
   end
 
   protected
