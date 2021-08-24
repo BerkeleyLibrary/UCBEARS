@@ -17,15 +17,13 @@ class User
   # Initializer
 
   # @param uid The CalNet UID
-  # @param borrower_id the previously generated borrower ID stored in the session cookie
   # @param affiliations Affiliations per CalNet (attribute `berkeleyEduAffiliations` e.g.
   #        `EMPLOYEE-TYPE-FACULTY`, `STUDENT-TYPE-REGISTERED`).
   # @param cal_groups CalNet LDAP groups (attribute `berkeleyEduIsMemberOf`). Note that
   #        in #from_omniauth we ignore any groups not in #KNOWN_CAL_GROUPS
-  def initialize(uid: nil, borrower_id: nil, affiliations: nil, cal_groups: nil)
+  def initialize(uid: nil, borrower_token: nil, affiliations: nil, cal_groups: nil)
     super(uid: uid, affiliations: affiliations, cal_groups: cal_groups)
-    # TODO: BorrowerId: Don't store the full object/hash in the session cookie
-    @borrower_id = Lending::BorrowerId.from_session(borrower_id) || Lending::BorrowerId.create_for(uid)
+    @borrower_token = Lending::BorrowerToken.decode_or_create(borrower_token, uid: uid)
   end
 
   # ------------------------------------------------------------
@@ -46,7 +44,7 @@ class User
       attrs = OpenStruct.new((session && session[:user]) || {})
       new(
         uid: attrs.uid,
-        borrower_id: attrs.borrower_id,
+        borrower_token: attrs.borrower_token,
         affiliations: attrs.affiliations,
         cal_groups: attrs.cal_groups
       )
@@ -78,8 +76,8 @@ class User
   # @return [Array]
   attr_accessor :cal_groups
 
-  # @return [Lending::BorrowerId]
-  attr_reader :borrower_id
+  # @return [String]
+  attr_reader :borrower_token
 
   # ------------------------------------------------------------
   # Instance methods
@@ -115,6 +113,10 @@ class User
   # @return [Boolean]
   def lending_admin?
     cal_groups&.include?(LENDING_ADMIN_GROUP)
+  end
+
+  def borrower_id
+    borrower_token.borrower_id
   end
 
   def inspect

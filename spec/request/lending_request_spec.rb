@@ -436,7 +436,7 @@ describe LendingController, type: :request do
       end
 
       it 'shows a loan if one exists' do
-        loan = item.check_out_to!(user.lending_id)
+        loan = item.check_out_to!(user.borrower_id)
         expect(loan.errors.full_messages).to be_empty
         expect(loan).to be_persisted # just to be sure
 
@@ -460,7 +460,7 @@ describe LendingController, type: :request do
         due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds
         loan = LendingItemLoan.create(
           lending_item_id: item.id,
-          patron_identifier: user.lending_id,
+          patron_identifier: user.borrower_id,
           loan_status: :active,
           loan_date: loan_date,
           due_date: due_date
@@ -489,7 +489,7 @@ describe LendingController, type: :request do
       end
 
       it 'pre-returns the loan if the number of copies is changed to zero' do
-        loan = item.check_out_to!(user.lending_id)
+        loan = item.check_out_to!(user.borrower_id)
 
         item.update!(copies: 0, active: false)
 
@@ -547,7 +547,7 @@ describe LendingController, type: :request do
 
         loan = LendingItemLoan.find_by(
           lending_item_id: item.id,
-          patron_identifier: user.lending_id
+          patron_identifier: user.borrower_id
         )
         expect(loan).to be_active
         expect(loan.loan_date).to be <= Time.current
@@ -566,7 +566,7 @@ describe LendingController, type: :request do
       end
 
       it 'fails if this user has already checked out the item' do
-        loan = item.check_out_to!(user.lending_id)
+        loan = item.check_out_to!(user.borrower_id)
         expect(loan).to be_persisted
 
         expect do
@@ -586,7 +586,7 @@ describe LendingController, type: :request do
         it 'fails if this user has already hit the checkout limit' do
           max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
           expect(active.size).to be > max_checkouts # just to be sure
-          max_checkouts.times { |i| active[i].check_out_to!(user.lending_id) }
+          max_checkouts.times { |i| active[i].check_out_to!(user.borrower_id) }
           item = active[max_checkouts] # next active item
 
           expect do
@@ -601,7 +601,7 @@ describe LendingController, type: :request do
           max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
           expect(active.size).to be > max_checkouts # just to be sure
           max_checkouts.times do |i|
-            loan = active[i].check_out_to!(user.lending_id)
+            loan = active[i].check_out_to!(user.borrower_id)
             loan.return!
           end
 
@@ -614,7 +614,7 @@ describe LendingController, type: :request do
 
           loan = LendingItemLoan.find_by(
             lending_item_id: item.id,
-            patron_identifier: user.lending_id
+            patron_identifier: user.borrower_id
           )
           expect(loan).to be_active
           expect(loan.loan_date).to be <= Time.current
@@ -631,7 +631,7 @@ describe LendingController, type: :request do
           max_checkouts = LendingItem::MAX_CHECKOUTS_PER_PATRON
           expect(active.size).to be > max_checkouts # just to be sure
           max_checkouts.times do |i|
-            loan = active[i].check_out_to!(user.lending_id)
+            loan = active[i].check_out_to!(user.borrower_id)
             loan.due_date = Time.current.utc - 1.days
             loan.save!
           end
@@ -645,7 +645,7 @@ describe LendingController, type: :request do
 
           loan = LendingItemLoan.find_by(
             lending_item_id: item.id,
-            patron_identifier: user.lending_id
+            patron_identifier: user.borrower_id
           )
           expect(loan).to be_active
           expect(loan.loan_date).to be <= Time.current
@@ -687,7 +687,7 @@ describe LendingController, type: :request do
 
     describe :return do
       it 'returns an item' do
-        loan = item.check_out_to!(user.lending_id)
+        loan = item.check_out_to!(user.borrower_id)
         get lending_return_path(directory: item.directory)
 
         loan.reload
@@ -698,7 +698,7 @@ describe LendingController, type: :request do
       end
 
       it 'succeeds even if the item was already returned' do
-        loan = item.check_out_to!(user.lending_id)
+        loan = item.check_out_to!(user.borrower_id)
         loan.return!
 
         get lending_return_path(directory: item.directory)
@@ -723,7 +723,7 @@ describe LendingController, type: :request do
 
     describe :manifest do
       it 'returns the manifest for a checked-out item' do
-        item.check_out_to!(user.lending_id)
+        item.check_out_to!(user.borrower_id)
         get lending_manifest_path(directory: item.directory)
         expect(response).to be_successful
       end

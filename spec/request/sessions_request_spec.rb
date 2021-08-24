@@ -38,6 +38,7 @@ describe SessionsController, type: :request do
 
     it 'persists the expected attributes in the session cookie' do
       user_from_omniauth = mock_login(:lending_admin)
+
       request.reset_session
       expect(session[:user]).to be_nil # just to be sure
 

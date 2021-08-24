@@ -140,7 +140,7 @@ class LendingController < ApplicationController
   # Private accessors
 
   def patron_identifier
-    current_user.lending_id
+    current_user.borrower_id
   end
 
   def lending_admin?

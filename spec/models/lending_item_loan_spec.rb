@@ -12,7 +12,7 @@ describe LendingItemLoan do
     end
 
     user = mock_user_without_login(:student)
-    @patron_id = user.lending_id
+    @patron_id = user.borrower_id
   end
 
   describe :return! do

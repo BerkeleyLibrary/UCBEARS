@@ -58,7 +58,9 @@ module CalnetHelper
     Rails.application.env_config['omniauth.auth'] = auth_hash
     do_get omniauth_callback_path(:calnet)
 
-    User.from_omniauth(auth_hash)
+    return request.session[:user] if request # request specs
+
+    User.from_omniauth(auth_hash) # TODO: something better for system specs
   end
 
   def mock_auth_hash(type)

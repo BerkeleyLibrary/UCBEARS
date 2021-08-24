@@ -334,7 +334,7 @@ describe LendingController, type: :system do
       describe :view do
         it 'allows a checkout' do
           expect(item).to be_available # just to be sure
-          expect(LendingItemLoan.where(patron_identifier: user.lending_id)).not_to exist # just to be sure
+          expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
           visit lending_view_path(directory: item.directory)
           expect(page).not_to have_selector('div#iiif_viewer')
@@ -351,7 +351,7 @@ describe LendingController, type: :system do
         end
 
         it 'allows a return' do
-          item.check_out_to(user.lending_id)
+          item.check_out_to(user.borrower_id)
 
           visit lending_view_path(directory: item.directory)
 
@@ -371,7 +371,7 @@ describe LendingController, type: :system do
           due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds
           loan = LendingItemLoan.create(
             lending_item_id: item.id,
-            patron_identifier: user.lending_id,
+            patron_identifier: user.borrower_id,
             loan_status: :active,
             loan_date: loan_date,
             due_date: due_date
@@ -387,7 +387,7 @@ describe LendingController, type: :system do
         end
 
         it 'redirects when loan expires' do
-          loan = item.check_out_to(user.lending_id)
+          loan = item.check_out_to(user.borrower_id)
 
           # Capybara doesn't seem to respect the meta-refresh, so we'll just
           # make sure it's there
@@ -412,7 +412,7 @@ describe LendingController, type: :system do
       describe :view do
         it "doesn't allow a checkout" do
           expect(item).not_to be_available # just to be sure
-          expect(LendingItemLoan.where(patron_identifier: user.lending_id)).not_to exist # just to be sure
+          expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
           visit lending_view_path(directory: item.directory)
           expect(page).not_to have_selector('div#iiif_viewer')
