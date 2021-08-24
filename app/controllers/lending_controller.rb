@@ -12,7 +12,7 @@ class LendingController < ApplicationController
   before_action(:authenticate!)
   before_action(:require_lending_admin!, except: %i[index view manifest check_out return])
   before_action(:ensure_lending_item!, except: %i[index new create profile])
-  before_action(:require_processed_item!, only: [:manifest])
+  before_action(:require_processed_item!, only: %i[view manifest])
 
   # ------------------------------------------------------------
   # Controller actions
@@ -224,7 +224,7 @@ class LendingController < ApplicationController
   end
 
   def require_processed_item!
-    require_eligible_patron! unless lending_admin?
+    require_eligible_patron! unless lending_admin? # TODO: require_eligible_patron! explicitly
     item = ensure_lending_item!
 
     raise ActiveRecord::RecordNotFound, item.reason_incomplete unless item.complete?

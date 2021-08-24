@@ -421,120 +421,139 @@ describe LendingController, type: :request do
     end
 
     describe :view do
-      it "doesn't create a new loan record" do
-        expect do
-          get lending_view_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-        expect(response.body).to include('Check out')
-        expect(response.body).not_to include('Return')
-        expect(response).to be_successful
-      end
+      context 'without an explicit token' do
+        it "doesn't create a new loan record" do
+          expect do
+            get lending_view_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
 
-      it 'returns 404 not found for nonexistent items' do
-        get lending_view_path(directory: 'not_a_directory')
-        expect(response.status).to eq(404)
-      end
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
+          expect(response).to redirect_to(expected_path)
+          follow_redirect!
 
-      it 'shows a loan if one exists' do
-        loan = item.check_out_to!(user.borrower_id)
-        expect(loan.errors.full_messages).to be_empty
-        expect(loan).to be_persisted # just to be sure
-
-        expect do
-          get lending_view_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-        expect(response).to be_successful
-
-        body = response.body
-
-        # TODO: format all dates
-        due_date_str = item.next_due_date.to_s(:short)
-        expect(body).to include(due_date_str)
-
-        expect(body).not_to include('Check out')
-        expect(body).to include('Return now')
-      end
-
-      it 'pre-returns the loan if already expired' do
-        loan_date = Time.current - 3.weeks
-        due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds
-        loan = LendingItemLoan.create(
-          lending_item_id: item.id,
-          patron_identifier: user.borrower_id,
-          loan_status: :active,
-          loan_date: loan_date,
-          due_date: due_date
-        )
-        loan.reload
-        expect(loan.complete?).to eq(true)
-        expect(loan.active?).to eq(false)
-
-        expect do
-          get lending_view_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-        expect(response).to be_successful
-
-        loan.reload
-        expect(loan).to be_complete
-        expect(loan.return_date).to be_within(1.minute).of Time.current
-
-        body = response.body
-
-        # TODO: format all dates
-        return_date_str = loan.return_date.to_s(:short)
-        expect(body).to include(return_date_str)
-
-        expect(body).to include('Check out')
-        expect(body).not_to include('Return now')
-      end
-
-      it 'pre-returns the loan if the number of copies is changed to zero' do
-        loan = item.check_out_to!(user.borrower_id)
-
-        item.update!(copies: 0, active: false)
-
-        loan.reload
-        expect(loan.complete?).to eq(true)
-        expect(loan.active?).to eq(false)
-
-        expect do
-          get lending_view_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-        expect(response).to be_successful
-
-        loan.reload
-        expect(loan).to be_complete
-        expect(loan.return_date).to be_within(1.minute).of Time.current
-
-        body = response.body
-
-        # TODO: format all dates
-        return_date_str = loan.return_date.to_s(:short)
-        expect(body).to include(return_date_str)
-
-        expect(body).to include('Check out')
-        expect(body).not_to include('Return now')
-      end
-
-      it 'displays an item with no available copies' do
-        item.copies.times do |copy|
-          item.check_out_to!("patron-#{copy}")
+          expect(response.body).to include('Check out')
+          expect(response.body).not_to include('Return')
+          expect(response).to be_successful
         end
-        expect(item).not_to be_available # just to be sure
 
-        expect do
-          get lending_view_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
-        expect(response).to be_successful
+        it 'returns 404 not found for nonexistent items' do
+          get lending_view_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
 
-        body = response.body
-        # TODO: verify checkout disabled
-        expect(body).not_to include('Return now')
-        expect(body).to include(LendingItem::MSG_UNAVAILABLE)
+        it 'shows a loan if one exists' do
+          loan = item.check_out_to!(user.borrower_id)
+          expect(loan.errors.full_messages).to be_empty
+          expect(loan).to be_persisted # just to be sure
 
-        # TODO: format all dates
-        due_date_str = item.next_due_date.to_s(:long)
-        expect(body).to include(due_date_str)
+          expect do
+            get lending_view_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
+
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
+          expect(response).to redirect_to(expected_path)
+          follow_redirect!
+
+          body = response.body
+
+          # TODO: format all dates
+          due_date_str = item.next_due_date.to_s(:short)
+          expect(body).to include(due_date_str)
+
+          expect(body).not_to include('Check out')
+          expect(body).to include('Return now')
+        end
+
+        it 'pre-returns the loan if already expired' do
+          loan_date = Time.current - 3.weeks
+          due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds
+          loan = LendingItemLoan.create(
+            lending_item_id: item.id,
+            patron_identifier: user.borrower_id,
+            loan_status: :active,
+            loan_date: loan_date,
+            due_date: due_date
+          )
+          loan.reload
+          expect(loan.complete?).to eq(true)
+          expect(loan.active?).to eq(false)
+
+          expect do
+            get lending_view_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
+
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
+          expect(response).to redirect_to(expected_path)
+          follow_redirect!
+
+          loan.reload
+          expect(loan).to be_complete
+          expect(loan.return_date).to be_within(1.minute).of Time.current
+
+          body = response.body
+
+          # TODO: format all dates
+          return_date_str = loan.return_date.to_s(:short)
+          expect(body).to include(return_date_str)
+
+          expect(body).to include('Check out')
+          expect(body).not_to include('Return now')
+        end
+
+        it 'pre-returns the loan if the number of copies is changed to zero' do
+          loan = item.check_out_to!(user.borrower_id)
+
+          item.update!(copies: 0, active: false)
+
+          loan.reload
+          expect(loan.complete?).to eq(true)
+          expect(loan.active?).to eq(false)
+
+          expect do
+            get lending_view_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
+
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
+          expect(response).to redirect_to(expected_path)
+          follow_redirect!
+
+          loan.reload
+          expect(loan).to be_complete
+          expect(loan.return_date).to be_within(1.minute).of Time.current
+
+          body = response.body
+
+          # TODO: format all dates
+          return_date_str = loan.return_date.to_s(:short)
+          expect(body).to include(return_date_str)
+
+          expect(body).to include('Check out')
+          expect(body).not_to include('Return now')
+        end
+
+        it 'displays an item with no available copies' do
+          item.copies.times do |copy|
+            item.check_out_to!("patron-#{copy}")
+          end
+          expect(item).not_to be_available # just to be sure
+
+          expect do
+            get lending_view_path(directory: item.directory)
+          end.not_to change(LendingItemLoan, :count)
+
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
+          expect(response).to redirect_to(expected_path)
+          follow_redirect!
+
+          body = response.body
+          # TODO: verify checkout disabled
+          expect(body).not_to include('Return now')
+          expect(body).to include(LendingItem::MSG_UNAVAILABLE)
+
+          # TODO: format all dates
+          due_date_str = item.next_due_date.to_s(:long)
+          expect(body).to include(due_date_str)
+        end
       end
     end
 
@@ -554,7 +573,7 @@ describe LendingController, type: :request do
         expect(loan.due_date).to be > Time.current
         expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
 
-        expected_path = lending_view_path(directory: item.directory)
+        expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
         expect(response).to redirect_to(expected_path)
 
         expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
@@ -621,7 +640,7 @@ describe LendingController, type: :request do
           expect(loan.due_date).to be > Time.current
           expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
 
-          expected_path = lending_view_path(directory: item.directory)
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
           expect(response).to redirect_to(expected_path)
 
           expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
@@ -652,7 +671,7 @@ describe LendingController, type: :request do
           expect(loan.due_date).to be > Time.current
           expect(loan.due_date - loan.loan_date).to eq(LendingItem::LOAN_DURATION_SECONDS.seconds)
 
-          expected_path = lending_view_path(directory: item.directory)
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
           expect(response).to redirect_to(expected_path)
 
           expect(response.body).not_to include(LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
