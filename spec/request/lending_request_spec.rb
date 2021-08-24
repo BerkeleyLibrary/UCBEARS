@@ -427,13 +427,9 @@ describe LendingController, type: :request do
             get lending_view_path(directory: item.directory)
           end.not_to change(LendingItemLoan, :count)
 
-          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
-          expect(response).to redirect_to(expected_path)
-          follow_redirect!
-
+          expect(response).to be_successful
           expect(response.body).to include('Check out')
           expect(response.body).not_to include('Return')
-          expect(response).to be_successful
         end
 
         it 'returns 404 not found for nonexistent items' do
@@ -481,10 +477,7 @@ describe LendingController, type: :request do
           expect do
             get lending_view_path(directory: item.directory)
           end.not_to change(LendingItemLoan, :count)
-
-          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
-          expect(response).to redirect_to(expected_path)
-          follow_redirect!
+          expect(response).to be_successful
 
           loan.reload
           expect(loan).to be_complete
@@ -512,10 +505,7 @@ describe LendingController, type: :request do
           expect do
             get lending_view_path(directory: item.directory)
           end.not_to change(LendingItemLoan, :count)
-
-          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
-          expect(response).to redirect_to(expected_path)
-          follow_redirect!
+          expect(response).to be_successful
 
           loan.reload
           expect(loan).to be_complete
@@ -540,10 +530,7 @@ describe LendingController, type: :request do
           expect do
             get lending_view_path(directory: item.directory)
           end.not_to change(LendingItemLoan, :count)
-
-          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
-          expect(response).to redirect_to(expected_path)
-          follow_redirect!
+          expect(response).to be_successful
 
           body = response.body
           # TODO: verify checkout disabled

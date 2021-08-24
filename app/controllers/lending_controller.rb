@@ -44,16 +44,19 @@ class LendingController < ApplicationController
   def show; end
 
   # Patron view
-  # TODO: move to a LoanController?
+  # TODO: separate actions for with/without token,
+  #       separate views for with/without active loan
   def view
     if (token_str = params[:token])
       update_user_token(token_str)
-      ensure_lending_item_loan!
-      populate_view_flash
-    else
-      # TODO: can we get Rails to just parameterize the token as a string?
+    end
+    ensure_lending_item_loan!
+
+    if token_str.nil? && @lending_item_loan.active?
       token_str = current_user.borrower_token.token_str
-      redirect_to lending_view_path(directory: directory, token: token_str)
+      redirect_to(lending_view_path(directory: directory, token: token_str))
+    else
+      populate_view_flash
     end
   end
 
@@ -215,12 +218,8 @@ class LendingController < ApplicationController
   # Utility methods
 
   def update_user_token(token_str)
-    if (new_token = Lending::BorrowerToken.from_string(token_str, uid: current_user.uid))
-      current_user.borrower_token = new_token
-      sign_in(current_user) # TODO: something less hacky
-    else
-      logger.warn("Token #{token_str.inspect} not valid for user #{current_user.uid}")
-    end
+    current_user.update_borrower_token(token_str)
+    sign_in(current_user) # TODO: something less hacky
   end
 
   def require_processed_item!
@@ -263,6 +262,7 @@ class LendingController < ApplicationController
   def ensure_lending_item_loan!
     require_eligible_patron!
 
+    # TODO: stop requiring an empty loan object
     @lending_item_loan = existing_loan || LendingItemLoan.new(**loan_args)
   end
 

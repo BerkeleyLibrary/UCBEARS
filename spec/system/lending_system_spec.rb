@@ -392,22 +392,26 @@ describe LendingController, type: :system do
           expect(page).to have_selector('div#iiif_viewer')
         end
 
-        it 'updates the user token' do
+        it 'updates the user token from the URL' do
           original_user = user
           item.check_out_to(original_user.borrower_id)
-
-          expected_path = lending_view_path(directory: item.directory, token: original_user.borrower_token.token_str)
 
           logout!
           user = mock_login(:student)
           expect(user.uid).to eq(original_user.uid) # just to be sure
           expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
 
-          visit expected_path
+          visit lending_view_path(directory: item.directory, token: original_user.borrower_token.token_str)
+          expect(page).to have_selector('div#iiif_viewer')
+        end
+
+        it 'redirects to a URL with a token' do
+          item.check_out_to(user.borrower_id)
+
+          expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
 
           visit lending_view_path(directory: item.directory)
           expect(page).to have_selector('div#iiif_viewer')
-
           expect(page.current_url).to include(expected_path)
         end
 

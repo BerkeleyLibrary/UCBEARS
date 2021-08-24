@@ -3,6 +3,7 @@
 # This is closely coupled to CalNet's user schema.
 class User
   include ActiveModel::Model
+  include BerkeleyLibrary::Logging
 
   # ------------------------------------------------------------
   # Constants
@@ -77,7 +78,7 @@ class User
   attr_accessor :cal_groups
 
   # @return [Lending::BorrowerToken]
-  attr_accessor :borrower_token
+  attr_reader :borrower_token
 
   # ------------------------------------------------------------
   # Instance methods
@@ -113,6 +114,14 @@ class User
   # @return [Boolean]
   def lending_admin?
     cal_groups&.include?(LENDING_ADMIN_GROUP)
+  end
+
+  def update_borrower_token(token_str)
+    if (new_token = Lending::BorrowerToken.from_string(token_str, uid: uid))
+      @borrower_token = new_token
+    else
+      logger.warn("Token #{token_str.inspect} not valid for user #{uid}")
+    end
   end
 
   def borrower_id

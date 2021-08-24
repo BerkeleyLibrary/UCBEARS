@@ -35,4 +35,28 @@ describe User do
       expect(unique_borrower_ids.size).to eq(types.size)
     end
   end
+
+  describe :update_borrower_token do
+    attr_reader :user
+
+    before(:each) do
+      @user = mock_user_without_login(:student)
+    end
+
+    it 'updates the token' do
+      old_token = user.borrower_token
+      new_token = Lending::BorrowerToken.new_token_for(user.uid)
+      user.update_borrower_token(new_token.token_str)
+      expect(user.borrower_token).to eq(new_token)
+      expect(user.borrower_token).not_to eq(old_token)
+    end
+
+    it 'ignores invalid tokens' do
+      old_token = user.borrower_token
+      new_token = Lending::BorrowerToken.new_token_for('some other UID')
+      user.update_borrower_token(new_token.token_str)
+      expect(user.borrower_token).to be(old_token)
+      expect(user.borrower_token).not_to eq(new_token)
+    end
+  end
 end
