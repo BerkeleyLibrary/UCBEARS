@@ -51,16 +51,19 @@ module CalnetHelper
     User.from_omniauth(auth_hash)
   end
 
+  # TODO: port this to Framework
   def mock_omniauth_login(auth_hash)
-    OmniAuth.config.mock_auth[:calnet] = auth_hash
-    do_get login_path
+    last_signed_in_user = nil
 
-    Rails.application.env_config['omniauth.auth'] = auth_hash
-    do_get omniauth_callback_path(:calnet)
+    # We want the actual user object from the session, but system specs don't provide
+    # access to it, so we intercept it at sign-in
+    allow_any_instance_of(SessionsController).to receive(:sign_in).and_wrap_original do |m, *args|
+      last_signed_in_user = args[0]
+      m.call(*args)
+    end
+    log_in_with_omniauth(auth_hash)
 
-    return request.session[:user] if request # request specs
-
-    User.from_omniauth(auth_hash) # TODO: something better for system specs
+    last_signed_in_user
   end
 
   def mock_auth_hash(type)
@@ -118,6 +121,14 @@ module CalnetHelper
   end
 
   private
+
+  def log_in_with_omniauth(auth_hash)
+    OmniAuth.config.mock_auth[:calnet] = auth_hash
+    do_get login_path
+
+    Rails.application.env_config['omniauth.auth'] = auth_hash
+    do_get omniauth_callback_path(:calnet)
+  end
 
   def can_disable_redirects?
     respond_to?(:page) && page.driver.respond_to?(:follow_redirects?)
