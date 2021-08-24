@@ -13,6 +13,7 @@ gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jwt', '~> 2.2'
 gem 'listen' # TODO: what actually uses this?
 gem 'lograge', '>=0.11.2'
 gem 'mirador_rails', git: 'https://github.com/sul-dlss/mirador_rails.git', ref: 'e021335'

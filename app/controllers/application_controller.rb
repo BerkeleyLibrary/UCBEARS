@@ -60,10 +60,9 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     session[:user] = user
 
-    logger.debug({
-                   msg: 'Signed in user',
-                   user: session[:user]
-                 })
+    # NOTE: We explicitly log as user.to_s, not the full object,
+    #       we want to be sure not to log borrower_id
+    logger.debug({ msg: 'Signed in user',  user: session[:user].to_s  })
   end
 
   # Sign out the current user by clearing all session data
