@@ -8,7 +8,6 @@ gem 'awesome_print', '>=1.8.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.1'
 gem 'berkeley_library-marc', '~> 0.2'
 gem 'berkeley_library-tind', '~> 0.4' # TODO: extract BerkeleyLibrary::Util::URIs into separate gem
-gem 'bootsnap', '~> 1.7', '>= 1.7.4', require: false
 gem 'bootstrap'
 gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'

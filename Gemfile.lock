@@ -103,8 +103,6 @@ GEM
       rubyzip (~> 2.3)
       typesafe_enum (~> 0.3)
     bindex (0.8.1)
-    bootsnap (1.7.7)
-      msgpack (~> 1.0)
     bootstrap (5.1.0)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 2.9.3, < 3)
@@ -218,7 +216,6 @@ GEM
     mime-types-data (3.2021.0704)
     mini_mime (1.1.0)
     minitest (5.14.4)
-    msgpack (1.4.2)
     multipart-post (2.1.1)
     net-ssh (6.1.0)
     netrc (0.11.0)
@@ -405,7 +402,6 @@ DEPENDENCIES
   berkeley_library-logging (~> 0.2, >= 0.2.1)
   berkeley_library-marc (~> 0.2)
   berkeley_library-tind (~> 0.4)
-  bootsnap (~> 1.7, >= 1.7.4)
   bootstrap
   brakeman
   bundle-audit
