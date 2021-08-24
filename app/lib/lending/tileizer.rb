@@ -11,8 +11,7 @@ module Lending
       compression: 'jpeg',
       tile_width: 256,
       tile_height: 256,
-      depth: 'onetile',
-      Q: 10
+      depth: 'onetile'
     }.freeze
 
     attr_reader :infile_path
