@@ -76,8 +76,8 @@ class User
   # @return [Array]
   attr_accessor :cal_groups
 
-  # @return [String]
-  attr_reader :borrower_token
+  # @return [Lending::BorrowerToken]
+  attr_accessor :borrower_token
 
   # ------------------------------------------------------------
   # Instance methods

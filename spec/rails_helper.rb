@@ -67,9 +67,13 @@ module CalnetHelper
   end
 
   def mock_auth_hash(type)
-    raise ArgumentError, "Unknown user type: #{type.inspect}" unless (id = IDS[type])
+    raise ArgumentError, "Unknown user type: #{type.inspect}" unless (id = uid_for(type))
 
     auth_hash_for(id)
+  end
+
+  def uid_for(type)
+    IDS[type]
   end
 
   def auth_hash_for(uid)

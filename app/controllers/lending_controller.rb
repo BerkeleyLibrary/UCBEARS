@@ -10,7 +10,7 @@ class LendingController < ApplicationController
   # Hooks
 
   before_action(:authenticate!)
-  before_action(:require_lending_admin!, except: %i[view manifest check_out return])
+  before_action(:require_lending_admin!, except: %i[index view manifest check_out return])
   before_action(:ensure_lending_item!, except: %i[index new create profile])
   before_action(:require_processed_item!, only: [:manifest])
 
@@ -21,6 +21,8 @@ class LendingController < ApplicationController
   # UI actions
 
   def index
+    render('application/not_found') && return unless current_user.lending_admin?
+
     ensure_lending_items!
   end
 
@@ -44,10 +46,14 @@ class LendingController < ApplicationController
   # Patron view
   # TODO: move to a LoanController?
   def view
-    ensure_lending_item_loan!
-    flash.now[:danger] ||= []
-    flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.auto_returned? # TODO: something less awkward
-    flash.now[:danger] << reason_unavailable unless available?
+    if (token_str = params[:token])
+      update_user_token(token_str)
+      ensure_lending_item_loan!
+      populate_view_flash
+    else
+      token_str = current_user.borrower_token.token_str
+      redirect_to lending_view_path(directory: directory, token: token_str)
+    end
   end
 
   def manifest
@@ -136,6 +142,12 @@ class LendingController < ApplicationController
 
   private
 
+  def populate_view_flash
+    flash.now[:danger] ||= []
+    flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.auto_returned? # TODO: something less awkward
+    flash.now[:danger] << reason_unavailable unless available?
+  end
+
   # ------------------------------
   # Private accessors
 
@@ -198,6 +210,14 @@ class LendingController < ApplicationController
 
   # ------------------------------
   # Utility methods
+
+  def update_user_token(token_str)
+    if (new_token = Lending::BorrowerToken.from_string(token_str, uid: current_user.uid))
+      current_user.borrower_token = new_token
+    else
+      logger.warn("Token #{token_str.inspect} not valid for user #{current_user.uid}")
+    end
+  end
 
   def require_processed_item!
     require_eligible_patron! unless lending_admin?

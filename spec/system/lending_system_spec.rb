@@ -366,6 +366,48 @@ describe LendingController, type: :system do
           expect(page).not_to have_selector('div#iiif_viewer')
         end
 
+        it 'requires a token' do
+          original_user = user
+          item.check_out_to(original_user.borrower_id)
+
+          logout!
+          user = mock_login(:student)
+          expect(user.uid).to eq(original_user.uid) # just to be sure
+          expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
+
+          visit lending_view_path(directory: item.directory)
+          expect(page).not_to have_selector('div#iiif_viewer')
+        end
+
+        it 'accepts a token in the URL' do
+          original_user = user
+          item.check_out_to(original_user.borrower_id)
+
+          logout!
+          user = mock_login(:student)
+          expect(user.uid).to eq(original_user.uid) # just to be sure
+          expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
+
+          visit lending_view_path(token: original_user.borrower_token)
+          expect(page).to have_selector('div#iiif_viewer')
+        end
+
+        it 'updates the user token' do
+          original_user = user
+          item.check_out_to(original_user.borrower_id)
+
+          logout!
+          user = mock_login(:student)
+          expect(user.uid).to eq(original_user.uid) # just to be sure
+          expect(user.borrower_id).not_to eq(original_user.borrower_id) # just to be sure
+
+          visit lending_view_path(token: original_user.borrower_token)
+          expect(user.borrower_id).to eq(original_user.borrower_id)
+
+          visit lending_view_path
+          expect(page).to have_selector('div#iiif_viewer')
+        end
+
         it 'displays a warning when loan has expired' do
           loan_date = Time.current.utc - 3.weeks
           due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds

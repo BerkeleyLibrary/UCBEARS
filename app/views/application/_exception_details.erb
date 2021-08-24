@@ -1,0 +1,8 @@
+<section class="exception-details">
+  <h2><%= exception.class %>: <%= exception.message %></h2>
+  <section class="backtrace">
+    <% exception.backtrace&.each do |frame| %>
+      <code class="trace"><%= frame %></code>
+    <% end %>
+  </section>
+</section>
