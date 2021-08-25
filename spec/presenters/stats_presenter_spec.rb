@@ -52,7 +52,7 @@ describe StatsPresenter do
     end
   end
 
-  describe 'loan stats' do
+  describe 'loan and item stats' do
     before(:each) do
       {
         lending_root_path: Pathname.new('spec/data/lending'),
@@ -91,46 +91,76 @@ describe StatsPresenter do
       end
     end
 
-    describe :loan_count_total do
-      it 'returns the total number of loans made' do
-        expect(sp.loan_count_total).to eq(loans.size)
+    context 'loan stats' do
+
+      describe :loan_count_total do
+        it 'returns the total number of loans made' do
+          expect(sp.loan_count_total).to eq(loans.size)
+        end
+      end
+
+      describe :loan_count_active do
+        it 'returns the number of active loans' do
+          expect(sp.loan_count_active).to eq(loans.size / 2)
+        end
+      end
+
+      describe :loan_count_complete do
+        it 'returns the number of completed loans' do
+          expect(sp.loan_count_complete).to eq(loans.size / 2)
+        end
+      end
+
+      describe :loan_count_expired do
+        it 'returns the number of expired loans' do
+          expect(sp.loan_count_expired).to eq(expired_loans.size)
+        end
+      end
+
+      describe :loan_duration_avg do
+        it 'returns the average loan duration' do
+          durations = completed_loans.map(&:duration)
+          expected_avg = durations.sum / durations.size
+
+          expect(sp.loan_duration_avg).to be_within(0.01).of(expected_avg)
+        end
+      end
+
+      describe :loan_duration_median do
+        it 'returns the median loan duration' do
+          loan_durations = completed_loans.map(&:duration)
+          sorted = loan_durations.sort
+          len = sorted.length
+          expected = (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+          expect(sp.loan_duration_median).to be_within(0.5).of(expected)
+        end
       end
     end
 
-    describe :loan_count_active do
-      it 'returns the number of active loans' do
-        expect(sp.loan_count_active).to eq(loans.size / 2)
+    context 'item stats' do
+      describe :checkouts_by_item do
+        it 'returns the expected checkouts for each item' do
+          checkouts_by_item = sp.checkouts_by_item
+          expect(checkouts_by_item.size).to eq(items.size)
+
+          items.each do |item|
+            expected_checkouts = LendingItemLoan.where(lending_item_id: item.id).count
+            checkouts = checkouts_by_item[item.id]
+            expect(checkouts).to eq(expected_checkouts)
+          end
+        end
       end
-    end
 
-    describe :loan_count_complete do
-      it 'returns the number of completed loans' do
-        expect(sp.loan_count_complete).to eq(loans.size / 2)
-      end
-    end
+      describe :active_checkouts_by_item do
+        it 'returns the expected checkouts for each item' do
+          checkouts_by_item = sp.active_checkouts_by_item
 
-    describe :loan_count_expired do
-      it 'returns the number of expired loans' do
-        expect(sp.loan_count_expired).to eq(expired_loans.size)
-      end
-    end
-
-    describe :loan_duration_avg do
-      it 'returns the average loan duration' do
-        durations = completed_loans.map(&:duration)
-        expected_avg = durations.sum / durations.size
-
-        expect(sp.loan_duration_avg).to be_within(0.01).of(expected_avg)
-      end
-    end
-
-    describe :loan_duration_median do
-      it 'returns the median loan duration' do
-        loan_durations = completed_loans.map(&:duration)
-        sorted = loan_durations.sort
-        len = sorted.length
-        expected = (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
-        expect(sp.loan_duration_median).to be_within(0.5).of(expected)
+          items.each do |item|
+            expected_checkouts = LendingItemLoan.active.where(lending_item_id: item.id).count
+            checkouts = checkouts_by_item[item.id] || 0
+            expect(checkouts).to eq(expected_checkouts)
+          end
+        end
       end
     end
   end
