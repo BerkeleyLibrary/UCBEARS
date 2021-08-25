@@ -2,13 +2,16 @@
 class ApplicationController < ActionController::Base
   include ExceptionHandling
 
-  # @!group Class Attributes
-  # @!attribute [rw]
+  # TODO: make this configurable
+  SUPPORT_EMAIL_STAFF = 'helpbox@library.berkeley.edu'.freeze
+  SUPPORT_EMAIL_PATRON = 'eref-library@berkeley.edu'.freeze
+
   # Value of the "Questions?" mailto link in the footer
   # @return [String]
-  class_attribute :support_email, default: 'helpbox@library.berkeley.edu'
+  def support_email
+    @support_email || SUPPORT_EMAIL_STAFF
+  end
   helper_method :support_email
-  # @!endgroup
 
   # @see https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection/ClassMethods.html
   protect_from_forgery with: :exception
@@ -67,6 +70,11 @@ class ApplicationController < ActionController::Base
   # @return [void]
   def sign_out
     reset_session
+  end
+
+  # TODO: make this less awkward
+  def use_patron_support_email!
+    @support_email = SUPPORT_EMAIL_PATRON
   end
 
   private
