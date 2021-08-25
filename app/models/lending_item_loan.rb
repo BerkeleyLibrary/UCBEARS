@@ -47,6 +47,8 @@ class LendingItemLoan < ActiveRecord::Base
   # Instance methods
 
   def return!
+    return if complete?
+
     self.loan_status = :complete
     self.return_date = Time.now.utc
 
