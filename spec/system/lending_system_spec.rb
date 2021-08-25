@@ -291,6 +291,13 @@ describe LendingController, type: :system do
         end
       end
 
+      describe :stats do
+        it 'displays the stats' do
+          visit lending_stats_path
+          expect(page.title).to include('Statistics')
+        end
+      end
+
       describe :show do
         it 'displays all due dates' do
           item = active.find { |it| it.copies > 1 }

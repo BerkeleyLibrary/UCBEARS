@@ -1,4 +1,6 @@
+# TODO: Rewrite as helper methods
 class StatsPresenter
+
   def session_unique_users
     SessionCounter.count('DISTINCT uid') # TODO: what's the ActiveRecord syntax for this?
   end
@@ -8,7 +10,7 @@ class StatsPresenter
   end
 
   def session_counts_by_type
-    %i[student staff faculty admin].map do |type|
+    %i[admin staff faculty student].map do |type|
       sum_for_type = SessionCounter.where(type => true).sum(:count)
       [type, sum_for_type]
     end.to_h
@@ -37,6 +39,8 @@ class StatsPresenter
 
   def loan_duration_median
     sorted = loan_durations.sort
+    return if sorted.empty?
+
     len = sorted.length
     (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
   end

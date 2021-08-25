@@ -12,14 +12,11 @@ class LendingController < ApplicationController
 
   before_action(:authenticate!)
   before_action(:require_lending_admin!, except: %i[index view manifest check_out return])
-  before_action(:ensure_lending_item!, except: %i[index new create profile])
+  before_action(:ensure_lending_item!, except: %i[index profile stats new create])
   before_action(:require_processed_item!, only: %i[view manifest])
 
   # ------------------------------------------------------------
   # Controller actions
-
-  # ------------------------------
-  # UI actions
 
   def index
     render('application/not_found') && return unless current_user.lending_admin?
@@ -43,6 +40,11 @@ class LendingController < ApplicationController
 
   # Admin view
   def show; end
+
+  # Stats
+  def stats
+    # TODO: load stats more efficiently
+  end
 
   # Patron view
   # TODO: separate actions for with/without token,

@@ -85,6 +85,13 @@ describe LendingController, type: :request do
           expect(response).to be_successful
         end
       end
+
+      describe :stats do
+        it 'displays the stats' do
+          get lending_stats_path
+          expect(response).to be_successful
+        end
+      end
     end
 
     context 'with items' do
@@ -166,6 +173,13 @@ describe LendingController, type: :request do
           expect(response).to be_successful
         ensure
           FileUtils.rm_f(profile_path)
+        end
+      end
+
+      describe :stats do
+        it 'displays the stats' do
+          get lending_stats_path
+          expect(response).to be_successful
         end
       end
 

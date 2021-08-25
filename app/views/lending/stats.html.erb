@@ -1,0 +1,82 @@
+<%
+  content_for(:page_title, 'UC BEARS: Statistics')
+  # TODO: Rewrite as helper methods
+  sp = StatsPresenter.new
+%>
+<%# TODO: use Rails I18n %>
+<section class="record">
+  <table>
+    <thead>
+      <tr>
+        <th>Sessions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% sp.session_counts_by_type.each do |type, sum_for_type| %>
+        <tr>
+          <th><%= type.to_s.capitalize  %> users</th>
+          <td><%= sum_for_type %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <th>Total sessions</th>
+        <td>
+          <%= sp.session_count_total %>
+          (<%= sp.session_unique_users %> unique user(s))
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2">
+          <em>Note:</em> Some users may fall into multiple types (e.g.,
+          admin users are generally also staff).
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Loans</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th>Active</th>
+        <td><%= sp.loan_count_active %></td>
+      </tr>
+      <tr>
+        <th>Complete</th>
+        <td>
+          <% complete_count = sp.loan_count_complete %>
+          <%= complete_count %>
+          <%
+            if complete_count > 0
+              expired_count = sp.loan_count_expired
+              returned_count = complete_count - expired_count
+          %>
+            <%= expired_count %> expired, <%= returned_count %> returned
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <th>Median loan duration</th>
+        <td>
+          <% if (median_duration = sp.loan_duration_median&.seconds) %>
+            <%= distance_of_time_in_words(median_duration) %>
+          <% else %>
+            N/A
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <th>Total</th>
+        <td><%= sp.loan_count_total %></td>
+      </tr>
+    </tbody>
+  </table>
+</section>

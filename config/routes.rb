@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     # TODO: don't include this in production
     get '/profile', to: 'lending#profile', as: :lending_profile
 
+    get '/stats', to: 'lending#stats', as: :lending_stats
+
     get '/:directory/edit', to: 'lending#edit', as: :lending_edit
     get '/:directory', to: 'lending#show', as: :lending_show
     get '/:directory/view(/:token)', to: 'lending#view', as: :lending_view, constraints: { token: %r{[^/]+} }
