@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   #
   # @return [User]
   def current_user
-    @current_user ||= User.from_session(session)
+    @current_user ||= User.from_session(session).tap(&method(:ensure_session_count))
   end
   helper_method :current_user
 
@@ -67,5 +67,14 @@ class ApplicationController < ActionController::Base
   # @return [void]
   def sign_out
     reset_session
+  end
+
+  private
+
+  def ensure_session_count(user)
+    return if SessionCounter.exists_for?(user)
+
+    logger.info("No session count found for user #{user.uid} with existing session; initializing")
+    SessionCounter.increment_count_for(user)
   end
 end

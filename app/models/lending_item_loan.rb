@@ -31,6 +31,19 @@ class LendingItemLoan < ActiveRecord::Base
   after_find { |loan| loan.return! if loan.expired? || loan.lending_item.copies == 0 }
 
   # ------------------------------------------------------------
+  # Class methods
+
+  class << self
+    def overdue
+      active.where('return_date >= due_date')
+    end
+
+    def return_overdue_loans!
+      overdue.find_each(&:return!)
+    end
+  end
+
+  # ------------------------------------------------------------
   # Instance methods
 
   def return!
@@ -60,10 +73,18 @@ class LendingItemLoan < ActiveRecord::Base
     expired? && return_date >= due_date
   end
 
+  def duration
+    return unless complete?
+
+    return_date - loan_date
+  end
+
   # ------------------------------------------------------------
   # Custom validation methods
 
   def patron_can_check_out
+    return if complete?
+
     errors.add(:base, LendingItem::MSG_CHECKED_OUT) if duplicate_checkout
     errors.add(:base, LendingItem::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached
   end

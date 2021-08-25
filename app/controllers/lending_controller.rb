@@ -251,7 +251,7 @@ class LendingController < ApplicationController
   end
 
   def ensure_lending_items!
-    LendingItemLoan.overdue.find_each(&:return!)
+    LendingItemLoan.return_overdue_loans!
     LendingItem.scan_for_new_items!
     @lending_items = LendingItem.order("#{sort_column} #{sort_direction}")
   end

@@ -41,21 +41,15 @@ class SessionsController < ApplicationController
 
   private
 
+  def auth_params
+    request.env['omniauth.auth']
+  end
+
   def log_signin(user)
     # NOTE: We explicitly log as user.to_s, not the full object,
     #       because we want to be sure not to log borrower_id
     logger.debug({ msg: 'Signed in user', user: user.to_s })
 
-    counter = SessionCounter.find_or_create_by!(
-      uid: user.uid,
-      student: user.ucb_student?,
-      staff: user.ucb_staff?,
-      faculty: user.ucb_faculty?
-    )
-    counter.increment!(:count)
-  end
-
-  def auth_params
-    request.env['omniauth.auth']
+    SessionCounter.increment_count_for(user)
   end
 end
