@@ -130,7 +130,7 @@ describe StatsPresenter do
         sorted = loan_durations.sort
         len = sorted.length
         expected = (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
-        expect(sp.loan_duration_median).to eq(expected)
+        expect(sp.loan_duration_median).to be_within(0.5).of(expected)
       end
     end
   end
