@@ -39,8 +39,8 @@ class StatsPresenter
   end
 
   def loan_durations
-    expr = 'EXTRACT(EPOCH from (return_date - loan_date))'
-    LendingItemLoan.complete.pluck(Arel.sql(expr))
+    expr = Arel.sql('EXTRACT(EPOCH from (return_date - loan_date))')
+    LendingItemLoan.complete.pluck(expr)
   end
 
   def loan_duration_median
@@ -52,8 +52,8 @@ class StatsPresenter
   end
 
   def loan_duration_avg
-    expr = 'AVG(EXTRACT(EPOCH from (return_date - loan_date)))'
-    LendingItemLoan.complete.pluck(Arel.sql(expr)).first
+    expr = Arel.sql('AVG(EXTRACT(EPOCH from (return_date - loan_date)))')
+    LendingItemLoan.complete.pluck(expr).first
   end
 
   # ------------------------------------------------------------
