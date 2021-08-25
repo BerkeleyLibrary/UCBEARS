@@ -1,3 +1,4 @@
+require 'erb'
 require 'iiif/presentation'
 require 'berkeley_library/util/uris'
 
