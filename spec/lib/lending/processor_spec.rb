@@ -78,6 +78,19 @@ module Lending
       end
     end
 
+    describe :verify do
+      it 'raises a ProcessingError for a malformed manifest' do
+        manifest = IIIFManifest.new(
+          title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',
+          author: 'Warburg, Aby',
+          dir_path: 'spec/data/lending/problems/final/b152240925_C070359919'
+        )
+        expect { processor.verify(manifest) }.to raise_error(ProcessingFailed) do |e|
+          expect(e.cause).to be_a(SyntaxError)
+        end
+      end
+    end
+
     it 'handles MARCXML names by bib number with a check digit mismatch' do
       Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmp_ready|
         FileUtils.cp_r(indir, tmp_ready)

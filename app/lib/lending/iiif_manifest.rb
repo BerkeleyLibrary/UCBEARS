@@ -70,6 +70,10 @@ module Lending
       @s ||= "#{self.class.name.split('::').last}@#{object_id}"
     end
 
+    def erb_path
+      @erb_path ||= dir_path.join(MANIFEST_TEMPLATE_NAME)
+    end
+
     private
 
     def template
@@ -78,10 +82,6 @@ module Lending
 
     def erb_source
       @erb_source ||= has_template? ? erb_path.read : write_manifest_erb!
-    end
-
-    def erb_path
-      @erb_path ||= dir_path.join(MANIFEST_TEMPLATE_NAME)
     end
 
     # rubocop:disable Metrics/AbcSize

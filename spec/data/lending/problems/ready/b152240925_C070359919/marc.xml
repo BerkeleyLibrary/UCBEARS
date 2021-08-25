@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+<record>
+  <leader>01775nam a2200457 a 4500</leader>
+  <controlfield tag="001">51886087</controlfield>
+  <controlfield tag="003">CU</controlfield>
+  <controlfield tag="005">20051024  TAPE OCLC1024: 0313</controlfield>
+  <controlfield tag="008">050927s2001    gw a          001 0 ger  </controlfield>
+  <controlfield tag="009">Reclvl: f Addate: 050927 Addid: INN Moddate: 080602 Modid: XRF</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">  2002438973</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">3050034092</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">.b152240925</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">DLC</subfield>
+    <subfield code="c">DLC</subfield>
+    <subfield code="d">CUY</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+    <subfield code="a">e-gx---</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+    <subfield code="a">AS182.W37</subfield>
+    <subfield code="b">W37 2001</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+    <subfield code="a">AS182</subfield>
+    <subfield code="b">.H302 2001</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Warburg, Aby,</subfield>
+    <subfield code="d">1866-1929.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg /</subfield>
+    <subfield code="c">Aby Warburg ; mit EintrÃ¤gen von Gertrud Bing und Fritz Saxl ; herausgegeben von Karen Michels und Charlotte Schoell-Glass.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">Berlin :</subfield>
+    <subfield code="b">Akademie Verlag,</subfield>
+    <subfield code="c">2001.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">xxxix, 681 p. :</subfield>
+    <subfield code="b">ill. ;</subfield>
+    <subfield code="c">25 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+    <subfield code="a">Gesammelte Schriften. Studienausgabe ;</subfield>
+    <subfield code="v">7. Abt., Bd. 7</subfield>
+  </datafield>
+  <datafield tag="597" ind1=" " ind2=" ">
+    <subfield code="a">Available online through HathiTrust Emergency Access Service. Click the HathiTrust button on the right and log in to access this book online</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+    <subfield code="a">Includes index.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="1" ind2="0">
+    <subfield code="a">Warburg, Aby,</subfield>
+    <subfield code="d">1866-1929</subfield>
+    <subfield code="v">Diaries.</subfield>
+  </datafield>
+  <datafield tag="610" ind1="2" ind2="0">
+    <subfield code="a">Warburg Institute.</subfield>
+    <subfield code="b">Library</subfield>
+    <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Art historians</subfield>
+    <subfield code="z">Germany</subfield>
+    <subfield code="v">Diaries.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Art libraries</subfield>
+    <subfield code="z">Germany</subfield>
+    <subfield code="z">Hamburg.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+    <subfield code="a">Germany</subfield>
+    <subfield code="x">Intellectual life</subfield>
+    <subfield code="y">20th century.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Bing, Gertrud.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Saxl, Fritz,</subfield>
+    <subfield code="d">1890-1948.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Michels, Karen.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Schoell-Glass, Charlotte,</subfield>
+    <subfield code="d">1951-</subfield>
+  </datafield>
+  <datafield tag="800" ind1="1" ind2=" ">
+    <subfield code="a">Warburg, Aby,</subfield>
+    <subfield code="d">1866-1929.</subfield>
+    <subfield code="t">Works.</subfield>
+    <subfield code="f">1998 ;</subfield>
+    <subfield code="v">7.</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+    <subfield code="b">ark:/28722/h22n4zv51</subfield>
+  </datafield>
+</record>
+</collection>

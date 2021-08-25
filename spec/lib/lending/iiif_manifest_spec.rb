@@ -23,6 +23,22 @@ module Lending
         actual = manifest.to_json_manifest(manifest_url, img_root_url)
         expect(actual.strip).to eq(expected_manifest.strip)
       end
+
+      it 'handles OCR text containing ERB delimiters' do
+        Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmpdir|
+          ready_dir = 'spec/data/lending/problems/ready/b152240925_C070359919'
+          final_dir = File.join(tmpdir, File.basename(ready_dir))
+          FileUtils.cp_r(ready_dir, final_dir)
+
+          manifest = IIIFManifest.new(
+            title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',
+            author: 'Warburg, Aby',
+            dir_path: final_dir
+          )
+          manifest.write_manifest_erb!
+          expect { manifest.to_json_manifest(manifest_url, img_root_url) }.not_to raise_error
+        end
+      end
     end
 
     describe :to_erb do
@@ -45,6 +61,27 @@ module Lending
 
         actual = ERB.new(expected_erb).result(binding)
         expect(actual.strip).to eq(expected_manifest.strip)
+      end
+
+      it 'handles OCR text containing ERB delimiters' do
+        Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmpdir|
+          ready_dir = 'spec/data/lending/problems/ready/b152240925_C070359919'
+          final_dir = File.join(tmpdir, File.basename(ready_dir))
+          FileUtils.cp_r(ready_dir, final_dir)
+
+          manifest = IIIFManifest.new(
+            title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',
+            author: 'Warburg, Aby',
+            dir_path: final_dir
+          )
+
+          expected = File.read('spec/data/lending/problems/final/b152240925_C070359919/manifest.json.erb')
+            .gsub('<% aus New York', '<%% aus New York')
+
+          actual = manifest.to_erb
+
+          expect(actual.strip).to eq(expected.strip)
+        end
       end
     end
 

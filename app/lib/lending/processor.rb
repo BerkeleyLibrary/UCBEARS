@@ -41,6 +41,12 @@ module Lending
     def verify(manifest)
       raise ArgumentError, 'Manifest never written' unless manifest
       raise ArgumentError, "Manifest template not present in processing directory #{manifest.dir_path}" unless manifest.has_template?
+
+      begin
+        manifest.to_json_manifest(IIIFManifest::MF_URL_PLACEHOLDER, IIIFManifest::IMGDIR_URL_PLACEHOLDER)
+      rescue SyntaxError => e
+        raise ProcessingFailed.new(indir, manifest.erb_path, cause: e)
+      end
     end
 
     private

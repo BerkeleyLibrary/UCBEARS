@@ -95,12 +95,18 @@ module Lending
         canvas.height = height
         canvas.images << create_image_annotation(canvas_uri, tiff_uri)
         # TODO: use :rendering
-        add_metadata(canvas, Transcript: txt_path.read) if txt_path.exist?
+        add_metadata(canvas, Transcript: transcript) if txt_path.exist?
       end
     end
     # rubocop:enable Metrics/AbcSize
 
     private
+
+    # TODO: just stop using ERB
+    def transcript
+      # escape ERB delimiters
+      txt_path.read.gsub('<%', '<%%')
+    end
 
     def ensure_page_tiff_path(path)
       PathUtils.ensure_filepath(path).tap do |tiff_path|
