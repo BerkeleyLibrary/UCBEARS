@@ -14,7 +14,7 @@ module ApplicationHelper
     mail_to support_email, 'Questions?', class: 'support-email'
   end
 
-  def login_link
+  def logout_link
     link_to 'CalNet Logout', logout_path, class: 'nav-link' if authenticated?
   end
 

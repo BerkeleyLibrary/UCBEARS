@@ -5,12 +5,16 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
+  <%# TODO: style this properly, get collapse working %>
   <div id="navbar-dropdown" class="navbar-collapse collapse">
     <ul class="navbar-nav mr-auto">
     </ul>
-
-    <ul class="navbar-nav">
-      <li class="nav-item"><%= login_link %></li>
+    <ul class="navbar-nav" style="margin-left: auto;">
+      <% if current_user.lending_admin? %>
+        <li class="nav-item"><%= link_to('Index', index_path, class: 'nav-link') %></li>
+        <li class="nav-item"><%= link_to('Statistics', lending_stats_path, class: 'nav-link') %></li>
+      <% end %>
+      <li class="nav-item"><%= logout_link %></li>
     </ul>
   </div>
 </nav>
