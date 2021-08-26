@@ -27,6 +27,14 @@ class LendingItem < ActiveRecord::Base
   validate :active_items_are_complete
 
   # ------------------------------------------------------------
+  # Callbacks
+
+  after_find do |item|
+    # TODO: do we even need the explicit return! with the after_find hook?
+    item.lending_item_loans.active.where('return_date >= due_date').find_each(&:return!)
+  end
+
+  # ------------------------------------------------------------
   # Constants
 
   LOAN_DURATION_SECONDS = 2 * 3600 # TODO: make this configurable

@@ -35,10 +35,12 @@ class LendingItemLoan < ActiveRecord::Base
 
   class << self
     def overdue
+      # TODO: make this a real scope
       active.where('return_date >= due_date')
     end
 
     def return_overdue_loans!
+      # TODO: do we even need the explicit return! with the after_find hook?
       overdue.find_each(&:return!)
     end
   end
