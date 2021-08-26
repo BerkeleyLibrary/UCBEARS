@@ -22,6 +22,39 @@ describe LendingItem, type: :model do
     end
   end
 
+  describe :refresh_marc_metadata! do
+    it 'refreshes the metadata' do
+      original_item = create(:active_item)
+      original_values = %i[author title publisher physical_desc].map { |attr| [attr, original_item.send(attr)] }
+
+      modified_values = original_values.transform_values { |v| "not #{v}" }
+      original_item.update!(**modified_values)
+      expect(original_item.persisted?).to eq(true) # just to be sure
+      modified_values.each { |attr, v| expect(original_item.send(attr)).to eq(v) } # just to be sure
+
+      refreshed_item = LendingItem.find(original_item.id).tap(&:refresh_marc_metadata!)
+      original_values.each { |attr, v| expect(refreshed_item.send(attr)).to eq(v) }
+
+      original_item.reload
+      original_values.each { |attr, v| expect(original_item.send(attr)).to eq(v) }
+    end
+
+    it "doesn't blow up on incomplete items" do
+      items = factory_names
+        .select { |n| n.to_s.start_with?('incomplete') }
+        .map { |n| build(n).tap { |it| it.save(validate: false) } }
+
+      sleep(1)
+
+      items.each do |item|
+        last_updated_at = item.updated_at
+        expect { item.refresh_marc_metadata! }.not_to raise_error
+
+        expect(item.updated_at).to eq(last_updated_at) if item.marc_metadata.nil?
+      end
+    end
+  end
+
   describe 'validation' do
     it 'requires a parseable directory' do
       attributes = attributes_for(:active_item).tap do |attrs|

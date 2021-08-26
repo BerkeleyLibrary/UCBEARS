@@ -38,11 +38,14 @@ class LendingItem < ActiveRecord::Base
   MSG_NOT_CHECKED_OUT = 'This item is not checked out.'.freeze
   MSG_ZERO_COPIES = 'Items without copies cannot be made active.'.freeze
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
+  MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
+
+  # TODO: make these warnings rather than validation-fatal errors
+  #       then we can stop littering save(validate: false) everywhere
   MSG_NO_IIIF_DIR = 'The item directory does not exist, or is not a directory'.freeze
   MSG_NO_PAGE_IMAGES = 'The item directory has no page images'.freeze
   MSG_NO_MANIFEST_TEMPLATE = 'The item directory does not have a IIIF manifest template'.freeze
   MSG_NO_MARC_XML = "The item directory does not contain a #{Lending::Processor::MARC_XML_NAME} file".freeze
-  MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
 
   # TODO: make this configurable
   MAX_CHECKOUTS_PER_PATRON = 1
@@ -113,6 +116,19 @@ class LendingItem < ActiveRecord::Base
     iiif_manifest.to_json_manifest(manifest_uri, Lending::Config.iiif_base_uri)
   end
 
+  def refresh_marc_metadata!
+    return unless marc_metadata
+
+    attrs = {
+      author: marc_metadata.author,
+      title: marc_metadata.title,
+      publisher: marc_metadata.publisher,
+      physical_desc: marc_metadata.physical_desc
+    }.filter { |_, v| !v.blank? }
+
+    save(validate: false) unless update(**attrs)
+  end
+
   # ------------------------------------------------------------
   # Synthetic accessors
 
@@ -138,6 +154,7 @@ class LendingItem < ActiveRecord::Base
     active? ? 'Active' : 'Inactive'
   end
 
+  # TODO: move these to an ItemValidator class or something
   def reason_unavailable
     return if available?
     return LendingItem::MSG_INACTIVE unless active?
@@ -148,6 +165,7 @@ class LendingItem < ActiveRecord::Base
     "#{LendingItem::MSG_UNAVAILABLE} It will be returned on #{date_str}"
   end
 
+  # TODO: move these to an ItemValidator class or something
   def reason_incomplete
     return if complete?
     return MSG_NO_IIIF_DIR unless has_iiif_dir?
@@ -221,6 +239,8 @@ class LendingItem < ActiveRecord::Base
 
   # ------------------------------------------------------------
   # Custom validators
+
+  # TODO: move all of these to an ItemValidator class or something
 
   def correct_directory_format
     return if directory && directory.split('_').size == 2
