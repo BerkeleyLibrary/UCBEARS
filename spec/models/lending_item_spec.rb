@@ -25,7 +25,7 @@ describe LendingItem, type: :model do
   describe :refresh_marc_metadata! do
     it 'refreshes the metadata' do
       original_item = create(:active_item)
-      original_values = %i[author title publisher physical_desc].map { |attr| [attr, original_item.send(attr)] }
+      original_values = %i[author title publisher physical_desc].map { |attr| [attr, original_item.send(attr)] }.to_h
 
       modified_values = original_values.transform_values { |v| "not #{v}" }
       original_item.update!(**modified_values)
