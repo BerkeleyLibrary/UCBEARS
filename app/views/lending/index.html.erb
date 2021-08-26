@@ -37,7 +37,7 @@
 
         <p>
           <span class="author-name"><%= presenter.author %></span>
-          <% presenter.marc_fields.each_value do |v| %>
+          <% presenter.pub_metadata.each_value do |v| %>
             <%= v %>
           <% end %>
         </p>

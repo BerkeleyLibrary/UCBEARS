@@ -21,20 +21,27 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     tag.a(class: 'btn btn-primary disabled') { 'Check out' }.html_safe
   end
 
-  def additional_fields
-    @additional_fields ||= {}.tap do |ff|
-      add_loan_info(ff) if loan.persisted?
-      if loan.active?
-        add_permalink(ff)
-      else
-        ff['Available?'] = to_yes_or_no(item.available?)
-        add_next_due_date(ff) unless item.available?
-      end
+  def build_fields
+    { 'Title' => item.title, 'Author' => item.author }.tap do |ff|
+      ff.merge!(pub_metadata)
+      add_circ_info(ff)
     end
   end
 
   def borrower_token_str
     current_user.borrower_token.token_str
+  end
+
+  protected
+
+  def add_circ_info(ff)
+    add_loan_info(ff) if loan.persisted?
+    if loan.active?
+      add_permalink(ff)
+    else
+      ff['Available?'] = to_yes_or_no(item.available?)
+      add_next_due_date(ff) unless item.available?
+    end
   end
 
   private

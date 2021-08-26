@@ -66,10 +66,6 @@ module Lending
     #
     # @return [Hash{String => String, Date, Numeric}]
     def to_display_fields
-      fields = {
-        'Title' => title,
-        author_label => author
-      }
       fields.tap do |ff|
         ff['Publisher'] = publisher if publisher
         ff['Physical Description'] = physical_desc if physical_desc
@@ -121,7 +117,7 @@ module Lending
     end
 
     def find_publisher
-      df = find_tag('260')
+      df = find_tag('260') || find_tag('264')
       return unless df
 
       join_subfields(df, %w[a b c d])

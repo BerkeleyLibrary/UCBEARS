@@ -14,6 +14,14 @@ class LendingItemPresenterBase
     @show_copyright_warning = show_copyright_warning
   end
 
+  def title
+    item.title
+  end
+
+  def author
+    item.author
+  end
+
   def show_viewer?
     @show_viewer
   end
@@ -30,12 +38,15 @@ class LendingItemPresenterBase
     'View'
   end
 
-  def title
-    marc_metadata&.title || item.title
-  end
-
   def to_yes_or_no(b)
     b ? 'Yes' : 'No'
+  end
+
+  def pub_metadata
+    @pub_metadata ||= {
+      'Publisher' => item.publisher,
+      'Physical Description' => item.physical_desc
+    }.filter { |_, v| !v.blank? }
   end
 
   def directory
@@ -44,21 +55,41 @@ class LendingItemPresenterBase
 
   protected
 
-  def build_fields
-    base_fields.tap do |ff|
-      ff.merge!(additional_fields) if respond_to?(:additional_fields)
+  def edit_action
+    link_to('Edit', lending_edit_path(directory: directory), class: 'btn btn-secondary')
+  end
+
+  def internal_metadata_fields
+    {
+      'Record ID' => item.record_id,
+      'Barcode' => item.barcode,
+      'Status' => item.status,
+      'Copies' => "#{item.copies_available} of #{item.copies} available"
+    }
+  end
+
+  def add_circ_metadata(ff)
+    add_due_dates(ff)
+    add_processing_metadata(ff)
+    add_direct_link(ff)
+  end
+
+  def add_due_dates(ff)
+    return if (due_dates = item.due_dates.to_a).empty?
+
+    ff['Due'] = due_dates
+  end
+
+  def add_processing_metadata(ff)
+    if item.complete?
+      ff['IIIF directory'] = item.iiif_dir
+    else
+      ff['Directory'] = directory
     end
   end
 
-  def marc_metadata
-    @marc_metadata ||= item.marc_metadata
-  end
-
-  private
-
-  def base_fields
-    return { 'Title' => item.title, 'Author' => item.author } unless (md = marc_metadata)
-
-    md.to_display_fields
+  def add_direct_link(ff)
+    view_url = lending_view_url(directory: directory)
+    ff['Direct link'] = link_to(view_url, view_url, target: '_blank')
   end
 end
