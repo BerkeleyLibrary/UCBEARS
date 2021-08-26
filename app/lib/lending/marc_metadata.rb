@@ -55,23 +55,6 @@ module Lending
       @physical_desc = find_physical_desc
     end
 
-    def author_label
-      author_personal.nil? ? 'Corporate Author' : 'Author'
-    end
-
-    # ------------------------------------------------------------
-    # Public utility methods
-
-    # Returns a hash of displayable MARC fields mapping labels to values.
-    #
-    # @return [Hash{String => String, Date, Numeric}]
-    def to_display_fields
-      fields.tap do |ff|
-        ff['Publisher'] = publisher if publisher
-        ff['Physical Description'] = physical_desc if physical_desc
-      end
-    end
-
     # ------------------------------------------------------------
     # Private methods
 
