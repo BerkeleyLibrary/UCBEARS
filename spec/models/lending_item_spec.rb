@@ -83,6 +83,11 @@ describe LendingItem, type: :model do
         items = LendingItem.scan_for_new_items!
         expect(items.size).to eq(expected_dirs.size)
       end
+
+      it 'populates the publication metadata' do
+        items = LendingItem.scan_for_new_items!
+        items.each { |it| expect(it.publisher).not_to be_nil }
+      end
     end
   end
 

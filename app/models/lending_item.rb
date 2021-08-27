@@ -91,13 +91,15 @@ class LendingItem < ActiveRecord::Base
     def create_from(directory)
       logger.info("Creating item for directory #{directory}")
 
-      marc_path = Lending.marc_path_for(directory)
-      logger.error("Unable to read MARC record from #{marc_path}") && return unless (metadata = Lending::MarcMetadata.from_file(marc_path))
+      LendingItem.new(directory: directory, copies: 0).tap do |item|
+        unless item.marc_metadata
+          logger.error("Unable to read MARC record from #{item.marc_path}")
+          return nil
+        end
 
-      item = LendingItem.create(directory: directory, title: metadata.title, author: metadata.author, copies: 0)
-      logger.error("Creating item for directory #{directory} failed", nil, item.errors.full_messages) if item.errors.any?
-
-      item if item.persisted?
+        item.read_marc_metadata
+        item.save(validate: false)
+      end
     end
   end
 
@@ -129,6 +131,11 @@ class LendingItem < ActiveRecord::Base
   end
 
   def refresh_marc_metadata!
+    read_marc_metadata
+    save(validate: false) if changed?
+  end
+
+  def read_marc_metadata
     return unless marc_metadata
 
     attrs = {
@@ -137,8 +144,7 @@ class LendingItem < ActiveRecord::Base
       publisher: marc_metadata.publisher,
       physical_desc: marc_metadata.physical_desc
     }.filter { |_, v| !v.blank? }
-
-    save(validate: false) unless update(**attrs)
+    assign_attributes(attrs)
   end
 
   # ------------------------------------------------------------
@@ -288,6 +294,13 @@ class LendingItem < ActiveRecord::Base
   end
   # rubocop:enable Naming/PredicateName
 
+  def marc_path
+    # TODO: stop checking whether iiif_dir is non-nil/present and just check whether files exist
+    return unless has_iiif_dir?
+
+    Pathname.new(iiif_dir).join(Lending::Processor::MARC_XML_NAME)
+  end
+
   # ------------------------------------------------------------
   # Private methods
 
@@ -314,13 +327,6 @@ class LendingItem < ActiveRecord::Base
   # TODO: move this to a helper
   def iiif_final_root
     Lending.stage_root_path(:final)
-  end
-
-  def marc_path
-    return unless iiif_dir
-    return unless File.exist?(iiif_dir) && File.directory?(iiif_dir)
-
-    Pathname.new(iiif_dir).join(Lending::Processor::MARC_XML_NAME)
   end
 end
 # rubocop:enable Metrics/ClassLength
