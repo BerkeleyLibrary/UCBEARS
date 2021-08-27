@@ -63,16 +63,20 @@ class LendingItem < ActiveRecord::Base
   # Class methods
 
   class << self
+    # TODO: smarter sorting
+    # TODO: cache completeness status in DB
+
     def active
-      LendingItem.where(active: true).lazy.select(&:complete?)
+      LendingItem.where(active: true).order(:title).lazy.select(&:complete?)
     end
 
     def inactive
-      LendingItem.where(active: false).lazy.select(&:complete?)
+      LendingItem.where(active: false).order(:title).lazy.select(&:complete?)
     end
 
     def incomplete
-      LendingItem.find_each.lazy.reject(&:complete?)
+      # TODO: get order working (requires abandoning find_each)
+      LendingItem.order(:title).find_each.lazy.reject(&:complete?)
     end
 
     def scan_for_new_items!

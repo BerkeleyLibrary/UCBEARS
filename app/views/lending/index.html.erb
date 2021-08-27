@@ -17,6 +17,7 @@
   <% end %>
 </ul>
 
+<%# TODO: don't load all items three times %>
 <% state_to_title.each do |state, state_title| %>
   <section id="lending-<%= state %>" class="lending-index">
     <h2><%= state_title %></h2>

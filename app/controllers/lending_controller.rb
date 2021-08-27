@@ -5,7 +5,7 @@ class LendingController < ApplicationController
   # ------------------------------------------------------------
   # Helpers
 
-  helper_method :sort_column, :sort_direction, :lending_admin?, :manifest_url
+  helper_method :lending_admin?, :manifest_url
 
   # ------------------------------------------------------------
   # Hooks
@@ -137,17 +137,6 @@ class LendingController < ApplicationController
   end
 
   # ------------------------------------------------------------
-  # Helper methods
-
-  def sort_column
-    params[:sort].tap { |col| return 'created_at' unless LendingItem.column_names.include?(col) }
-  end
-
-  def sort_direction
-    params[:direction].tap { |dir| return 'desc' unless %w[asc desc].include?(dir) }
-  end
-
-  # ------------------------------------------------------------
   # Private methods
 
   private
@@ -256,7 +245,6 @@ class LendingController < ApplicationController
   def ensure_lending_items!
     LendingItemLoan.return_overdue_loans!
     LendingItem.scan_for_new_items!
-    @lending_items = LendingItem.order("#{sort_column} #{sort_direction}")
   end
 
   def ensure_lending_item!
