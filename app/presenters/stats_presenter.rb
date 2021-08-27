@@ -1,4 +1,4 @@
-# TODO: Rewrite as helper methods
+# TODO: Rewrite as helper methods? or as a model?
 class StatsPresenter
 
   # ------------------------------------------------------------
@@ -78,7 +78,7 @@ class StatsPresenter
       .joins(:lending_item)
       .group(:lending_item_id)
       .count(:lending_item_id)
-      .sort_by { |_, ct| ct }
+      .sort_by { |_, ct| -ct }
       .to_h
   end
 
@@ -89,7 +89,7 @@ class StatsPresenter
       .joins(:lending_item)
       .group(:lending_item_id)
       .count(:lending_item_id)
-      .sort_by { |_, ct| ct }
+      .sort_by { |_, ct| -ct }
       .to_h
   end
 end
