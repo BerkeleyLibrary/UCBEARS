@@ -14,6 +14,18 @@ class User
   # keep the ones we care about
   KNOWN_CAL_GROUPS = [LENDING_ADMIN_GROUP].freeze
 
+  # 'NOT REGISTERED' = summer session / concurrent enrollment / early in the semester
+  # NOTE: CalNet docs are contradictory about whether there should be a dash after NOT,
+  #       so for now we should handle both. See:
+  #
+  #       - https://calnetweb.berkeley.edu/calnet-technologists/ldap-directory-service/how-ldap-organized/people-ou/people-ou-affiliations#Student
+  #       - see https://calnetweb.berkeley.edu/calnet-technologists/single-sign/cas/casify-your-web-application-or-web-server
+  STUDENT_AFFILIATIONS = [
+    'STUDENT-TYPE-REGISTERED',
+    'STUDENT-TYPE-NOT REGISTERED',
+    'STUDENT-TYPE-NOT-REGISTERED'
+  ].freeze
+
   # ------------------------------------------------------------
   # Initializer
 
@@ -105,9 +117,7 @@ class User
   def ucb_student?
     return unless affiliations
 
-    # 'NOT-REGISTERED' = summer session / concurrent enrollment? maybe?
-    # see https://calnetweb.berkeley.edu/calnet-technologists/single-sign/cas/casify-your-web-application-or-web-server
-    %w[STUDENT-TYPE-REGISTERED STUDENT-TYPE-NOT-REGISTERED].any? { |a9n| affiliations.include?(a9n) }
+    STUDENT_AFFILIATIONS.any? { |a9n| affiliations.include?(a9n) }
   end
 
   # Whether the user is a member of the Framework lending admin CalGroup

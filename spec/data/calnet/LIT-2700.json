@@ -1,0 +1,66 @@
+{
+  "provider": "calnet",
+  "uid": "LIT-2700",
+  "info": {
+    "nickname": "LIT-2700"
+  },
+  "credentials": {
+    "ticket": "ST-0000000-000000000000000000000000000-auth-p00"
+  },
+  "extra": {
+    "user": "LIT-2700",
+    "isFromNewLogin": "false",
+    "bypassMultifactorAuthentication": "false",
+    "authenticationDate": "2021-08-27T16:29:55.645170Z",
+    "authnContextClass": "mfa-duo",
+    "displayName": "Rachel Rebecca Roe",
+    "berkeleyEduKerberosPrincipalString": "rrroe",
+    "givenName": "Rachel Rebecca",
+    "successfulAuthenticationHandlers": "mfa-duo",
+    "samlAuthenticationStatementAuthMethod": "urn:oasis:names:tc:SAML:1.0:am:unspecified",
+    "credentialType": "UsernamePasswordCredential",
+    "uid": "LIT-2700",
+    "authenticationMethod": "mfa-duo",
+    "surname": "Roe",
+    "berkeleyEduAffiliations": [
+      "AFFILIATE-TYPE-ADVCON-ATTENDEE",
+      "AFFILIATE-TYPE-ADVCON-STUDENT",
+      "FORMER-EMPLOYEE",
+      "STUDENT-TYPE-NOT REGISTERED"
+    ],
+    "berkeleyEduIsMemberOf": [
+      "cn=edu:berkeley:app:2Step:Allow2StepView,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:2Step:Enforce2Step,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:2Step:Require2Step,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:2StepTest:Allow2StepViewTest,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:2StepTest:Enforce2StepTest,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:auth-cas:box_app:box_app-access,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:auth-cas:fom-cchem:fom-cchem-access,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:auth-cas:g_suite:g_suite-access,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:auth-cas:webapp-default:webapp-default-access,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:auth-cas:zoom_berkeley:zoom_berkeley-allow,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:calmessages:students,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:calmessages:undergrad-students,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:frwl:PAN-UserID:userid-rans-users,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:rans:Remote-Access-Core,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:rans:Remote-Access-Full,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:wifi:WiFi-Users,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:app:zoom:Zoom_Basic,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:Employees-Students-UCPath-Affiliates,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:all-accounts-people-ou,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:current-campus-community,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:emp-aff-stu-no-retirees,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:employees:former-employees,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:Majors:Undergraduate-Majors:045A7,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:Programs:Undergrad:045A7U,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:all-students-types,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:extension-students,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:not-registered-students,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:undergrad-students-via-programs,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:official:students:undergraduate-students,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:org:libr:exproxy:ezproxy_access,ou=campus groups,dc=berkeley,dc=edu",
+      "cn=edu:berkeley:org:libr:ezproxy:ezproxy_access,ou=campus groups,dc=berkeley,dc=edu"
+    ],
+    "longTermAuthenticationRequestTokenUsed": "false"
+  }
+}

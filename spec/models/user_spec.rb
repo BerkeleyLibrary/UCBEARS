@@ -66,4 +66,15 @@ describe User do
       expect(user.inspect).not_to include(user.borrower_id)
     end
   end
+
+  describe 'LIT-2700' do
+    describe :ucb_student? do
+      it 'accepts the user from LIT-2700 as a student' do
+        auth_yml = File.read('spec/data/calnet/LIT-2700.json')
+        auth_hash = JSON.parse(auth_yml)
+        user = User.from_omniauth(auth_hash)
+        expect(user.ucb_student?).to eq(true)
+      end
+    end
+  end
 end
