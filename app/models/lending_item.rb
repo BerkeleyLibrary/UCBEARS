@@ -20,7 +20,6 @@ class LendingItem < ActiveRecord::Base
   validates :directory, presence: true
   validates_uniqueness_of :directory
   validates :title, presence: true
-  validates :author, presence: true
   validates :copies, numericality: { greater_than_or_equal_to: 0 }
   validate :correct_directory_format
   validate :active_items_have_copies

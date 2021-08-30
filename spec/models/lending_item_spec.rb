@@ -89,6 +89,20 @@ describe LendingItem, type: :model do
         items.each { |it| expect(it.publisher).not_to be_nil }
       end
     end
+
+    describe 'validation' do
+      it "doesn't prevent activating items with no author" do
+        item = create(:inactive_item)
+        expect(item).to be_persisted # just to be sure
+
+        item.update!(author: nil)
+        item.update!(copies: 3, active: true)
+
+        item.reload
+        expect(item.author).to be_nil
+        expect(item.active?).to eq(true)
+      end
+    end
   end
 
   context 'with existing items' do
