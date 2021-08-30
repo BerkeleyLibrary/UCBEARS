@@ -11,7 +11,7 @@ module Lending
         attrs[:barcode] = barcode
       end
 
-      @ready_dir =  'spec/data/lending/ready'
+      @ready_dir = 'spec/data/lending/ready'
       @expected_dir = Pathname.new('spec/data/lending/final').join(item[:directory])
 
       @tmpdir = Dir.mktmpdir(File.basename(__FILE__, '.rb'))
@@ -108,6 +108,39 @@ module Lending
       expect(actual_template.exist?).to eq(true)
 
       expect(actual_template.read.strip).to eq(expected_template.read.strip)
+    end
+
+    describe :new do
+      it 'rejects bad directories' do
+        bad_dirs = [
+          'recordid_',
+          '_barcode',
+          'recordidandbarcodewithnounderscore',
+          ' leading_space',
+          'trailing_space ',
+          "\u00A0leading_nbsp",
+          "trailing_nbsp\u00A0",
+          "\u202Fleading_narrow_nbsp",
+          "trailing_narrow_nbsp\u202F",
+          "control_charact\u008drs",
+          "contr\u008dl_characters"
+        ]
+        Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmp_root|
+          tmp_in, tmp_out = %w[ready processing].map do |d|
+            File.join(tmp_root, d).tap { |dir| FileUtils.mkdir(dir) }
+          end
+
+          aggregate_failures 'bad directories' do
+            bad_dirs.each do |d|
+              bad_indir = File.join(tmp_in, d).tap { |dir| FileUtils.mkdir(dir) }
+              bad_outdir = File.join(tmp_out, d).tap { |dir| FileUtils.mkdir(dir) }
+
+              msg = "#{CGI.escape(d).inspect} was not recognized as a bad directory"
+              expect { Processor.new(bad_indir, bad_outdir) }.to raise_error(ArgumentError), msg
+            end
+          end
+        end
+      end
     end
   end
 end

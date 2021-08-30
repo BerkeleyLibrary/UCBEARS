@@ -3,7 +3,10 @@ require 'pathname'
 module Lending
   module PathUtils
     DIRNAME_RE = /^(?<record_id>[^_]+)_(?<barcode>.+)$/.freeze
-    MSG_BAD_DIRNAME = 'Item directory %s should be in the form <record_id>_<barcode>'.freeze
+    MSG_BAD_DIRNAME = "Item directory '%s' should be in the form <record_id>_<barcode>".freeze
+    SEGMENT_RE = /^([[:graph:]][[:print:]]*[[:graph:]]|[[:graph:]])$/.freeze
+    MSG_INVALID_BARCODE = "Item barcode '%s' contains invalid characters".freeze
+    MSG_INVALID_RECORD_ID = "Item record ID '%s' contains invalid characters".freeze
 
     def all_item_dirs(parent)
       each_item_dir(parent).to_a
@@ -82,11 +85,17 @@ module Lending
     end
 
     def decompose_dirname(path)
-      # TODO: do we care about check digits?
       match_data = DIRNAME_RE.match(path.basename.to_s)
       raise ArgumentError, format(MSG_BAD_DIRNAME, path) unless match_data
 
-      [match_data[:record_id].downcase, match_data[:barcode]]
+      barcode = match_data[:barcode]
+      raise ArgumentError, format(MSG_INVALID_BARCODE) unless barcode =~ SEGMENT_RE
+
+      # TODO: do we care about check digits?
+      record_id = match_data[:record_id].downcase
+      raise ArgumentError, format(MSG_INVALID_RECORD_ID) unless barcode =~ SEGMENT_RE
+
+      [record_id, barcode]
     end
 
     class << self
