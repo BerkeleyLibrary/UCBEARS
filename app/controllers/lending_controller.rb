@@ -127,7 +127,7 @@ class LendingController < ApplicationController
 
   def destroy
     if @lending_item.complete?
-      logger.warn('Failed to delete non-incomplete item', @lending_item.to_h)
+      logger.warn('Failed to delete non-incomplete item', @lending_item.debug_hash)
       flash[:danger] = 'Only incomplete items can be deleted.'
     else
       @lending_item.destroy!
@@ -221,7 +221,7 @@ class LendingController < ApplicationController
 
   # create/update parameters
   def lending_item_params # TODO: better/more consistent name
-    params.require(:lending_item).permit(:directory, :title, :author, :copies, :active)
+    params.require(:lending_item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active)
   end
 
   # loan lookup parameters

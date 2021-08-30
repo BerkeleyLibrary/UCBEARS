@@ -22,33 +22,6 @@ describe LendingController, type: :request do
     end
   end
 
-  let(:item_attrs) do
-    [
-      {
-        title: 'The great depression in Europe, 1929-1939',
-        author: 'Clavin, Patricia.',
-        directory: 'b135297126_C068087930',
-        copies: 2,
-        active: true
-      },
-      {
-        title: 'Cultural atlas of Ancient Egypt',
-        author: 'Baines, John,',
-        directory: 'B135491460_C106083325'
-      },
-      {
-        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-        author: 'Horn, Walter',
-        directory: 'b100523250_C044235662'
-      },
-      {
-        title: 'Villette',
-        author: 'Brontë, Charlotte',
-        directory: 'b155001346_C044219363'
-      }
-    ]
-  end
-
   attr_reader :items
   attr_reader :item
 
@@ -391,7 +364,7 @@ describe LendingController, type: :request do
           allow(Rails.logger).to receive(:warn)
 
           expect(item).to be_complete # just to be sure
-          expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.to_h)
+          expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.debug_hash)
 
           delete lending_destroy_path(directory: item.directory)
           expect(response).to redirect_to index_path

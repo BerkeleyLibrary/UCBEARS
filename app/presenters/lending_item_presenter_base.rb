@@ -51,7 +51,7 @@ class LendingItemPresenterBase
   protected
 
   def action_edit
-    link_to('Edit', lending_edit_path(directory: directory), class: 'btn btn-secondary')
+    link_to('Edit item', lending_edit_path(directory: directory), class: 'btn btn-secondary')
   end
 
   def action_reload

@@ -14,19 +14,30 @@
     <table>
       <tbody>
       <tr>
-        <th>Title</th>
-        <td><%= item.title %></td>
+        <th><%= form.label(:title, class: 'control-label') %></th>
+        <td><%= form.text_field(:title, class: 'form-control add-required') %></td>
       </tr>
 
       <tr>
-        <th>Author</th>
-        <td><%= item.author %></td>
+        <th><%= form.label(:author, class: 'control-label') %></th>
+        <td><%= form.text_field(:author, class: 'form-control add-required') %></td>
       </tr>
 
       <tr>
         <th><%= form.label(:copies, class: 'control-label') %></th>
         <td><%= form.text_field(:copies, class: 'form-control add-required') %></td>
       </tr>
+
+      <tr>
+        <th><%= form.label(:publisher, class: 'control-label') %></th>
+        <td><%= form.text_field(:publisher, class: 'form-control add-required') %></td>
+      </tr>
+
+      <tr>
+        <th><%= form.label(:physical_desc, 'Physical description', class: 'control-label') %></th>
+        <td><%= form.text_field(:physical_desc, class: 'form-control add-required') %></td>
+      </tr>
+
       <tr>
         <th><%= form.label(:active, class: 'control-label') %></th>
         <td>

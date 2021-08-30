@@ -169,7 +169,7 @@ class LendingItem < ActiveRecord::Base
   # ------------------------------------------------------------
   # Synthetic accessors
 
-  def to_h
+  def debug_hash
     DEBUG_ATTRIBUTES.map do |attr|
       raw_value = send(attr)
       [attr, loggable_value_for(raw_value)]

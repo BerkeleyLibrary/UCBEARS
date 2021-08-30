@@ -19,33 +19,6 @@ describe LendingController, type: :system do
 
   let(:states) { %i[active inactive incomplete] }
 
-  let(:item_attrs) do
-    [
-      {
-        title: 'The great depression in Europe, 1929-1939',
-        author: 'Clavin, Patricia.',
-        directory: 'b135297126_C068087930',
-        copies: 2,
-        active: true
-      },
-      {
-        title: 'Cultural atlas of Ancient Egypt',
-        author: 'Baines, John,',
-        directory: 'B135491460_C106083325'
-      },
-      {
-        title: 'The Plan of St. Gall : a study of the architecture & economy of life in a paradigmatic Carolingian monastery',
-        author: 'Horn, Walter',
-        directory: 'b100523250_C044235662'
-      },
-      {
-        title: 'Villette',
-        author: 'Brontë, Charlotte',
-        directory: 'b155001346_C044219363'
-      }
-    ]
-  end
-
   attr_reader :items
   attr_reader :item
 
@@ -166,7 +139,7 @@ describe LendingController, type: :system do
             expect(URI.parse(show_link['href']).path).to eq(show_path)
 
             edit_path = lending_edit_path(directory: item.directory)
-            edit_link = item_section.find_link('Edit')
+            edit_link = item_section.find_link('Edit item')
             expect(URI.parse(edit_link['href']).path).to eq(edit_path)
           end
         end
@@ -229,13 +202,13 @@ describe LendingController, type: :system do
           end
         end
 
-        describe 'Edit' do
+        describe 'Edit item' do
           it 'shows the edit screen' do
             item = active.find { |it| it.copies > 0 }
             item_section = find_item_section(item)
 
             edit_path = lending_edit_path(directory: item.directory)
-            edit_link = item_section.find_link('Edit')
+            edit_link = item_section.find_link('Edit item')
             expect(URI.parse(edit_link['href']).path).to eq(edit_path)
             edit_link.click
 
@@ -344,6 +317,57 @@ describe LendingController, type: :system do
         end
 
         # TODO: Test MARC reload
+      end
+
+      describe :edit do
+        it 'allows the item to be edited' do
+          visit lending_edit_path(directory: item.directory)
+
+          new_values = {
+            title: 'The Great Depression in Europe, 1929-1939',
+            author: 'Patricia Clavin',
+            publisher: 'New York: St. Martin’s Press, 2000',
+            physical_desc: 'viii, 244 p.; ill.; 23 cm.',
+            copies: 12
+          }
+          new_values.each do |attr, value|
+            field_id = "lending_item_#{attr}"
+            field = page.find_field(field_id)
+            field.fill_in(with: value, fill_options: { clear: :backspace })
+
+            page.find_field(field_id)
+            expect(field.value).to eq(value.to_s)
+          end
+
+          expect(item).to be_active # just to be sure
+
+          page.choose('lending_item_active_0')
+
+          submit_button = find(:xpath, "//input[@type='submit']")
+          submit_button.click
+
+          expect(page).to have_content('Item updated.')
+
+          # TODO: do we need templates or are manifests now fast enough to generate on the fly?
+          # TODO: stop storing title and author in manifest template
+          # old_values = new_values.each_key.with_object({}) { |attr, vv| vv[attr] = item.send(attr) }
+          # old_values.each do |attr, value|
+          #   next if attr == :copies # too easy for numbers to appear in Mirador
+          #
+          #   expect(page).not_to have_content(value), "Old value for #{attr} found: #{value.inspect}"
+          # end
+
+          item.reload
+          expect(item).not_to be_active
+          new_values.each do |attr, value|
+            expect(item.send(attr)).to eq(value)
+          end
+
+          metadata_table = page.find('table.item-metadata')
+          new_values.each_value do |value|
+            expect(metadata_table).to have_content(value)
+          end
+        end
       end
     end
   end
