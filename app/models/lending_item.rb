@@ -150,6 +150,8 @@ class LendingItem < ActiveRecord::Base
   def refresh_marc_metadata!
     read_marc_metadata
     save(validate: false) if changed?
+
+    previous_changes
   end
 
   def read_marc_metadata

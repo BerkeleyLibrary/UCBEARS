@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get '/:directory/return', to: 'lending#return', as: :lending_return
     get '/:directory/activate', to: 'lending#activate', as: :lending_activate
     get '/:directory/deactivate', to: 'lending#deactivate', as: :lending_deactivate
+    get '/:directory/reload', to: 'lending#reload', as: :lending_reload
   end
 
 end

@@ -407,6 +407,48 @@ describe LendingController, type: :request do
           expect(response.status).to eq(404)
         end
       end
+
+      describe :reload do
+        it 'reloads the MARC metadata' do
+          original_author = item.author
+          edited_author = 'Roe, Rachel R.'
+          expect(edited_author).not_to eq(original_author) # just to be sure
+
+          item.update!(author: edited_author)
+
+          get lending_reload_path(directory: item.directory)
+          expect(response).to redirect_to lending_show_path(directory: item.directory)
+
+          follow_redirect!
+          expect(response.body).to include('MARC metadata reloaded.')
+
+          item.reload
+          expect(item.author).to eq(original_author)
+        end
+
+        it 'returns 404 not found for nonexistent items' do
+          get lending_reload_path(directory: 'not_a_directory')
+          expect(response.status).to eq(404)
+        end
+
+        it 'succeeds for unchanged items' do
+          get lending_reload_path(directory: item.directory)
+          expect(response).to redirect_to lending_show_path(directory: item.directory)
+
+          follow_redirect!
+          expect(response.body).to include('No changes found.')
+        end
+
+        it 'shows an error for items without MARC metadata' do
+          item = incomplete.find { |it| !it.has_marc_record? }
+          expect(item).not_to be_nil # just to be sure
+
+          get lending_reload_path(directory: item.directory)
+          expect(response).to redirect_to lending_show_path(directory: item.directory)
+          follow_redirect!
+          expect(response.body).to include('Error reloading MARC metadata')
+        end
+      end
     end
   end
 
@@ -806,6 +848,29 @@ describe LendingController, type: :request do
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_deactivate_path(directory: 'not_a_directory')
+        expect(response.status).to eq(403)
+      end
+    end
+
+    describe :reload do
+      it 'returns 403 forbidden' do
+        get lending_reload_path(directory: item.directory)
+        expect(response.status).to eq(403)
+      end
+
+      it "doesn't reload the MARC metadata" do
+        original_author = item.author
+        edited_author = 'Roe, Rachel R.'
+        expect(edited_author).not_to eq(original_author) # just to be sure
+
+        item.update!(author: edited_author)
+        get lending_reload_path(directory: item.directory)
+        item.reload
+        expect(item.author).to eq(edited_author)
+      end
+
+      it 'returns 403 forbidden even for nonexistent items' do
+        get lending_reload_path(directory: 'not_a_directory')
         expect(response.status).to eq(403)
       end
     end

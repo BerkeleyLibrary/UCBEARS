@@ -342,6 +342,8 @@ describe LendingController, type: :system do
             expect(page).to have_content(loan.due_date.to_s(:short))
           end
         end
+
+        # TODO: Test MARC reload
       end
     end
   end

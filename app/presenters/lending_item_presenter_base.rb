@@ -7,11 +7,10 @@ class LendingItemPresenterBase
 
   delegate_missing_to :@view_context
 
-  def initialize(view_context, item, show_viewer:, show_copyright_warning: false)
+  def initialize(view_context, item, show_viewer:)
     @view_context = view_context
     @item = item
     @show_viewer = show_viewer
-    @show_copyright_warning = show_copyright_warning
   end
 
   def title
@@ -24,10 +23,6 @@ class LendingItemPresenterBase
 
   def show_viewer?
     @show_viewer
-  end
-
-  def show_copyright_warning?
-    @show_copyright_warning
   end
 
   def fields
@@ -55,8 +50,20 @@ class LendingItemPresenterBase
 
   protected
 
-  def edit_action
+  def action_edit
     link_to('Edit', lending_edit_path(directory: directory), class: 'btn btn-secondary')
+  end
+
+  def action_reload
+    item.has_marc_record? ? action_reload_enabled : action_reload_disabled
+  end
+
+  def action_reload_enabled
+    link_to('Reload MARC metadata', lending_reload_path(directory: directory), class: 'btn btn-danger')
+  end
+
+  def action_reload_disabled
+    tag.a(class: 'btn btn-danger disabled') { 'Reload MARC metadata' }.html_safe
   end
 
   def internal_metadata_fields

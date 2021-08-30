@@ -7,8 +7,8 @@ class LendingItemShowPresenter < LendingItemPresenterBase
     'Preview'
   end
 
-  def action
-    edit_action
+  def actions
+    [action_edit, action_reload]
   end
 
   def build_fields

@@ -8,10 +8,10 @@ class LendingItemViewPresenter < LendingItemPresenterBase
       view_context,
       item,
       show_viewer: loan.active?,
-      show_copyright_warning: (!loan.active? && item.available?)
     )
 
     @loan = loan
+    @show_copyright_warning = (!loan.active? && item.available?)
   end
 
   def action
@@ -30,6 +30,10 @@ class LendingItemViewPresenter < LendingItemPresenterBase
 
   def borrower_token_str
     current_user.borrower_token.token_str
+  end
+
+  def show_copyright_warning?
+    @show_copyright_warning
   end
 
   protected

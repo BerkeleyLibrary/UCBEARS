@@ -137,10 +137,34 @@ class LendingController < ApplicationController
     redirect_to(:index)
   end
 
+  def reload
+    begin
+      refresh_and_notify
+    rescue StandardError => e
+      msg = "Error reloading MARC metadata: #{e}"
+      logger.error(msg, e)
+      flash[:danger] = msg
+    end
+
+    redirect_to lending_show_url(directory: @lending_item.directory)
+  end
+
   # ------------------------------------------------------------
   # Private methods
 
   private
+
+  def refresh_and_notify
+    raise ArgumentError, "No MARC record found at #{@lending_item.marc_path}" unless @lending_item.has_marc_record?
+
+    changes = @lending_item.refresh_marc_metadata!
+    if changes.empty?
+      flash[:info] = 'No changes found.'
+    else
+      logger.info("MARC metadata for #{@lending_item.id} reloaded", changes.transform_values { |(v2, v1)| { from_value: v1, to_value: v2 } })
+      flash[:success] = 'MARC metadata reloaded.'
+    end
+  end
 
   def populate_view_flash
     flash.now[:danger] ||= []

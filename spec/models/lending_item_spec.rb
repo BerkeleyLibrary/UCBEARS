@@ -39,6 +39,26 @@ describe LendingItem, type: :model do
       original_values.each { |attr, v| expect(original_item.send(attr)).to eq(v) }
     end
 
+    it 'returns previous values when refreshing changes the metadata' do
+      item = create(:active_item)
+      original_values = %i[author title publisher physical_desc].map { |attr| [attr, item.send(attr)] }.to_h
+
+      modified_values = original_values.transform_values { |v| "not #{v}" }
+      item.update!(**modified_values)
+
+      item.reload
+      refreshed = item.refresh_marc_metadata!
+      expected_changes = original_values.map { |attr, v| [attr, [modified_values[attr], v]] }.to_h
+      expect(refreshed).to include(expected_changes)
+    end
+
+    it 'returns an empty hash when refreshing does not change the metadata' do
+      item = create(:active_item)
+      item.reload
+      refreshed = item.refresh_marc_metadata!
+      expect(refreshed).to be_empty
+    end
+
     it "doesn't blow up on incomplete items" do
       items = factory_names
         .select { |n| n.to_s.start_with?('incomplete') }
@@ -77,9 +97,9 @@ describe LendingItem, type: :model do
         expected_dirs = Lending
           .stage_root_path(:final).children
           .select do |d|
-            Lending::PathUtils.item_dir?(d) &&
-              d.join(Lending::MARC_XML_NAME).file?
-          end
+          Lending::PathUtils.item_dir?(d) &&
+            d.join(Lending::MARC_XML_NAME).file?
+        end
         items = LendingItem.scan_for_new_items!
         expect(items.size).to eq(expected_dirs.size)
       end

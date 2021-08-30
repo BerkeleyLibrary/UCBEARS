@@ -1,21 +1,78 @@
 <%
   # TODO: something less hacky
   content_for(:head_additional) do
-  next unless @lending_item_loan&.active?
+    next unless @lending_item_loan&.active?
 
-  redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
-  redirect_url = lending_return_url(directory: @lending_item_loan.lending_item.directory)
+    redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
+    redirect_url = lending_return_url(directory: @lending_item_loan.lending_item.directory)
 %>
   <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
 <% end %>
 
 <% content_for(:page_title, "UC BEARS: #{@lending_item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
-<%=
-  render(
-    partial: 'record',
-    locals: {
-      presenter: LendingItemViewPresenter.new(self, @lending_item, @lending_item_loan)
-    }
-  )
-%>
+
+<% presenter = LendingItemViewPresenter.new(self, @lending_item, @lending_item_loan) %>
+
+<section class="record">
+  <table>
+    <thead>
+    <tr>
+      <th>
+        <h2>
+          <%= presenter.title %>
+        </h2>
+      </th>
+    </tr>
+    </thead>
+  </table>
+
+  <% if presenter.show_viewer? %>
+    <%=
+      render(
+        partial: 'viewer',
+        locals: {
+          manifest_url: manifest_url,
+          viewer_title: presenter.viewer_title,
+        }
+      )
+    %>
+  <% end %>
+
+  <table>
+    <% presenter.fields.each do |label, value| %>
+      <tr>
+        <th><%= label %></th>
+        <td><%= format_value(value) %></td>
+      </tr>
+    <% end %>
+    <% if presenter.show_copyright_warning? %>
+      <tr>
+        <td class="copyright">
+          <h3>⚠️ Warning of Copyright</h3>
+          <p>
+            The copyright law of the United States (Title 17, United States Code) governs the making of photocopies
+            or other reproductions of copyrighted material. Under certain conditions specified in the law, libraries
+            and archives are authorized to furnish a photocopy or other reproduction. One of these specific conditions
+            is that the photocopy or reproduction is not to be “used for any purpose other than private study,
+            scholarship, or research.” The library has utilized technical measures to prevent any further copying,
+            downloading, or distribution of this work. Use of this reproduction in violation of these terms could
+            subject users to potential liability for copyright infringement.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <th class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
+          <%= presenter.action %>
+        </th>
+      </tr>
+    <% else %>
+      <tr>
+        <th class="action">
+          <%= presenter.action %>
+        </th>
+      </tr>
+    <% end %>
+
+  </table>
+</section>

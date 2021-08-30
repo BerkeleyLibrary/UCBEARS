@@ -2,11 +2,46 @@
 
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
-<%=
-  render(
-    partial: 'record',
-    locals: {
-      presenter:LendingItemShowPresenter.new(self, @lending_item)
-    }
-  )
-%>
+<% presenter = LendingItemShowPresenter.new(self, @lending_item) %>
+
+<section class="record">
+  <table>
+    <thead>
+    <tr>
+      <th>
+        <h2>
+          <%= presenter.title %>
+        </h2>
+      </th>
+    </tr>
+    </thead>
+  </table>
+
+  <% if presenter.show_viewer? %>
+    <%=
+      render(
+        partial: 'viewer',
+        locals: {
+          manifest_url: manifest_url,
+          viewer_title: presenter.viewer_title,
+        }
+      )
+    %>
+  <% end %>
+
+  <table>
+    <% presenter.fields.each do |label, value| %>
+      <tr>
+        <th><%= label %></th>
+        <td><%= format_value(value) %></td>
+      </tr>
+    <% end %>
+    <% presenter.actions.each do |action| %>
+    <tr>
+      <th class="action">
+        <%= action %>
+      </th>
+    </tr>
+    <% end %>
+  </table>
+</section>
