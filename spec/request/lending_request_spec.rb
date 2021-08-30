@@ -388,7 +388,10 @@ describe LendingController, type: :request do
         end
 
         it 'does not destroy a complete item' do
+          allow(Rails.logger).to receive(:warn)
+
           expect(item).to be_complete # just to be sure
+          expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.to_h)
 
           delete lending_destroy_path(directory: item.directory)
           expect(response).to redirect_to index_path

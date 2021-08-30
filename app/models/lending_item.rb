@@ -37,6 +37,24 @@ class LendingItem < ActiveRecord::Base
   # ------------------------------------------------------------
   # Constants
 
+  DEBUG_ATTRIBUTES = %i[
+    id
+    directory
+    status
+    iiif_dir
+    has_iiif_dir?
+    has_page_images?
+    marc_path
+    has_marc_record?
+    manifest_template_path
+    has_manifest_template?
+    complete?
+    active?
+    copies
+    copies_available
+    available?
+  ].freeze
+
   LOAN_DURATION_SECONDS = 2 * 3600 # TODO: make this configurable
 
   # TODO: Use Rails i18n
@@ -150,6 +168,13 @@ class LendingItem < ActiveRecord::Base
   # ------------------------------------------------------------
   # Synthetic accessors
 
+  def to_h
+    DEBUG_ATTRIBUTES.map do |attr|
+      raw_value = send(attr)
+      [attr, loggable_value_for(raw_value)]
+    end.to_h
+  end
+
   def complete?
     has_iiif_dir? && has_page_images? && has_marc_record? && has_manifest_template?
   end
@@ -208,6 +233,7 @@ class LendingItem < ActiveRecord::Base
   end
 
   def iiif_manifest
+    # TODO: always return manifest object unless iiif_dir is nil
     return unless has_iiif_dir?
 
     manifest = Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_dir)
@@ -305,6 +331,16 @@ class LendingItem < ActiveRecord::Base
   # Private methods
 
   private
+
+  def loggable_value_for(raw_value)
+    return raw_value.to_s if raw_value.is_a?(Pathname)
+
+    raw_value
+  end
+
+  def manifest_template_path
+    iiif_manifest&.erb_path
+  end
 
   def load_marc_metadata
     Lending::MarcMetadata.from_file(marc_path).tap do |md|

@@ -289,6 +289,34 @@ describe LendingController, type: :system do
             expect(LendingItem.exists?(item.id)).to eq(false)
           end
         end
+
+        it 'does not delete a complete item' do
+          item = LendingItem.find_by(directory: 'b23752729_C118406204')
+          expect(item).not_to be_complete # just to be sure
+
+          item_section = find_item_section(item)
+
+          delete_button_xpath = ".//form[@action='#{lending_destroy_path(directory: item.directory)}']"
+          delete_form = item_section.find(:xpath, delete_button_xpath)
+          delete_button = delete_form.find_button('Delete')
+
+          mf = Lending::IIIFManifest.new(title: item.title, author: item.author, dir_path: item.iiif_dir)
+          begin
+            mf.write_manifest_erb!
+            expect(item).to be_complete # just to be sure
+
+            delete_button.click
+            alert = page.find('.alert-danger')
+            expect(alert).to have_text('Only incomplete items can be deleted.')
+
+            expect(page).to have_content(item.title)
+            expect(page).not_to have_content(delete_button_xpath)
+
+            expect(LendingItem.exists?(item.id)).to eq(true)
+          ensure
+            FileUtils.rm(mf.erb_path)
+          end
+        end
       end
 
       describe :stats do

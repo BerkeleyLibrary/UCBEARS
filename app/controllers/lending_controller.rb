@@ -127,7 +127,8 @@ class LendingController < ApplicationController
 
   def destroy
     if @lending_item.complete?
-      flash[:error] = 'Only incomplete items can be deleted.'
+      logger.warn('Failed to delete non-incomplete item', @lending_item.to_h)
+      flash[:danger] = 'Only incomplete items can be deleted.'
     else
       @lending_item.destroy!
       flash[:success] = 'Item deleted.'
