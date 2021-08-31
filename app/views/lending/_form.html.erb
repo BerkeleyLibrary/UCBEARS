@@ -54,13 +54,33 @@
         </td>
       </tr>
       </tbody>
+
       <tfoot>
       <tr>
-        <th class="action">
+        <th></th>
+        <th class="action" style="padding-bottom: 2rem;"><%# TODO: something less awkward %>
           <input type="submit" class="btn btn-primary" value="<%= submit_label %>">
+        </th>
+      </tr>
+      <tr>
+        <th></th>
+        <th class="action">
+          <% if item.has_marc_record? %>
+            <%=
+              link_to(
+                'Reload MARC metadata',
+                lending_reload_path(directory: item.directory),
+                class: 'btn btn-danger',
+                data: { confirm: 'Reloading MARC metadata will discard all changes made on this form.' }
+              )
+            %>
+          <% else %>
+            <a class="btn btn-danger disabled">Reload MARC metadata</a>
+          <% end %>
         </th>
       </tr>
       </tfoot>
     </table>
   <% end %>
+
 </section>

@@ -6,7 +6,7 @@ class LendingItemIndexPresenter < LendingItemPresenterBase
   end
 
   def actions
-    [action_edit, show_action, primary_action]
+    [action_edit, action_show, primary_action]
   end
 
   def tabular_fields
@@ -26,25 +26,25 @@ class LendingItemIndexPresenter < LendingItemPresenterBase
   private
 
   def primary_action
-    return delete_action if item.incomplete?
-    return deactivate_action if item.active?
+    return action_delete if item.incomplete?
+    return action_deactivate if item.active?
 
-    activate_action
+    action_activate
   end
 
-  def show_action
+  def action_show
     link_to('Show', lending_show_path(directory: directory), class: 'btn btn-secondary')
   end
 
-  def activate_action
+  def action_activate
     link_to('Make Active', lending_activate_path(directory: directory), class: 'btn btn-primary')
   end
 
-  def deactivate_action
+  def action_deactivate
     link_to('Make Inactive', lending_deactivate_path(directory: directory), class: 'btn btn-warning')
   end
 
-  def delete_action
+  def action_delete
     button_to('Delete', lending_destroy_path(directory: directory), method: :delete, class: 'btn btn-danger')
   end
 end

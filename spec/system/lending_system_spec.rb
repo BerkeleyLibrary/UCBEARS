@@ -315,8 +315,6 @@ describe LendingController, type: :system do
             expect(page).to have_content(loan.due_date.to_s(:short))
           end
         end
-
-        # TODO: Test MARC reload
       end
 
       describe :edit do
@@ -363,6 +361,39 @@ describe LendingController, type: :system do
 
           metadata_table = page.find('table.item-metadata')
           new_values.each_value do |value|
+            expect(metadata_table).to have_content(value)
+          end
+        end
+
+        it 'allows reloading MARC metadata' do
+          new_values = {
+            title: 'The Great Depression in Europe, 1929-1939',
+            author: 'Patricia Clavin',
+            publisher: 'New York: St. Martin’s Press, 2000',
+            physical_desc: 'viii, 244 p.; ill.; 23 cm.'
+          }
+          original_values = new_values.each_key.with_object({}) { |attr, vv| vv[attr] = item.send(attr) }
+
+          item.update!(new_values)
+
+          visit lending_edit_path(directory: item.directory)
+
+          reload_link = page.find_link('Reload MARC metadata')
+
+          page.accept_alert 'Reloading MARC metadata will discard all changes made on this form.' do
+            reload_link.click
+          end
+
+          expect(page).to have_content('MARC metadata reloaded.')
+
+          item.reload
+
+          original_values.each do |attr, value|
+            expect(item.send(attr)).to eq(value)
+          end
+
+          metadata_table = page.find('table.item-metadata')
+          original_values.each_value do |value|
             expect(metadata_table).to have_content(value)
           end
         end

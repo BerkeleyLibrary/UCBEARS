@@ -54,18 +54,6 @@ class LendingItemPresenterBase
     link_to('Edit item', lending_edit_path(directory: directory), class: 'btn btn-secondary')
   end
 
-  def action_reload
-    item.has_marc_record? ? action_reload_enabled : action_reload_disabled
-  end
-
-  def action_reload_enabled
-    link_to('Reload MARC metadata', lending_reload_path(directory: directory), class: 'btn btn-danger')
-  end
-
-  def action_reload_disabled
-    tag.a(class: 'btn btn-danger disabled') { 'Reload MARC metadata' }.html_safe
-  end
-
   def internal_metadata_fields
     {
       'Record ID' => item.record_id,
