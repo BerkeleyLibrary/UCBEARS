@@ -1,3 +1,17 @@
+# 1.1.0 (2021-08-31)
+
+- Item directory names are now validated to ensure they don't start or end with
+  whitespace, or contain non-printing characters
+- Items with no author (e.g. complete journal issues) can now be activated
+- Publisher and physical description are now cached in the database along with
+  author and title, instead of read from `marc.xml` every time they're needed
+- Edit page improvements:
+  - Author, title, publisher, and physical description can now be edited
+  - Author, title, publisher, and physical description can now be reloaded on
+    demand from `marc.xml`
+- IIIF manifest uses the database title and author, if different from those
+  in the manifest template
+
 # 1.0.0 (2021-08-25)
 
 First production release. Changes since 0.1.0:
