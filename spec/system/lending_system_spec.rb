@@ -348,14 +348,12 @@ describe LendingController, type: :system do
 
           expect(page).to have_content('Item updated.')
 
-          # TODO: do we need templates or are manifests now fast enough to generate on the fly?
-          # TODO: stop storing title and author in manifest template
-          # old_values = new_values.each_key.with_object({}) { |attr, vv| vv[attr] = item.send(attr) }
-          # old_values.each do |attr, value|
-          #   next if attr == :copies # too easy for numbers to appear in Mirador
-          #
-          #   expect(page).not_to have_content(value), "Old value for #{attr} found: #{value.inspect}"
-          # end
+          old_values = new_values.each_key.with_object({}) { |attr, vv| vv[attr] = item.send(attr) }
+          old_values.each do |attr, value|
+            next if attr == :copies # too easy for numbers to appear in Mirador
+
+            expect(page).not_to have_content(value), "Old value for #{attr} found: #{value.inspect}"
+          end
 
           item.reload
           expect(item).not_to be_active

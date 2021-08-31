@@ -87,6 +87,27 @@ describe LendingItem, type: :model do
     end
   end
 
+  describe :update do
+    it 'updates (or appears to update) the manifest' do
+      item = create(:active_item)
+
+      original_title = item.title
+      original_author = item.author
+      original_manifest = item.to_json_manifest(Lending::IIIFManifest::MF_URL_PLACEHOLDER)
+
+      new_title = 'The Great Depression in Europe, 1929-1939'
+      new_author = 'Patricia Clavin'
+
+      item.update!(title: new_title, author: new_author)
+      new_manifest = item.to_json_manifest(Lending::IIIFManifest::MF_URL_PLACEHOLDER)
+
+      expected_manifest = original_manifest
+        .gsub(/(?<=")#{original_title}(?=")/, new_title)
+        .gsub(/(?<=")#{original_author}(?=")/, new_author)
+      expect(new_manifest).to eq(expected_manifest)
+    end
+  end
+
   context 'without existing items' do
     before(:each) do
       expect(LendingItem.count).to eq(0) # just to be sure

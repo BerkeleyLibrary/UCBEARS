@@ -143,9 +143,27 @@ class LendingItem < ActiveRecord::Base
     end
   end
 
+  # TODO: find a better way to make sure we reflect the most current title & author in the manifest
+  #       - stop storing title and author?
+  #       - cache page image info & generate manifest on the fly?
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def to_json_manifest(manifest_uri)
-    iiif_manifest.to_json_manifest(manifest_uri, Lending::Config.iiif_base_uri)
+    mf_json_src = iiif_manifest.to_json_manifest(manifest_uri, Lending::Config.iiif_base_uri)
+    mf_json = JSON.parse(mf_json_src)
+
+    mf_metadata = mf_json['metadata']
+    mf_title, mf_author = %w[Title Author].map { |k| mf_metadata.find { |entry| entry['label'] == k } }
+    title_changed = mf_json['label'] != title || mf_title['value'] != title
+    author_changed = mf_author['value'] != author
+    return mf_json_src unless title_changed || author_changed
+
+    mf_title['value'] = title
+    mf_author['value'] = author
+    mf_json['label'] = title
+
+    JSON.pretty_generate(mf_json)
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def refresh_marc_metadata!
     read_marc_metadata
