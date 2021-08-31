@@ -169,6 +169,11 @@ describe LendingController, type: :request do
           expect(response.status).to eq(404)
         end
 
+        it 'returns 404 not found for /lending' do
+          get '/lending'
+          expect(response.status).to eq(404)
+        end
+
         xit 'only shows the viewer for complete items'
         xit 'shows a message for incomplete items'
       end
@@ -872,10 +877,19 @@ describe LendingController, type: :request do
       expect(response).to redirect_to(login_with_callback_url)
     end
 
-    it 'GET lending_show_path redirects to login' do
-      get(path = lending_show_path(directory: item.directory))
-      login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
-      expect(response).to redirect_to(login_with_callback_url)
+    describe 'GET lending_show_path' do
+      it 'GET lending_show_path redirects to login' do
+        get(path = lending_show_path(directory: item.directory))
+        login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
+        expect(response).to redirect_to(login_with_callback_url)
+      end
+
+      it 'redirects to login' do
+        get '/lending'
+        path = lending_show_path(directory: 'lending')
+        login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
+        expect(response).to redirect_to(login_with_callback_url)
+      end
     end
 
     it 'DELETE lending_destroy_path redirects to login' do
