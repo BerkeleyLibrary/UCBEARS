@@ -8,6 +8,8 @@ class LendingItemPresenterBase
   delegate_missing_to :@view_context
 
   def initialize(view_context, item, show_viewer:)
+    raise ArgumentError, 'Item cannot be nil' unless item
+
     @view_context = view_context
     @item = item
     @show_viewer = show_viewer
