@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def render_with_errors(view, errors, log_message)
-    logger.error(log_message, nil, errors.full_messages)
+    logger.error(log_message, errors.full_messages)
     render_422(view, errors)
   end
 
