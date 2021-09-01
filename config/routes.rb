@@ -21,7 +21,8 @@ Rails.application.routes.draw do
 
   defaults format: 'html' do
     # TODO: don't include this in production
-    get '/profile', to: 'lending#profile', as: :lending_profile
+    get '/profile_index', to: 'lending#profile_index', as: :lending_profile_index
+    get '/profile_stats', to: 'lending#profile_stats', as: :lending_profile_stats
 
     get '/stats', to: 'lending#stats', as: :lending_stats
 

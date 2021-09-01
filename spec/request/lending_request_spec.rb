@@ -135,17 +135,18 @@ describe LendingController, type: :request do
         end
       end
 
-      describe :profile do
-        let(:profile_path) { 'public/profile.html' }
+      describe :profile_index do
+        let(:profile_file) { File.join('public', LendingController::PROFILE_INDEX_HTML) }
 
         it 'generates a profile' do
-          get lending_profile_path
-          expect(File.exist?(profile_path)).to eq(true)
+          get lending_profile_index_path
 
-          get '/profile.html'
+          expect(File.exist?(profile_file)).to eq(true)
+
+          get "/#{LendingController::PROFILE_INDEX_HTML}"
           expect(response).to be_successful
         ensure
-          FileUtils.rm_f(profile_path)
+          FileUtils.rm_f(profile_file)
         end
       end
 
@@ -153,6 +154,21 @@ describe LendingController, type: :request do
         it 'displays the stats' do
           get lending_stats_path
           expect(response).to be_successful
+        end
+      end
+
+      describe :profile_stats do
+        let(:profile_file) { File.join('public', LendingController::PROFILE_STATS_HTML) }
+
+        it 'generates a profile' do
+          get lending_profile_stats_path
+
+          expect(File.exist?(profile_file)).to eq(true)
+
+          get "/#{LendingController::PROFILE_STATS_HTML}"
+          expect(response).to be_successful
+        ensure
+          FileUtils.rm_f(profile_file)
         end
       end
 

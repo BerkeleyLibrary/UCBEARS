@@ -3,6 +3,12 @@
 class LendingController < ApplicationController
 
   # ------------------------------------------------------------
+  # Constants
+
+  PROFILE_INDEX_HTML = 'index-profile.html'.freeze
+  PROFILE_STATS_HTML = 'stats-profile.html'.freeze
+
+  # ------------------------------------------------------------
   # Helpers
 
   helper_method :lending_admin?, :manifest_url
@@ -11,8 +17,8 @@ class LendingController < ApplicationController
   # Hooks
 
   before_action(:authenticate!)
-  before_action(:require_lending_admin!, except: %i[index view manifest check_out return])
-  before_action(:ensure_lending_item!, except: %i[index profile stats new create])
+  before_action(:require_lending_admin!, except: %i[view manifest check_out return])
+  before_action(:ensure_lending_item!, except: %i[index stats profile_index profile_stats])
   before_action(:require_processed_item!, only: %i[view manifest])
   before_action(:use_patron_support_email!, only: %i[view manifest])
 
@@ -26,13 +32,13 @@ class LendingController < ApplicationController
   end
 
   # Index page, but generate a profile result
-  def profile
+  def profile_index
     RubyProf.start
     ensure_lending_items!
     render(:index)
   ensure
     result = RubyProf.stop
-    File.open(File.join(File.expand_path('../../public', __dir__), 'profile.html'), 'w') do |f|
+    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_INDEX_HTML), 'w') do |f|
       RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
     end
   end
@@ -45,6 +51,17 @@ class LendingController < ApplicationController
   # Stats
   def stats
     # TODO: load stats more efficiently
+  end
+
+  # Stats page, but generate a profile result
+  def profile_stats
+    RubyProf.start
+    render(:stats)
+  ensure
+    result = RubyProf.stop
+    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_STATS_HTML), 'w') do |f|
+      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
+    end
   end
 
   # Patron view
