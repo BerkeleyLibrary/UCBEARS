@@ -43,7 +43,7 @@ function showMetadataInOverlay (metadata) {
 }
 
 function addMetadataHandler (eventEmitter, windowObject) {
-  console.log('Adding Mirador transcript handler for window "' + windowObject.id + '"')
+  // console.log('Adding Mirador transcript handler for window "' + windowObject.id + '"')
   eventEmitter.subscribe('currentCanvasIDUpdated.' + windowObject.id, function (_) {
     const canvasId = windowObject.canvasID
     const canvasObj = windowObject.canvases[canvasId]

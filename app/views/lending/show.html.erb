@@ -18,6 +18,9 @@
   </table>
 
   <% if presenter.show_viewer? %>
+    <% content_for(:head_additional) do %>
+      <%= javascript_include_tag('mirador_extensions', 'data-turbolinks-track': 'reload') %>
+    <% end %>
     <%=
       render(
         partial: 'viewer',

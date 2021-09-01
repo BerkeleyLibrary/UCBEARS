@@ -1,14 +1,3 @@
-<%
-  # TODO: something less hacky
-  content_for(:head_additional) do
-    next unless @lending_item_loan&.active?
-
-    redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
-    redirect_url = lending_return_url(directory: @lending_item_loan.lending_item.directory)
-%>
-  <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
-<% end %>
-
 <% content_for(:page_title, "UC BEARS: #{@lending_item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
@@ -28,6 +17,18 @@
   </table>
 
   <% if presenter.show_viewer? %>
+    <%
+      # TODO: something less hacky
+      content_for(:head_additional) do
+        next unless @lending_item_loan&.active?
+
+        redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
+        redirect_url = lending_return_url(directory: @lending_item_loan.lending_item.directory)
+    %>
+      <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
+      <%= javascript_include_tag('mirador_extensions', 'data-turbolinks-track': 'reload') %>
+    <% end %>
+
     <%=
       render(
         partial: 'viewer',

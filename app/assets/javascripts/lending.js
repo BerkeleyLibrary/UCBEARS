@@ -1,1 +1,1 @@
-//= require shared/mirador
+// placeholder
