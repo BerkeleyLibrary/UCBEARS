@@ -59,7 +59,7 @@
       <tr>
         <th></th>
         <th class="action" style="padding-bottom: 2rem;"><%# TODO: something less awkward %>
-          <input type="submit" class="btn btn-primary" value="<%= submit_label %>">
+          <%= form.submit(submit_label, class: 'btn btn-primary', data: { disable_with: submit_label }) %>
         </th>
       </tr>
       <tr>
@@ -71,7 +71,9 @@
                 'Reload MARC metadata',
                 lending_reload_path(directory: item.directory),
                 class: 'btn btn-danger',
-                data: { confirm: 'Reloading MARC metadata will discard all changes made on this form.' }
+                data: {
+                  confirm: 'Reloading MARC metadata will discard all changes made on this form.'
+                }
               )
             %>
           <% else %>

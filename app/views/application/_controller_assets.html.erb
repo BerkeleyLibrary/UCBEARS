@@ -1,3 +1,3 @@
 <%# TODO: get rid of this and use Webpack dynamic imports %>
-<%= stylesheet_link_tag(controller_name, media: 'all', 'data-turbolinks-track': 'reload') if File.exist?("app/assets/stylesheets/#{controller_name}.scss") %>
-<%= javascript_include_tag(controller_name, 'data-turbolinks-track': 'reload') if File.exist?("app/assets/javascripts/#{controller_name}.js") %>
+<%= stylesheet_link_tag(controller_name, media: 'all') if File.exist?("app/assets/stylesheets/#{controller_name}.scss") %>
+<%= javascript_include_tag(controller_name) if File.exist?("app/assets/javascripts/#{controller_name}.js") %>

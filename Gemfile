@@ -27,7 +27,6 @@ gem 'puma', '~> 4.3', '>= 4.3.8'
 gem 'rails', '~> 6.0.3'
 gem 'ruby-prof', '~> 0.17.0' # TODO: move this back to dev/test
 gem 'ruby-vips', '~> 2.0'
-gem 'turbolinks', '~> 5'
 gem 'typesafe_enum', '~> 0.3'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier', '>= 1.3.0'
