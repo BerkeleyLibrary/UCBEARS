@@ -64,7 +64,7 @@ services:
         source: ./spec/data/lending/final
         target: /data
     ports:
-      - 8180:80
+      - 80:80
     networks:
       default:
         aliases:

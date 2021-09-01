@@ -261,6 +261,33 @@ describe LendingController, type: :system do
 
             expect(LendingItem.exists?(item.id)).to eq(false)
           end
+
+          it 'works for incomplete items that differ from complete items only by "file extension"' do
+            attributes = attributes_for(:complete_item).tap do |attrs|
+              attrs[:directory] = "#{attrs[:directory]}.orig"
+            end
+            item = LendingItem.create!(attributes)
+            expect(item.directory).to end_with('.orig') # just to be sure
+
+            visit index_path
+
+            item_section = find_item_section(item)
+
+            delete_path = lending_destroy_path(directory: item.directory)
+            expect(delete_path).to end_with(item.directory) # just to be sure
+
+            delete_path = lending_destroy_path(directory: item.directory)
+            delete_form = item_section.find(:xpath, ".//form[@action='#{delete_path}']")
+            delete_button = delete_form.find_button('Delete')
+
+            delete_button.click
+
+            alert = page.find('.alert-success')
+            expect(alert).to have_text('Item deleted.')
+
+            expect(page).not_to have_content(item.directory)
+            expect(LendingItem.exists?(item.id)).to eq(false)
+          end
         end
 
         it 'does not delete a complete item' do
