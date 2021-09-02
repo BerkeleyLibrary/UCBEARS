@@ -10,6 +10,9 @@
 # Build/test artifacts
 /artifacts/
 
+# Profiling results
+public/*profile*.html
+
 # From previous revision
 /config/master.key
 /node_modules

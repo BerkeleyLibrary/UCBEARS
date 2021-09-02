@@ -35,6 +35,7 @@ class LendingController < ApplicationController
   def profile_index
     RubyProf.start
     ensure_lending_items!
+    flash.now[:info] = "<a href=\"/#{PROFILE_INDEX_HTML}\">Profile generated.</a>"
     render(:index)
   ensure
     result = RubyProf.stop
@@ -56,6 +57,7 @@ class LendingController < ApplicationController
   # Stats page, but generate a profile result
   def profile_stats
     RubyProf.start
+    flash.now[:info] = "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>"
     render(:stats)
   ensure
     result = RubyProf.stop
