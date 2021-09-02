@@ -41,13 +41,19 @@ describe StatsPresenter do
     end
 
     describe :session_counts_by_type do
-      it 'counts by type' do
-        flag_accessors_by_type.each do |t, flag_accessor|
-          users_with_flag = users.select { |u| u.send(flag_accessor) }
-          expected_count = users_with_flag.inject(0) { |c, u| c + expected_counts_by_user[u] }
-          actual_count = sp.session_counts_by_type[t]
-          expect(actual_count).to eq(expected_count)
+      it 'counts by combination of user types' do
+        expected_counts_by_type = users.each_with_object({}) do |user, counts|
+          types = %i[student staff faculty admin].select do |type|
+            flag_accessor = flag_accessors_by_type[type]
+            user.send(flag_accessor)
+          end.map(&:to_s).sort
+          counts_for_types = (counts[types] ||= { total_sessions: 0, unique_users: 0 })
+          counts_for_types[:total_sessions] +=  expected_counts_by_user[user]
+          counts_for_types[:unique_users] += 1
         end
+
+        actual_counts_by_type = sp.session_counts_by_type
+        expect(actual_counts_by_type).to eq(expected_counts_by_type)
       end
     end
   end
@@ -145,7 +151,7 @@ describe StatsPresenter do
 
           items.each do |item|
             expected_checkouts = LendingItemLoan.where(lending_item_id: item.id).count
-            checkouts = checkouts_by_item[item.id]
+            checkouts = checkouts_by_item[item]
             expect(checkouts).to eq(expected_checkouts)
           end
         end
@@ -157,7 +163,7 @@ describe StatsPresenter do
 
           items.each do |item|
             expected_checkouts = LendingItemLoan.active.where(lending_item_id: item.id).count
-            checkouts = checkouts_by_item[item.id] || 0
+            checkouts = checkouts_by_item[item] || 0
             expect(checkouts).to eq(expected_checkouts)
           end
         end
