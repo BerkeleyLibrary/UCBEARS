@@ -10,122 +10,134 @@
 <section class="record">
   <table>
     <thead>
-      <tr>
-        <th>Sessions</th>
-      </tr>
+    <tr>
+      <th>Sessions</th>
+    </tr>
     </thead>
 
     <tbody>
-      <% presenter.session_counts_by_type.each do |type, sum_for_type| %>
-        <tr>
-          <th><%= type.to_s.capitalize %> users</th>
-          <td><%= sum_for_type %></td>
-        </tr>
-      <% end %>
+    <% presenter.session_counts_by_type.each do |types, counts| %>
       <tr>
-        <th>Total sessions</th>
+        <th><%= types.join(', ').capitalize %></th>
         <td>
-          <%= presenter.session_count_total %>
-          (<%= presenter.session_unique_users %> unique user(s))
+          <%
+            total_sessions = counts[:total_sessions]
+            unique_users = counts[:unique_users]
+          %>
+          <%= total_sessions %>
+          (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
         </td>
       </tr>
+    <% end %>
+    <tr>
+      <th>Total sessions</th>
+      <td>
+        <%
+          total_sessions = presenter.session_count_total
+          unique_users = presenter.session_unique_users
+        %>
+        <%= total_sessions %>
+        (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
+      </td>
+    </tr>
     </tbody>
     <tfoot>
-      <tr>
-        <td colspan="2">
-          <em>Note:</em> Some users may fall into multiple types (e.g.,
-          admin users are generally also staff).
-        </td>
-      </tr>
+    <tr>
+      <td colspan="2">
+        <em>Note:</em> Some users may fall into multiple types (e.g.,
+        admin users are generally also staff).
+      </td>
+    </tr>
     </tfoot>
   </table>
 
   <table>
     <thead>
-      <tr>
-        <th>Loans</th>
-      </tr>
+    <tr>
+      <th>Loans</th>
+    </tr>
     </thead>
 
     <tbody>
-      <tr>
-        <th>Active</th>
-        <td><%= presenter.loan_count_active %></td>
-      </tr>
-      <tr>
-        <th>Complete</th>
-        <td>
-          <% complete_count = presenter.loan_count_complete %>
-          <%= complete_count %>
-          <%
-            if complete_count > 0
-              expired_count = presenter.loan_count_expired
-              returned_count = complete_count - expired_count
-          %>
-            (<%= expired_count %> expired, <%= returned_count %> returned)
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <th>Median loan duration</th>
-        <td>
-          <% if (median_duration = presenter.loan_duration_median&.seconds) %>
-            <%= distance_of_time_in_words(median_duration) %>
-          <% else %>
-            N/A
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <th>Total</th>
-        <td><%= presenter.loan_count_total %></td>
-      </tr>
+    <tr>
+      <th>Active</th>
+      <td><%= presenter.loan_count_active %></td>
+    </tr>
+    <tr>
+      <th>Complete</th>
+      <td>
+        <% complete_count = presenter.loan_count_complete %>
+        <%= complete_count %>
+        <%
+          if complete_count > 0
+            expired_count = presenter.loan_count_expired
+            returned_count = complete_count - expired_count
+        %>
+          (<%= expired_count %> expired, <%= returned_count %> returned)
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>Median loan duration</th>
+      <td>
+        <% if (median_duration = presenter.loan_duration_median&.seconds) %>
+          <%= distance_of_time_in_words(median_duration) %>
+        <% else %>
+          N/A
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>Total</th>
+      <td><%= presenter.loan_count_total %></td>
+    </tr>
     </tbody>
   </table>
 
   <table>
     <thead>
-      <tr>
-        <th>Items</th>
-      </tr>
+    <tr>
+      <th>Items</th>
+    </tr>
     </thead>
 
     <tbody>
-      <% presenter.item_counts_by_state.each do |title, count| %>
-        <tr>
-          <th><%= title %></th>
-          <td><%= count %></td>
-        </tr>
-      <% end %>
-      <% total_checkouts_by_item = presenter.checkouts_by_item %>
-      <% unless total_checkouts_by_item.empty? %>
-        <tr>
-          <% active_checkouts_by_item = presenter.active_checkouts_by_item %>
-          <th>Loans by item</th>
-          <td style="padding-top: 0;">
-            <%# TODO: style this properly %>
-            <table style="margin-top: 0;">
-              <% total_checkouts_by_item.each do |item_id, checkouts| %>
-                <% next unless (item = LendingItem.find(item_id)) %>
-                <% item_presenter = LendingItemIndexPresenter.new(self, item) %>
-                <tr>
-                  <th style="padding-left: 0; font-weight: normal;">
-                    <%= checkouts %>
-                    (<%= active_checkouts_by_item[item_id] || 0 %> active)
-                  </th>
-                  <td>
-                    <%
-                      link_text = [:author, :title].map { |attr| item_presenter.send(attr) }.join(' ')
-                      link_href = lending_show_path(directory: item.directory)
-                    %>
-                    <%= link_to(link_text, link_href) %>
-                  </td>
-                </tr>
-              <% end %>
-            </table>
-          </td>
-        </tr>
-      <% end %>
+    <% presenter.item_counts_by_state.each do |title, count| %>
+      <tr>
+        <th><%= title %></th>
+        <td><%= count %></td>
+      </tr>
+    <% end %>
+    <% total_checkouts_by_item = presenter.checkouts_by_item %>
+    <% unless total_checkouts_by_item.empty? %>
+      <tr>
+        <% active_checkouts_by_item = presenter.active_checkouts_by_item %>
+        <th>Loans by item</th>
+        <td style="padding-top: 0;">
+          <%# TODO: style this properly %>
+          <table style="margin-top: 0;">
+            <% total_checkouts_by_item.each do |item, checkouts| %>
+              <% item_presenter = LendingItemIndexPresenter.new(self, item) %>
+              <tr>
+                <th style="padding-left: 0; font-weight: normal;">
+                  <%= checkouts %>
+                  (<%= active_checkouts_by_item[item] || 0 %> active)
+                </th>
+                <td>
+                  <%
+                    link_href = lending_show_path(directory: item.directory)
+                    title_and_author = [:author, :title].map { |attr| item_presenter.send(attr) }.join(' ')
+                  %>
+                  <%= link_to(item.record_id, link_href) %>
+                  <%= link_to(item.barcode, link_href) %>
+                  <%= link_to(title_and_author, link_href) %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    <% end %>
     </tbody>
   </table>
 

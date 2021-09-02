@@ -2,6 +2,21 @@
 class StatsPresenter
 
   # ------------------------------------------------------------
+  # Constants
+
+  SESSION_COUNTS_BY_TYPE_SQL = <<~SQL.freeze
+      SELECT student, staff, faculty, admin,
+             SUM(count) AS total_sessions,
+             count(DISTINCT uid) AS unique_users#{' '}
+        FROM session_counters
+       WHERE uid IS NOT NULL
+    GROUP BY (student, staff, faculty, admin)
+  SQL
+
+  LOAN_DURATIONS_SQL = 'EXTRACT(EPOCH from (return_date - loan_date))'.freeze
+  LOAN_DURATION_AVG_SQL = 'AVG(EXTRACT(EPOCH from (return_date - loan_date)))'.freeze
+
+  # ------------------------------------------------------------
   # Session stats
 
   def session_unique_users
@@ -13,10 +28,14 @@ class StatsPresenter
   end
 
   def session_counts_by_type
-    %i[admin staff faculty student].map do |type|
-      sum_for_type = SessionCounter.where(type => true).sum(:count)
-      [type, sum_for_type]
-    end.to_h
+    stmt = Arel.sql(SESSION_COUNTS_BY_TYPE_SQL)
+
+    ActiveRecord::Base.connection.execute(stmt).each_with_object({}) do |result, counts|
+      types = %w[student staff faculty admin].select { |t| result[t] }.sort
+      next if types.empty? # should never happen
+
+      counts[types] = { total_sessions: result['total_sessions'], unique_users: result['unique_users'] }
+    end
   end
 
   # ------------------------------------------------------------
@@ -39,7 +58,7 @@ class StatsPresenter
   end
 
   def loan_durations
-    expr = Arel.sql('EXTRACT(EPOCH from (return_date - loan_date))')
+    expr = Arel.sql(LOAN_DURATIONS_SQL)
     LendingItemLoan.complete.pluck(expr)
   end
 
@@ -52,7 +71,7 @@ class StatsPresenter
   end
 
   def loan_duration_avg
-    expr = Arel.sql('AVG(EXTRACT(EPOCH from (return_date - loan_date)))')
+    expr = Arel.sql(LOAN_DURATION_AVG_SQL)
     LendingItemLoan.complete.pluck(expr).first
   end
 
@@ -76,7 +95,7 @@ class StatsPresenter
     # TODO: something more efficient, w/nil handling
     LendingItemLoan
       .joins(:lending_item)
-      .group(:lending_item_id)
+      .group(:lending_item)
       .count(:lending_item_id)
       .sort_by { |_, ct| -ct }
       .to_h
@@ -87,7 +106,7 @@ class StatsPresenter
     LendingItemLoan
       .active
       .joins(:lending_item)
-      .group(:lending_item_id)
+      .group(:lending_item)
       .count(:lending_item_id)
       .sort_by { |_, ct| -ct }
       .to_h
