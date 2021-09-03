@@ -18,17 +18,17 @@
     <tbody>
 
     <% presenter.all_session_stats.each do |stats| %>
-    <tr>
-      <th><%= stats.types.join(', ').capitalize %></th>
-      <td>
-        <%
-          total_sessions = stats.total_sessions
-          unique_users = stats.unique_users
-        %>
-        <%= total_sessions %> <%= 'session'.pluralize(total_sessions) %>
-        (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
-      </td>
-    </tr>
+      <tr>
+        <th><%= stats.types.join('/') %></th>
+        <td>
+          <%
+            total_sessions = stats.total_sessions
+            unique_users = stats.unique_users
+          %>
+          <%= total_sessions %> <%= 'session'.pluralize(total_sessions) %>
+          (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
+        </td>
+      </tr>
     <% end %>
 
     <tr>
@@ -93,6 +93,7 @@
       <th>Median loan duration</th>
       <td>
         <% if (median_duration = presenter.loan_duration_median&.seconds) %>
+          <%# TODO: consider 'dotiw' gem for better display %>
           <%= distance_of_time_in_words(median_duration) %>
         <% else %>
           N/A
@@ -130,26 +131,24 @@
     </tr>
     </thead>
     <tbody>
-    <% presenter.loan_stats_by_date.each do |date, item_stats| %>
+    <% presenter.item_lending_stats_by_date.each do |date, item_stats_for_date| %>
       <tr>
         <th><%= l(date, format: :short) %></th>
         <td>
-          <%# TODO: something smarter %>
-          <% item_stats.reduce(nil) do |last_item_id, stats| %>
-            <% stats.id.tap do |current_item_id| %>
-              <% if current_item_id != last_item_id %>
-                <p>
-                  <%= stats.title %>
-                  <%= stats.author %>
-                  <%= stats.publisher %>
-                  <%= stats.physical_desc %>
-                </p>
-              <% end %>
-              <ul>
-                <li><%= stats.loan_status %></li>
-                <li><%= stats.loan_count %></li>
-              </ul>
-            <% end %>
+          <%# TODO: format this properly %>
+          <% item_stats_for_date.each do |item_stats| %>
+            <% item = item_stats.item %>
+            <% link_text = [:record_id, :barcode, :title].map { |attr| item.send(attr) }.join(' ') %>
+            <% link_href = lending_show_path(directory: item.directory) %>
+            <%= link_to(link_text, link_href) %>
+            <ul>
+              <%# TODO: style this properly %>
+              <li style="list-style-position: inside; list-style-type: square;">
+                <%= item_stats.loan_count_total %> checkouts
+                (<%= item_stats.loan_counts_by_state
+                     .map { |state, count| "#{count} #{state}" }.join(', ') %>)
+              </li>
+            </ul>
           <% end %>
         </td>
       </tr>

@@ -1,6 +1,11 @@
 class LendingItemLoan < ActiveRecord::Base
 
   # ------------------------------------------------------------
+  # Constants
+
+  LOAN_STATES = %i[pending active complete].freeze
+
+  # ------------------------------------------------------------
   # Scopes
 
   scope :overdue, -> { active.where('due_date < ?', Time.current.utc) }
@@ -14,7 +19,7 @@ class LendingItemLoan < ActiveRecord::Base
   # Attribute restrictions
 
   # TODO: just calculate this from dates
-  enum loan_status: { pending: 'pending', active: 'active', complete: 'complete' }
+  enum loan_status: LOAN_STATES.each_with_object({}) { |state, states| states[state] = state.to_s }
 
   # ------------------------------------------------------------
   # Validations
@@ -42,6 +47,13 @@ class LendingItemLoan < ActiveRecord::Base
     def return_overdue_loans!
       # TODO: do we even need the explicit return! with the after_find hook?
       overdue.find_each(&:return!)
+    end
+
+    # TODO: rename date columns to datetimes
+    def for_loan_date(date)
+      raise ArgumentError, "#{date.inspect} is not a date object" unless date.respond_to?(:to_date) && (date.to_date == date)
+
+      where('loan_date >= ? AND loan_date < ?', from_time, until_time)
     end
   end
 

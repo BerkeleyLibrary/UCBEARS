@@ -61,6 +61,7 @@ class SessionStats
   # ------------------------------------------------------------
   # Comparable
 
+  # rubocop:disable Metrics/AbcSize
   def <=>(other)
     return unless other.is_a?(SessionStats)
 
@@ -77,4 +78,5 @@ class SessionStats
 
     unique_users <=> other.unique_users
   end
+  # rubocop:enable Metrics/AbcSize
 end

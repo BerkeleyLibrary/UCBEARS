@@ -48,7 +48,7 @@ describe StatsPresenter do
             user.send(flag_accessor)
           end.map(&:to_s).sort
           counts_for_types = (counts[types] ||= { total_sessions: 0, unique_users: 0 })
-          counts_for_types[:total_sessions] +=  expected_counts_by_user[user]
+          counts_for_types[:total_sessions] += expected_counts_by_user[user]
           counts_for_types[:unique_users] += 1
         end
 
@@ -148,27 +148,45 @@ describe StatsPresenter do
     end
 
     context 'item stats' do
-      describe :checkouts_by_item do
-        it 'returns the expected checkouts for each item' do
-          checkouts_by_item = sp.checkouts_by_item
-          expect(checkouts_by_item.size).to eq(items.size)
-
-          items.each do |item|
-            expected_checkouts = LendingItemLoan.where(lending_item_id: item.id).count
-            checkouts = checkouts_by_item[item]
-            expect(checkouts).to eq(expected_checkouts)
+      describe :item_lending_stats_by_date do
+        it 'returns the loans for the correct date' do
+          sp.item_lending_stats_by_date.each do |date, stats_for_date|
+            stats_for_date.each do |item_stats|
+              item_stats.loans.map(&:loan_date).each do |loan_date|
+                expect(loan_date.to_date).to eq(date)
+              end
+            end
           end
         end
-      end
 
-      describe :active_checkouts_by_item do
-        it 'returns the expected checkouts for each item' do
-          checkouts_by_item = sp.active_checkouts_by_item
+        it 'returns the correct loans for each item' do
+          sp.item_lending_stats_by_date.each do |_, stats_for_date|
+            stats_for_date.each do |item_stats|
+              item = item_stats.item
+              item_stats.loans.each do |loan|
+                expect(loan.lending_item).to eq(item)
+              end
+            end
+          end
+        end
 
-          items.each do |item|
-            expected_checkouts = LendingItemLoan.active.where(lending_item_id: item.id).count
-            checkouts = checkouts_by_item[item] || 0
-            expect(checkouts).to eq(expected_checkouts)
+        it 'returns the expected counts' do
+          counts_by_state_by_item_id = {}
+          sp.item_lending_stats_by_date.each do |_, all_stats_for_date|
+            all_stats_for_date.each do |stats|
+              item_id = stats.item.id
+              counts_by_state = (counts_by_state_by_item_id[item_id] ||= {})
+              stats.loan_counts_by_state.each do |state, count|
+                counts_by_state[state] = counts_by_state.fetch(state, 0) + count
+              end
+            end
+          end
+
+          counts_by_state_by_item_id.each do |item_id, counts_by_state|
+            counts_by_state.each do |state, count|
+              expected_count = LendingItemLoan.where(lending_item_id: item_id, loan_status: state).count
+              expect(count).to eq(expected_count)
+            end
           end
         end
       end

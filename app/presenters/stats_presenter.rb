@@ -104,16 +104,9 @@ class StatsPresenter
     end.to_h
   end
 
-  def loan_stats_by_date
-    # TODO: single query w/cursor?
-    LendingItemLoan.distinct.order('date(loan_date) desc').pluck('date(loan_date)').lazy.map { |d| [d, loan_stats_for_date(d)] }
-  end
-
-  def loan_stats_for_date(loan_date)
-    # TODO: prepared statements instead of sanitize_sql?
-    stmt = ActiveRecord::Base.sanitize_sql([LOAN_STATS_SQL, loan_date])
-    # TODO: consider using postgresql_cursor gem
-    #       see https://github.com/afair/postgresql_cursor
-    ActiveRecord::Base.connection.execute(stmt).lazy.map { |row| OpenStruct.new(row) }
+  def item_lending_stats_by_date
+    ItemLendingStats.each_by_date.map do |date, stats|
+      [date, stats.sort]
+    end
   end
 end
