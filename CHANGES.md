@@ -1,3 +1,9 @@
+# 1.1.1 (next)
+
+- improves stats display
+- limits stats page checkout information to last 7 days
+- adds CSV downloads for all loans or for loans by date
+
 # 1.1.0 (2021-08-31)
 
 - Item directory names are now validated to ensure they don't start or end with
