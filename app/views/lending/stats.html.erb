@@ -16,21 +16,23 @@
     </thead>
 
     <tbody>
-    <% presenter.session_counts_by_type.each do |types, counts| %>
-      <tr>
-        <th><%= types.join(', ').capitalize %></th>
-        <td>
-          <%
-            total_sessions = counts[:total_sessions]
-            unique_users = counts[:unique_users]
-          %>
-          <%= total_sessions %>
-          (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
-        </td>
-      </tr>
-    <% end %>
+
+    <% presenter.all_session_stats.each do |stats| %>
     <tr>
-      <th>Total sessions</th>
+      <th><%= stats.types.join(', ').capitalize %></th>
+      <td>
+        <%
+          total_sessions = stats.total_sessions
+          unique_users = stats.unique_users
+        %>
+        <%= total_sessions %> <%= 'session'.pluralize(total_sessions) %>
+        (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
+      </td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <th>Total</th>
       <td>
         <%
           total_sessions = presenter.session_count_total
@@ -40,11 +42,13 @@
         (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
       </td>
     </tr>
+
     </tbody>
+
     <tfoot>
     <tr>
-      <td colspan="2">
-        <strong>Notes:</strong>
+      <th>Notesgit</th>
+      <td>
         <ul>
           <%# TODO: style this properly %>
           <li style="list-style-position: inside; list-style-type: square;">"Faculty" represents all academic

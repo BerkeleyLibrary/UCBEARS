@@ -6,15 +6,6 @@ class StatsPresenter
   # ------------------------------------------------------------
   # Constants
 
-  SESSION_COUNTS_BY_TYPE_SQL = <<~SQL.freeze
-      SELECT student, staff, faculty, admin,
-             SUM(count) AS total_sessions,
-             count(DISTINCT uid) AS unique_users#{' '}
-        FROM session_counters
-       WHERE uid IS NOT NULL
-    GROUP BY (student, staff, faculty, admin)
-  SQL
-
   LOAN_STATS_SQL = <<~SQL.freeze
       SELECT lending_items.id,
              lending_items.directory,
@@ -48,22 +39,16 @@ class StatsPresenter
   # Session stats
 
   def session_unique_users
-    SessionCounter.count('DISTINCT uid') # TODO: what's the ActiveRecord syntax for this?
+    # TODO: do we care if UIDs occur multiple times with different flags?
+    all_session_stats.reduce(0) { |total, stat| total + stat.unique_users }
   end
 
   def session_count_total
-    SessionCounter.sum(:count)
+    all_session_stats.reduce(0) { |total, stat| total + stat.total_sessions }
   end
 
-  def session_counts_by_type
-    stmt = Arel.sql(SESSION_COUNTS_BY_TYPE_SQL)
-
-    ActiveRecord::Base.connection.execute(stmt).each_with_object({}) do |result, counts|
-      types = %w[student staff faculty admin].select { |t| result[t] }.sort
-      next if types.empty? # should never happen
-
-      counts[types] = { total_sessions: result['total_sessions'], unique_users: result['unique_users'] }
-    end
+  def all_session_stats
+    @session_stats ||= SessionStats.all.to_a.sort
   end
 
   # ------------------------------------------------------------

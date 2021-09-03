@@ -40,7 +40,7 @@ describe StatsPresenter do
       end
     end
 
-    describe :session_counts_by_type do
+    describe :all_session_stats do
       it 'counts by combination of user types' do
         expected_counts_by_type = users.each_with_object({}) do |user, counts|
           types = %i[student staff faculty admin].select do |type|
@@ -52,8 +52,12 @@ describe StatsPresenter do
           counts_for_types[:unique_users] += 1
         end
 
-        actual_counts_by_type = sp.session_counts_by_type
-        expect(actual_counts_by_type).to eq(expected_counts_by_type)
+        expected_stats = expected_counts_by_type.map do |types, counts|
+          SessionStats.new(types, counts[:total_sessions], counts[:unique_users])
+        end.sort
+
+        actual_stats = sp.all_session_stats
+        expect(actual_stats).to eq(expected_stats)
       end
     end
   end
