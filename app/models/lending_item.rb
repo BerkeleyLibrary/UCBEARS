@@ -8,6 +8,7 @@ class LendingItem < ActiveRecord::Base
   # Relations
 
   has_many :lending_item_loans, dependent: :destroy
+  has_many :active_lending_item_loans, -> { where(loan_status: 'active') }, class_name: LendingItemLoan.to_s
 
   # ------------------------------------------------------------
   # Callbacks

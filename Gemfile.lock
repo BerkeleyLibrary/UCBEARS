@@ -85,9 +85,10 @@ GEM
     autoprefixer-rails (10.3.1.0)
       execjs (~> 2)
     awesome_print (1.9.2)
-    berkeley_library-logging (0.2.1)
+    berkeley_library-logging (0.2.3)
       activesupport (~> 6.0)
       amazing_print (~> 1.1)
+      colorize (~> 0.8.1)
       lograge (~> 0.11)
       ougai (~> 1.8)
     berkeley_library-marc (0.2.0)
@@ -222,10 +223,10 @@ GEM
     net-ssh (6.1.0)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.12.3)
+    nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    oj (3.13.2)
+    oj (3.13.3)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -396,7 +397,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print (>= 1.8.0)
-  berkeley_library-logging (~> 0.2, >= 0.2.1)
+  berkeley_library-logging (~> 0.2, >= 0.2.3)
   berkeley_library-marc (~> 0.2)
   berkeley_library-tind (~> 0.4)
   bootstrap

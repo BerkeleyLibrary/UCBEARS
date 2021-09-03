@@ -47,8 +47,12 @@
         <strong>Notes:</strong>
         <ul>
           <%# TODO: style this properly %>
-          <li style="list-style-position: inside; list-style-type: square;">"Faculty" represents all academic appointees, including librarians.</li>
-          <li style="list-style-position: inside; list-style-type: square;">Some users fall into multiple types (e.g., admin users are generally also staff or faculty).</li>
+          <li style="list-style-position: inside; list-style-type: square;">"Faculty" represents all academic
+            appointees, including librarians.
+          </li>
+          <li style="list-style-position: inside; list-style-type: square;">Some users fall into multiple types (e.g.,
+            admin users are generally also staff or faculty).
+          </li>
         </ul>
       </td>
     </tr>
@@ -112,33 +116,37 @@
         <td><%= count %></td>
       </tr>
     <% end %>
-    <% total_checkouts_by_item = presenter.checkouts_by_item %>
-    <% unless total_checkouts_by_item.empty? %>
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Checkouts by date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% presenter.loan_stats_by_date.each do |date, item_stats| %>
       <tr>
-        <% active_checkouts_by_item = presenter.active_checkouts_by_item %>
-        <th>Loans by item</th>
-        <td style="padding-top: 0;">
-          <%# TODO: style this properly %>
-          <table style="margin-top: 0;">
-            <% total_checkouts_by_item.each do |item, checkouts| %>
-              <% item_presenter = LendingItemIndexPresenter.new(self, item) %>
-              <tr>
-                <th style="padding-left: 0; font-weight: normal;">
-                  <%= checkouts %>
-                  (<%= active_checkouts_by_item[item] || 0 %> active)
-                </th>
-                <td>
-                  <%
-                    link_href = lending_show_path(directory: item.directory)
-                    title_and_author = [:author, :title].map { |attr| item_presenter.send(attr) }.join(' ')
-                  %>
-                  <%= link_to(item.record_id, link_href) %>
-                  <%= link_to(item.barcode, link_href) %>
-                  <%= link_to(title_and_author, link_href) %>
-                </td>
-              </tr>
+        <th><%= l(date, format: :short) %></th>
+        <td>
+          <%# TODO: something smarter %>
+          <% item_stats.reduce(nil) do |last_item_id, stats| %>
+            <% stats.id.tap do |current_item_id| %>
+              <% if current_item_id != last_item_id %>
+                <p>
+                  <%= stats.title %>
+                  <%= stats.author %>
+                  <%= stats.publisher %>
+                  <%= stats.physical_desc %>
+                </p>
+              <% end %>
+              <ul>
+                <li><%= stats.loan_status %></li>
+                <li><%= stats.loan_count %></li>
+              </ul>
             <% end %>
-          </table>
+          <% end %>
         </td>
       </tr>
     <% end %>

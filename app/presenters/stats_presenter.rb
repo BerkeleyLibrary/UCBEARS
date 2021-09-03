@@ -1,3 +1,5 @@
+require 'ostruct'
+
 # TODO: Rewrite as helper methods? or as a model?
 class StatsPresenter
 
@@ -11,6 +13,32 @@ class StatsPresenter
         FROM session_counters
        WHERE uid IS NOT NULL
     GROUP BY (student, staff, faculty, admin)
+  SQL
+
+  LOAN_STATS_SQL = <<~SQL.freeze
+      SELECT lending_items.id,
+             lending_items.directory,
+             lending_items.title,
+             lending_items.author,
+             lending_items.publisher,
+             lending_items.physical_desc,
+             loan_counts.loan_status,
+             loan_counts.loan_count,
+             loan_counts.loan_date
+        FROM lending_items,
+             (
+                 SELECT loan_status,
+                        COUNT(id) AS loan_count,
+                        DATE(loan_date) AS loan_date,
+                        lending_item_id
+                   FROM lending_item_loans
+                  WHERE DATE(loan_date) = ?
+               GROUP BY DATE(loan_date), loan_status, lending_item_id
+             ) AS loan_counts
+       WHERE (loan_counts.lending_item_id = lending_items.id)
+    ORDER BY lending_items.title,
+             loan_counts.loan_status,
+             loan_counts.loan_count
   SQL
 
   LOAN_DURATIONS_SQL = 'EXTRACT(EPOCH from (return_date - loan_date))'.freeze
@@ -91,24 +119,16 @@ class StatsPresenter
     end.to_h
   end
 
-  def checkouts_by_item
-    # TODO: something more efficient, w/nil handling
-    LendingItemLoan
-      .joins(:lending_item)
-      .group(:lending_item)
-      .count(:lending_item_id)
-      .sort_by { |_, ct| -ct }
-      .to_h
+  def loan_stats_by_date
+    # TODO: single query w/cursor?
+    LendingItemLoan.distinct.order('date(loan_date) desc').pluck('date(loan_date)').lazy.map { |d| [d, loan_stats_for_date(d)] }
   end
 
-  def active_checkouts_by_item
-    # TODO: something more efficient, w/nil handling
-    LendingItemLoan
-      .active
-      .joins(:lending_item)
-      .group(:lending_item)
-      .count(:lending_item_id)
-      .sort_by { |_, ct| -ct }
-      .to_h
+  def loan_stats_for_date(loan_date)
+    # TODO: prepared statements instead of sanitize_sql?
+    stmt = ActiveRecord::Base.sanitize_sql([LOAN_STATS_SQL, loan_date])
+    # TODO: consider using postgresql_cursor gem
+    #       see https://github.com/afair/postgresql_cursor
+    ActiveRecord::Base.connection.execute(stmt).lazy.map { |row| OpenStruct.new(row) }
   end
 end
