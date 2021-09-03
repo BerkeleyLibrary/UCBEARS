@@ -72,6 +72,28 @@ class ApplicationController < ActionController::Base
     reset_session
   end
 
+  def lending_admin?
+    current_user.lending_admin?
+  end
+
+  def require_lending_admin!
+    authenticate!
+    return if lending_admin?
+
+    raise Error::ForbiddenError, 'This page is restricted to UC BEARS administrators.'
+  end
+
+  def eligible_patron?
+    current_user.ucb_student? || current_user.ucb_faculty? || current_user.ucb_staff?
+  end
+
+  def require_eligible_patron!
+    authenticate!
+    return if eligible_patron?
+
+    raise Error::ForbiddenError, 'This page is restricted to active UC Berkeley faculty, staff, and students.'
+  end
+
   # TODO: make this less awkward
   def use_patron_support_email!
     @support_email = SUPPORT_EMAIL_PATRON

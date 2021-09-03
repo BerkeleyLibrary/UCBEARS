@@ -49,11 +49,13 @@ class LendingController < ApplicationController
   # Admin view
   def show; end
 
+  # TODO: move this to StatsController
   # Stats
   def stats
     # TODO: load stats more efficiently
   end
 
+  # TODO: move this to StatsController
   # Stats page, but generate a profile result
   def profile_stats
     RubyProf.start
@@ -198,14 +200,6 @@ class LendingController < ApplicationController
     current_user.borrower_id
   end
 
-  def lending_admin?
-    current_user.lending_admin?
-  end
-
-  def eligible_patron?
-    current_user.ucb_student? || current_user.ucb_faculty? || current_user.ucb_staff?
-  end
-
   def existing_loan
     @existing_loan ||= active_loan || most_recent_loan
   end
@@ -264,20 +258,6 @@ class LendingController < ApplicationController
     item = ensure_lending_item!
 
     raise ActiveRecord::RecordNotFound, item.reason_incomplete unless item.complete?
-  end
-
-  def require_lending_admin!
-    authenticate!
-    return if lending_admin?
-
-    raise Error::ForbiddenError, 'This page is restricted to UC BEARS administrators.'
-  end
-
-  def require_eligible_patron!
-    authenticate!
-    return if eligible_patron?
-
-    raise Error::ForbiddenError, 'This page is restricted to active UC Berkeley faculty, staff, and students.'
   end
 
   def require_active_loan!

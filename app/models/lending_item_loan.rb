@@ -8,6 +8,8 @@ class LendingItemLoan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Scopes
 
+  # TODO: rename date columns to datetimes
+
   scope :overdue, -> { active.where('due_date < ?', Time.current.utc) }
 
   # ------------------------------------------------------------
@@ -47,13 +49,6 @@ class LendingItemLoan < ActiveRecord::Base
     def return_overdue_loans!
       # TODO: do we even need the explicit return! with the after_find hook?
       overdue.find_each(&:return!)
-    end
-
-    # TODO: rename date columns to datetimes
-    def for_loan_date(date)
-      raise ArgumentError, "#{date.inspect} is not a date object" unless date.respond_to?(:to_date) && (date.to_date == date)
-
-      where('loan_date >= ? AND loan_date < ?', from_time, until_time)
     end
   end
 

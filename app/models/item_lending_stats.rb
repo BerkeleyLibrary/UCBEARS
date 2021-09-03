@@ -11,6 +11,10 @@ class ItemLendingStats
     ORDER BY 1 DESC
   SQL
 
+  CSV_LOAN_COLS = %i[loan_date due_date return_date loan_status].freeze
+  CSV_ITEM_COLS = %i[record_id barcode title author publisher physical_desc].freeze
+  CSV_HEADERS = (CSV_LOAN_COLS + CSV_ITEM_COLS).map { |attr| attr.to_s.titleize }
+
   # ------------------------------------------------------------
   # Accessors
 
@@ -34,6 +38,12 @@ class ItemLendingStats
         .exec_query(stmt, STMT_NAME_ALL_LOAN_DATES)
         .rows
         .map { |row| Date.parse(row[0]) }
+    end
+
+    def all(&block)
+      return to_enum(:all) unless block_given?
+
+      each_by_date.map { |_, stats_for_date| stats_for_date.each(&block) }
     end
 
     def each_by_date
@@ -86,6 +96,20 @@ class ItemLendingStats
   end
 
   # ------------------------------------------------------------
+  # Export
+
+  def to_csv(out = nil)
+    return StringIO.new.tap { |o| to_csv(o) }.string unless out
+
+    loans.each do |loan|
+      loan_cols = CSV_LOAN_COLS.map { |attr| loan.send(attr) }
+      item_cols = CSV_ITEM_COLS.map { |attr| item.send(attr) }
+      csv_line = CSV.generate_line(loan_cols + item_cols, encoding: 'UTF-8')
+      out << csv_line
+    end
+  end
+
+  # ------------------------------------------------------------
   # Comparable
 
   def <=>(other)
@@ -95,10 +119,12 @@ class ItemLendingStats
     order = other.loans.count <=> loans.count
     return order if order != 0
 
-    order = item.title <=> other.item.title
-    return order if order != 0
-
-    item.directory <=> other.item.directory
+    0.tap do
+      ItemLendingStats::CSV_ITEM_COLS.filter_map do |attr|
+        attr_order = item.send(attr) <=> other.item.send(attr)
+        return attr_order if attr_order != 0
+      end
+    end
   end
   # ------------------------------------------------------------
   # Private methods

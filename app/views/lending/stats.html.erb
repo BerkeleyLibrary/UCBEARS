@@ -47,7 +47,7 @@
 
     <tfoot>
     <tr>
-      <th>Notesgit</th>
+      <th>Notes</th>
       <td>
         <ul>
           <%# TODO: style this properly %>
@@ -127,11 +127,46 @@
   <table>
     <thead>
     <tr>
-      <th>Checkouts by date</th>
+      <th>Download item lending stats by date</th>
     </tr>
     </thead>
     <tbody>
+    <tr>
+      <td>
+        <ul>
+          <li>
+            <%= link_to('Download all stats', stats_lending_path) %> (CSV)
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <% ItemLendingStats.all_loan_dates.each do |date| %>
+            <li>
+              <% iso_date = date.iso8601 %>
+              <%= link_to("Download stats for #{iso_date}", stats_lending_path(date: iso_date)) %>
+              (CSV)
+            </li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Recent checkouts</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%# TODO: move cutoff functionality to ItemLendingStats %>
+    <% cutoff_date = Date.current - 7.days %>
     <% presenter.item_lending_stats_by_date.each do |date, item_stats_for_date| %>
+      <% break if date < cutoff_date %>
       <tr>
         <th><%= l(date, format: :short) %></th>
         <td>

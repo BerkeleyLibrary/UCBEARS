@@ -39,4 +39,7 @@ Rails.application.routes.draw do
     get '/:directory/reload', to: 'lending#reload', as: :lending_reload, constraints: { directory: %r{[^/]+} }
   end
 
+  defaults format: 'csv' do
+    get '/stats/lending(/:date)', to: 'stats#lending', as: :stats_lending
+  end
 end
