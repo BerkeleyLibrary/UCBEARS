@@ -10,37 +10,39 @@ RSpec.describe 'Stats', type: :request do
     end
   end
 
-  attr_reader :users, :items, :loans, :completed_loans, :expired_loans
+  attr_reader :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans
 
   let(:user_types) { %i[staff faculty student lending_admin] }
 
   before(:each) do
     @users = user_types.map { |t| mock_user_without_login(t) }
 
+    # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec
+    copies_per_item = 2 * users.size
+
     @items = %i[active_item complete_item].map do |f|
-      create(f).tap do |item|
-        item.update!(copies: 2 * users.size, active: true)
-      end
+      create(f, copies: copies_per_item, active: true)
     end
 
-    @loans = users.each_with_object([]) do |user, ll|
-      items[0].check_out_to(user).tap do |loan|
-        loan.return!
-        ll << loan
-      end
-      items[1].check_out_to(user).tap { |loan| ll << loan }
+    @returned_loans = []
+
+    @loans = []
+    users.each do |user|
+      loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+      loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+      loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
     end
+
+    @returned_loans = loans.select(&:return_date)
+    expect(returned_loans).not_to be_empty # just to be sure
+
+    @expired_loans = loans.select(&:expired?)
+    expect(expired_loans).not_to be_empty # just to be sure
 
     @completed_loans = loans.select(&:complete?)
-    @expired_loans = completed_loans.each_with_object([]).with_index do |(ln, exp), i|
-      next if i.even?
+    expect(completed_loans).not_to be_empty # just to be sure
 
-      due_date = ln.loan_date - i.days
-      loan_date = due_date - LendingItem::LOAN_DURATION_SECONDS.seconds
-      return_date = due_date + 1.seconds
-      ln.update!(loan_date: loan_date, due_date: due_date, return_date: return_date)
-      exp << ln
-    end
+    expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
   end
 
   context 'with lending admin credentials' do

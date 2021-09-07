@@ -1,14 +1,44 @@
+# rubocop:disable Metrics/ClassLength
 class ItemLendingStats
   include Comparable
 
   # ------------------------------------------------------------
   # Constants
 
-  STMT_NAME_ALL_LOAN_DATES = 'loan_dates'.freeze
-  ALL_LOAN_DATES_SQL = <<~SQL.freeze
+  SELECT_ALL_LOAN_DATES_STMT = 'SELECT_ALL_LOAN_DATES'.freeze
+  SELECT_ALL_LOAN_DATES = <<~SQL.freeze
       SELECT DISTINCT DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE ?)
         FROM lending_item_loans
     ORDER BY 1 DESC
+  SQL
+
+  SELECT_ALL_LOAN_DURATIONS = <<~SQL.freeze
+    SELECT return_date - loan_date AS loan_duration
+      FROM lending_item_loans AS returned_loans
+     WHERE return_date IS NOT NULL
+
+    UNION ALL
+
+    SELECT due_date - loan_date AS loan_duration
+      FROM lending_item_loans AS expired_loans
+     WHERE return_date IS NULL
+       AND (due_date AT TIME ZONE 'UTC')
+           <= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+  SQL
+
+  SELECT_MEAN_LOAN_DURATION_STMT = 'SELECT_MEAN_LOAN_DURATION'.freeze
+  SELECT_MEAN_LOAN_DURATION = <<~SQL.freeze
+    SELECT AVG(EXTRACT(EPOCH FROM loan_duration)) AS mean_loan_duration
+      FROM (#{SELECT_ALL_LOAN_DURATIONS}) AS loan_durations
+  SQL
+
+  SELECT_MEDIAN_LOAN_DURATION_STMT = 'SELECT_MEDIAN_LOAN_DURATION'.freeze
+  SELECT_MEDIAN_LOAN_DURATION = <<~SQL.freeze
+    SELECT EXTRACT(EPOCH
+                    FROM (PERCENTILE_CONT(0.5)
+                         WITHIN GROUP (ORDER BY loan_duration))
+                  ) AS median_loan_duration
+      FROM (#{SELECT_ALL_LOAN_DURATIONS}) AS loan_durations
   SQL
 
   CSV_LOAN_COLS = %i[loan_date due_date return_date loan_status].freeze
@@ -25,21 +55,13 @@ class ItemLendingStats
 
   def initialize(item, loans)
     @item = item
-    @loans = loans.is_a?(Array) ? loans : loans.to_a
+    @loans = loans
   end
 
   # ------------------------------------------------------------
   # Class methods
 
   class << self
-    def all_loan_dates
-      stmt = ActiveRecord::Base.sanitize_sql([ALL_LOAN_DATES_SQL, Time.zone.name])
-      ActiveRecord::Base.connection
-        .exec_query(stmt, STMT_NAME_ALL_LOAN_DATES)
-        .rows
-        .map { |row| Date.parse(row[0]) }
-    end
-
     def all(&block)
       return to_enum(:all) unless block_given?
 
@@ -56,22 +78,39 @@ class ItemLendingStats
       raise ArgumentError, "#{date.inspect} is not a date object" unless date.respond_to?(:to_date) && (date.to_date == date)
       return to_enum(:each_for_date, date) unless block_given?
 
-      lending_items_with_loans_on(date)
-        .find_each { |item| yield new(item, item.lending_item_loans) }
-    end
-
-    private
-
-    def lending_items_with_loans_on(date)
       LendingItem
         .includes(:lending_item_loans)
         .joins(:lending_item_loans) # INNER JOIN
-        .where(
-          'lending_item_loans.loan_date >= ? AND lending_item_loans.loan_date < ?',
-          date.to_time,
-          (date + 1.days).to_time
-        )
+        .merge(LendingItemLoan.loaned_on(date))
+        .find_each do |item|
+        # TODO: get scoped eager loading working properly so we don't have to pass the scope twice
+        # yield new(item, item.lending_item_loans)
+        yield new(item, item.lending_item_loans.loaned_on(date))
+      end
     end
+
+    def all_loan_dates
+      stmt = ActiveRecord::Base.sanitize_sql([SELECT_ALL_LOAN_DATES, Time.zone.name])
+      ActiveRecord::Base.connection
+        .exec_query(stmt, SELECT_ALL_LOAN_DATES_STMT, prepare: true)
+        .rows
+        .map { |row| Date.parse(row[0]) }
+    end
+
+    def median_loan_duration
+      stmt = Arel.sql(SELECT_MEDIAN_LOAN_DURATION)
+      ActiveRecord::Base.connection
+        .exec_query(stmt, SELECT_MEDIAN_LOAN_DURATION_STMT, prepare: true)
+        .first['median_loan_duration']
+    end
+
+    def mean_loan_duration
+      stmt = Arel.sql(SELECT_MEAN_LOAN_DURATION)
+      ActiveRecord::Base.connection
+        .exec_query(stmt, SELECT_MEAN_LOAN_DURATION_STMT, prepare: true)
+        .first['mean_loan_duration']
+    end
+
   end
 
   # ------------------------------------------------------------
@@ -87,11 +126,11 @@ class ItemLendingStats
     loans_for_status.size
   end
 
-  def loan_counts_by_state
-    @loan_counts_by_state ||= LendingItemLoan::LOAN_STATES.each_with_object({}) do |state, counts|
-      next if (count = loan_count_by_status(state)) == 0
+  def loan_counts_by_status
+    @loan_counts_by_status ||= LendingItemLoan::LOAN_STATUS_SCOPES.each_with_object({}) do |scope, counts|
+      next if (count = loan_count_by_status(scope)) == 0
 
-      counts[state] = count
+      counts[scope] = count
     end
   end
 
@@ -126,6 +165,7 @@ class ItemLendingStats
       end
     end
   end
+
   # ------------------------------------------------------------
   # Private methods
 
@@ -133,7 +173,8 @@ class ItemLendingStats
 
   def loans_by_status
     @loans_by_status ||= {}.with_indifferent_access.tap do |lbs|
-      loans.each { |loan| (lbs[loan.loan_status] ||= []) << loan }
+      LendingItemLoan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.send(scope) }
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

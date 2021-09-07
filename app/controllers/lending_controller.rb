@@ -189,7 +189,7 @@ class LendingController < ApplicationController
 
   def populate_view_flash
     flash.now[:danger] ||= []
-    flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.auto_returned? # TODO: something less awkward
+    flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.expired? # TODO: something less awkward
     flash.now[:danger] << reason_unavailable unless available?
   end
 
@@ -267,7 +267,6 @@ class LendingController < ApplicationController
   end
 
   def ensure_lending_items!
-    LendingItemLoan.return_overdue_loans!
     LendingItem.scan_for_new_items!
   end
 

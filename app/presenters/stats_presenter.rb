@@ -4,38 +4,6 @@ require 'ostruct'
 class StatsPresenter
 
   # ------------------------------------------------------------
-  # Constants
-
-  LOAN_STATS_SQL = <<~SQL.freeze
-      SELECT lending_items.id,
-             lending_items.directory,
-             lending_items.title,
-             lending_items.author,
-             lending_items.publisher,
-             lending_items.physical_desc,
-             loan_counts.loan_status,
-             loan_counts.loan_count,
-             loan_counts.loan_date
-        FROM lending_items,
-             (
-                 SELECT loan_status,
-                        COUNT(id) AS loan_count,
-                        DATE(loan_date) AS loan_date,
-                        lending_item_id
-                   FROM lending_item_loans
-                  WHERE DATE(loan_date) = ?
-               GROUP BY DATE(loan_date), loan_status, lending_item_id
-             ) AS loan_counts
-       WHERE (loan_counts.lending_item_id = lending_items.id)
-    ORDER BY lending_items.title,
-             loan_counts.loan_status,
-             loan_counts.loan_count
-  SQL
-
-  LOAN_DURATIONS_SQL = 'EXTRACT(EPOCH from (return_date - loan_date))'.freeze
-  LOAN_DURATION_AVG_SQL = 'AVG(EXTRACT(EPOCH from (return_date - loan_date)))'.freeze
-
-  # ------------------------------------------------------------
   # Session stats
 
   def session_unique_users
@@ -67,25 +35,19 @@ class StatsPresenter
   end
 
   def loan_count_expired
-    LendingItemLoan.complete.where('return_date >= due_date').count
+    LendingItemLoan.expired.count
   end
 
-  def loan_durations
-    expr = Arel.sql(LOAN_DURATIONS_SQL)
-    LendingItemLoan.complete.pluck(expr)
+  def loan_count_returned
+    LendingItemLoan.returned.count
   end
 
   def loan_duration_median
-    sorted = loan_durations.sort
-    return if sorted.empty?
-
-    len = sorted.length
-    (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+    ItemLendingStats.median_loan_duration
   end
 
   def loan_duration_avg
-    expr = Arel.sql(LOAN_DURATION_AVG_SQL)
-    LendingItemLoan.complete.pluck(expr).first
+    ItemLendingStats.mean_loan_duration
   end
 
   # ------------------------------------------------------------
@@ -93,15 +55,13 @@ class StatsPresenter
 
   def item_counts_by_state
     # TODO: use Rails i18n
-    state_to_title = {
+    {
       inactive: 'New or inactive items',
       active: 'Active items',
       incomplete: 'Incomplete items'
-    }
-    # TODO: don't load all items just to do this
-    state_to_title.map do |state, state_title|
-      [state_title, LendingItem.send(state).count]
-    end.to_h
+    }.each_with_object({}) do |(scope, title), counts|
+      counts[title] = LendingItem.send(scope).count
+    end
   end
 
   def item_lending_stats_by_date

@@ -55,8 +55,12 @@ module Lending
       end
 
       def new_token_for(uid)
-        borrower_id = SecureRandom.uuid
+        borrower_id = next_borrower_id
         new(uid, borrower_id, encode(uid, borrower_id))
+      end
+
+      def next_borrower_id
+        SecureRandom.uuid
       end
 
       def encode(uid, borrower_id)

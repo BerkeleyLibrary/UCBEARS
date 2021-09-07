@@ -10,47 +10,66 @@ describe ItemLendingStats do
     end
   end
 
-  attr_reader :users, :items, :loans, :completed_loans, :expired_loans
+  attr_reader :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans
 
   let(:user_types) { %i[staff faculty student lending_admin] }
 
-  before(:each) do
-    @users = user_types.map { |t| mock_user_without_login(t) }
-
-    @items = %i[active_item complete_item].map do |f|
-      create(f).tap do |item|
-        item.update!(copies: 2 * users.size, active: true)
+  context 'without loans' do
+    describe :all do
+      it 'is empty' do
+        all_stats = ItemLendingStats.all
+        expect(all_stats.any?).to eq(false)
       end
     end
 
-    @loans = users.each_with_object([]) do |user, ll|
-      items[0].check_out_to(user).tap do |loan|
-        loan.return!
-        ll << loan
+    describe :median_loan_date do
+      it 'returns nil' do
+        expect(ItemLendingStats.median_loan_duration).to be_nil
       end
-      items[1].check_out_to(user).tap { |loan| ll << loan }
-    end
-
-    @completed_loans = loans.select(&:complete?)
-    @expired_loans = completed_loans.each_with_object([]).with_index do |(ln, exp), i|
-      next if i.even?
-
-      due_date = ln.loan_date
-      loan_date = due_date - LendingItem::LOAN_DURATION_SECONDS.seconds
-      return_date = due_date + 1.seconds
-      ln.update!(loan_date: loan_date, due_date: due_date, return_date: return_date)
-      exp << ln
     end
   end
 
-  describe :to_csv do
-    it 'returns a CSV' do
-      ItemLendingStats.all.each do |stats|
-        stats_csv = stats.to_csv
-        expect(stats_csv).to be_a(String)
+  context 'with loans' do
+    before(:each) do
+      @users = user_types.map { |t| mock_user_without_login(t) }
 
-        rows = CSV.parse(stats_csv)
-        expect(rows.size).to eq(stats.loan_count_total)
+      # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec
+      copies_per_item = 2 * users.size
+
+      @items = %i[active_item complete_item].map do |f|
+        create(f, copies: copies_per_item, active: true)
+      end
+
+      @returned_loans = []
+
+      @loans = []
+      users.each do |user|
+        loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
+      end
+
+      @returned_loans = loans.select(&:return_date)
+      expect(returned_loans).not_to be_empty # just to be sure
+
+      @expired_loans = loans.select(&:expired?)
+      expect(expired_loans).not_to be_empty # just to be sure
+
+      @completed_loans = loans.select(&:complete?)
+      expect(completed_loans).not_to be_empty # just to be sure
+
+      expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
+    end
+
+    describe :to_csv do
+      it 'returns a CSV' do
+        ItemLendingStats.all.each do |stats|
+          stats_csv = stats.to_csv
+          expect(stats_csv).to be_a(String)
+
+          rows = CSV.parse(stats_csv)
+          expect(rows.size).to eq(stats.loan_count_total)
+        end
       end
     end
   end

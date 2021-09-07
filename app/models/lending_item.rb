@@ -8,12 +8,6 @@ class LendingItem < ActiveRecord::Base
   # Relations
 
   has_many :lending_item_loans, dependent: :destroy
-  has_many :active_lending_item_loans, -> { where(loan_status: 'active') }, class_name: LendingItemLoan.to_s
-
-  # ------------------------------------------------------------
-  # Callbacks
-
-  after_update :return_loans_if_inactive
 
   # ------------------------------------------------------------
   # Validations
@@ -29,10 +23,7 @@ class LendingItem < ActiveRecord::Base
   # ------------------------------------------------------------
   # Callbacks
 
-  after_find do |item|
-    # TODO: do we even need the explicit return! with the after_find hook?
-    item.lending_item_loans.active.where('return_date >= due_date').find_each(&:return!)
-  end
+  after_update :return_loans_if_inactive
 
   # ------------------------------------------------------------
   # Constants
@@ -131,8 +122,7 @@ class LendingItem < ActiveRecord::Base
 
     LendingItemLoan.create(
       lending_item_id: id,
-      patron_identifier: patron_identifier,
-      loan_status: :active,
+      patron_identifier: patron_identifier, # TODO: rename to borrower_id
       loan_date: loan_date,
       due_date: due_date
     )
@@ -239,7 +229,7 @@ class LendingItem < ActiveRecord::Base
 
   def copies_available
     total_copies = copies || 0 # TODO: make this non-nullable
-    (total_copies - lending_item_loans.where(loan_status: :active).count)
+    (total_copies - lending_item_loans.active.count)
   end
 
   def due_dates

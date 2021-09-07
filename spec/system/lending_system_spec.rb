@@ -538,7 +538,6 @@ describe LendingController, type: :system do
           loan = LendingItemLoan.create(
             lending_item_id: item.id,
             patron_identifier: user.borrower_id,
-            loan_status: :active,
             loan_date: loan_date,
             due_date: due_date
           )

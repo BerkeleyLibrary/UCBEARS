@@ -180,7 +180,7 @@
               <%# TODO: style this properly %>
               <li style="list-style-position: inside; list-style-type: square;">
                 <%= item_stats.loan_count_total %> checkouts
-                (<%= item_stats.loan_counts_by_state
+                (<%= item_stats.loan_counts_by_status
                      .map { |state, count| "#{count} #{state}" }.join(', ') %>)
               </li>
             </ul>

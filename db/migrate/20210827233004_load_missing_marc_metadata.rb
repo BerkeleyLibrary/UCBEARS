@@ -1,5 +1,5 @@
 # Ensure migration can run without error even if we delete/rename the models
-class LendingItemLoan < ActiveRecord::Base; end unless defined?(LendingItem)
+class LendingItem < ActiveRecord::Base; end unless defined?(LendingItem)
 
 class LoadMissingMarcMetadata < ActiveRecord::Migration[6.0]
   def change

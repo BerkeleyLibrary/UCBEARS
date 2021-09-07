@@ -106,7 +106,7 @@ describe LendingController, type: :request do
           end
         end
 
-        it 'auto-expires overdue loans' do
+        it 'treats expired loans as complete' do
           active.each do |items|
             expect(items.lending_item_loans).to be_empty
           end
@@ -525,7 +525,6 @@ describe LendingController, type: :request do
 
           body = response.body
 
-          # TODO: format all dates
           due_date_str = item.next_due_date.to_s(:short)
           expect(body).to include(due_date_str)
 
@@ -539,7 +538,6 @@ describe LendingController, type: :request do
           loan = LendingItemLoan.create(
             lending_item_id: item.id,
             patron_identifier: user.borrower_id,
-            loan_status: :active,
             loan_date: loan_date,
             due_date: due_date
           )
@@ -554,13 +552,8 @@ describe LendingController, type: :request do
 
           loan.reload
           expect(loan).to be_complete
-          expect(loan.return_date).to be_within(1.minute).of Time.current
 
           body = response.body
-
-          # TODO: format all dates
-          return_date_str = loan.return_date.to_s(:short)
-          expect(body).to include(return_date_str)
 
           expect(body).to include('Check out')
           expect(body).not_to include('Return now')
@@ -586,7 +579,6 @@ describe LendingController, type: :request do
 
           body = response.body
 
-          # TODO: format all dates
           return_date_str = loan.return_date.to_s(:short)
           expect(body).to include(return_date_str)
 
@@ -610,7 +602,6 @@ describe LendingController, type: :request do
           expect(body).not_to include('Return now')
           expect(body).to include(LendingItem::MSG_UNAVAILABLE)
 
-          # TODO: format all dates
           due_date_str = item.next_due_date.to_s(:long)
           expect(body).to include(due_date_str)
         end

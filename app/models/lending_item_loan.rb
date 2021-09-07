@@ -3,25 +3,31 @@ class LendingItemLoan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Constants
 
-  LOAN_STATES = %i[pending active complete].freeze
+  LOAN_STATUS_SCOPES = %i[pending active complete expired].freeze
 
   # ------------------------------------------------------------
   # Scopes
 
   # TODO: rename date columns to datetimes
 
-  scope :overdue, -> { active.where('due_date < ?', Time.current.utc) }
+  scope :pending, -> { where(loan_date: nil) }
+  scope :active, -> { where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc) }
+  scope :complete, -> { where('due_date <= ? OR return_date IS NOT NULL', Time.current.utc) }
+  scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
+  scope :returned, -> { where('return_date IS NOT NULL') }
+
+  scope :loaned_on, ->(date) do
+    raise ArgumentError unless date.to_date == date # we only want dates, not timestamps
+
+    from_time = date.to_date.to_time
+    until_time = from_time + 1.days
+    where('lending_item_loans.loan_date >= ? AND lending_item_loans.loan_date < ?', from_time, until_time)
+  end
 
   # ------------------------------------------------------------
   # Relations
 
   belongs_to :lending_item
-
-  # ------------------------------------------------------------
-  # Attribute restrictions
-
-  # TODO: just calculate this from dates
-  enum loan_status: LOAN_STATES.each_with_object({}) { |state, states| states[state] = state.to_s }
 
   # ------------------------------------------------------------
   # Validations
@@ -33,61 +39,51 @@ class LendingItemLoan < ActiveRecord::Base
   validate :item_active
 
   # ------------------------------------------------------------
-  # Callbacks
-
-  after_find { |loan| loan.return! if loan.expired? || loan.lending_item.copies == 0 }
-
-  # ------------------------------------------------------------
-  # Class methods
-
-  class << self
-    def overdue
-      # TODO: make this a real scope
-      active.where('return_date >= due_date')
-    end
-
-    def return_overdue_loans!
-      # TODO: do we even need the explicit return! with the after_find hook?
-      overdue.find_each(&:return!)
-    end
-  end
-
-  # ------------------------------------------------------------
   # Instance methods
 
   def return!
-    return if complete?
+    return if return_date.present?
 
-    self.loan_status = :complete
-    self.return_date = Time.now.utc
-
-    # no_duplicate_checkouts validation can cause a SystemStackError
-    # when return! is triggered from after_find
-    save(validate: false)
+    update!(return_date: Time.current.utc)
   end
 
-  # TODO: this should probably be "due?" or "overdue?"
+  # ------------------------------------------------------------
+  # Synthetic accessors
+
+  def pending?
+    loan_date.nil?
+  end
+
+  def active?
+    return_date.nil? && !loan_term_expired? && loan_date.present?
+  end
+
+  def complete?
+    return_date.present? || loan_term_expired?
+  end
+
   def expired?
-    seconds_remaining <= 0
+    return_date.nil? && loan_term_expired?
+  end
+
+  def loan_status
+    LOAN_STATUS_SCOPES.find { |scope| send("#{scope}?") }
   end
 
   def ok_to_check_out?
-    lending_item.available? && !(active? || duplicate_checkout || checkout_limit_reached)
+    # TODO: clean this up
+    lending_item.available? && !(active? || already_checked_out? || checkout_limit_reached)
   end
 
   def seconds_remaining
     due_date ? due_date.utc - Time.current.utc : 0
   end
 
-  # TODO: this should probably be "expired?"
-  def auto_returned?
-    expired? && return_date >= due_date
-  end
-
   def duration
     return unless complete?
 
-    return_date - loan_date
+    end_date = return_date || due_date
+    end_date - loan_date
   end
 
   # ------------------------------------------------------------
@@ -96,7 +92,7 @@ class LendingItemLoan < ActiveRecord::Base
   def patron_can_check_out
     return if complete?
 
-    errors.add(:base, LendingItem::MSG_CHECKED_OUT) if duplicate_checkout
+    errors.add(:base, LendingItem::MSG_CHECKED_OUT) if already_checked_out?
     errors.add(:base, LendingItem::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached
   end
 
@@ -109,6 +105,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def item_active
+    return if complete?
     return if lending_item.active?
 
     errors.add(:base, LendingItem::MSG_INACTIVE)
@@ -116,26 +113,19 @@ class LendingItemLoan < ActiveRecord::Base
 
   private
 
+  def loan_term_expired?
+    due_date && due_date <= Time.current.utc
+  end
+
   def checkout_limit_reached
+    other_checkouts = LendingItemLoan.active.where('lending_item_id != ? AND patron_identifier = ?', lending_item_id, patron_identifier)
     other_checkouts.count >= LendingItem::MAX_CHECKOUTS_PER_PATRON
   end
 
-  def other_checkouts
-    conditions = <<~SQL
-      patron_identifier = ? AND
-      due_date > ? AND
-      return_date IS NULL AND
-      lending_item_id <> ?
-    SQL
-    LendingItemLoan.where(conditions, patron_identifier, Time.current.utc, lending_item_id)
-  end
-
-  def duplicate_checkout
-    dup = LendingItemLoan.find_by(
-      lending_item_id: lending_item_id,
-      patron_identifier: patron_identifier,
-      loan_status: 'active'
-    )
-    dup && dup.id != id
+  def already_checked_out?
+    LendingItemLoan.active
+      .where(lending_item_id: lending_item_id, patron_identifier: patron_identifier)
+      .where.not(id: id)
+      .exists?
   end
 end

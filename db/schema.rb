@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_02_180731) do
+ActiveRecord::Schema.define(version: 2021_09_07_193406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,14 +18,11 @@ ActiveRecord::Schema.define(version: 2021_09_02_180731) do
   create_table "lending_item_loans", force: :cascade do |t|
     t.bigint "lending_item_id", null: false
     t.string "patron_identifier"
-    t.string "loan_status", default: "pending"
     t.datetime "loan_date"
     t.datetime "due_date"
     t.datetime "return_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["lending_item_id", "loan_status"], name: "lending_item_loan_status"
-    t.index ["lending_item_id", "patron_identifier"], name: "lending_item_loan_uniqueness", unique: true, where: "((loan_status)::text = 'active'::text)"
     t.index ["lending_item_id"], name: "index_lending_item_loans_on_lending_item_id"
     t.index ["patron_identifier"], name: "index_lending_item_loans_on_patron_identifier"
   end

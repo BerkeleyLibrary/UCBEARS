@@ -72,33 +72,35 @@ describe StatsPresenter do
       end
     end
 
-    attr_reader :items, :loans, :completed_loans, :expired_loans
+    attr_reader :items, :loans, :completed_loans, :expired_loans, :returned_loans
 
     before(:each) do
+      # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec
+      copies_per_item = 2 * users.size
+
       @items = %i[active_item complete_item].map do |f|
-        create(f).tap do |item|
-          item.update!(copies: 2 * users.size, active: true)
-        end
+        create(f, copies: copies_per_item, active: true)
       end
 
-      @loans = users.each_with_object([]) do |user, ll|
-        items[0].check_out_to(user).tap do |loan|
-          loan.return!
-          ll << loan
-        end
-        items[1].check_out_to(user).tap { |loan| ll << loan }
+      @returned_loans = []
+
+      @loans = []
+      users.each do |user|
+        loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
       end
+
+      @returned_loans = loans.select(&:return_date)
+      expect(returned_loans).not_to be_empty # just to be sure
+
+      @expired_loans = loans.select(&:expired?)
+      expect(expired_loans).not_to be_empty # just to be sure
 
       @completed_loans = loans.select(&:complete?)
-      @expired_loans = completed_loans.each_with_object([]).with_index do |(ln, exp), i|
-        next if i.even?
+      expect(completed_loans).not_to be_empty # just to be sure
 
-        due_date = ln.loan_date
-        loan_date = due_date - LendingItem::LOAN_DURATION_SECONDS.seconds
-        return_date = due_date + 1.seconds
-        ln.update!(loan_date: loan_date, due_date: due_date, return_date: return_date)
-        exp << ln
-      end
+      expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
     end
 
     context 'loan stats' do
@@ -111,19 +113,25 @@ describe StatsPresenter do
 
       describe :loan_count_active do
         it 'returns the number of active loans' do
-          expect(sp.loan_count_active).to eq(loans.size / 2)
+          expect(sp.loan_count_active).to eq(loans.select(&:active?).size)
         end
       end
 
       describe :loan_count_complete do
         it 'returns the number of completed loans' do
-          expect(sp.loan_count_complete).to eq(loans.size / 2)
+          expect(sp.loan_count_complete).to eq(loans.select(&:complete?).size)
         end
       end
 
       describe :loan_count_expired do
         it 'returns the number of expired loans' do
           expect(sp.loan_count_expired).to eq(expired_loans.size)
+        end
+      end
+
+      describe :loan_count_returned do
+        it 'returns the number of returned loans' do
+          expect(sp.loan_count_returned).to eq(returned_loans.size)
         end
       end
 
@@ -171,21 +179,13 @@ describe StatsPresenter do
         end
 
         it 'returns the expected counts' do
-          counts_by_state_by_item_id = {}
-          sp.item_lending_stats_by_date.each do |_, all_stats_for_date|
+          sp.item_lending_stats_by_date.each do |date, all_stats_for_date|
             all_stats_for_date.each do |stats|
-              item_id = stats.item.id
-              counts_by_state = (counts_by_state_by_item_id[item_id] ||= {})
-              stats.loan_counts_by_state.each do |state, count|
-                counts_by_state[state] = counts_by_state.fetch(state, 0) + count
+              item = stats.item
+              stats.loan_counts_by_status.each do |status, count|
+                expected_count = item.lending_item_loans.send(status).loaned_on(date).count
+                expect(count).to eq(expected_count)
               end
-            end
-          end
-
-          counts_by_state_by_item_id.each do |item_id, counts_by_state|
-            counts_by_state.each do |state, count|
-              expected_count = LendingItemLoan.where(lending_item_id: item_id, loan_status: state).count
-              expect(count).to eq(expected_count)
             end
           end
         end
