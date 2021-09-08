@@ -5,9 +5,16 @@ class ItemLendingStats
   # ------------------------------------------------------------
   # Constants
 
-  SELECT_ALL_LOAN_DATES_STMT = 'SELECT_ALL_LOAN_DATES'.freeze
-  SELECT_ALL_LOAN_DATES = <<~SQL.freeze
+  SELECT_DISTINCT_LOAN_DATES_STMT = 'SELECT_DISTINCT_LOAN_DATES'.freeze
+  SELECT_DISTINCT_LOAN_DATES = <<~SQL.freeze
       SELECT DISTINCT DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE ?)
+        FROM lending_item_loans
+    ORDER BY 1 DESC
+  SQL
+
+  SELECT_LOAN_DATES_BY_ID_STMT = 'SELECT_LOAN_DATES_BY_ID'.freeze
+  SELECT_LOAN_DATES_BY_ID = <<~SQL.freeze
+      SELECT id, DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE ?)
         FROM lending_item_loans
     ORDER BY 1 DESC
   SQL
@@ -90,11 +97,20 @@ class ItemLendingStats
     end
 
     def all_loan_dates
-      stmt = ActiveRecord::Base.sanitize_sql([SELECT_ALL_LOAN_DATES, Time.zone.name])
+      stmt = ActiveRecord::Base.sanitize_sql([SELECT_DISTINCT_LOAN_DATES, Time.zone.name])
       ActiveRecord::Base.connection
-        .exec_query(stmt, SELECT_ALL_LOAN_DATES_STMT, prepare: true)
+        .exec_query(stmt, SELECT_DISTINCT_LOAN_DATES_STMT, prepare: true)
         .rows
         .map { |row| Date.parse(row[0]) }
+    end
+
+    # for debugging
+    def all_loan_dates_by_id
+      stmt = ActiveRecord::Base.sanitize_sql([SELECT_LOAN_DATES_BY_ID, Time.zone.name])
+      ActiveRecord::Base.connection
+        .exec_query(stmt, SELECT_LOAN_DATES_BY_ID_STMT, prepare: true)
+        .rows
+        .map { |row| [row[0], Date.parse(row[1])] }
     end
 
     def median_loan_duration
