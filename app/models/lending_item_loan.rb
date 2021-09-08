@@ -58,12 +58,16 @@ class LendingItemLoan < ActiveRecord::Base
     return_date.nil? && !loan_term_expired? && loan_date.present?
   end
 
-  def complete?
-    return_date.present? || loan_term_expired?
+  def returned?
+    return_date.present?
   end
 
   def expired?
     return_date.nil? && loan_term_expired?
+  end
+
+  def complete?
+    return_date.present? || loan_term_expired?
   end
 
   def loan_status
