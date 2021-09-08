@@ -139,6 +139,9 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
+    dotiw (5.3.1)
+      activesupport
+      i18n
     erubi (1.10.0)
     execjs (2.8.1)
     factory_bot (6.2.0)
@@ -409,6 +412,7 @@ DEPENDENCIES
   concurrent-ruby (~> 1.1)
   database_cleaner-active_record (~> 2.0)
   dotenv (~> 2.7)
+  dotiw
   factory_bot_rails
   iiif-presentation (~> 1.0)
   jbuilder (~> 2.5)

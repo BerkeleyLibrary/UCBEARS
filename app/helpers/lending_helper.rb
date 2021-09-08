@@ -4,6 +4,7 @@ module LendingHelper
   end
 
   def format_value(value)
+    return format_duration(value) if value.is_a?(ActiveSupport::Duration)
     return format_values(value) if value.respond_to?(:map)
     return format_date(value) if value.respond_to?(:strftime)
 

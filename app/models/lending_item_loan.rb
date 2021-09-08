@@ -3,7 +3,7 @@ class LendingItemLoan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Constants
 
-  LOAN_STATUS_SCOPES = %i[pending active complete expired].freeze
+  LOAN_STATUS_SCOPES = %i[pending active returned expired complete].freeze
 
   # ------------------------------------------------------------
   # Scopes

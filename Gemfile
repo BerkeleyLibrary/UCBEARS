@@ -9,6 +9,7 @@ gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.3'
 gem 'berkeley_library-marc', '~> 0.2'
 gem 'berkeley_library-tind', '~> 0.4' # TODO: extract BerkeleyLibrary::Util::URIs into separate gem
 gem 'bootstrap'
+gem 'dotiw'
 gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'

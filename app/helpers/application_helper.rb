@@ -1,3 +1,5 @@
+require 'dotiw'
+
 module ApplicationHelper
   def alerts
     content_tag(:div, class: 'alerts mt-4') do
@@ -28,5 +30,13 @@ module ApplicationHelper
 
   def page_title
     return content_for :page_title if content_for?(:page_title)
+  end
+
+  def format_duration(duration, value_for_nil: nil)
+    return value_for_nil unless duration
+    raise ArgumentError, "Not a duration: #{duration.inspect}" unless duration.respond_to?(:seconds)
+    return format_duration(duration.seconds) unless duration.is_a?(ActiveSupport::Duration)
+
+    distance_of_time_in_words(duration, 0, { only: %i[hours minutes], two_words_connector: ', ' })
   end
 end

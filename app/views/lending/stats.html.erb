@@ -92,12 +92,7 @@
     <tr>
       <th>Median loan duration</th>
       <td>
-        <% if (median_duration = presenter.loan_duration_median&.seconds) %>
-          <%# TODO: consider 'dotiw' gem for better display %>
-          <%= distance_of_time_in_words(median_duration) %>
-        <% else %>
-          N/A
-        <% end %>
+        <%= format_duration(presenter.loan_duration_median, value_for_nil: 'N/A') %>
       </td>
     </tr>
     <tr>
