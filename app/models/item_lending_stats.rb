@@ -48,9 +48,13 @@ class ItemLendingStats
       FROM (#{SELECT_ALL_LOAN_DURATIONS}) AS loan_durations
   SQL
 
-  CSV_LOAN_COLS = %i[loan_date due_date return_date loan_status].freeze
+  CSV_LOAN_COLS = %i[loan_date due_date return_date duration loan_status].freeze
   CSV_ITEM_COLS = %i[record_id barcode title author publisher physical_desc].freeze
-  CSV_HEADERS = (CSV_LOAN_COLS + CSV_ITEM_COLS).map { |attr| attr.to_s.titleize }
+
+  # TODO: use I18n
+  CSV_HEADERS = (CSV_LOAN_COLS + CSV_ITEM_COLS).map do |attr|
+    attr == :duration ? 'Duration (seconds)' : attr.to_s.titleize
+  end
 
   # ------------------------------------------------------------
   # Accessors

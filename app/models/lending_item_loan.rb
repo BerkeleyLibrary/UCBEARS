@@ -86,8 +86,7 @@ class LendingItemLoan < ActiveRecord::Base
   def duration
     return unless complete?
 
-    end_date = return_date || due_date
-    end_date - loan_date
+    (return_date || due_date) - loan_date
   end
 
   # ------------------------------------------------------------
