@@ -1,6 +1,23 @@
 require 'rails_helper'
 
 describe ItemLendingStats do
+  let(:select_loan_date) { 'select loan_date from lending_item_loans where id = ?' }
+
+  def tz_debug_info
+    db_tz_info = ActiveRecord::Base
+      .connection
+      .exec_query("SELECT CURRENT_TIME, CURRENT_SETTING('TIMEZONE') AS timezone")
+      .first
+    {
+      db_current_time: db_tz_info['current_time'],
+      db_timezone: db_tz_info['timezone'],
+      system_time_now: Time.now,
+      system_timezone: Time.now.zone,
+      rails_time_current: Time.current,
+      rails: Time.zone
+    }.map { |k, v| "#{k}: #{v}" }.join(', ')
+  end
+
   def date_failure_msg(actual_date, expected_date, id)
     stmt = ActiveRecord::Base.sanitize_sql([select_loan_date, id])
     {
@@ -41,8 +58,6 @@ describe ItemLendingStats do
   end
 
   context 'with loans' do
-    let(:select_loan_date) { 'select loan_date from lending_item_loans where id = ?' }
-
     attr_reader :loans_by_date
 
     before(:each) do
@@ -111,14 +126,7 @@ describe ItemLendingStats do
             expect(actual_date).to eq(expected_date), -> { "Wrong date: #{date_failure_msg(actual_date, expected_date, id)}" }
           end
 
-          if failure_count > 0
-            tzs = {
-              db: ActiveRecord::Base.connection.exec_query("select current_setting('TIMEZONE') as tz").first['tz'],
-              system: Time.now.zone,
-              rails: Time.zone
-            }.map { |tz_type, tz_value| "#{tz_type}: #{tz_value}" }.join(', ')
-            RSpec::Expectations.fail_with("#{failure_count} loans returned incorrect dates; time zones were: #{tzs}")
-          end
+          RSpec::Expectations.fail_with("#{failure_count} loans returned incorrect dates (#{tz_debug_info})") if failure_count > 0
         end
       end
     end
@@ -139,14 +147,7 @@ describe ItemLendingStats do
             end
           end
 
-          if failure_count > 0
-            tzs = {
-              db: ActiveRecord::Base.connection.exec_query("select current_setting('TIMEZONE') as tz").first['tz'],
-              system: Time.now.zone,
-              rails: Time.zone
-            }.map { |tz_type, tz_value| "#{tz_type}: #{tz_value}" }.join(', ')
-            RSpec::Expectations.fail_with("#{failure_count} loans in incorrect group; time zones were: #{tzs}")
-          end
+          RSpec::Expectations.fail_with("#{failure_count} loans in incorrect group (#{tz_debug_info})") if failure_count > 0
         end
       end
     end
