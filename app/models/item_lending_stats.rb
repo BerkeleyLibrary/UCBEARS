@@ -7,7 +7,7 @@ class ItemLendingStats
 
   SELECT_DISTINCT_LOAN_DATES_STMT = 'SELECT_DISTINCT_LOAN_DATES'.freeze
   SELECT_DISTINCT_LOAN_DATES = <<~SQL.freeze
-      SELECT DISTINCT DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE ?)
+      SELECT DISTINCT DATE(DATE_TRUNC('day', loan_date, :tz))
         FROM lending_item_loans
     ORDER BY 1 DESC
   SQL
@@ -16,9 +16,7 @@ class ItemLendingStats
   SELECT_LOAN_DATES_BY_ID = <<~SQL.freeze
       SELECT id,
              loan_date,
-             (loan_date AT TIME ZONE 'UTC') AS utc,
-             ((loan_date AT TIME ZONE 'UTC') AT TIME ZONE :tz) AS utc_tz_local,
-             DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE :tz) AS date_utc_tz_local,
+             DATE(DATE_TRUNC('day', loan_date, :tz)) AS loan_date_local,
              :tz AS tz
         FROM lending_item_loans
     ORDER BY loan_date DESC
@@ -106,7 +104,7 @@ class ItemLendingStats
     end
 
     def all_loan_dates
-      stmt = ActiveRecord::Base.sanitize_sql([SELECT_DISTINCT_LOAN_DATES, Time.zone.name])
+      stmt = ActiveRecord::Base.sanitize_sql([SELECT_DISTINCT_LOAN_DATES, { tz: Time.zone.name }])
       ActiveRecord::Base.connection
         .exec_query(stmt, SELECT_DISTINCT_LOAN_DATES_STMT, prepare: true)
         .rows

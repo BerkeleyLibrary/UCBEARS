@@ -121,7 +121,7 @@ describe ItemLendingStats do
           failure_count = 0
           ItemLendingStats.all_loan_dates_by_id.each do |result|
             id = result['id']
-            actual_date = Date.parse(result['date_utc_tz_local'])
+            actual_date = Date.parse(result['loan_date_local'])
             expected_date = loans_by_date[id]
 
             failure_count += 1 if actual_date != expected_date
