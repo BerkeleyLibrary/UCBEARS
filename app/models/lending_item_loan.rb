@@ -3,7 +3,7 @@ class LendingItemLoan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Constants
 
-  LOAN_STATUS_SCOPES = %i[pending active returned expired complete].freeze
+  LOAN_STATUS_SCOPES = %i[pending active returned expired].freeze
 
   # ------------------------------------------------------------
   # Scopes
@@ -12,9 +12,9 @@ class LendingItemLoan < ActiveRecord::Base
 
   scope :pending, -> { where(loan_date: nil) }
   scope :active, -> { where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc) }
-  scope :complete, -> { where('due_date <= ? OR return_date IS NOT NULL', Time.current.utc) }
-  scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
   scope :returned, -> { where('return_date IS NOT NULL') }
+  scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
+  scope :complete, -> { where('due_date <= ? OR return_date IS NOT NULL', Time.current.utc) }
 
   scope :loaned_on, ->(date) do
     from_time = Time.zone.local(date.year, date.month, date.day)
