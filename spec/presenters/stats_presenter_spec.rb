@@ -104,58 +104,6 @@ describe StatsPresenter do
     end
 
     context 'loan stats' do
-      describe :all_loan_dates do
-        let(:select_loan_date) { 'select loan_date from lending_item_loans where id = ?' }
-
-        attr_reader :loans_by_date
-
-        before(:each) do
-          @loans_by_date = {}
-          LendingItemLoan.pluck(:id, :loan_date).each do |id, loan_date|
-            loans_by_date[id] = loan_date.to_date
-          end
-        end
-
-        it 'returns correct dates based on time zone' do
-          expected_loan_dates = loans_by_date.values.sort.uniq.reverse
-          all_loan_dates = ItemLendingStats.all_loan_dates
-
-          expect(all_loan_dates).to eq(expected_loan_dates)
-        end
-
-        it 'returns the correct date for each loan' do
-          aggregate_failures 'all_loan_dates_by_id' do
-            failure_count = 0
-            ItemLendingStats.all_loan_dates_by_id.each do |id, actual_date|
-              expected_date = loans_by_date[id]
-
-              msg = -> do
-                stmt = ActiveRecord::Base.sanitize_sql([select_loan_date, id])
-                {
-                  id: id,
-                  expected: expected_date,
-                  actual: actual_date,
-                  rails: LendingItemLoan.find(id).loan_date,
-                  db: ActiveRecord::Base.connection.exec_query(stmt).first['loan_date']
-                }.map { |k, v| "#{k}: #{v}" }.join('; ')
-              end
-
-              failure_count += 1 if actual_date != expected_date
-              expect(actual_date).to eq(expected_date), msg
-            end
-
-            if failure_count > 0
-              tzs = {
-                db: ActiveRecord::Base.connection.exec_query("select current_setting('TIMEZONE') as tz").first['tz'],
-                system: Time.now.zone,
-                rails: Time.zone
-              }.map { |tz_type, tz_value| "#{tz_type}: #{tz_value}" }.join(', ')
-              RSpec::Expectations.fail_with("#{failure_count} loans returned incorrect dates; time zones were: #{tzs}")
-            end
-          end
-        end
-      end
-
       describe :loan_count_total do
         it 'returns the total number of loans made' do
           expect(sp.loan_count_total).to eq(loans.size)
