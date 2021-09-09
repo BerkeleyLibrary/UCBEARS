@@ -1,8 +1,11 @@
-# 1.1.1 (next)
+# 1.2.0 (2021-09-09)
 
 - improves stats display
 - limits stats page checkout information to last 7 days
 - adds CSV downloads for all loans or for loans by date
+- properly distinguishes expired loans from returned loans
+- replaces explicit loan status in database with status calculated from
+  loan date, due date, and return date
 
 # 1.1.0 (2021-08-31)
 
