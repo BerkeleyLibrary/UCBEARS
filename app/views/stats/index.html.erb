@@ -130,7 +130,7 @@
       <td>
         <ul>
           <li>
-            <%= link_to('Download all stats', stats_lending_path) %> (CSV)
+            <%= link_to('Download all stats', stats_download_path) %> (CSV)
           </li>
         </ul>
       </td>
@@ -141,7 +141,7 @@
           <% ItemLendingStats.all_loan_dates.each do |date| %>
             <li>
               <% iso_date = date.iso8601 %>
-              <%= link_to("Download stats for #{iso_date}", stats_lending_path(date: iso_date)) %>
+              <%= link_to("Download stats for #{iso_date}", stats_download_path(date: iso_date)) %>
               (CSV)
             </li>
           <% end %>

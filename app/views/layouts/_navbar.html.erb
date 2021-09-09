@@ -12,7 +12,7 @@
     <ul class="navbar-nav" style="margin-left: auto;">
       <% if current_user.lending_admin? %>
         <li class="nav-item"><%= link_to('Index', index_path, class: 'nav-link') %></li>
-        <li class="nav-item"><%= link_to('Statistics', lending_stats_path, class: 'nav-link') %></li>
+        <li class="nav-item"><%= link_to('Statistics', stats_path, class: 'nav-link') %></li>
       <% end %>
       <li class="nav-item"><%= logout_link %></li>
     </ul>

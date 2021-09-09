@@ -1,9 +1,26 @@
 class StatsController < ApplicationController
   before_action :require_lending_admin!
 
-  def lending
+  PROFILE_STATS_HTML = 'stats-profile.html'.freeze
+
+  def download
     respond_to do |format|
       format.csv { send_csv }
+    end
+  end
+
+  # Stats
+  def index; end
+
+  # Stats page, but generate a profile result
+  def profile_index
+    RubyProf.start
+    flash.now[:info] = "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>"
+    render(:index)
+  ensure
+    result = RubyProf.stop
+    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_STATS_HTML), 'w') do |f|
+      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
     end
   end
 

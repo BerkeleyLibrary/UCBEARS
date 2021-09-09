@@ -321,7 +321,7 @@ describe LendingController, type: :system do
 
       describe :stats do
         it 'displays the stats' do
-          visit lending_stats_path
+          visit stats_path
           expect(page.title).to include('Statistics')
         end
       end

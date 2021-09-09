@@ -13,19 +13,19 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#callback', as: :omniauth_callback
   get '/auth/failure', to: 'sessions#failure'
 
-  # Lending (UC BEARS) routes
-  # TODO: get Rails to use :directory as the primary key and this all gets a lot simpler
-  defaults format: 'json' do
-    get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: { directory: %r{[^/]+} }
+  defaults format: 'csv' do
+    get '/stats/lending(/:date)', to: 'stats#download', as: :stats_download
   end
 
   defaults format: 'html' do
     # TODO: don't include this in production
+    get '/stats', to: 'stats#index', as: :stats
+    get '/profile_stats', to: 'stats#profile_index', as: :stats_profile
+
+    # TODO: don't include this in production
     get '/profile_index', to: 'lending#profile_index', as: :lending_profile_index
-    get '/profile_stats', to: 'lending#profile_stats', as: :lending_profile_stats
 
-    get '/stats', to: 'lending#stats', as: :lending_stats
-
+    # TODO: get Rails to use :directory as the primary key and this all gets a lot simpler
     get '/:directory/edit', to: 'lending#edit', as: :lending_edit, constraints: { directory: %r{[^/]+} }
     get '/:directory', to: 'lending#show', as: :lending_show, constraints: { directory: %r{[^/]+} }
     get '/:directory/view(/:token)', to: 'lending#view', as: :lending_view, constraints: { directory: %r{[^/]+}, token: %r{[^/]+} }
@@ -39,7 +39,8 @@ Rails.application.routes.draw do
     get '/:directory/reload', to: 'lending#reload', as: :lending_reload, constraints: { directory: %r{[^/]+} }
   end
 
-  defaults format: 'csv' do
-    get '/stats/lending(/:date)', to: 'stats#lending', as: :stats_lending
+  # TODO: get Rails to use :directory as the primary key and this all gets a lot simpler
+  defaults format: 'json' do
+    get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: { directory: %r{[^/]+} }
   end
 end

@@ -48,10 +48,32 @@ RSpec.describe 'Stats', type: :request do
   context 'with lending admin credentials' do
     before(:each) { mock_login(:lending_admin) }
 
-    describe :lending do
+    describe :index do
+      it 'displays the stats' do
+        get stats_path
+        expect(response).to be_successful
+      end
+    end
+
+    describe :stats_profile do
+      let(:profile_file) { File.join('public', StatsController::PROFILE_STATS_HTML) }
+
+      it 'generates a profile' do
+        get stats_profile_path
+
+        expect(File.exist?(profile_file)).to eq(true)
+
+        get "/#{StatsController::PROFILE_STATS_HTML}"
+        expect(response).to be_successful
+      ensure
+        FileUtils.rm_f(profile_file)
+      end
+    end
+
+    describe :download do
       context 'without a date' do
         it 'returns stats for all loans' do
-          get stats_lending_path
+          get stats_download_path
           expect(response).to be_successful
 
           body_csv = CSV.parse(response.body, headers: true)
@@ -63,7 +85,7 @@ RSpec.describe 'Stats', type: :request do
       context 'with a date' do
         it 'returns the stats for the specified date' do
           ItemLendingStats.all_loan_dates.each do |date|
-            get stats_lending_path(date: date.iso8601)
+            get stats_download_path(date: date.iso8601)
 
             expect(response).to be_successful
 
@@ -75,14 +97,14 @@ RSpec.describe 'Stats', type: :request do
 
         it 'rejects a non-date argument' do
           # TODO: more explicit error handling
-          expect { get stats_lending_path(date: 'not a date') }.to raise_error(ActionController::BadRequest)
+          expect { get stats_download_path(date: 'not a date') }.to raise_error(ActionController::BadRequest)
 
           # TODO: more explicit error handling
         end
 
         it 'rejects a bad date' do
           # TODO: more explicit error handling
-          expect { get stats_lending_path(date: '9999-99-99') }.to raise_error(ActionController::BadRequest)
+          expect { get stats_download_path(date: '9999-99-99') }.to raise_error(ActionController::BadRequest)
         end
       end
     end

@@ -6,7 +6,6 @@ class LendingController < ApplicationController
   # Constants
 
   PROFILE_INDEX_HTML = 'index-profile.html'.freeze
-  PROFILE_STATS_HTML = 'stats-profile.html'.freeze
 
   # ------------------------------------------------------------
   # Helpers
@@ -18,7 +17,7 @@ class LendingController < ApplicationController
 
   before_action(:authenticate!)
   before_action(:require_lending_admin!, except: %i[view manifest check_out return])
-  before_action(:ensure_lending_item!, except: %i[index stats profile_index profile_stats])
+  before_action(:ensure_lending_item!, except: %i[index profile_index])
   before_action(:require_processed_item!, only: %i[view manifest])
   before_action(:use_patron_support_email!, only: %i[view manifest])
 
@@ -48,25 +47,6 @@ class LendingController < ApplicationController
 
   # Admin view
   def show; end
-
-  # TODO: move this to StatsController
-  # Stats
-  def stats
-    # TODO: load stats more efficiently
-  end
-
-  # TODO: move this to StatsController
-  # Stats page, but generate a profile result
-  def profile_stats
-    RubyProf.start
-    flash.now[:info] = "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>"
-    render(:stats)
-  ensure
-    result = RubyProf.stop
-    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_STATS_HTML), 'w') do |f|
-      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
-    end
-  end
 
   # Patron view
   # TODO: separate actions for with/without token,
