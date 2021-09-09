@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   defaults format: 'csv' do
     get '/stats/lending(/:date)', to: 'stats#download', as: :stats_download
+    # TODO: don't include this in production
+    get '/stats/all_loan_dates', to: 'stats#all_loan_dates', as: :stats_all_loan_dates
   end
 
   defaults format: 'html' do

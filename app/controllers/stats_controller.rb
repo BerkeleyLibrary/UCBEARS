@@ -24,6 +24,25 @@ class StatsController < ApplicationController
     end
   end
 
+  # For debugging
+  def all_loan_dates
+    result = ItemLendingStats.all_loan_dates_by_id
+    respond_to do |format|
+      format.csv do
+        send_file_headers!(
+          type: 'text/csv; charset=utf-8',
+          filename: 'all_loan_dates.csv'
+        )
+        self.response_body = Enumerator.new do |y|
+          y << CSV.generate_line(result.columns, encoding: 'UTF-8')
+          result.rows.each do |row|
+            y << CSV.generate_line(row, encoding: 'UTF-8')
+          end
+        end
+      end
+    end
+  end
+
   private
 
   def csv_filename
@@ -44,7 +63,7 @@ class StatsController < ApplicationController
       filename: csv_filename
     )
     self.response_body = Enumerator.new do |y|
-      y << CSV.generate_line(ItemLendingStats::CSV_HEADERS)
+      y << CSV.generate_line(ItemLendingStats::CSV_HEADERS, encoding: 'UTF-8')
       all_item_stats.each { |item_stats| item_stats.to_csv(y) }
     end
   end

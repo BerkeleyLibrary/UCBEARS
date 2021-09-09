@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Stats', type: :request do
+RSpec.describe StatsController, type: :request do
   before(:each) do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
@@ -107,6 +107,29 @@ RSpec.describe 'Stats', type: :request do
           expect { get stats_download_path(date: '9999-99-99') }.to raise_error(ActionController::BadRequest)
         end
       end
+    end
+
+    describe :all_loan_dates do
+      it 'returns all loan dates by ID, as CSV' do
+        get stats_all_loan_dates_path
+
+        expected = ItemLendingStats.all_loan_dates_by_id
+        expected_headers = expected.columns
+        expected_rows = expected.rows
+
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.size).to eq(expected_rows.size)
+
+        csv.each_with_index do |csv_row, row|
+          expected_values = expected_rows[row]
+          expected_headers.each_with_index do |header, col|
+            actual = csv_row[header]
+            expected = expected_values[col]
+            expect(actual.to_s).to eq(expected.to_s)
+          end
+        end
+      end
+
     end
   end
 end

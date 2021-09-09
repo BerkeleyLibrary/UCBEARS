@@ -14,9 +14,14 @@ class ItemLendingStats
 
   SELECT_LOAN_DATES_BY_ID_STMT = 'SELECT_LOAN_DATES_BY_ID'.freeze
   SELECT_LOAN_DATES_BY_ID = <<~SQL.freeze
-      SELECT id, DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE ?)
+      SELECT id,
+             loan_date,
+             (loan_date AT TIME ZONE 'UTC') AS utc,
+             ((loan_date AT TIME ZONE 'UTC') AT TIME ZONE :tz) AS utc_tz_local,
+             DATE((loan_date AT TIME ZONE 'UTC') AT TIME ZONE :tz) AS date_utc_tz_local,
+             :tz AS tz
         FROM lending_item_loans
-    ORDER BY 1 DESC
+    ORDER BY loan_date DESC
   SQL
 
   SELECT_ALL_LOAN_DURATIONS = <<~SQL.freeze
@@ -110,11 +115,9 @@ class ItemLendingStats
 
     # for debugging
     def all_loan_dates_by_id
-      stmt = ActiveRecord::Base.sanitize_sql([SELECT_LOAN_DATES_BY_ID, Time.zone.name])
+      stmt = ActiveRecord::Base.sanitize_sql([SELECT_LOAN_DATES_BY_ID, { tz: Time.zone.name }])
       ActiveRecord::Base.connection
         .exec_query(stmt, SELECT_LOAN_DATES_BY_ID_STMT, prepare: true)
-        .rows
-        .map { |row| [row[0], Date.parse(row[1])] }
     end
 
     def median_loan_duration
