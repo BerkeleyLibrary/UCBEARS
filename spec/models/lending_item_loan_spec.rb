@@ -65,4 +65,46 @@ describe LendingItemLoan do
       expect(loan.duration).to eq(15.minutes)
     end
   end
+
+  describe :loaned_on do
+    attr_reader :env_tz_actual
+    attr_reader :rails_tz_actual
+    attr_reader :loans_by_date
+
+    before(:each) do
+      @env_tz_actual = ENV['TZ']
+      @rails_tz_actual = Time.zone
+
+      Time.zone = 'America/Los_Angeles'
+
+      @loans_by_date = {}
+
+      local_date = (Date.current - 7.days)
+      year, month, day = %i[year month day].map { |attr| local_date.send(attr) }
+      [2, 8, 14, 20].each do |hour|
+        loan_date = Time.zone.local(year, month, day, hour)
+        loan = create(:expired_loan, loan_date: loan_date, lending_item_id: item.id, patron_identifier: user.borrower_id)
+        (loans_by_date[local_date] ||= []) << loan
+      end
+    end
+
+    after(:each) do
+      ENV['TZ'] = env_tz_actual
+      Time.zone = rails_tz_actual
+    end
+
+    it 'returns loans for the correct date regardless of the Ruby time zone' do
+      %w[UTC America/Los_Angeles].each do |tz|
+        ENV['TZ'] = tz
+
+        aggregate_failures "loaned_on [TZ = #{tz}]" do
+          loans_by_date.each do |local_date, expected_loans|
+            actual = LendingItemLoan.loaned_on(local_date).map(&:loan_date)
+            expected = expected_loans.map(&:loan_date)
+            expect(actual).to match_array(expected)
+          end
+        end
+      end
+    end
+  end
 end

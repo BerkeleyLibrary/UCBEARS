@@ -12,16 +12,6 @@ class ItemLendingStats
     ORDER BY 1 DESC
   SQL
 
-  SELECT_LOAN_DATES_BY_ID_STMT = 'SELECT_LOAN_DATES_BY_ID'.freeze
-  SELECT_LOAN_DATES_BY_ID = <<~SQL.freeze
-      SELECT id,
-             loan_date,
-             DATE(DATE_TRUNC('day', loan_date, :tz)) AS loan_date_local,
-             :tz AS tz
-        FROM lending_item_loans
-    ORDER BY loan_date DESC
-  SQL
-
   SELECT_ALL_LOAN_DURATIONS = <<~SQL.freeze
     SELECT return_date - loan_date AS loan_duration
       FROM lending_item_loans AS returned_loans
@@ -109,13 +99,6 @@ class ItemLendingStats
         .exec_query(stmt, SELECT_DISTINCT_LOAN_DATES_STMT, prepare: true)
         .rows
         .map { |row| Date.parse(row[0]) }
-    end
-
-    # for debugging
-    def all_loan_dates_by_id
-      stmt = ActiveRecord::Base.sanitize_sql([SELECT_LOAN_DATES_BY_ID, { tz: Time.zone.name }])
-      ActiveRecord::Base.connection
-        .exec_query(stmt, SELECT_LOAN_DATES_BY_ID_STMT, prepare: true)
     end
 
     def median_loan_duration

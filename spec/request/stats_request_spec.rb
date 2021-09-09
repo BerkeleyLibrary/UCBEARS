@@ -108,31 +108,5 @@ RSpec.describe StatsController, type: :request do
         end
       end
     end
-
-    describe :all_loan_dates do
-      it 'returns all loan dates by ID, as CSV' do
-        get stats_all_loan_dates_path
-
-        expected_rails_loan_dates = LendingItemLoan.pluck(:id, :loan_date).to_h
-
-        expected = ItemLendingStats.all_loan_dates_by_id
-        expected_headers = expected.columns + ['rails_loan_date']
-        expected_rows = expected.rows
-
-        csv = CSV.parse(response.body, headers: true)
-        expect(csv.size).to eq(expected_rows.size)
-
-        csv.each_with_index do |csv_row, row|
-          expected_values = expected_rows[row]
-          expected_values << expected_rails_loan_dates[expected_values[0]]
-          expected_headers.each_with_index do |header, col|
-            actual = csv_row[header]
-            expected = expected_values[col]
-            expect(actual.to_s).to eq(expected.to_s)
-          end
-        end
-      end
-
-    end
   end
 end

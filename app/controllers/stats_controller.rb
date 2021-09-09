@@ -24,30 +24,7 @@ class StatsController < ApplicationController
     end
   end
 
-  # For debugging
-  def all_loan_dates
-    all_loan_dates_by_id = ItemLendingStats.all_loan_dates_by_id
-    respond_to do |format|
-      format.csv do
-        rails_loan_dates = LendingItemLoan.pluck(:id, :loan_date).to_h
-        send_all_loan_dates_csv(all_loan_dates_by_id, rails_loan_dates)
-      end
-    end
-  end
-
   private
-
-  def send_all_loan_dates_csv(all_loan_dates_by_id, rails_loan_dates)
-    csv_headers = all_loan_dates_by_id.columns + ['rails_loan_date']
-    send_file_headers!(type: 'text/csv; charset=utf-8', filename: 'all_loan_dates.csv')
-    self.response_body = Enumerator.new do |y|
-      y << CSV.generate_line(csv_headers, encoding: 'UTF-8')
-      all_loan_dates_by_id.each do |result|
-        row = result.values + [rails_loan_dates[result['id']]]
-        y << CSV.generate_line(row, encoding: 'UTF-8')
-      end
-    end
-  end
 
   def csv_filename
     return 'ucbears-lending.csv' unless date_param

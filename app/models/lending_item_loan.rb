@@ -17,9 +17,7 @@ class LendingItemLoan < ActiveRecord::Base
   scope :returned, -> { where('return_date IS NOT NULL') }
 
   scope :loaned_on, ->(date) do
-    raise ArgumentError unless date.to_date == date # we only want dates, not timestamps
-
-    from_time = date.to_date.to_time
+    from_time = Time.zone.local(date.year, date.month, date.day)
     until_time = from_time + 1.days
     where('lending_item_loans.loan_date >= ? AND lending_item_loans.loan_date < ?', from_time, until_time)
   end

@@ -3,32 +3,6 @@ require 'rails_helper'
 describe ItemLendingStats do
   let(:select_loan_date) { 'select loan_date from lending_item_loans where id = ?' }
 
-  def tz_debug_info
-    db_tz_info = ActiveRecord::Base
-      .connection
-      .exec_query("SELECT CURRENT_TIME, CURRENT_SETTING('TIMEZONE') AS timezone")
-      .first
-    {
-      db_current_time: db_tz_info['current_time'],
-      db_timezone: db_tz_info['timezone'],
-      system_time_now: Time.now,
-      system_timezone: Time.now.zone,
-      rails_time_current: Time.current,
-      rails: Time.zone
-    }.map { |k, v| "#{k}: #{v}" }.join(', ')
-  end
-
-  def date_failure_msg(actual_date, expected_date, id)
-    stmt = ActiveRecord::Base.sanitize_sql([select_loan_date, id])
-    {
-      id: id,
-      expected: expected_date,
-      actual: actual_date,
-      rails: LendingItemLoan.find(id).loan_date,
-      db: ActiveRecord::Base.connection.exec_query(stmt).first['loan_date']
-    }.map { |k, v| "#{k}: #{v}" }.join('; ')
-  end
-
   before(:each) do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
@@ -75,8 +49,15 @@ describe ItemLendingStats do
       @loans = []
       users.each do |user|
         loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-        loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-        loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
+
+        date = (Date.current - 7.days)
+        year, month, day = %i[year month day].map { |attr| date.send(attr) }
+        [1, 7, 13, 19].each do |hour|
+          expired_loan_date = Time.utc(year, month, day, hour)
+          loans << create(:expired_loan, loan_date: expired_loan_date, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
+          completed_loan_date = Time.utc(year, month, day, hour + 3)
+          loans << create(:completed_loan, loan_date: completed_loan_date, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
+        end
       end
 
       @returned_loans = loans.select(&:return_date)
@@ -115,41 +96,43 @@ describe ItemLendingStats do
 
         expect(all_loan_dates).to eq(expected_loan_dates)
       end
-
-      it 'returns the correct date for each loan' do
-        aggregate_failures 'all_loan_dates_by_id' do
-          failure_count = 0
-          ItemLendingStats.all_loan_dates_by_id.each do |result|
-            id = result['id']
-            actual_date = Date.parse(result['loan_date_local'])
-            expected_date = loans_by_date[id]
-
-            failure_count += 1 if actual_date != expected_date
-            expect(actual_date).to eq(expected_date), -> { "Wrong date: #{date_failure_msg(actual_date, expected_date, id)}" }
-          end
-
-          RSpec::Expectations.fail_with("#{failure_count} loans returned incorrect dates (#{tz_debug_info})") if failure_count > 0
-        end
-      end
     end
 
     describe :each_by_date do
       it 'returns each loan in the correct date group' do
-        aggregate_failures 'all_loan_dates_by_id' do
-          failure_count = 0
-          ItemLendingStats.each_by_date do |expected_date, stats_for_date|
+        aggregate_failures 'each_by_date' do
+          ItemLendingStats.each_by_date do |actual_date, stats_for_date|
             stats_for_date.each do |item_stats|
               item_stats.loans.each do |loan|
                 loan_date = loan.loan_date
 
-                actual_date = loan_date.to_date
-                failure_count += 1 if actual_date != expected_date
-                expect(actual_date).to eq(expected_date), -> { "Wrong date group: #{date_failure_msg(actual_date, expected_date, loan.id)}" }
+                expected_date = loan_date.to_date
+                expect(actual_date).to eq(expected_date), "Loan on date #{loan_date} grouped with #{actual_date}; expected #{expected_date}"
               end
             end
           end
+        end
+      end
 
-          RSpec::Expectations.fail_with("#{failure_count} loans in incorrect group (#{tz_debug_info})") if failure_count > 0
+      it 'returns the correct date group even when the Ruby time zone is UTC' do
+        tz_actual = ENV['TZ']
+        begin
+          ENV['TZ'] = 'UTC'
+
+          aggregate_failures 'each_by_date' do
+            ItemLendingStats.each_by_date do |actual_date, stats_for_date|
+              stats_for_date.each do |item_stats|
+                item_stats.loans.each do |loan|
+                  loan_date = loan.loan_date
+
+                  expected_date = loan_date.to_date
+                  expect(actual_date).to eq(expected_date), "Loan on date #{loan_date} grouped with #{actual_date}; expected #{expected_date}"
+                end
+              end
+            end
+          end
+        ensure
+          ENV['TZ'] = tz_actual
         end
       end
     end
