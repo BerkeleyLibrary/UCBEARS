@@ -1,0 +1,38 @@
+// //////////////////////////////
+// Text
+
+$em: 1em; // SCSS math works better on variables than literals
+
+$font-size-xsmall: 3 * $em / 4;
+$font-size-small: 11 * $em / 12;
+$font-size-large: 7 * $em / 6;
+$font-size-xlarge: 2 * $em;
+
+$line-height: 4 * $em / 3;
+
+$image-error-width: $font-size-large;
+$image-error-height: 576 * $image-error-width / 512;
+
+// //////////////////////////////
+// Box layout
+
+$margin-xsmall: $em / 6;
+$margin-small: $em / 3;
+$margin: $em / 2;
+$margin-large: 2 * $margin-small;
+$margin-xlarge: $em;
+
+$padding-header-footer: $em;
+$sitename-baseline-adjust: 5 * $em / 6;
+
+// ////////////////////////////////////////////////////////////
+// Fonts
+
+$font-family-sans: 'freight-sans-pro', Helvetica, sans-serif;
+$font-family-mono: Hasklig, Menlo, Consolas, Cousine, Courier, 'Courier New', monospace;
+
+$font-weight-light: 300;
+$font-weight-book: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;

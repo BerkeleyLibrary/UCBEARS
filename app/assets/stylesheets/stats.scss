@@ -1,0 +1,10 @@
+@import 'includes/shared';
+@import 'includes/table';
+
+section {
+  &.stats {
+    table {
+      width: 100%;
+    }
+  }
+}

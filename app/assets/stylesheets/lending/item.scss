@@ -1,0 +1,138 @@
+@import "../includes/globals";
+
+// ////////////////////////////////////////////////////////////
+// Shared between layouts
+
+section {
+  &.item {
+    table {
+      font-size: 14px;
+      margin-bottom: $margin;
+      margin-top: $margin;
+      width: 100%;
+
+      thead {
+        display: contents;
+      }
+
+      tbody {
+        display: contents;
+      }
+
+      tfoot {
+        display: contents;
+      }
+
+      tr {
+        display: contents;
+      }
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Desktop layout
+
+@media (min-width: $media-breakpoint-width) {
+  section {
+    &.item {
+      margin-left: auto;
+      margin-right: auto;
+      width: $media-breakpoint-width;
+      max-width: $media-breakpoint-width;
+
+      table {
+        display: grid;
+        grid-template-columns: min-content 1fr;
+
+        thead {
+          th {
+            grid-column: 1 / 3;
+          }
+        }
+
+        tr {
+          &:last-child {
+            th {
+              border-bottom: 0;
+            }
+          }
+        }
+
+        th {
+          grid-column: 1;
+          text-align: right;
+          white-space: nowrap;
+
+          &.action {
+            grid-column: 2;
+          }
+        }
+
+        td {
+          grid-column: 2;
+
+          &.description, &.copyright {
+            grid-column: 1 / 3;
+          }
+
+          &.viewer {
+            background: black;
+            grid-column: 1 / 3;
+
+            a {
+              box-shadow: none;
+              background: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Mobile layout
+
+@media (max-width: $media-breakpoint-width) {
+  section {
+    &.item {
+      margin: $margin-xlarge;
+      font-size: 12pt;
+
+      table {
+        display: flex;
+        flex-direction: column;
+
+        tbody {
+          th {
+            border-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          td {
+            padding-left: $em;
+
+            &.description {
+              padding-left: $margin-xsmall;
+              padding-right: $margin-xsmall;
+            }
+
+            &.viewer {
+              background: black;
+
+              a {
+                box-shadow: none;
+                background: none;
+              }
+            }
+          }
+        }
+
+        th {
+          text-align: left;
+        }
+      }
+    }
+  }
+}

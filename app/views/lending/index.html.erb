@@ -19,7 +19,7 @@
 
 <%# TODO: don't load all items three times %>
 <% state_to_title.each do |state, state_title| %>
-  <section id="lending-<%= state %>" class="lending-index">
+  <section id="lending-<%= state %>" class="index">
     <h2><%= state_title %></h2>
 
     <% LendingItem.send(state).each do |item| %>

@@ -1,0 +1,46 @@
+@import 'globals';
+
+// ////////////////////////////////////////////////////////////
+// mini-reset
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  ul {
+    padding-left: 0;
+
+    li {
+      list-style-type: none;
+    }
+  }
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+}
+
+// ////////////////////////////////////////////////////////////
+// Shared between layouts
+
+nav {
+  font-size: $font-size-large;
+}
+
+.btn {
+  color: white;
+  box-shadow: none;
+  font-weight: bold;
+}
+
+.action {
+  input, a, a, a:link, a:visited {
+    box-shadow: none;
+
+    &.btn {
+      color: white;
+      font-weight: bold;
+    }
+  }
+}

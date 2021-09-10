@@ -1,0 +1,111 @@
+@import "../includes/globals";
+
+// ////////////////////////////////////////////////////////////
+// Shared between layouts
+
+section {
+  &.index {
+    margin-top: $margin-xlarge;
+    padding-top: $margin-xlarge;
+    padding-bottom: $margin-xlarge;
+
+    h2 {
+      font-size: $font-size-large;
+      font-weight: $font-weight-book;
+      background: $color-reversed-background;
+      width: 100%;
+      color: white;
+      padding: $margin-small $margin;
+    }
+
+    section.lending-item {
+      margin-left: $margin;
+
+      &:not(:first-of-type) {
+        margin-top: $margin-xlarge;
+      }
+
+      &:not(:last-of-type) {
+        padding-bottom: $margin-xlarge;
+        border-bottom: 1px solid $color-row-divider;
+      }
+
+      h3 {
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+        width: 100%;
+      }
+
+      ul.actions {
+        display: flex;
+        padding: 0;
+
+        li.action {
+          display: block;
+          margin-right: $margin;
+        }
+      }
+
+      h4 {
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
+        margin-top: $margin-xlarge;
+        margin-bottom: $margin-xsmall;
+      }
+
+      p {
+        margin-bottom: $margin-xsmall;
+
+        &.problems {
+          font-size: $font-size-small;
+          font-weight: bold;
+          color: $color-south-hall;
+
+          &:before {
+            content: '⚠️';
+            margin-right: $margin-xsmall;
+          }
+        }
+      }
+
+      .author-name {
+        font-weight: $font-weight-bold;
+      }
+
+      table {
+        &.lending-metadata {
+          font-size: $font-size-xsmall;
+          margin-top: $margin;
+
+          th, td {
+            padding: 0 $margin-large 0 0;
+          }
+        }
+      }
+
+      details {
+        summary {
+          display: list-item;
+          font-size: $font-size-xsmall;
+          line-height: $line-height;
+        }
+      }
+    }
+
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Desktop layout
+
+@media (min-width: $media-breakpoint-width) {
+  section {
+    &.index {
+      section.lending-item {
+        ul.actions {
+          float: right;
+        }
+      }
+    }
+  }
+}

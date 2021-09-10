@@ -1,0 +1,90 @@
+@import 'globals';
+
+// ////////////////////////////////////////////////////////////
+// Shared between layouts
+
+table {
+  thead {
+    th {
+      background: $color-reversed-background;
+      border: 0;
+      color: white;
+      text-align: left;
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: $font-weight-book;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  tbody {
+    th {
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  tr {
+    th {
+      border-bottom: 1px solid $color-row-divider;
+      padding: $margin-small $margin;
+      white-space: nowrap;
+
+      &.action {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: left;
+        white-space: normal;
+      }
+    }
+
+    td {
+      border-bottom: 1px solid $color-row-divider;
+      padding: $margin-small;
+
+      &.copyright {
+        border-bottom: none;
+        margin-top: $margin-xlarge;
+
+        h3 {
+          font-size: $font-size-large;
+          font-weight: $font-weight-bold;
+          padding-top: $margin-xlarge;
+        }
+      }
+    }
+
+    &:last-child {
+      th {
+        border-bottom: none;
+      }
+
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Desktop layout
+
+@media (min-width: $media-breakpoint-width) {
+  table {
+    h2 {
+      line-height: $line-height;
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Mobile layout
+
+@media (max-width: $media-breakpoint-width) {
+  table {
+    h2 {
+      line-height: $em;
+    }
+  }
+}
