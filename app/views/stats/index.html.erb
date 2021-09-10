@@ -8,182 +8,203 @@
 
 <%# TODO: use Rails I18n %>
 <section class="stats">
-  <table>
-    <thead>
-    <tr>
-      <th>Sessions</th>
-    </tr>
-    </thead>
 
-    <tbody>
-
-    <% presenter.all_session_stats.each do |stats| %>
+  <!-- Session stats -->
+  <section class="stats-subsection" id="stats-sessions">
+    <h2>Sessions</h2>
+    <table class="stats-table">
+      <tbody>
+      <% all_session_stats = presenter.all_session_stats %>
       <tr>
-        <th><%= stats.types.join('/') %></th>
-        <td>
-          <%
-            total_sessions = stats.total_sessions
-            unique_users = stats.unique_users
-          %>
-          <%= total_sessions %> <%= 'session'.pluralize(total_sessions) %>
-          (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
+        <%# TODO: better multi-row <th> styling logic %>
+        <th style="border-bottom-style: none;" rowspan="<%= 1 + (3 * (1 + all_session_stats.size)) %>">User types</th>
+      </tr>
+      <% all_session_stats.each do |stats| %>
+        <%
+          unique_users = stats.unique_users
+          total_sessions = stats.total_sessions
+        %>
+        <tr>
+          <th rowspan="3" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
+        </tr>
+        <tr>
+          <td>Sessions</td>
+          <td><%= total_sessions %></td>
+        </tr>
+        <tr>
+          <td>Users</td>
+          <td><%= unique_users %></td>
+        </tr>
+      <% end %>
+      <%# TODO: better stats-summary styling logic %>
+      <tr class="stats-summary">
+        <%# TODO: better multi-row <th> styling logic %>
+        <th style="border-bottom-style: none;" rowspan="3" scope="rowgroup">
+          All types
+        </th>
+      </tr>
+      <tr class="stats-summary">
+        <th>Total sessions</th>
+        <td><%= presenter.session_count_total %></td>
+      </tr>
+      <%# TODO: better stats-summary styling logic %>
+      <tr class="stats-summary">
+        <th style="border-top: 0;">Total unique users</th>
+        <td style="border-top: 0;"><%= presenter.session_unique_users %></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <section class="notes">
+      <h3>Notes</h3>
+      <ul>
+        <li>"Faculty" represents all academic appointees, including librarians.</li>
+        <li>Some users fall into multiple types (e.g., admin users are generally also staff or faculty).</li>
+      </ul>
+    </section>
+  </section>
+
+  <!-- Item stats -->
+  <section class="stats-subsection" id="stats-items">
+    <h2>Items</h2>
+    <table class="stats-table">
+      <% counts = presenter.item_counts_by_state %>
+      <tbody>
+      <tr>
+        <%# TODO: better multi-row <th> styling logic %>
+        <th style="border-bottom-style: none;" rowspan="<%= 2 + counts.size %>">
+          Item status
+        </th>
+      </tr>
+      <% counts.each do |title, count| %>
+        <tr>
+          <th><%= title %></th>
+          <td><%= count %></td>
+        </tr>
+      <% end %>
+      <tr class="stats-summary">
+        <th>Total</th>
+        <td><%= counts.values.sum %></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Loan stats -->
+  <section class="stats-subsection" id="stats-loans">
+    <h2>Loans</h2>
+    <table class="stats-table">
+      <tbody>
+      <tr>
+        <%# TODO: better multi-row <th> styling logic %>
+        <th style="border-bottom-style: none;" rowspan="6">
+          Loan status
+        </th>
+      </tr>
+      <tr>
+        <th>Active</th>
+        <td><%= presenter.loan_count_active %></td>
+      </tr>
+      <tr>
+        <th>Expired</th>
+        <td><%= presenter.loan_count_expired %></td>
+      </tr>
+      <tr>
+        <th>Returned</th>
+        <td><%= presenter.loan_count_returned %></td>
+      </tr>
+      <%# TODO: better stats-summary styling logic %>
+      <tr class="stats-summary">
+        <th style="border-top: 0;">Total complete</th>
+        <td style="border-top: 0;"><%= presenter.loan_count_complete %></td>
+      </tr>
+      <tr class="stats-summary">
+        <th>Total loans</th>
+        <td><%= presenter.loan_count_total %></td>
+      </tr>
+      <tr class="stats-summary">
+        <th>Median loan duration</th>
+        <td colspan="2">
+          <%= format_duration(presenter.loan_duration_median, value_for_nil: 'N/A') %>
         </td>
       </tr>
-    <% end %>
+      </tbody>
+    </table>
 
-    <tr>
-      <th>Total</th>
-      <td>
-        <%
-          total_sessions = presenter.session_count_total
-          unique_users = presenter.session_unique_users
-        %>
-        <%= total_sessions %>
-        (<%= unique_users %> unique <%= 'user'.pluralize(unique_users) %>)
-      </td>
-    </tr>
+    <section class="stats-subsection">
 
-    </tbody>
-
-    <tfoot>
-    <tr>
-      <th>Notes</th>
-      <td>
-        <ul>
-          <%# TODO: style this properly %>
-          <li style="list-style-position: inside; list-style-type: square;">"Faculty" represents all academic
-            appointees, including librarians.
-          </li>
-          <li style="list-style-position: inside; list-style-type: square;">Some users fall into multiple types (e.g.,
-            admin users are generally also staff or faculty).
-          </li>
-        </ul>
-      </td>
-    </tr>
-    </tfoot>
-  </table>
-
-  <table>
-    <thead>
-    <tr>
-      <th>Loans</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr>
-      <th>Active</th>
-      <td><%= presenter.loan_count_active %></td>
-    </tr>
-    <tr>
-      <th>Complete</th>
-      <td>
-        <% complete_count = presenter.loan_count_complete %>
-        <%= complete_count %>
-        <%
-          if complete_count > 0
-            expired_count = presenter.loan_count_expired
-            returned_count = complete_count - expired_count
-        %>
-          (<%= expired_count %> expired, <%= returned_count %> returned)
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <th>Median loan duration</th>
-      <td>
-        <%= format_duration(presenter.loan_duration_median, value_for_nil: 'N/A') %>
-      </td>
-    </tr>
-    <tr>
-      <th>Total</th>
-      <td><%= presenter.loan_count_total %></td>
-    </tr>
-    </tbody>
-  </table>
-
-  <table>
-    <thead>
-    <tr>
-      <th>Items</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <% presenter.item_counts_by_state.each do |title, count| %>
-      <tr>
-        <th><%= title %></th>
-        <td><%= count %></td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-
-  <table>
-    <thead>
-    <tr>
-      <th>Download item lending stats by date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>
-        <ul>
-          <li>
-            <%= link_to('Download all stats', stats_download_path) %> (CSV)
-          </li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <ul>
-          <% ItemLendingStats.all_loan_dates.each do |date| %>
+      <h3>Lending stats by date (CSV)</h3>
+      <% if (all_dates = ItemLendingStats.all_loan_dates).empty? %>
+        <p>(No stats to download.)</p>
+      <% else %>
+        <p>
+          <% link_text = [all_dates.last, all_dates.first].uniq.map(&:iso8601).join(' – ') %>
+          <strong>All dates:</strong> <%= link_to(link_text, stats_download_path) %>
+        </p>
+        <ul class="stats-downloads">
+          <% all_dates.each do |date| %>
+            <% iso_date = date.iso8601 %>
             <li>
-              <% iso_date = date.iso8601 %>
-              <%= link_to("Download stats for #{iso_date}", stats_download_path(date: iso_date)) %>
-              (CSV)
+              <%= link_to(iso_date, stats_download_path(date: iso_date)) %>
             </li>
           <% end %>
         </ul>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+      <% end %>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Recent checkouts</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%# TODO: move cutoff functionality to ItemLendingStats %>
-    <% cutoff_date = Date.current - 7.days %>
-    <% presenter.item_lending_stats_by_date.each do |date, item_stats_for_date| %>
-      <% break if date < cutoff_date %>
-      <tr>
-        <th><%= l(date, format: :short) %></th>
-        <td>
-          <%# TODO: format this properly %>
-          <% item_stats_for_date.each do |item_stats| %>
-            <% item = item_stats.item %>
-            <% link_text = [:record_id, :barcode, :title].map { |attr| item.send(attr) }.join(' ') %>
-            <% link_href = lending_show_path(directory: item.directory) %>
-            <%= link_to(link_text, link_href) %>
-            <ul>
-              <%# TODO: style this properly %>
-              <li style="list-style-position: inside; list-style-type: square;">
-                <%= item_stats.loan_count_total %> checkouts
-                (<%= item_stats.loan_counts_by_status
-                     .map { |state, count| "#{count} #{state}" }.join(', ') %>)
-              </li>
-            </ul>
+    </section>
+
+    <section class="stats-subsection">
+      <%
+        # TODO: move cutoff functionality to ItemLendingStats
+        cutoff_days = 7
+        cutoff_items = 10
+      %>
+      <h3>Recent popular items</h3>
+      <p>The <%= cutoff_items %> most popular items for each of the last <%= cutoff_days %> days.</p>
+      <% scopes = LendingItemLoan::LOAN_STATUS_SCOPES - [:pending] %>
+      <table class="stats-table">
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Record ID</th>
+          <th>Barcode</th>
+          <% scopes.each do |status| %>
+            <th><%= status.to_s.capitalize[0...3] %>.</th>
           <% end %>
-        </td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
+          <th>Total</th>
+          <th>Title</th>
+        </tr>
+        </thead>
 
+        <tbody>
+        <% cutoff_date = Date.current - cutoff_days.days %>
+        <% presenter.item_lending_stats_by_date.each do |date, stats_for_date| %>
+          <% break if date <= cutoff_date %>
+
+          <tr>
+            <th rowspan="<%= 1 + stats_for_date.size %>">
+              <%= l(date, format: :short) %>
+            </th>
+          </tr>
+
+          <% stats_for_date.each_with_index do |item_stats, i| %>
+            <% break if i >= cutoff_items %>
+            <% item = item_stats.item %>
+            <% link_href = lending_show_path(directory: item.directory) %>
+            <% counts_by_status = item_stats.loan_counts_by_status %>
+            <tr>
+              <td><%= link_to(item.record_id, link_href) %></td>
+              <td><%= link_to(item.barcode, link_href) %></td>
+              <% scopes.each do |status| %>
+                <td style="text-align: center"><%= counts_by_status[status] || '-' %></td>
+              <% end %>
+              <th style="text-align: center"><%= item_stats.loan_count_total %></th>
+              <td><%= link_to(item.title, link_href) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    </section>
+  </section>
 </section>

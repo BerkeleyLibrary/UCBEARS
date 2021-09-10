@@ -39,6 +39,14 @@ a, a:link, a:visited {
             box-shadow: none;
         }
     }
+
+    td & {
+        box-shadow: inset 0 -2px 0 #FDB515;
+
+        .navbar-nav & {
+          box-shadow: none;
+        }
+    }
 }
 
 a:hover, a:active, a:focus {

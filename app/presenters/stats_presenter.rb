@@ -30,16 +30,16 @@ class StatsPresenter
     LendingItemLoan.active.count
   end
 
-  def loan_count_complete
-    LendingItemLoan.complete.count
+  def loan_count_returned
+    LendingItemLoan.returned.count
   end
 
   def loan_count_expired
     LendingItemLoan.expired.count
   end
 
-  def loan_count_returned
-    LendingItemLoan.returned.count
+  def loan_count_complete
+    LendingItemLoan.complete.count
   end
 
   def loan_duration_median
@@ -56,9 +56,9 @@ class StatsPresenter
   def item_counts_by_state
     # TODO: use Rails i18n
     {
-      inactive: 'New or inactive items',
-      active: 'Active items',
-      incomplete: 'Incomplete items'
+      inactive: 'New or inactive',
+      active: 'Active',
+      incomplete: 'Incomplete'
     }.each_with_object({}) do |(scope, title), counts|
       counts[title] = LendingItem.send(scope).count
     end

@@ -9,6 +9,7 @@ section {
     padding-top: $margin-xlarge;
     padding-bottom: $margin-xlarge;
 
+    // TODO: Share between index.scss, stats.scss
     h2 {
       font-size: $font-size-large;
       font-weight: $font-weight-book;
@@ -30,6 +31,7 @@ section {
         border-bottom: 1px solid $color-row-divider;
       }
 
+      // TODO: Share between index.scss, stats.scss
       h3 {
         font-size: $font-size-large;
         font-weight: $font-weight-bold;

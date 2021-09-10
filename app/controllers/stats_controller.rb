@@ -1,4 +1,6 @@
 class StatsController < ApplicationController
+  include StatsHelper
+  
   before_action :require_lending_admin!
 
   PROFILE_STATS_HTML = 'stats-profile.html'.freeze
@@ -26,12 +28,6 @@ class StatsController < ApplicationController
 
   private
 
-  def csv_filename
-    return 'ucbears-lending.csv' unless date_param
-
-    "ucbears-lending-#{date_param.iso8601}.csv"
-  end
-
   def all_item_stats
     return ItemLendingStats.all unless date_param
 
@@ -41,7 +37,7 @@ class StatsController < ApplicationController
   def send_csv
     send_file_headers!(
       type: 'text/csv; charset=utf-8',
-      filename: csv_filename
+      filename: csv_filename_for(date_param)
     )
     self.response_body = Enumerator.new do |y|
       y << CSV.generate_line(ItemLendingStats::CSV_HEADERS, encoding: 'UTF-8')

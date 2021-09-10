@@ -121,7 +121,7 @@ class ItemLendingStats
   # Stats methods
 
   def loan_count_total
-    loans.size
+    loans.respond_to?(:count) ? loans.count : loans.size
   end
 
   def loan_count_by_status(loan_status)

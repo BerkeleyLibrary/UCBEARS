@@ -2,9 +2,101 @@
 @import 'includes/table';
 
 section {
-  &.stats {
-    table {
+  &.stats-subsection {
+    margin-bottom: $margin-xlarge;
+
+    // TODO: Share between index.scss, stats.scss
+    h2 {
+      font-size: $font-size-large;
+      font-weight: $font-weight-book;
+      background: $color-reversed-background;
+      width: 100%;
+      color: white;
+      padding: $margin-small $margin;
+    }
+
+    // TODO: Share between index.scss, stats.scss
+    h3 {
+      font-size: $font-size-large;
+      font-weight: $font-weight-bold;
       width: 100%;
     }
+
+    section.notes {
+      margin-left: $margin;
+
+      h3 {
+        font-size: $font-size-normal;
+        border-bottom: 0;
+      }
+    }
+
+    &.stats-subsection {
+      margin-left: $margin;
+      margin-top: $margin-xxlarge;
+
+      h3 {
+        border-bottom: 1px solid $color-reversed-background;
+      }
+
+    }
+  }
+
+  ul.stats-downloads {
+    li {
+      list-style-type: none;
+    }
+  }
+}
+
+table.stats-table {
+  width: 100%;
+  font-size: $font-size-small;
+
+  //tr, td {
+  //  border: 2px solid #a0a0f0;
+  //  background: #f0f0a0;
+  //}
+
+  td {
+    &:last-child {
+      width: 100%;
+    }
+  }
+
+  td {
+    padding-left: $margin;
+  }
+
+  // TODO: better stats-summary styling logic
+  tr.stats-summary {
+    th, td {
+      border-top: 2px solid $color-reversed-background;
+    }
+
+    td {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Responsive layouts
+
+@media (min-width: 3 * $media-breakpoint-width / 2) {
+  ul.stats-downloads {
+    column-count: 4;
+  }
+}
+
+@media (min-width: $media-breakpoint-width) and (max-width: 3 * $media-breakpoint-width / 2) {
+  ul.stats-downloads {
+    column-count: 3;
+  }
+}
+
+@media (min-width: $media-breakpoint-width / 2) and (max-width: $media-breakpoint-width) {
+  ul.stats-downloads {
+    column-count: 2;
   }
 }
