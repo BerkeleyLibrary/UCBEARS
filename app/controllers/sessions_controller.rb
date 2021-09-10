@@ -35,6 +35,9 @@ class SessionsController < ApplicationController
   # Logout the user by redirecting to CAS logout screen
   def destroy
     sign_out
+
+    # TODO: configure this more elegantly and make it play better with Selenium tests
+    #       also backport whatever the fix is to Framework
     end_url = "https://auth#{'-test' unless Rails.env.production?}.berkeley.edu/cas/logout"
     redirect_to end_url
   end

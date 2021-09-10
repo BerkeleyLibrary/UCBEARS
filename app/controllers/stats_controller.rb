@@ -1,6 +1,6 @@
 class StatsController < ApplicationController
   include StatsHelper
-  
+
   before_action :require_lending_admin!
 
   PROFILE_STATS_HTML = 'stats-profile.html'.freeze

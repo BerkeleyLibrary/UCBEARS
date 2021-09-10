@@ -85,16 +85,13 @@ module CalnetHelper
 
   # Logs out. Suitable for calling in an after() block.
   def logout!
-    stub_request(:get, 'https://auth-test.berkeley.edu/cas/logout').to_return(status: 200)
-    without_redirects { do_get logout_path }
+    unless respond_to?(:page)
+      # Selenium doesn't know anything about webmock and will just hit the real logout path
+      # TODO: backport these changes to Framework
+      stub_request(:get, 'https://auth-test.berkeley.edu/cas/logout').to_return(status: 200)
+      without_redirects { do_get logout_path }
+    end
 
-    clear_login_state!
-  end
-
-  # Clears login state without actually loading SessionController#logout.
-  # Use this if you want Capybara failure screenshots to capture the page
-  # under test instead of the 'logout successful' page.
-  def clear_login_state!
     # ActionDispatch::TestProcess#session delegates to request.session,
     # but doesn't check whether it's actually present
     request.reset_session if request

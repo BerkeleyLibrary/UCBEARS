@@ -53,7 +53,7 @@ describe LendingController, type: :system do
   end
 
   after(:each) do
-    clear_login_state!
+    logout!
   end
 
   # ------------------------------------------------------------
