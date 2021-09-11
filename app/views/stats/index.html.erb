@@ -24,7 +24,12 @@
             <% if i == 0 %>
               <th rowspan="<%= (3 * (1 + all_session_stats.size)) %>">User types</th>
             <% end %>
-            <th rowspan="2" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
+            <th rowspan="2" scope="rowgroup">
+              <%= stats.types.map(&:capitalize).join('/') %>
+              <% if stats.types.size == 1 %>
+              (only)
+              <% end %>
+            </th>
             <td>Sessions</td>
             <td><%= total_sessions %></td>
           </tr>
