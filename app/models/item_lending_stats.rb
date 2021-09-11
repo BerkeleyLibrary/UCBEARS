@@ -95,7 +95,8 @@ class ItemLendingStats
 
     def all_loan_dates
       stmt = ActiveRecord::Base.sanitize_sql([SELECT_DISTINCT_LOAN_DATES, { tz: Time.zone.name }])
-      ActiveRecord::Base.connection
+      ActiveRecord::Base
+        .connection
         .exec_query(stmt, SELECT_DISTINCT_LOAN_DATES_STMT, prepare: true)
         .rows
         .map { |row| Date.parse(row[0]) }
@@ -159,15 +160,15 @@ class ItemLendingStats
     return unless other.is_a?(ItemLendingStats)
 
     # sort from most to least
-    order = other.loans.count <=> loans.count
+    order = other.loan_count_total <=> loan_count_total
     return order if order != 0
 
-    0.tap do
-      ItemLendingStats::CSV_ITEM_COLS.filter_map do |attr|
-        attr_order = item.send(attr) <=> other.item.send(attr)
-        return attr_order if attr_order != 0
-      end
-    end
+    order = ItemLendingStats::CSV_ITEM_COLS
+      .lazy
+      .map { |attr| item.send(attr) <=> other.item.send(attr) }
+      .find { |o| o > 0 }
+
+    order || 0
   end
 
   # ------------------------------------------------------------
