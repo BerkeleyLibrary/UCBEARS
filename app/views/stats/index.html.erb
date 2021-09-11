@@ -14,36 +14,36 @@
     <h2>Sessions</h2>
     <table class="stats-table">
       <tbody>
-      <% all_session_stats = presenter.all_session_stats %>
-      <% all_session_stats.each_with_index do |stats, i| %>
-        <%
-          unique_users = stats.unique_users
-          total_sessions = stats.total_sessions
-        %>
-        <tr>
-          <% if i == 0 %>
-            <th rowspan="<%= (3 * (1 + all_session_stats.size)) %>">User types</th>
-          <% end %>
-          <th rowspan="2" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
-          <td>Sessions</td>
-          <td><%= total_sessions %></td>
+        <% all_session_stats = presenter.all_session_stats %>
+        <% all_session_stats.each_with_index do |stats, i| %>
+          <%
+            unique_users = stats.unique_users
+            total_sessions = stats.total_sessions
+          %>
+          <tr>
+            <% if i == 0 %>
+              <th rowspan="<%= (3 * (1 + all_session_stats.size)) %>">User types</th>
+            <% end %>
+            <th rowspan="2" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
+            <td>Sessions</td>
+            <td><%= total_sessions %></td>
+          </tr>
+          <tr>
+            <td>Users</td>
+            <td><%= unique_users %></td>
+          </tr>
+        <% end %>
+        <tr class="stats-summary">
+          <th style="border-bottom-style: none;" rowspan="2" scope="rowgroup">
+            All types
+          </th>
+          <th>Total sessions</th>
+          <td><%= presenter.session_count_total %></td>
         </tr>
-        <tr>
-          <td>Users</td>
-          <td><%= unique_users %></td>
+        <tr class="stats-summary">
+          <th style="border-top: 0;">Total unique users</th>
+          <td style="border-top: 0;"><%= presenter.session_unique_users %></td>
         </tr>
-      <% end %>
-      <tr class="stats-summary">
-        <th style="border-bottom-style: none;" rowspan="2" scope="rowgroup">
-          All types
-        </th>
-        <th>Total sessions</th>
-        <td><%= presenter.session_count_total %></td>
-      </tr>
-      <tr class="stats-summary">
-        <th style="border-top: 0;">Total unique users</th>
-        <td style="border-top: 0;"><%= presenter.session_unique_users %></td>
-      </tr>
       </tbody>
     </table>
 
@@ -62,21 +62,21 @@
     <table class="stats-table">
       <% counts = presenter.item_counts_by_state %>
       <tbody>
-      <% counts.each_with_index do |(title, count), i| %>
-        <tr>
-          <% if i == 0 %>
-            <th rowspan="<%= 1 + counts.size %>">
-              Item status
-            </th>
-          <% end %>
-          <th><%= title %></th>
-          <td><%= count %></td>
+        <% counts.each_with_index do |(title, count), i| %>
+          <tr>
+            <% if i == 0 %>
+              <th rowspan="<%= 1 + counts.size %>">
+                Item status
+              </th>
+            <% end %>
+            <th><%= title %></th>
+            <td><%= count %></td>
+          </tr>
+        <% end %>
+        <tr class="stats-summary">
+          <th>Total</th>
+          <td><%= counts.values.sum %></td>
         </tr>
-      <% end %>
-      <tr class="stats-summary">
-        <th>Total</th>
-        <td><%= counts.values.sum %></td>
-      </tr>
       </tbody>
     </table>
   </section>
@@ -86,36 +86,36 @@
     <h2>Loans</h2>
     <table class="stats-table">
       <tbody>
-      <tr>
-        <th rowspan="6">
-          Loan status
-        </th>
-        <th>Active</th>
-        <td><%= presenter.loan_count_active %></td>
-      </tr>
-      <tr>
-        <th>Expired</th>
-        <td><%= presenter.loan_count_expired %></td>
-      </tr>
-      <tr>
-        <th>Returned</th>
-        <td><%= presenter.loan_count_returned %></td>
-      </tr>
-      <%# TODO: better stats-summary styling logic %>
-      <tr class="stats-summary">
-        <th style="border-top: 0;">Total complete</th>
-        <td style="border-top: 0;"><%= presenter.loan_count_complete %></td>
-      </tr>
-      <tr class="stats-summary">
-        <th>Total loans</th>
-        <td><%= presenter.loan_count_total %></td>
-      </tr>
-      <tr class="stats-summary">
-        <th>Median loan duration</th>
-        <td colspan="2">
-          <%= format_duration(presenter.loan_duration_median, value_for_nil: 'N/A') %>
-        </td>
-      </tr>
+        <tr>
+          <th rowspan="6">
+            Loan status
+          </th>
+          <th>Active</th>
+          <td><%= presenter.loan_count_active %></td>
+        </tr>
+        <tr>
+          <th>Expired</th>
+          <td><%= presenter.loan_count_expired %></td>
+        </tr>
+        <tr>
+          <th>Returned</th>
+          <td><%= presenter.loan_count_returned %></td>
+        </tr>
+        <%# TODO: better stats-summary styling logic %>
+        <tr class="stats-summary">
+          <th style="border-top: 0;">Total complete</th>
+          <td style="border-top: 0;"><%= presenter.loan_count_complete %></td>
+        </tr>
+        <tr class="stats-summary">
+          <th>Total loans</th>
+          <td><%= presenter.loan_count_total %></td>
+        </tr>
+        <tr class="stats-summary">
+          <th>Median loan duration</th>
+          <td colspan="2">
+            <%= format_duration(presenter.loan_duration_median, value_for_nil: 'N/A') %>
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -152,45 +152,44 @@
       <% scopes = LendingItemLoan::LOAN_STATUS_SCOPES - [:pending] %>
       <table class="stats-table">
         <thead>
-        <tr>
-          <th>Date</th>
-          <th>Record ID</th>
-          <th>Barcode</th>
-          <% scopes.each do |status| %>
-            <th><%= status.to_s.capitalize[0...3] %>.</th>
-          <% end %>
-          <th>Total</th>
-          <th>Title</th>
-        </tr>
+          <tr>
+            <th>Date</th>
+            <th>Record ID</th>
+            <th>Barcode</th>
+            <% scopes.each do |status| %>
+              <th><%= status.to_s.capitalize[0...3] %>.</th>
+            <% end %>
+            <th>Total</th>
+            <th>Title</th>
+          </tr>
         </thead>
 
         <tbody>
-        <% cutoff_date = Date.current - cutoff_days.days %>
-        <% presenter.item_lending_stats_by_date.each do |date, stats_for_date| %>
-          <% break if date <= cutoff_date %>
+          <% cutoff_date = Date.current - cutoff_days.days %>
+          <% presenter.item_lending_stats_by_date.each do |date, stats_for_date| %>
+            <% break if date <= cutoff_date %>
 
-          <tr>
-            <th rowspan="<%= 1 + stats_for_date.size %>">
-              <%= l(date, format: :short) %>
-            </th>
-          </tr>
-
-          <% stats_for_date.each_with_index do |item_stats, i| %>
-            <% break if i >= cutoff_items %>
-            <% item = item_stats.item %>
-            <% link_href = lending_show_path(directory: item.directory) %>
-            <% counts_by_status = item_stats.loan_counts_by_status %>
-            <tr>
-              <td><%= link_to(item.record_id, link_href) %></td>
-              <td><%= link_to(item.barcode, link_href) %></td>
-              <% scopes.each do |status| %>
-                <td style="text-align: center"><%= counts_by_status[status] || '-' %></td>
-              <% end %>
-              <th style="text-align: center"><%= item_stats.loan_count_total %></th>
-              <td><%= link_to(item.title, link_href) %></td>
-            </tr>
+            <% stats_for_date.each_with_index do |item_stats, i| %>
+              <% break if i >= cutoff_items %>
+              <% item = item_stats.item %>
+              <% link_href = lending_show_path(directory: item.directory) %>
+              <% counts_by_status = item_stats.loan_counts_by_status %>
+              <tr>
+                <% if i == 0 %>
+                  <th rowspan="<%= [cutoff_items, stats_for_date.size].min %>">
+                    <%= l(date, format: :short) %>
+                  </th>
+                <% end %>
+                <td><%= link_to(item.record_id, link_href) %></td>
+                <td><%= link_to(item.barcode, link_href) %></td>
+                <% scopes.each do |status| %>
+                  <td style="text-align: center"><%= counts_by_status[status] || '-' %></td>
+                <% end %>
+                <th style="text-align: center"><%= item_stats.loan_count_total %></th>
+                <td><%= link_to(item.title, link_href) %></td>
+              </tr>
+            <% end %>
           <% end %>
-        <% end %>
         </tbody>
       </table>
     </section>
