@@ -33,24 +33,30 @@
   }
 }
 
-// ////////////////////////////////////////////////////////////
-// Desktop layout
-
-@media (min-width: $media-breakpoint-width) {
-  div.viewer {
-    width: 792px;
-    height: 1056px;
-    margin: auto;
-  }
+// TODO: smarter widths once we get rid of Bootstrap
+div.viewer {
+  width: 100%;
+  height: 1024px;
 }
 
-// ////////////////////////////////////////////////////////////
-// Mobile layout
-
-@media (max-width: $media-breakpoint-width) {
-
-  div.viewer {
-    width: 100%;
-    height: 1024px;
-  }
-}
+//// ////////////////////////////////////////////////////////////
+//// Desktop layout
+//
+//@media (min-width: $media-breakpoint-width) {
+//  div.viewer {
+//    width: 100%;
+//    height: 1056px;
+//    margin: auto;
+//  }
+//}
+//
+//// ////////////////////////////////////////////////////////////
+//// Mobile layout
+//
+//@media (max-width: $media-breakpoint-width) {
+//
+//  div.viewer {
+//    width: 100%;
+//    height: 1024px;
+//  }
+//}

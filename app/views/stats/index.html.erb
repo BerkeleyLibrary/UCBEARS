@@ -15,19 +15,16 @@
     <table class="stats-table">
       <tbody>
       <% all_session_stats = presenter.all_session_stats %>
-      <tr>
-        <%# TODO: better multi-row <th> styling logic %>
-        <th style="border-bottom-style: none;" rowspan="<%= 1 + (3 * (1 + all_session_stats.size)) %>">User types</th>
-      </tr>
-      <% all_session_stats.each do |stats| %>
+      <% all_session_stats.each_with_index do |stats, i| %>
         <%
           unique_users = stats.unique_users
           total_sessions = stats.total_sessions
         %>
         <tr>
-          <th rowspan="3" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
-        </tr>
-        <tr>
+          <% if i == 0 %>
+            <th rowspan="<%= (3 * (1 + all_session_stats.size)) %>">User types</th>
+          <% end %>
+          <th rowspan="2" scope="rowgroup"><%= stats.types.map(&:capitalize).join('/') %></th>
           <td>Sessions</td>
           <td><%= total_sessions %></td>
         </tr>
@@ -36,18 +33,13 @@
           <td><%= unique_users %></td>
         </tr>
       <% end %>
-      <%# TODO: better stats-summary styling logic %>
       <tr class="stats-summary">
-        <%# TODO: better multi-row <th> styling logic %>
-        <th style="border-bottom-style: none;" rowspan="3" scope="rowgroup">
+        <th style="border-bottom-style: none;" rowspan="2" scope="rowgroup">
           All types
         </th>
-      </tr>
-      <tr class="stats-summary">
         <th>Total sessions</th>
         <td><%= presenter.session_count_total %></td>
       </tr>
-      <%# TODO: better stats-summary styling logic %>
       <tr class="stats-summary">
         <th style="border-top: 0;">Total unique users</th>
         <td style="border-top: 0;"><%= presenter.session_unique_users %></td>
@@ -70,14 +62,13 @@
     <table class="stats-table">
       <% counts = presenter.item_counts_by_state %>
       <tbody>
-      <tr>
-        <%# TODO: better multi-row <th> styling logic %>
-        <th style="border-bottom-style: none;" rowspan="<%= 2 + counts.size %>">
-          Item status
-        </th>
-      </tr>
-      <% counts.each do |title, count| %>
+      <% counts.each_with_index do |(title, count), i| %>
         <tr>
+          <% if i == 0 %>
+            <th rowspan="<%= 1 + counts.size %>">
+              Item status
+            </th>
+          <% end %>
           <th><%= title %></th>
           <td><%= count %></td>
         </tr>
@@ -96,12 +87,9 @@
     <table class="stats-table">
       <tbody>
       <tr>
-        <%# TODO: better multi-row <th> styling logic %>
-        <th style="border-bottom-style: none;" rowspan="6">
+        <th rowspan="6">
           Loan status
         </th>
-      </tr>
-      <tr>
         <th>Active</th>
         <td><%= presenter.loan_count_active %></td>
       </tr>

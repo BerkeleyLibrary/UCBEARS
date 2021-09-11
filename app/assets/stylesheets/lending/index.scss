@@ -24,11 +24,11 @@ section {
 
       &:not(:first-of-type) {
         margin-top: $margin-xlarge;
+        border-top: 1px solid $color-row-divider;
       }
 
       &:not(:last-of-type) {
         padding-bottom: $margin-xlarge;
-        border-bottom: 1px solid $color-row-divider;
       }
 
       // TODO: Share between index.scss, stats.scss
@@ -81,6 +81,7 @@ section {
 
           th, td {
             padding: 0 $margin-large 0 0;
+            border-top: none;
           }
         }
       }
