@@ -2,24 +2,28 @@
 <html lang="us-en">
   <head>
     <title><%= page_title %></title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <link rel="stylesheet" href="https://use.typekit.net/rxa5jay.css">
+
     <%= javascript_pack_tag('application') %>
     <%= stylesheet_link_tag('application', media: 'all') %>
+
     <%= render(partial: 'controller_assets') %>
 
+    <%# TODO: Something less janky %>
     <%= yield :head_additional %>
   </head>
   <body>
-    <main id="main">
-      <a href="#main" class="visually-hidden focusable skip-link">Skip to main content</a>
-      <div id="app" class="container">
-        <%= render "layouts/navbar" %>
-        <%= alerts %>
-        <%= yield %>
-        <%= render "layouts/footer" %>
-      </div>
+    <%= render(partial: 'layouts/header') %>
+    <main>
+      <%= render(partial: 'layouts/flash') %>
+      <%= yield %>
     </main>
+    <%= render(partial: 'layouts/footer') %>
   </body>
 </html>

@@ -98,6 +98,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def item_available
+    return if complete?
     return if lending_item.available?
     # Don't count this loan against number of available copies
     return if lending_item.active_loans.include?(self)

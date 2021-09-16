@@ -1,0 +1,13 @@
+<% if flash.any? %>
+  <aside class="flash">
+    <ul class="flash">
+      <% flash.each do |lvl, messages| %>
+        <% Array(messages).each do |msg| %>
+          <li class="<%= lvl %>">
+            <p><%= msg %></p>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </aside>
+<% end %>

@@ -1,11 +1,31 @@
-<footer class="page-footer font-small blue pt-4">
-  <div class="container text-center">
-    <p class="text-muted"><%= questions_link %></p>
-    <p class="text-muted">Copyright &copy; <%= Time.new.year %> The Regents of the University of California. All rights reserved.</p>
-    <ul class="list-inline font-weight-bold text-uppercase small">
-      <li class="list-inline-item"><a href="https://lib.berkeley.edu/about/privacy-policy">Privacy</a></li>
-      <li class="list-inline-item"><a href="https://dac.berkeley.edu/web-accessibility">Accessibility</a></li>
-      <li class="list-inline-item"><a href="https://ophd.berkeley.edu/policies-and-procedures/nondiscrimination-policy-statement">Nondiscrimination</a></li>
+<footer>
+  <section id="copyright-info">
+    <p>
+      Copyright &copy; <%= Date.current.year %> The Regents of the University of California. All rights reserved.
+    </p>
+    <p>
+      Except where otherwise noted, this work is subject to a
+      <a href="https://www.lib.berkeley.edu/about/creative-commons">Creative Commons Attribution-Noncommercial 4.0
+        License</a>.
+    </p>
+  </section>
+  <section id="questions">
+    <%= questions_link %>
+  </section>
+  <section id="social-media">
+    <a href="https://www.facebook.com/ucberkeleylibrary/"><%= image_tag('icons/facebook-square.svg', class: 'social-media-icon', alt: 'Facebook') %></a>
+    <a href="https://twitter.com/UCBerkeleyLib"><%= image_tag('icons/twitter-square.svg', class: 'social-media-icon', alt: 'Twitter') %></a>
+    <a href="https://www.youtube.com/channel/UCrwP3Cw1FHwqslSAG5JkLTQ"><%= image_tag('icons/youtube-square.svg', class: 'social-media-icon', alt: 'YouTube') %></a>
+    <a href="https://www.instagram.com/ucberkeleylibrary/"><%= image_tag('icons/instagram.svg', class: 'social-media-icon', alt: 'Instagram') %></a>
+  </section>
+  <section id="footer-links">
+    <ul>
+      <li><a href="https://lib.berkeley.edu/about/privacy-policy">Privacy</a></li>
+      <li><a href="https://dac.berkeley.edu/web-accessibility">Accessibility</a></li>
+      <li><a href="https://ophd.berkeley.edu/policies-and-procedures/nondiscrimination-policy-statement">Nondiscrimination</a></li>
     </ul>
-  </div>
+  </section>
+  <section id="footer-logo">
+    <a href="https://www.berkeley.edu/"><%= image_tag('UCBerkeley_wordmark_white.svg', class: 'footer-logo', alt: 'UC Berkeley') %></a>
+  </section>
 </footer>

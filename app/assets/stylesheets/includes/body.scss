@@ -1,0 +1,39 @@
+@import 'globals';
+
+body {
+  background-color: $color-background;
+  color: black;
+
+  font-family: $font-family-sans;
+  font-weight: $font-weight-normal;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: min-content;
+
+  main {
+    flex-grow: 999;
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Desktop/tablet layout
+
+@media (min-width: $media-breakpoint-width) {
+  html {
+    font-size: 16pt;
+    line-height: $line-height;
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Mobile layout
+
+@media (max-width: $media-breakpoint-width) {
+  html {
+    font-size: 12pt;
+    line-height: $line-height;
+  }
+}

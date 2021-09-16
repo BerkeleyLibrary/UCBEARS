@@ -18,7 +18,7 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     return action_return if loan.active?
     return action_check_out if loan.ok_to_check_out?
 
-    tag.a(class: 'btn btn-primary disabled') { 'Check out' }.html_safe
+    tag.a(class: 'btn primary disabled') { 'Check out' }.html_safe
   end
 
   def build_fields
@@ -67,10 +67,10 @@ class LendingItemViewPresenter < LendingItemPresenterBase
   end
 
   def action_return
-    link_to('Return now', lending_return_path(directory: directory), class: 'btn btn-danger')
+    link_to('Return now', lending_return_path(directory: directory), class: 'btn danger')
   end
 
   def action_check_out
-    link_to('Check out', lending_check_out_path(directory: directory), class: 'btn btn-primary')
+    link_to('Check out', lending_check_out_path(directory: directory), class: 'btn primary')
   end
 end

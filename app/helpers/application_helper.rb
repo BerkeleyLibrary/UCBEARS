@@ -1,36 +1,42 @@
 require 'dotiw'
 
 module ApplicationHelper
-  def alerts
-    content_tag(:div, class: 'alerts mt-4') do
-      flash.each do |lvl, msgs|
-        msgs = [msgs] if msgs.is_a?(String)
-        msgs.each do |msg|
-          concat content_tag(:div, msg.html_safe, class: "alert alert-#{lvl}")
-        end
-      end
-    end
+  # ------------------------------------------------------------
+  # Message / text helpers
+
+  def app_title
+    t(:app_title)
   end
 
-  def questions_link
-    mail_to support_email, 'Questions?', class: 'support-email'
-  end
-
-  def logout_link
-    link_to 'CalNet Logout', logout_path, class: 'nav-link' if authenticated?
-  end
-
-  def logo_link
-    link_to(
-      image_tag('logo.png', height: '30', alt: 'UC Berkeley Library'),
-      'http://www.lib.berkeley.edu/',
-      { class: 'navbar-brand no-link-style' }
-    )
+  def app_title_short
+    t(:app_title_short)
   end
 
   def page_title
-    return content_for :page_title if content_for?(:page_title)
+    (title = content_for(:page_title)) ? "#{app_title_short}: #{title}" : app_title
   end
+
+  # ------------------------------------------------------------
+  # Link helpers
+
+  def index_link
+    link_to(app_title_short, index_path)
+  end
+
+  def login_link
+    link_to('CalNet Login', login_path) unless authenticated?
+  end
+
+  def logout_link
+    link_to 'CalNet Logout', logout_path if authenticated?
+  end
+
+  def questions_link
+    mail_to support_email, 'Questions?'
+  end
+
+  # ------------------------------------------------------------
+  # HTML helpers
 
   def format_duration(duration, value_for_nil: nil)
     return value_for_nil unless duration

@@ -1,5 +1,4 @@
 @import 'includes/shared';
-@import 'includes/table';
 
 section {
   &.stats-subsection {
@@ -8,8 +7,8 @@ section {
     // TODO: Share between index.scss, stats.scss
     h2 {
       font-size: $font-size-large;
-      font-weight: $font-weight-book;
-      background: $color-reversed-background;
+      font-weight: $font-weight-normal;
+      background: $color-background-reversed;
       width: 100%;
       color: white;
       padding: $margin-small $margin;
@@ -36,7 +35,7 @@ section {
       margin-top: $margin-xxlarge;
 
       h3 {
-        border-bottom: 1px solid $color-reversed-background;
+        border-bottom: 1px solid $color-background-reversed;
       }
 
     }
@@ -71,7 +70,7 @@ table.stats-table {
   // TODO: better stats-summary styling logic
   tr.stats-summary {
     th, td {
-      border-top: 2px solid $color-reversed-background;
+      border-top: 2px solid $color-background-reversed;
     }
 
     td {

@@ -33,18 +33,18 @@ class LendingItemIndexPresenter < LendingItemPresenterBase
   end
 
   def action_show
-    link_to('Show', lending_show_path(directory: directory), class: 'btn btn-secondary')
+    link_to('Show', lending_show_path(directory: directory), class: 'btn secondary')
   end
 
   def action_activate
-    link_to('Make Active', lending_activate_path(directory: directory), class: 'btn btn-primary')
+    link_to('Make Active', lending_activate_path(directory: directory), class: 'btn primary')
   end
 
   def action_deactivate
-    link_to('Make Inactive', lending_deactivate_path(directory: directory), class: 'btn btn-warning')
+    link_to('Make Inactive', lending_deactivate_path(directory: directory), class: 'btn danger')
   end
 
   def action_delete
-    button_to('Delete', lending_destroy_path(directory: directory), method: :delete, class: 'btn btn-danger')
+    button_to('Delete', lending_destroy_path(directory: directory), method: :delete, class: 'btn danger')
   end
 end

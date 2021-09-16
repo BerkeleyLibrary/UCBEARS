@@ -22,14 +22,14 @@ table {
 table {
   thead {
     th {
-      background: $color-reversed-background;
+      background: $color-background-reversed;
       border: 0;
       color: white;
       text-align: left;
 
       h2 {
         font-size: 1.25rem;
-        font-weight: $font-weight-book;
+        font-weight: $font-weight-normal;
         margin-bottom: 0;
       }
     }

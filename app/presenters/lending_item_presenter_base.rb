@@ -53,7 +53,7 @@ class LendingItemPresenterBase
   protected
 
   def action_edit
-    link_to('Edit item', lending_edit_path(directory: directory), class: 'btn btn-secondary')
+    link_to('Edit item', lending_edit_path(directory: directory), class: 'btn secondary')
   end
 
   def internal_metadata_fields

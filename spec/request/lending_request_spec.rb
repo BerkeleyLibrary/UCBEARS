@@ -292,6 +292,8 @@ describe LendingController, type: :request do
         end
       end
 
+      # TODO: test deactivating items with open loans
+
       describe :deactivate do
         it 'deactivates an active item' do
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH

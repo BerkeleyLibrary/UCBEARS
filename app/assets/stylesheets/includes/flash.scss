@@ -1,0 +1,40 @@
+@import 'globals';
+
+aside.flash {
+}
+
+ul.flash {
+  display: contents;
+
+  li {
+    display: block;
+
+    background-color: $color-founders-rock;
+    color: white !important;;
+
+    font-size: $font-size-small;
+    line-height: $line-height;
+
+    font-weight: $font-weight-medium;
+    border: 1px solid transparent;
+    border-radius: $margin-small;
+    padding: $margin $margin-large;
+    margin-top: $margin;
+    margin-bottom: $margin;
+
+    &.success, &.notice {
+      border-color: $color-sather-gate;
+      background-color: $color-lap-lane;
+    }
+
+    &.warning {
+      border-color: $color-wellman-tile;
+      background-color: $color-south-hall;
+    }
+
+    &.alert, &.danger {
+      border-color: $color-wellman-tile;
+      background-color: $color-rose-garden;
+    }
+  }
+}

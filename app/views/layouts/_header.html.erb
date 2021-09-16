@@ -1,0 +1,30 @@
+<header>
+  <div class="header-logo">
+    <a href="https://www.lib.berkeley.edu/">
+      <%= image_tag('UCBerkeley_Library_wordmark_black.svg', class: 'header-logo', alt: 'UC Berkeley Library') %>
+    </a>
+    <span class="site-name"><%= index_link %></span>
+  </div>
+  <nav>
+    <input type="checkbox" id="nav-menu">
+    <label class="nav-menu-label" for="nav-menu">
+      <%= image_tag('nav-menu.svg', alt: 'Menu') %>
+    </label>
+    <ul>
+      <li>
+        <a href="https://www.lib.berkeley.edu/">Library Home</a>
+      </li>
+      <% if current_user.lending_admin? %>
+      <li>
+        <%= link_to('Index', index_path) %>
+      </li>
+        <li>
+          <%= link_to('Statistics', stats_path) %>
+        </li>
+      <% end %>
+      <li>
+        <%= authenticated? ? logout_link : login_link %>
+      </li>
+    </ul>
+  </nav>
+</header>
