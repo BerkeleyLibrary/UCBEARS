@@ -14,6 +14,13 @@ section {
       width: 100%;
     }
 
+    ul {
+      font-size: $font-size-small;
+      padding-left: $margin-xlarge;
+
+      list-style: square;
+    }
+
     section.notes {
       margin-left: $margin;
 
@@ -29,7 +36,6 @@ section {
       h3 {
         border-bottom: 1px solid $color-background-reversed;
       }
-
     }
   }
 
@@ -45,10 +51,10 @@ table.stats-table {
   font-size: $font-size-small;
   line-height: $line-height;
 
-  //tr, td {
-  //  border: 2px solid #a0a0f0;
-  //  background: #f0f0a0;
-  //}
+  th {
+    text-align: left;
+    font-weight: $font-weight-medium;
+  }
 
   td {
     &:last-child {

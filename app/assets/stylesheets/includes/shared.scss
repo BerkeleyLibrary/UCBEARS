@@ -11,6 +11,7 @@
 
 html {
   height: 100%;
+  font-variant-numeric: lining-nums !important;
 }
 
 // ////////////////////////////////////////////////////////////
@@ -58,8 +59,6 @@ h5 {
   line-height: $line-height !important;
 
   font-weight: $font-weight-medium !important;
-  font-variant-numeric: lining-nums !important;
-
   margin-bottom: $margin !important;
 }
 
@@ -85,9 +84,14 @@ h6 {
 // ////////////////////////////////////////////////////////////
 // Block elements
 
+p {
+  font-size: $font-size-small;
+  margin-top: $margin-small;
+  margin-bottom: $margin-small;
+}
+
 input {
   font-family: $font-family-sans;
-  font-variant-numeric: lining-nums;
   font-weight: $font-weight-normal;
 
   &[type=text] {
@@ -120,35 +124,39 @@ a.btn, input[type=button], input[type=submit] {
   box-shadow: none;
   display: inline-block;
 
-  transition: background-color 0.25s, color 0.25s;
+  &:not(:disabled) {
+    transition: background-color 0.25s, color 0.25s;
+  }
 
   color: white !important;
 
   font-weight: $font-weight-medium;
 
-  &:disabled {
+  &.disabled {
     border-color: $color-disabled !important;
     background-color: $color-disabled !important;
   }
 
-  &.primary {
-    background-color: $color-action-primary;
-    border-color: $color-background-reversed;
-  }
+  &:not(.disabled) {
+    &.primary {
+      background-color: $color-action-primary;
+      border-color: $color-background-reversed;
+    }
 
-  &.secondary {
-    background-color: $color-action-secondary;
-    border-color: $color-background-reversed;
-  }
+    &.secondary {
+      background-color: $color-action-secondary;
+      border-color: $color-background-reversed;
+    }
 
-  &.danger {
-    border-color: $color-danger-border;
-    background-color: $color-danger;
-  }
+    &.danger {
+      border-color: $color-danger-border;
+      background-color: $color-danger;
+    }
 
-  &:hover {
-    color: $color-action-primary !important;
-    background-color: $color-anchor-highlight;
+    &:hover {
+      color: $color-action-primary !important;
+      background-color: $color-anchor-highlight;
+    }
   }
 }
 

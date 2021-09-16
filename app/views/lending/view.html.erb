@@ -38,7 +38,8 @@
         <td><%= format_value(value) %></td>
       </tr>
     <% end %>
-    <% if presenter.show_copyright_warning? %>
+    <%# TODO: something less hacky %>
+    <% if presenter.loan.ok_to_check_out? %>
       <tr>
         <td class="copyright">
           <h3>⚠️ Warning of Copyright</h3>
@@ -51,6 +52,33 @@
             downloading, or distribution of this work. Use of this reproduction in violation of these terms could
             subject users to potential liability for copyright infringement.
           </p>
+        </td>
+      </tr>
+      <tr>
+        <th class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
+          <%= presenter.action %>
+        </th>
+      </tr>
+    <% elsif !presenter.loan.active? %>
+      <tr>
+        <td class="copyright">
+          <h2>⚠️ Item not available</h2>
+          <p><%= presenter.loan.reason_unavailable %></p>
+          <% other_checkouts = presenter.loan.other_checkouts.to_a %>
+          <% unless other_checkouts.empty? %>
+            <p>Items currently checked out:</p>
+            <ul style="padding-left: 1rem; list-style-type: square;"><%# TODO: style this properly %>
+              <% other_checkouts.each do |other_loan| %>
+                <%
+                  other_item = other_loan.lending_item
+                  view_url = lending_view_url(directory: other_item.directory, token: presenter.borrower_token_str)
+                %>
+                <li>
+                  <%= link_to(other_item.title, view_url, target: '_blank') %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
         </td>
       </tr>
       <tr>

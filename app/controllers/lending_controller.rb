@@ -170,7 +170,9 @@ class LendingController < ApplicationController
   def populate_view_flash
     flash.now[:danger] ||= []
     flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.expired? # TODO: something less awkward
-    flash.now[:danger] << reason_unavailable unless available?
+    return unless (reason_unavailable = @lending_item_loan.reason_unavailable)
+
+    flash.now[:danger] = reason_unavailable
   end
 
   # ------------------------------

@@ -32,10 +32,6 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     current_user.borrower_token.token_str
   end
 
-  def show_copyright_warning?
-    @show_copyright_warning
-  end
-
   protected
 
   def add_circ_info(ff)

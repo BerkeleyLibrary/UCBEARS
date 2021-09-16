@@ -77,6 +77,14 @@ class LendingItemLoan < ActiveRecord::Base
     lending_item.available? && !(active? || already_checked_out? || checkout_limit_reached)
   end
 
+  def reason_unavailable
+    return if ok_to_check_out?
+
+    lending_item.reason_unavailable ||
+      (LendingItem::MSG_CHECKED_OUT if already_checked_out?) ||
+      (LendingItem::MSG_CHECKOUT_LIMIT_REACHED if checkout_limit_reached)
+  end
+
   def seconds_remaining
     due_date ? due_date.utc - Time.current.utc : 0
   end
@@ -85,6 +93,10 @@ class LendingItemLoan < ActiveRecord::Base
     return unless complete?
 
     (return_date || due_date) - loan_date
+  end
+
+  def other_checkouts
+    LendingItemLoan.active.where('lending_item_id != ? AND patron_identifier = ?', lending_item_id, patron_identifier)
   end
 
   # ------------------------------------------------------------
@@ -120,7 +132,6 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def checkout_limit_reached
-    other_checkouts = LendingItemLoan.active.where('lending_item_id != ? AND patron_identifier = ?', lending_item_id, patron_identifier)
     other_checkouts.count >= LendingItem::MAX_CHECKOUTS_PER_PATRON
   end
 
