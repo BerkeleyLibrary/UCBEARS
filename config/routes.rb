@@ -3,7 +3,6 @@ Rails.application.routes.draw do
 
   defaults format: 'json' do
     get 'health', to: 'health#index'
-    get 'health/secure', to: 'health#secure'
   end
 
   # Mirador IIIF viewer

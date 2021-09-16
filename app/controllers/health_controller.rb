@@ -5,15 +5,6 @@ class HealthController < ApplicationController
     render_check_result
   end
 
-  # Admin-only health check endpoint
-  def secure
-    require_lending_admin!
-
-    render_check_result
-  end
-
-  private
-
   def render_check_result
     respond_to do |format|
       format.json { render(json: check_result, status: http_status) }

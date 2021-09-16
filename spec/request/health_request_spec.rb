@@ -3,6 +3,22 @@ require 'rails_helper'
 context HealthController, type: :request do
   let(:iiif_url) { 'http://ucbears-iiif/iiif/' }
 
+  let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
+  before(:each) do
+    @env_orig = Lending::Config::ENV_VARS.each_with_object({}) do |var, env|
+      env[var] = ENV[var]
+    end
+
+    @config_ivars_orig = config_instance_vars.each_with_object({}) do |var, ivals|
+      ivals[var] = Lending::Config.instance_variable_get(var)
+    end
+  end
+
+  after(:each) do
+    @env_orig.each { |var, val| ENV[var] = val }
+    @config_ivars_orig.each { |var, val| Lending::Config.instance_variable_set(var, val) }
+  end
+
   RSpec.shared_examples 'a failed check' do |failed_check, cascade_failures = []|
     it 'returns a warning status' do
       get send(path_helper)
@@ -35,12 +51,8 @@ context HealthController, type: :request do
 
     context 'success' do
       before(:each) do
-        {
-          lending_root_path: Pathname.new('spec/data/lending'),
-          iiif_base_uri: URI.parse(iiif_url)
-        }.each do |getter, val|
-          allow(Lending::Config).to receive(getter).and_return(val)
-        end
+        Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+        Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
         stub_request(:head, /#{iiif_url}/).to_return(status: 200)
         create(:complete_item)
@@ -61,25 +73,6 @@ context HealthController, type: :request do
     end
 
     context 'failure' do
-
-      let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
-
-      before(:each) do
-        @env_orig = Lending::Config::ENV_VARS.each_with_object({}) do |var, env|
-          env[var] = ENV[var]
-        end
-
-        @config_ivars_orig = config_instance_vars.each_with_object({}) do |var, ivals|
-          ivals[var] = Lending::Config.instance_variable_get(var)
-        end
-
-      end
-
-      after(:each) do
-        @env_orig.each { |var, val| ENV[var] = val }
-        @config_ivars_orig.each { |var, val| Lending::Config.instance_variable_set(var, val) }
-      end
-
       context 'with reachable IIIF server' do
         before(:each) do
           stub_request(:head, /#{iiif_url}/).to_return(status: 200)
@@ -118,12 +111,8 @@ context HealthController, type: :request do
         let(:failed_check) { 'iiif_server_reachable' }
 
         before(:each) do
-          {
-            lending_root_path: Pathname.new('spec/data/lending'),
-            iiif_base_uri: URI.parse(iiif_url)
-          }.each do |getter, val|
-            allow(Lending::Config).to receive(getter).and_return(val)
-          end
+          Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+          Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
         end
 
         context 'with complete items' do
@@ -178,24 +167,5 @@ context HealthController, type: :request do
 
   describe :health do
     it_behaves_like('a health check', :health_path)
-  end
-
-  describe :health_secure do
-    context 'with admin login' do
-      before(:each) { mock_login(:lending_admin) }
-      after(:each) { logout! }
-
-      it_behaves_like('a health check', :health_secure_path)
-    end
-
-    context 'with non-admin login' do
-      before(:each) { mock_login(:student) }
-      after(:each) { logout! }
-
-      it 'returns 403 Forbidden' do
-        get health_secure_path
-        expect(response.status).to eq(403)
-      end
-    end
   end
 end
