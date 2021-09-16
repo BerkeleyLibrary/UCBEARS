@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   root 'lending#index', as: :index
 
-  get 'health', to: 'home#health'
+  defaults format: 'json' do
+    get 'health', to: 'health#index'
+    get 'health/secure', to: 'health#secure'
+  end
 
   # Mirador IIIF viewer
   mount MiradorRails::Engine, at: MiradorRails::Engine.locales_mount_path

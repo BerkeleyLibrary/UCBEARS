@@ -287,7 +287,7 @@ class LendingItem < ActiveRecord::Base
   def has_page_images?
     return false unless has_iiif_dir?
 
-    Dir.entries(iiif_dir).any? { |e| Lending::Page.page_number?(e) }
+    Dir.entries(iiif_dir).any? { |e| Lending::Page.page_image?(e) }
   end
   # rubocop:enable Naming/PredicateName
 

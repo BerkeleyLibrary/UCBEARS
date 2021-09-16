@@ -20,10 +20,14 @@ RSpec.configure do |config|
   config.formatter = :documentation
 
   config.around(:each) do |example|
+    # prevent running out of file handles-- see https://github.com/teamcapybara/capybara#gotchas
+    # but only on system tests since it makes WebMock less useful
+    # -- see https://github.com/bblimke/webmock/issues/955
+    allow_real_http_connections = (example.metadata[:type] == :system)
+
     WebMock.disable_net_connect!(
       allow_localhost: true,
-      # prevent running out of file handles -- see https://github.com/teamcapybara/capybara#gotchas
-      net_http_connect_on_start: true
+      net_http_connect_on_start: allow_real_http_connections
     )
     example.run
   ensure
