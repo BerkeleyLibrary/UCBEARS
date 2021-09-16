@@ -60,6 +60,11 @@ window.addEventListener('load', () => {
       allowFullscreen: true,
       allowMaximize: false,
       defaultView: 'single',
+      panels: {
+        info: true,
+        search: true
+      },
+      sideBarOpen: true,
       views: [
         { key: 'single' },
         { key: 'book' },
@@ -67,7 +72,7 @@ window.addEventListener('load', () => {
       ]
     },
     thumbnailNavigation: {
-      defaultPosiition: 'far-right'
+      defaultPosition: 'far-right'
     },
     workspace: {
       draggingEnabled: false,

@@ -4,18 +4,6 @@
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
 <section class="item">
-  <table>
-    <thead>
-    <tr>
-      <th>
-        <h2>
-          <%= presenter.title %>
-        </h2>
-      </th>
-    </tr>
-    </thead>
-  </table>
-
   <% if presenter.show_viewer? %>
     <% content_for(:head_additional) do %>
       <%= javascript_pack_tag('viewer') %>
@@ -29,6 +17,8 @@
         }
       )
     %>
+  <% else %>
+  <h2><%= presenter.title %></h2>
   <% end %>
 
   <table class="item-metadata">
