@@ -1,6 +1,6 @@
 <% presenter = LendingItemViewPresenter.new(self, @lending_item, @lending_item_loan) %>
 
-<% content_for(:page_title, "UC BEARS: #{@lending_item.title}") %>
+<% content_for(:page_title, "#{@lending_item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
 <section class="item">
@@ -15,6 +15,7 @@
     %>
       <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
       <%= javascript_pack_tag('viewer') %>
+      <%= stylesheet_link_tag('viewer') %>
     <% end %>
 
     <%=

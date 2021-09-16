@@ -14,45 +14,52 @@ window.addEventListener('load', () => {
     id: iiifViewer.id,
     windows: [{ manifestId: manifestId }],
     selectedTheme: 'dark',
-    theme: {
-      // See https://material-ui.com/customization/default-theme/
-      // TODO: set palette colors https://material-ui.com/customization/palette/
-      windowTopBarStyle: {
-        // border
-      },
-      typography: {
-        // TODO: figure out how to share this with globals.scss / fonts.scss
-        fontFamily: 'freight-sans-pro, sans-serif',
-        h1: {
-          lineHeight: 4 / 3
+    themes: {
+      dark: {
+        // See https://material-ui.com/customization/default-theme/
+        // TODO: figure out how to share this with colors.scss
+        palette: {
+          shades: {
+            main: '#46535e' // $color-background-reversed
+          }
         },
-        h2: {
-          lineHeight: 4 / 3
+        typography: {
+          // TODO: figure out how to share this with shared.scss / fonts.scss
+          fontFamily: 'freight-sans-pro, sans-serif',
+          h1: {
+            lineHeight: 4 / 3
+          },
+          h2: {
+            lineHeight: 4 / 3
+          },
+          h3: {
+            lineHeight: 4 / 3
+          },
+          h5: {
+            fontSize: '1rem',
+            lineHeight: 4 / 3
+          },
+          subtitle1: {
+            lineHeight: 4 / 3,
+            letterSpacing: '0em'
+          },
+          subtitle2: {
+            lineHeight: 4 / 3,
+            letterSpacing: '0em'
+          },
+          body1: {
+            fontSize: '.8333rem',
+            lineHeight: 4 / 3,
+            letterSpacing: '0em'
+          },
+          body2: {
+            fontSize: '.75rem',
+            lineHeight: 4 / 3,
+            letterSpacing: '0em'
+          }
         },
-        h3: {
-          lineHeight: 4 / 3
-        },
-        h5: {
-          fontSize: '1rem',
-          lineHeight: 4 / 3
-        },
-        subtitle1: {
-          lineHeight: 4 / 3,
-          letterSpacing: '0em'
-        },
-        subtitle2: {
-          lineHeight: 4 / 3,
-          letterSpacing: '0em'
-        },
-        body1: {
-          fontSize: '.8333rem',
-          lineHeight: 4 / 3,
-          letterSpacing: '0em'
-        },
-        body2: {
-          fontSize: '.75rem',
-          lineHeight: 4 / 3,
-          letterSpacing: '0em'
+        windowTopBarStyle: {
+          // border
         }
       }
     },
@@ -61,6 +68,7 @@ window.addEventListener('load', () => {
       allowMaximize: false,
       defaultView: 'single',
       panels: {
+        attribution: false,
         info: true,
         search: true
       },

@@ -1,0 +1,63 @@
+@import 'includes/globals';
+
+section.viewer {
+  position: relative;
+  margin-top: $margin;
+
+  height: 1024px; // TODO: something sensible
+  width: 100%;
+
+  background: black;
+
+  a {
+    box-shadow: none;
+    transition: none;
+
+    &:hover {
+      background-color: inherit;
+    }
+  }
+
+  // ////////////////////////////////////////////////////////////
+  // Mirador styling overrides
+
+  // TODO: figure out how to override these in Material UI theme
+
+  .mirador-window-top-bar {
+    border-top: 2px solid transparent !important;
+  }
+
+  .mirador-primary-window {
+    background-color: black;
+  }
+
+  .MuiIconButton-root {
+    padding: $margin-small;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: $font-size-normal;
+  }
+
+  .MuiButtonBase-root {
+    transition: background-color 0.25s, color 0.25s;
+
+    &:hover {
+      background-color: $color-anchor-highlight;
+      color: $color-background-reversed !important;
+    }
+  }
+
+  .MuiPaper-root {
+    background-color: $color-background-reversed;
+  }
+
+  .MuiToolbar-root {
+    background-color: $color-background-reversed;
+  }
+
+  .MuiTab-textColorPrimary.Mui-selected {
+    color: $color-success;
+    border-right-color: $color-success-border !important;
+  }
+}

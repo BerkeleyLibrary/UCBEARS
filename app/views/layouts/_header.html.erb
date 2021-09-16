@@ -12,7 +12,7 @@
     </label>
     <ul>
       <li>
-        <a href="https://www.lib.berkeley.edu/">Library Home</a>
+        <%= authenticated? ? logout_link : login_link %>
       </li>
       <% if current_user.lending_admin? %>
       <li>
@@ -23,7 +23,7 @@
         </li>
       <% end %>
       <li>
-        <%= authenticated? ? logout_link : login_link %>
+        <a href="https://www.lib.berkeley.edu/">Library Home</a>
       </li>
     </ul>
   </nav>

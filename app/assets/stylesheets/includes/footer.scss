@@ -10,11 +10,12 @@ footer {
 
   a {
     color: white;
+    box-shadow: none;
     transition: color 0.25s;
 
     &:hover {
       color: $color-anchor-highlight;
-      box-shadow: none;
+      background-color: transparent;
     }
   }
 

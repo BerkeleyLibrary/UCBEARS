@@ -7,6 +7,9 @@ body {
   font-family: $font-family-sans;
   font-weight: $font-weight-normal;
 
+  font-size: inherit;
+  line-height: $line-height;
+
   display: flex;
   flex-direction: column;
 

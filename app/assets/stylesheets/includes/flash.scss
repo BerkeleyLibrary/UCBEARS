@@ -9,8 +9,8 @@ ul.flash {
   li {
     display: block;
 
-    background-color: $color-founders-rock;
-    color: white !important;;
+    background-color: $color-action-secondary;
+    color: white !important;
 
     font-size: $font-size-small;
     line-height: $line-height;
@@ -23,18 +23,18 @@ ul.flash {
     margin-bottom: $margin;
 
     &.success, &.notice {
-      border-color: $color-sather-gate;
-      background-color: $color-lap-lane;
+      border-color: $color-success-border;
+      background-color: $color-success;
     }
 
     &.warning {
-      border-color: $color-wellman-tile;
-      background-color: $color-south-hall;
+      border-color: $color-warning-border;
+      background-color: $color-warning;
     }
 
     &.alert, &.danger {
-      border-color: $color-wellman-tile;
-      background-color: $color-rose-garden;
+      border-color: $color-danger-border;
+      background-color: $color-danger;
     }
   }
 }

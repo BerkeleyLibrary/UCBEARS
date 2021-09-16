@@ -1,60 +1,9 @@
-@use 'sass:math';
-
+@import 'layout';
 @import 'fonts';
 @import 'colors';
-
-// ////////////////////////////////////////////////////////////
-// Layout
-
-// SCSS math works better on variables than literals
-$em: 1em;
-$rem: 1rem;
-
-// //////////////////////////////
-// Text
-
-// TODO: fewer & more rational font sizes
-$font-size-xxsmall: 2 * $rem / 3;
-$font-size-xsmall: .75 * $rem;
-$font-size-small: 5 * $rem / 6;
-$font-size-normal: $rem;
-$font-size-large: 11 * $rem / 9;
-$font-size-xlarge: 4 * $rem / 3;
-$font-size-xxlarge: 2 * $rem;
-
-$line-height: 4 * $em / 3;
-
-// //////////////////////////////
-// Box layout
-
-// TODO: rationalize vs. font sizes
-$margin-xxxlarge: 2 * $rem;
-$margin-xxlarge: 5 * $rem / 3;
-$margin-xlarge: $rem; // TODO: collapse these?
-$margin-large: $rem;  // TODO: collapse these?
-$margin: $margin-large / 2;
-$margin-small: $margin / 2;
-$margin-xsmall: $rem / 3;
-$margin-xxsmall: $rem / 6;
-
-$padding-header-footer: $rem;
 
 // //////////////////////////////
 // Responsive layouts
 
 // TODO: Something more sophisticated that works properly w/iPhone X
 $media-breakpoint-width: 800px;
-
-$sitename-baseline-adjust: $font-size-xsmall;
-
-// ////////////////////////////////////////////////////////////
-// Shared classes
-
-.visually-hidden {
-  position: absolute !important;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}

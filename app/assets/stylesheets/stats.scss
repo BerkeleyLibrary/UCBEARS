@@ -6,18 +6,11 @@ section {
 
     // TODO: Share between index.scss, stats.scss
     h2 {
-      font-size: $font-size-large;
-      font-weight: $font-weight-normal;
-      background: $color-background-reversed;
       width: 100%;
-      color: white;
-      padding: $margin-small $margin;
     }
 
     // TODO: Share between index.scss, stats.scss
     h3 {
-      font-size: $font-size-large;
-      font-weight: $font-weight-bold;
       width: 100%;
     }
 
@@ -25,7 +18,6 @@ section {
       margin-left: $margin;
 
       h3 {
-        font-size: $font-size-normal;
         border-bottom: 0;
       }
     }
@@ -51,6 +43,7 @@ section {
 table.stats-table {
   width: 100%;
   font-size: $font-size-small;
+  line-height: $line-height;
 
   //tr, td {
   //  border: 2px solid #a0a0f0;
@@ -74,7 +67,7 @@ table.stats-table {
     }
 
     td {
-      font-weight: $font-weight-semibold;
+      font-weight: $font-weight-medium;
     }
   }
 }

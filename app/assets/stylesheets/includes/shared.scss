@@ -21,6 +21,19 @@ h1 {
   line-height: $line-height;
 }
 
+h2 {
+  font-size: $font-size-normal !important;
+  font-weight: $font-weight-normal !important;
+  background: $color-background-reversed;
+  color: white;
+  padding: $margin-small $margin;
+}
+
+h3 {
+  font-size: $font-size-normal;
+  font-weight: $font-weight-medium;
+}
+
 @media (max-width: $media-breakpoint-width) {
   h1 {
     text-align: center;
@@ -47,64 +60,47 @@ ul.actions {
   li {
     display: contents;
 
-    a {
-      box-shadow: none;
-    }
+  }
+}
 
-    a, input[type=button], input[type=submit] {
-      display: block;
+a.btn, input[type=button], input[type=submit] {
+  box-shadow: none;
+  display: inline-block;
 
-      border-width: 1px;
-      border-style: solid;
+  border-width: 1px;
+  border-style: solid;
 
-      background-color: $color-lap-lane;
-      border-color: $color-pacific;
+  background-color: $color-success;
+  border-color: $color-background-reversed;
 
-      color: white !important;
+  color: white !important;
 
-      font-family: $font-family-sans;
-      font-size: $font-size-small;
-      line-height: $line-height;
+  font-family: $font-family-sans;
+  font-size: $font-size-small;
+  line-height: $line-height;
 
-      font-weight: $font-weight-medium;
-      border-radius: $margin-small;
-      padding: $margin-xxsmall $margin;
+  font-weight: $font-weight-medium;
+  border-radius: $margin-small;
+  padding: $margin-xxsmall $margin;
 
-      &:disabled {
-        border-color: $color-web-grey;
-        background-color: $color-web-grey;
-      }
+  &:disabled {
+    border-color: $color-disabled !important;
+    background-color: $color-disabled !important;
+  }
 
-      &.primary {
-        background-color: $color-berkeley-blue;
-        border-color: $color-pacific;
+  &.primary {
+    background-color: $color-action-primary;
+    border-color: $color-background-reversed;
+  }
 
-        &:disabled {
-          border-color: $color-web-grey;
-          background-color: $color-web-grey;
-        }
-      }
+  &.secondary {
+    background-color: $color-action-secondary;
+    border-color: $color-background-reversed;
+  }
 
-      &.secondary {
-        background-color: $color-founders-rock;
-        border-color: $color-pacific;
-
-        &:disabled {
-          border-color: $color-web-grey;
-          background-color: $color-web-grey;
-        }
-      }
-
-      &.danger {
-        border-color: $color-golden-gate;
-        background-color: $color-rose-garden;
-
-        &:disabled {
-          border-color: $color-web-grey;
-          background-color: $color-web-grey;
-        }
-      }
-    }
+  &.danger {
+    border-color: $color-danger-border;
+    background-color: $color-danger;
   }
 }
 
@@ -114,10 +110,11 @@ ul.actions {
 a {
   color: inherit;
   text-decoration: none;
-  transition: box-shadow 0.25s;
+  box-shadow: inset 0 -4px 0 $color-anchor-highlight;
+  transition: background-color 0.25s;
 
   &:hover {
-    box-shadow: inset 0 -4px 0 $color-anchor-highlight;
+    background-color: $color-anchor-highlight;
   }
 }
 
@@ -132,4 +129,16 @@ code {
 
 strong {
   font-weight: $font-weight-bold;
+}
+
+// ////////////////////////////////////////////////////////////
+// Shared classes
+
+.visually-hidden {
+  position: absolute !important;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
