@@ -16,22 +16,61 @@ html {
 // ////////////////////////////////////////////////////////////
 // Semantic elements
 
+// TODO: clean up all these !importants & just reset Mirador styles
+
 h1 {
-  font-size: $font-size-xlarge;
-  line-height: $line-height;
+  font-size: $font-size-xlarge !important;
+  line-height: $line-height !important;
+  margin-bottom: $margin-large;
 }
 
 h2 {
-  font-size: $font-size-normal !important;
-  font-weight: $font-weight-normal !important;
   background: $color-background-reversed;
   color: white;
   padding: $margin-small $margin;
+
+  font-size: $font-size-normal !important;
+  line-height: $line-height !important;
+
+  font-weight: $font-weight-normal !important;
 }
 
 h3 {
-  font-size: $font-size-normal;
-  font-weight: $font-weight-medium;
+  font-size: $font-size-normal !important;
+  line-height: $line-height !important;
+
+  font-weight: $font-weight-medium !important;
+  margin-bottom: $margin;
+}
+
+h4 {
+  font-size: $font-size-small !important;
+  line-height: $line-height !important;
+
+  font-weight: $font-weight-bold !important;
+
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+}
+
+h5 {
+  font-size: $font-size-small !important;
+  line-height: $line-height !important;
+
+  font-weight: $font-weight-medium !important;
+  font-variant-numeric: lining-nums !important;
+
+  margin-bottom: $margin !important;
+}
+
+h6 {
+  font-size: $font-size-xxsmall !important;
+  line-height: $line-height !important;
+
+  font-weight: $font-weight-bold !important;
+  text-transform: uppercase !important;
+
+  margin-bottom: $margin-small;
 }
 
 @media (max-width: $media-breakpoint-width) {
@@ -49,7 +88,15 @@ h3 {
 input {
   font-family: $font-family-sans;
   font-variant-numeric: lining-nums;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-normal;
+
+  &[type=text] {
+    font-size: $font-size-small;
+    line-height: $line-height;
+    border: 1px solid $color-action-secondary;
+    border-radius: $margin-small;
+    padding: $margin-xxsmall $margin;
+  }
 }
 
 ul.actions {
@@ -59,29 +106,25 @@ ul.actions {
 
   li {
     display: contents;
-
   }
 }
 
 a.btn, input[type=button], input[type=submit] {
-  box-shadow: none;
-  display: inline-block;
-
-  border-width: 1px;
-  border-style: solid;
-
-  background-color: $color-success;
-  border-color: $color-background-reversed;
-
-  color: white !important;
-
-  font-family: $font-family-sans;
   font-size: $font-size-small;
   line-height: $line-height;
 
-  font-weight: $font-weight-medium;
+  border: 1px solid $color-action-secondary;
   border-radius: $margin-small;
   padding: $margin-xxsmall $margin;
+
+  box-shadow: none;
+  display: inline-block;
+
+  transition: background-color 0.25s, color 0.25s;
+
+  color: white !important;
+
+  font-weight: $font-weight-medium;
 
   &:disabled {
     border-color: $color-disabled !important;
@@ -101,6 +144,11 @@ a.btn, input[type=button], input[type=submit] {
   &.danger {
     border-color: $color-danger-border;
     background-color: $color-danger;
+  }
+
+  &:hover {
+    color: $color-action-primary !important;
+    background-color: $color-anchor-highlight;
   }
 }
 

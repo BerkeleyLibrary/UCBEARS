@@ -31,6 +31,29 @@ section.viewer {
     background-color: black;
   }
 
+  dl.mirador-label-value-metadata {
+    margin-top: $margin-large;
+
+    // TODO: share w/h6
+    .MuiTypography-subtitle2 {
+      font-size: $font-size-xxsmall !important;
+      line-height: $line-height !important;
+
+      font-weight: $font-weight-bold !important;
+      text-transform: uppercase !important;
+
+      margin-bottom: $margin-small;
+    }
+
+    dd {
+      .mirador-third-party-html {
+        font-family: $font-family-serif;
+        font-size: $font-size-xsmall;
+        line-height: $line-height;
+      }
+    }
+  }
+
   .MuiIconButton-root {
     padding: $margin-small;
   }

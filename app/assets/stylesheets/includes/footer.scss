@@ -69,7 +69,7 @@ footer {
   footer {
     align-items: end;
     display: grid;
-    grid-template-columns: min-content 1fr min-content;
+    grid-template-columns: min-content minmax(0, 1fr) min-content;
 
     section {
       &#copyright-info {
