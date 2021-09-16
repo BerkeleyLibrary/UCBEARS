@@ -24,9 +24,17 @@ module Health
     # TODO: DRY these
     # TODO: toss ActiveModel, use hierarchical status methods
 
-    VALIDATION_METHODS = %i[iiif_base_uri lending_root_path iiif_server_reachable].freeze
+    VALIDATION_METHODS = %i[no_pending_migrations iiif_base_uri lending_root_path iiif_server_reachable].freeze
 
     VALIDATION_METHODS.each { |m| validate(m) }
+
+    def no_pending_migrations
+      ActiveRecord::Migration.check_pending!
+      @no_pending_migrations = true
+    rescue ActiveRecord::PendingMigrationError => e
+      log_error(:no_pending_migrations, e)
+      @no_pending_migrations = false
+    end
 
     def iiif_base_uri
       return @iiif_base_uri if instance_variable_defined?(:@iiif_base_uri)
@@ -76,7 +84,8 @@ module Health
 
     def log_error(attr, e, detail: nil)
       logger.error(e)
-      errors.add(attr, detail ? "#{detail}: #{e.message}" : e.message)
+      msg = [e.class, e.message.to_s.strip].join(': ')
+      errors.add(attr, detail ? "#{detail}: #{msg}" : msg)
     end
 
     # TODO: DRY all of these

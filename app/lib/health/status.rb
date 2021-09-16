@@ -5,6 +5,7 @@ module Health
   class Status < TypesafeEnum::Base
     new(:PASS, 200) # NOTE: states should be ordered from least to most severe
     new(:WARN, 429)
+    new(:FAIL, 503)
 
     # Concatenates health states, returning the more severe state.
     # @return [Status] the more severe status
