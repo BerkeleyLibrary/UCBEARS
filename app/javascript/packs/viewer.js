@@ -1,0 +1,98 @@
+import Mirador from 'mirador/dist/es/src/index.js'
+
+window.addEventListener('load', () => {
+  const iiifViewer = document.getElementById('iiif_viewer')
+  if (!iiifViewer) {
+    console.log('iiif_viewer not found')
+    return
+  }
+
+  const manifestId = iiifViewer.dataset.manifestId
+
+  // See https://github.com/ProjectMirador/mirador/blob/master/src/config/settings.js
+  const config = {
+    id: iiifViewer.id,
+    windows: [{ manifestId: manifestId }],
+    selectedTheme: 'dark',
+    theme: {
+      // See https://material-ui.com/customization/default-theme/
+      // TODO: set palette colors https://material-ui.com/customization/palette/
+      windowTopBarStyle: {
+        // border
+      },
+      typography: {
+        // TODO: figure out how to share this with globals.scss / fonts.scss
+        fontFamily: 'freight-sans-pro, sans-serif',
+        h1: {
+          lineHeight: 4 / 3
+        },
+        h2: {
+          lineHeight: 4 / 3
+        },
+        h3: {
+          lineHeight: 4 / 3
+        },
+        h5: {
+          fontSize: '1rem',
+          lineHeight: 4 / 3
+        },
+        subtitle1: {
+          lineHeight: 4 / 3,
+          letterSpacing: '0em'
+        },
+        subtitle2: {
+          lineHeight: 4 / 3,
+          letterSpacing: '0em'
+        },
+        body1: {
+          fontSize: '.8333rem',
+          lineHeight: 4 / 3,
+          letterSpacing: '0em'
+        },
+        body2: {
+          fontSize: '.75rem',
+          lineHeight: 4 / 3,
+          letterSpacing: '0em'
+        }
+      }
+    },
+    window: {
+      allowFullscreen: true,
+      allowMaximize: false,
+      defaultView: 'single',
+      views: [
+        { key: 'single' },
+        { key: 'book' },
+        { key: 'scroll' }
+      ]
+    },
+    thumbnailNavigation: {
+      defaultPosiition: 'far-right'
+    },
+    workspace: {
+      draggingEnabled: false,
+      allowNewWindows: false,
+      showZoomControls: true,
+      type: null
+    },
+    workspaceControlPanel: {
+      enabled: false
+    }
+  }
+
+  const viewer = Mirador.viewer(config)
+  window.miradorInstance = viewer
+
+  const unsubscriber = {}
+  unsubscriber.unsubscribe = viewer.store.subscribe(() => {
+    const osdCanvas = document.querySelector('div.openseadragon-canvas')
+
+    if (osdCanvas) {
+      osdCanvas.addEventListener('wheel', (event) => {
+        event.stopPropagation()
+      }, { capture: true })
+
+      unsubscriber.unsubscribe()
+    }
+  })
+})

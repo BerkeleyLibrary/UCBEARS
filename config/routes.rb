@@ -5,9 +5,6 @@ Rails.application.routes.draw do
     get 'health', to: 'health#index'
   end
 
-  # Mirador IIIF viewer
-  mount MiradorRails::Engine, at: MiradorRails::Engine.locales_mount_path
-
   # Omniauth automatically handles requests to /auth/:provider. We need only
   # implement the callback.
   get '/login', to: 'sessions#new', as: :login

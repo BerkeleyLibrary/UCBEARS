@@ -17,6 +17,9 @@
   </table>
 
   <% if presenter.show_viewer? %>
+    <% content_for(:head_additional) do %>
+      <%= javascript_pack_tag('viewer') %>
+    <% end %>
     <%=
       render(
         partial: 'viewer',

@@ -1,62 +1,7 @@
 @import '../includes/globals';
 
-// ////////////////////////////////////////////////////////////
-// Mirador hacks
-
-// TODO: Why doesn't Mirador config hide this
-.hud-container {
-  display: none;
-}
-
-.mirador-container {
-  a.mirador-icon-view-type {
-    display: none;
-  }
-}
-
-// Hide manifest add button and drag-and-drop functionality
-.mirador-container {
-  .remove-slot-option, .slotIconContainer, .addItemLink, .dropMask {
-    display: none !important;
-  }
-
-  $slot-box-shadow: inset 0 0 35px #000;
-
-  .slot {
-    &:hover {
-      box-shadow: $slot-box-shadow;
-    }
-  }
-
-  .slot.focused, .slot.draggedOver {
-    box-shadow: $slot-box-shadow;
-  }
-}
-
-// TODO: smarter widths once we get rid of Bootstrap
+// TODO: smarter widths now we've gotten rid of Bootstrap
 div.viewer {
   width: 100%;
   height: 1024px;
 }
-
-//// ////////////////////////////////////////////////////////////
-//// Desktop layout
-//
-//@media (min-width: $media-breakpoint-width) {
-//  div.viewer {
-//    width: 100%;
-//    height: 1056px;
-//    margin: auto;
-//  }
-//}
-//
-//// ////////////////////////////////////////////////////////////
-//// Mobile layout
-//
-//@media (max-width: $media-breakpoint-width) {
-//
-//  div.viewer {
-//    width: 100%;
-//    height: 1024px;
-//  }
-//}
