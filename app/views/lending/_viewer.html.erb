@@ -8,44 +8,45 @@
   <tr>
     <% if @lending_item.complete? %>
       <td class="viewer">
-        <div class="viewer">
-          <%
-            # TODO: make this a method on IIIFItem or something
-            canvas_id = BerkeleyLibrary::Util::URIs.append(manifest_url, '/canvas/p1').to_s
+        <div id="iiif_viewer" data-manifest-id="<%= manifest_url %>"></div>
+        <!--        <div class="viewer">-->
+          <%#
+<!--            # TODO: make this a method on IIIFItem or something-->
+<!--            canvas_id = BerkeleyLibrary::Util::URIs.append(manifest_url, '/canvas/p1').to_s-->
           %>
-          <%=
-            # TODO: do all this by hand in a $(document).ready()
-            mirador_tag(
-              id: 'iiif_viewer',
-              width: '100%',
-              height: '100%',
-              position: 'relative',
-              display: 'block',
-              instance_name: 'miradorInstance',
-              options: {
-                mainMenuSettings: { show: false },
-                data: [
-                  { manifestUri: manifest_url, location: 'UC Berkeley Library' }
-                ],
-                windowObjects: [
-                  {
-                    loadedManifest: manifest_url,
-                    canvasID: canvas_id,
-                    viewType: 'ImageView',
-                    availableViews: ['ImageView'],
-                    annotationLayer: false,
-                    displayLayout: false,
-                    sidePanel: false,
-                  }
-                ]
-              }
+          <%#=
+<!--            # TODO: do all this by hand in a $(document).ready()-->
+<!--            mirador_tag(-->
+<!--              id: 'iiif_viewer',-->
+<!--              width: '100%',-->
+<!--              height: '100%',-->
+<!--              position: 'relative',-->
+<!--              display: 'block',-->
+<!--              instance_name: 'miradorInstance',-->
+<!--              options: {-->
+<!--                mainMenuSettings: { show: false },-->
+<!--                data: [-->
+<!--                  { manifestUri: manifest_url, location: 'UC Berkeley Library' }-->
+<!--                ],-->
+<!--                windowObjects: [-->
+<!--                  {-->
+<!--                    loadedManifest: manifest_url,-->
+<!--                    canvasID: canvas_id,-->
+<!--                    viewType: 'ImageView',-->
+<!--                    availableViews: ['ImageView'],-->
+<!--                    annotationLayer: false,-->
+<!--                    displayLayout: false,-->
+<!--                    sidePanel: false,-->
+<!--                  }-->
+<!--                ]-->
+<!--              }-->
             ) %>
-          <script>
-            $(function () {
-              addMiradorMetadataHandler()
-            })
-          </script>
-        </div>
+<!--          <script>-->
+<!--            $(function () {-->
+<!--              addMiradorMetadataHandler()-->
+<!--            })-->
+<!--          </script>-->
+<!--        </div>-->
       </td>
     <% else %>
       <td class="description">

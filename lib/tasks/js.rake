@@ -1,6 +1,8 @@
 require 'rspec/core/rake_task'
 require 'docker'
 
+# TODO: convert all this to a Yarn task?
+#       see https://unused.github.io/blog/posts/eslint-rails/
 module BerkeleyLibrary
   class ESLintRunner
     include FileUtils
@@ -23,7 +25,7 @@ module BerkeleyLibrary
     # @param report_path [String] the report path
     # @param js_dirs [String, Array<String>] the JavaScript directory or directories to inspect
     # @param err_stream [IO, nil] target for ESLint stderr output (`nil` redirects to `File::NULL`)
-    def initialize(report_format: 'html', report_path: 'artifacts/eslint/index.html', js_dirs: 'app/assets/javascripts', err_stream: nil)
+    def initialize(report_format: 'html', report_path: 'artifacts/eslint/index.html', js_dirs: 'app/javascript', err_stream: nil)
       @report_format = report_format
       @report_path = report_path
       @js_dirs = Array(js_dirs)

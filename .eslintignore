@@ -1,2 +1,2 @@
 # ignore generated files
-app/assets/javascripts/application.js
+config/webpacker/**/*.js

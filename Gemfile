@@ -8,16 +8,12 @@ gem 'awesome_print', '>=1.8.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.3'
 gem 'berkeley_library-marc', '~> 0.2'
 gem 'berkeley_library-tind', '~> 0.4' # TODO: extract BerkeleyLibrary::Util::URIs into separate gem
-gem 'bootstrap'
 gem 'dotiw'
 gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
 gem 'jwt', '~> 2.2'
 gem 'listen' # TODO: what actually uses this?
 gem 'lograge', '>=0.11.2'
-gem 'mirador_rails', git: 'https://github.com/sul-dlss/mirador_rails.git', ref: 'e021335'
 gem 'net-ssh'
 gem 'omniauth-cas',
     git: 'https://github.com/dlindahl/omniauth-cas.git',
@@ -30,7 +26,7 @@ gem 'ruby-prof', '~> 0.17.0' # TODO: move this back to dev/test
 gem 'ruby-vips', '~> 2.0'
 gem 'typesafe_enum', '~> 0.3'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'uglifier', '>= 1.3.0'
+gem 'webpacker', '~> 5.4'
 
 group :development, :test do
   gem 'brakeman'
