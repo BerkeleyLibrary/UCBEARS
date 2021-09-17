@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'capybara_helper'
 
 describe HealthController, type: :system do
   let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
