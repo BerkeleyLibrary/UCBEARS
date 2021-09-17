@@ -59,8 +59,17 @@ describe LendingController, type: :system do
   # ------------------------------------------------------------
   # Helper methods
 
+  def find_alerts
+    page.find('aside#flash')
+  end
+
+  def find_alert(lvl)
+    alerts = find_alerts
+    alerts.find("li.#{lvl}")
+  end
+
   def expect_no_alerts
-    expect(page).not_to have_xpath("//div[contains(@class, 'alerts')]")
+    expect(page).not_to have_selector('aside#flash')
   end
 
   # ------------------------------------------------------------
@@ -235,7 +244,7 @@ describe LendingController, type: :system do
             active_section = find(:xpath, "//section[@id='lending-active']")
             expect(active_section).to have_xpath(".//section[@class='lending-item' and h3[contains(text(), '#{item.title}')]]")
 
-            alert = page.find('.alert-success')
+            alert = find_alert('success')
             expect(alert).to have_text('Item now active.')
 
             item.reload
@@ -254,7 +263,7 @@ describe LendingController, type: :system do
 
             delete_button.click
 
-            alert = page.find('.alert-success')
+            alert = find_alert('success')
             expect(alert).to have_text('Item deleted.')
 
             expect(page).not_to have_content(item.title)
@@ -282,7 +291,7 @@ describe LendingController, type: :system do
 
             delete_button.click
 
-            alert = page.find('.alert-success')
+            alert = find_alert('success')
             expect(alert).to have_text('Item deleted.')
 
             expect(page).not_to have_content(item.directory)
@@ -306,7 +315,7 @@ describe LendingController, type: :system do
             expect(item).to be_complete # just to be sure
 
             delete_button.click
-            alert = page.find('.alert-danger')
+            alert = find_alert('danger')
             expect(alert).to have_text('Only incomplete items can be deleted.')
 
             expect(page).to have_content(item.title)
@@ -461,7 +470,7 @@ describe LendingController, type: :system do
           expect(URI.parse(checkout_link['href']).path).to eq(checkout_path)
           checkout_link.click
 
-          alert = page.find('.alert-success')
+          alert = find_alert('success')
           expect(alert).to have_text('Checkout successful.')
 
           expect(page).to have_selector('div#iiif_viewer')
@@ -477,7 +486,7 @@ describe LendingController, type: :system do
           expect(URI.parse(return_link['href']).path).to eq(return_path)
           return_link.click
 
-          alert = page.find('.alert-success')
+          alert = find_alert('success')
           expect(alert).to have_text('Item returned.')
 
           expect(page).not_to have_selector('div#iiif_viewer')
@@ -545,7 +554,7 @@ describe LendingController, type: :system do
 
           visit lending_view_path(directory: item.directory)
 
-          alert = page.find('.alert-danger')
+          alert = find_alert('danger')
           expect(alert).to have_text('Your loan term has expired.')
 
           expect(page).not_to have_selector('div#iiif_viewer')
@@ -588,14 +597,14 @@ describe LendingController, type: :system do
         it "doesn't leave spurious warnings on other pages" do
           visit lending_view_path(directory: item.directory)
 
-          alert = page.find('.alert-danger')
+          alert = find_alert('danger')
           expect(alert).to have_text('This item is not in active circulation.')
 
           available_item = available.first
           visit lending_view_path(directory: available_item.directory)
 
           expect(page).to have_link('Check out')
-          expect(page).not_to have_selector('.alert-danger')
+          expect_no_alerts
         end
       end
     end

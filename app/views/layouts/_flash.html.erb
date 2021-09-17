@@ -1,8 +1,16 @@
-<% if flash.any? %>
-  <aside class="flash">
+<%
+  flash_messages = flash.each_with_object({}) do |(lvl, msgs), h|
+    next unless msgs
+    next if (messages = Array(msgs)).empty?
+
+    h[lvl] = messages
+  end
+%>
+<% if flash_messages.any? %>
+  <aside id="flash" class="flash">
     <ul class="flash">
-      <% flash.each do |lvl, messages| %>
-        <% Array(messages).each do |msg| %>
+      <% flash_messages.each do |lvl, messages| %>
+        <% messages.each do |msg| %>
           <li class="<%= lvl %>">
             <p><%= msg %></p>
           </li>
