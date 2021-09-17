@@ -15,8 +15,8 @@ services:
       default:
         aliases:
           - app.test
-    # volumes:
-    #   - ./:/opt/app
+    volumes:
+      - ./:/opt/app
     ports:
       - 3000:3000
     restart: always
