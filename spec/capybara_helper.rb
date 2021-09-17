@@ -85,7 +85,7 @@ module CapybaraHelper
       @driver_name = driver_name
       @chrome_args = DEFAULT_CHROME_ARGS + chrome_args
       @chrome_prefs = Configurator.default_chrome_prefs.merge(chrome_prefs)
-      @webmock_options = DEFAULT_WEBMOCK_OPTIONS.merge(webmock_options)
+      @webmock_options = merge_webmock_options(webmock_options)
     end
 
     def configure!
@@ -104,6 +104,14 @@ module CapybaraHelper
     end
 
     private
+
+    def merge_webmock_options(webmock_options)
+      DEFAULT_WEBMOCK_OPTIONS.dup.tap do |opts|
+        webmock_options.each do |opt, val|
+          opts[opt] = val.is_a?(Array) ? ((opts[opt] || []) + val).uniq : val
+        end
+      end
+    end
 
     def configure_capybara!
       Capybara.save_path = CapybaraHelper.local_save_path.tap do |p|

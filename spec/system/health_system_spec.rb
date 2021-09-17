@@ -8,10 +8,12 @@ describe HealthController, type: :system do
       ivals[var] = Lending::Config.instance_variable_get(var)
     end
 
-    @webmock_config = [:allow_localhost, :allow, :net_http_connect_on_start].each_with_object({}) do |attr, opts|
+    @webmock_config = %i[allow_localhost allow net_http_connect_on_start].each_with_object({}) do |attr, opts|
       opts[attr] = WebMock::Config.instance.send(attr)
     end
-    webmock_tmp_config = @webmock_config.merge({ allow: 'ucbears-iiif' })
+    webmock_tmp_config = @webmock_config.dup.tap do |conf|
+      conf[:allow] = (conf[:allow] || []) + ['ucbears-iiif']
+    end
     WebMock.disable_net_connect!(webmock_tmp_config)
 
     Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
