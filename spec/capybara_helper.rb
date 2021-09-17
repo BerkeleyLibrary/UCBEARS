@@ -103,16 +103,6 @@ module CapybaraHelper
       end
     end
 
-    private
-
-    def merge_webmock_options(webmock_options)
-      DEFAULT_WEBMOCK_OPTIONS.dup.tap do |opts|
-        webmock_options.each do |opt, val|
-          opts[opt] = val.is_a?(Array) ? ((opts[opt] || []) + val).uniq : val
-        end
-      end
-    end
-
     def configure_capybara!
       Capybara.save_path = CapybaraHelper.local_save_path.tap do |p|
         FileUtils.mkdir_p(p)
@@ -123,6 +113,16 @@ module CapybaraHelper
       end
 
       Capybara.javascript_driver = driver_name
+    end
+
+    private
+
+    def merge_webmock_options(webmock_options)
+      DEFAULT_WEBMOCK_OPTIONS.dup.tap do |opts|
+        webmock_options.each do |opt, val|
+          opts[opt] = val.is_a?(Array) ? ((opts[opt] || []) + val).uniq : val
+        end
+      end
     end
 
     def configure_rspec!
@@ -182,21 +182,12 @@ module CapybaraHelper
       )
     end
 
-    def configure!
+    def configure_capybara!
       super
 
-      RSpec.configure do |config|
-        # NOTE: this *has* to be done in a before(:each) hook, or it'll get clobbered
-        # by ActionDispatch::SystemTesting::TestHelpers::SetupAndTeardown#before_setup
-        #
-        # TODO: this is fixed in Rails 6.1
-        config.before(:each, type: :system) do
-          Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'] if ENV['CAPYBARA_SERVER_PORT']
-          Capybara.app_host = "http://#{CAPYBARA_APP_HOSTNAME}"
-          Capybara.server_host = '0.0.0.0'
-          Capybara.always_include_port = true
-        end
-      end
+      Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'] if ENV['CAPYBARA_SERVER_PORT']
+      Capybara.app_host = "http://#{CAPYBARA_APP_HOSTNAME}"
+      Capybara.server_host = '0.0.0.0'
     end
   end
 
