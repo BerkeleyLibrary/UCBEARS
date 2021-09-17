@@ -96,6 +96,21 @@ window.addEventListener('load', () => {
   const viewer = Mirador.viewer(config)
   window.miradorInstance = viewer
 
+  // Test via a getter in the options object to see if the passive property is accessed
+  // -- see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
+  let supportsPassive = false
+  try {
+    const opts = Object.defineProperty({}, 'passive', {
+      get: function () {
+        supportsPassive = true
+      }
+    })
+    window.addEventListener('testPassive', null, opts)
+    window.removeEventListener('testPassive', null, opts)
+  } catch (e) {
+    // passive event listeners not supported
+  }
+
   const unsubscriber = {}
   unsubscriber.unsubscribe = viewer.store.subscribe(() => {
     const osdCanvas = document.querySelector('div.openseadragon-canvas')
@@ -103,7 +118,7 @@ window.addEventListener('load', () => {
     if (osdCanvas) {
       osdCanvas.addEventListener('wheel', (event) => {
         event.stopPropagation()
-      }, { capture: true })
+      }, supportsPassive ? { passive: false } : { capture: true })
 
       unsubscriber.unsubscribe()
     }

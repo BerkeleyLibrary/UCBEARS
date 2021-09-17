@@ -69,7 +69,10 @@ context HealthController, type: :request do
         Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
         Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
-        stub_request(:head, /#{iiif_url}/).to_return(status: 200)
+        stub_request(:head, /#{iiif_url}/).to_return(status: 200, headers: {
+                                                       'Access-Control-Allow-Origin' => '*',
+                                                       'Access-Control-Allow-Headers' => 'X-Requested-With'
+                                                     })
         create(:complete_item)
       end
 
@@ -91,7 +94,10 @@ context HealthController, type: :request do
     context 'warning' do
       context 'with reachable IIIF server' do
         before(:each) do
-          stub_request(:head, /#{iiif_url}/).to_return(status: 200)
+          stub_request(:head, /#{iiif_url}/).to_return(status: 200, headers: {
+                                                         'Access-Control-Allow-Origin' => '*',
+                                                         'Access-Control-Allow-Headers' => 'X-Requested-With'
+                                                       })
         end
 
         context 'with complete items' do
@@ -185,7 +191,10 @@ context HealthController, type: :request do
         Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
         Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
-        stub_request(:head, /#{iiif_url}/).to_return(status: 200)
+        stub_request(:head, /#{iiif_url}/).to_return(status: 200, headers: {
+                                                       'Access-Control-Allow-Origin' => '*',
+                                                       'Access-Control-Allow-Headers' => 'X-Requested-With'
+                                                     })
         create(:complete_item)
 
         allow(ActiveRecord::Migration).to receive(:check_pending!).and_raise(ActiveRecord::PendingMigrationError)

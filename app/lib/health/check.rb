@@ -152,12 +152,15 @@ module Health
     def iiif_server_reached
       return unless (test_uri = iiif_test_uri)
 
-      f_successful = Faraday.head(test_uri).success?
-      f_successful.tap do |successful|
-        next if successful
+      response = Faraday.head(test_uri)
 
-        errors.add(:iiif_server_reachable, "HEAD request to IIIF test URL #{iiif_test_uri} returned status #{Faraday.head(test_uri).status}")
-      end
+      f_successful = response.success?
+      errors.add(:iiif_server_reachable, "HEAD #{iiif_test_uri} returned status #{response.status}") unless f_successful
+
+      acao_header = response.headers['Access-Control-Allow-Origin']
+      errors.add(:iiif_server_reachable, "HEAD #{iiif_test_uri} did not return Access-Control-Allow-Origin header") unless acao_header.present?
+
+      f_successful && acao_header.present?
     end
 
   end
