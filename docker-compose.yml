@@ -9,7 +9,7 @@ services:
       - selenium-chrome
     environment: &app-environment
       LIT_LENDING_ROOT: spec/data/lending
-      LIT_IIIF_BASE_URL: http://ucbears-iiif/iiif/
+      LIT_IIIF_BASE_URL: http://iipsrv/iiif/
     init: true
     networks:
       default:
@@ -51,7 +51,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./:/build:rw
 
-  ucbears-iiif:
+  iipsrv:
     image: containers.lib.berkeley.edu/lap/iiip-nginx-single/master:latest
     init: true
     environment:
@@ -68,7 +68,7 @@ services:
     networks:
       default:
         aliases:
-          - ucbears-iiif.test
+          - iipsrv.test
     entrypoint: ["/iipsrv-entrypoint.sh"]
 
   selenium:

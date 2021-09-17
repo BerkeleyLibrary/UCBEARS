@@ -12,11 +12,11 @@ describe HealthController, type: :system do
       opts[attr] = WebMock::Config.instance.send(attr)
     end
     webmock_tmp_config = @webmock_config.dup.tap do |conf|
-      conf[:allow] = (conf[:allow] || []) + ['ucbears-iiif']
+      conf[:allow] = (conf[:allow] || []) + ['iipsrv.test']
     end
     WebMock.disable_net_connect!(webmock_tmp_config)
 
-    Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+    Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
     Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
     create(:complete_item)

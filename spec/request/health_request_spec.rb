@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 context HealthController, type: :request do
-  let(:iiif_url) { 'http://ucbears-iiif/iiif/' }
+  let(:iiif_url) { 'http://iipsrv.test/iiif/' }
 
   let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
   before(:each) do
@@ -66,7 +66,7 @@ context HealthController, type: :request do
 
     context 'success' do
       before(:each) do
-        Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+        Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
         Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
         stub_request(:head, /#{iiif_url}/).to_return(status: 200, headers: {
@@ -121,7 +121,7 @@ context HealthController, type: :request do
               Lending::Config.instance_variable_set(:@lending_root_path, nil)
               ENV[Lending::Config::ENV_ROOT] = nil
 
-              Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+              Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
             end
 
             it_behaves_like('a warning', 'lending_root_path', %w[iiif_server_reachable])
@@ -133,7 +133,7 @@ context HealthController, type: :request do
         let(:failed_check) { 'iiif_server_reachable' }
 
         before(:each) do
-          Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+          Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
           Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
         end
 
@@ -188,7 +188,7 @@ context HealthController, type: :request do
 
     describe :no_pending_migrations do
       before(:each) do
-        Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://ucbears-iiif/iiif/'))
+        Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
         Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
 
         stub_request(:head, /#{iiif_url}/).to_return(status: 200, headers: {

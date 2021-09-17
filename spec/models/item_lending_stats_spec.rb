@@ -6,7 +6,7 @@ describe ItemLendingStats do
   before(:each) do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
-      iiif_base_uri: URI.parse('http://ucbears-iiif/iiif/')
+      iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
     end
