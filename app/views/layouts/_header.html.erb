@@ -12,12 +12,12 @@
     </label>
     <ul>
       <li>
-        <%= authenticated? ? logout_link : login_link %>
+        <%= logout_link %>
       </li>
       <% if current_user.lending_admin? %>
-      <li>
-        <%= link_to('Index', index_path) %>
-      </li>
+        <li>
+          <%= link_to('Index', index_path) %>
+        </li>
         <li>
           <%= link_to('Statistics', stats_path) %>
         </li>

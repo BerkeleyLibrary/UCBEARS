@@ -23,10 +23,6 @@ module ApplicationHelper
     link_to(app_title_short, index_path)
   end
 
-  def login_link
-    link_to('CalNet Login', login_path) unless authenticated?
-  end
-
   def logout_link
     link_to 'CalNet Logout', logout_path if authenticated?
   end

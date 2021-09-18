@@ -194,14 +194,6 @@ class LendingController < ApplicationController
     @most_recent_loan ||= LendingItemLoan.where(**loan_args).order(:updated_at).last
   end
 
-  def available?
-    @lending_item.available? || @lending_item_loan.active?
-  end
-
-  def reason_unavailable
-    @lending_item.reason_unavailable
-  end
-
   def manifest_url
     lending_manifest_url(directory: directory)
   end
