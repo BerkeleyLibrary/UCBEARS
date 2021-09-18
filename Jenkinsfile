@@ -1,5 +1,7 @@
+@Library('jenkins-workflow-scripts@iipsrv-service')
+
 dockerComposePipeline(
-  stack: [template: 'postgres-selenium'],
+  stack: [template: 'iipsrv-postgres-selenium'],
   commands: [
     [
         [exec: 'rake check RAILS_ENV=test'],

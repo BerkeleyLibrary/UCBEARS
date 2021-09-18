@@ -33,4 +33,7 @@ Rails.application.configure do
 
   # Test mode short-circuits the entire auth flow
   OmniAuth.config.test_mode = true
+
+  config.iiif_base_url = 'http://iipsrv.test/iiif/'
+  config.lending_root = 'spec/data/lending'
 end

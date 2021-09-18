@@ -9,7 +9,7 @@ services:
       - selenium-chrome
     environment: &app-environment
       LIT_LENDING_ROOT: spec/data/lending
-      LIT_IIIF_BASE_URL: http://iipsrv/iiif/
+      LIT_IIIF_BASE_URL: http://iipsrv.test/iiif/
     init: true
     networks:
       default:
@@ -57,12 +57,12 @@ services:
     environment:
       - VERBOSITY=6
       - LOGFILE=/dev/stdout
-      - FILESYSTEM_PREFIX=/data/
+      - FILESYSTEM_PREFIX=/iipsrv-data/
       - CORS=*
     volumes:
       - type: bind
-        source: ./spec/data/lending/final
-        target: /data
+        source: ./iipsrv-data
+        target: /iipsrv-data
     ports:
       - 80:80
     networks:

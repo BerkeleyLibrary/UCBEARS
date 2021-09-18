@@ -5,7 +5,6 @@ module Health
   # @see https://tools.ietf.org/id/draft-inadarei-api-health-check-01.html JSON Format
   # @see https://www.consul.io/docs/agent/checks.html StatusCode based on Consul
   class Check
-    include ActiveModel::Validations
     include BerkeleyLibrary::Logging
 
     # ############################################################
@@ -13,7 +12,6 @@ module Health
 
     ERR_IMG_SERVER_UNREACHABLE = 'Error contacting image server'.freeze
     ERR_NO_COMPLETE_ITEM = 'Unable to locate complete item'.freeze
-    ERR_NO_IIIF_TEST_URI = 'Unable to construct IIIF test URI'.freeze
 
     # ############################################################
     # Public methods
@@ -21,91 +19,80 @@ module Health
     # ##############################
     # Validations
 
-    # TODO: DRY these
-    # TODO: toss ActiveModel, use hierarchical status methods
-
-    VALIDATION_METHODS = %i[no_pending_migrations iiif_base_uri lending_root_path iiif_server_reachable].freeze
-
-    VALIDATION_METHODS.each { |m| validate(m) }
+    # TODO: Implement 529 fail
+    VALIDATION_METHODS = %i[
+      no_pending_migrations
+      lending_root_path
+      test_item_exists
+      iiif_server_reachable
+    ].freeze
 
     def no_pending_migrations
-      ActiveRecord::Migration.check_pending!
-      @no_pending_migrations = true
-    rescue ActiveRecord::PendingMigrationError => e
-      log_error(:no_pending_migrations, e)
-      @no_pending_migrations = false
-    end
-
-    def iiif_base_uri
-      return @iiif_base_uri if instance_variable_defined?(:@iiif_base_uri)
-
-      @iiif_base_uri = Lending::Config.iiif_base_uri
-    rescue Lending::ConfigException => e
-      log_error(:iiif_base_uri, e)
-      @iiif_base_uri = nil
+      @no_pending_migrations ||= without_exceptions do
+        ActiveRecord::Migration.check_pending!
+        Result.pass
+      end
     end
 
     def lending_root_path
-      return @lending_root_path if instance_variable_defined?(:@lending_root_path)
+      @lending_root_path ||= without_exceptions do
+        readable = Lending::Config.lending_root_path
+        next Result.warn('lending root path not set') unless readable
+        next Result.warn("not a pathname: #{readable.inspect}") unless readable.is_a?(Pathname)
+        next Result.warn("not a directory: #{readable}") unless readable.directory?
+        next Result.warn("directory not readable: #{readable}") unless readable.readable?
 
-      @lending_root_path = Lending::Config.lending_root_path
-    rescue Lending::ConfigException => e
-      log_error(:lending_root_path, e)
-      @lending_root_path = nil
+        Result.pass
+      end
     end
 
-    # TODO: could we simplify this check with a newer version of iipsrv?
-    #       see https://github.com/ruven/iipsrv/issues/190
-    def iiif_server_reachable
-      return @iiif_server_reachable if instance_variable_defined?(:@iiif_server_reachable)
+    def test_item_exists
+      @test_item_exists ||= without_exceptions do
+        complete_item.present? ? Result.pass : Result.warn(ERR_NO_COMPLETE_ITEM)
+      end
+    end
 
-      @iiif_server_reachable = iiif_server_reached
-    rescue StandardError => e
-      log_error(:iiif_server_reachable, e, detail: ERR_IMG_SERVER_UNREACHABLE)
-      @iiif_server_reachable = false
-    ensure
-      ensure_error_added(:iiif_server_reachable, ERR_IMG_SERVER_UNREACHABLE) unless @iiif_server_reachable
+    def iiif_server_reachable
+      @iiif_server_reachable ||= without_exceptions do
+        iiif_server_reached ? Result.pass : Result.warn(ERR_IMG_SERVER_UNREACHABLE)
+      end
     end
 
     # ##############################
     # Accessors
 
     def result
-      @result ||= passing? ? Result.pass(details) : Result.warn(details)
+      @result ||= run_all_checks
     end
 
     # ############################################################
     # Private methods
 
-    private
-
     # ##############################
-    # Misc. private methods
+    # Checks
 
-    def log_error(attr, e, detail: nil)
-      logger.error(e)
-      msg = [e.class, e.message.to_s.strip].join(': ')
-      errors.add(attr, detail ? "#{detail}: #{msg}" : msg)
+    def run_all_checks
+      status = Health::Status::PASS
+      details = {}.tap do |dt|
+        VALIDATION_METHODS.each do |check|
+          check_result = send(check)
+          status &= check_result.status
+          dt[check] = check_result
+        end
+      end
+      Result.new(status: status, details: details)
     end
 
-    # TODO: DRY all of these
-    def ensure_error_added(attr, msg_default)
-      (errors.add(attr, msg_default) unless errors.key?(attr))
+    def without_exceptions
+      yield
+    rescue StandardError => e
+      logger.error(e)
+      msg = [e.class, e.message.to_s.strip].join(': ')
+      Result.warn(msg)
     end
 
     # ##############################
     # Private accessors
-
-    def details
-      error_hash = errors.to_h
-      {}.tap do |details|
-        Health::Check::VALIDATION_METHODS.each do |check|
-          errs = error_hash.delete(check)
-          details[check] = errs ? Result.warn(errs) : Result.pass
-        end
-        error_hash.each { |check, errs| details[check] = Result.warn(errs) }
-      end
-    end
 
     def active_item
       return @active_item if instance_variable_defined?(:@active_item)
@@ -119,14 +106,6 @@ module Health
       @inactive_item = LendingItem.inactive.first
     end
 
-    # Cached validation status so we only validate once
-    def passing?
-      @passing ||= valid?
-    end
-
-    # ##############################
-    # Sub-validations
-
     def complete_item
       return @complete_item if instance_variable_defined?(:@complete_item)
 
@@ -139,6 +118,15 @@ module Health
       @iiif_test_uri = find_iiif_test_uri
     end
 
+    def iiif_base_uri
+      return @iiif_base_uri if instance_variable_defined?(:@iiif_base_uri)
+
+      @iiif_base_uri = Lending::Config.iiif_base_uri
+    end
+
+    # ##############################
+    # Validation prerequisites
+
     def find_iiif_test_uri
       return unless (base_uri = iiif_base_uri)
       return unless (item = complete_item)
@@ -149,6 +137,8 @@ module Health
       BerkeleyLibrary::Util::URIs.append(base_uri, item.directory, image_file_name, 'info.json')
     end
 
+    # TODO: could we simplify this check with a newer version of iipsrv?
+    #       see https://github.com/ruven/iipsrv/issues/190
     def iiif_server_reached
       return unless (test_uri = iiif_test_uri)
 
