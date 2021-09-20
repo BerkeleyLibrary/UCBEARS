@@ -1,4 +1,4 @@
-@Library('jenkins-workflow-scripts@iipsrv-service')
+@Library('jenkins-workflow-scripts@iipsrv-service') _
 
 dockerComposePipeline(
   stack: [template: 'iipsrv-postgres-selenium'],
