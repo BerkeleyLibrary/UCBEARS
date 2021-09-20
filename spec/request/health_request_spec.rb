@@ -190,6 +190,45 @@ context HealthController, type: :request do
         expect(response).to be_a_health_result
         expect(response).to be_warning
         expect(response).to have_states(passing_except(:iiif_server_reachable))
+        expect(response.body).to match(/Connection refused/)
+      end
+    end
+
+    context 'IIIF test image not found' do
+      let(:expected_status) { 404 }
+
+      before(:each) do
+        stub_request(:any, /#{iiif_url}/).to_return(status: expected_status)
+
+        create(:complete_item)
+      end
+
+      it 'returns a WARN response' do
+        get health_path
+
+        expect(response).to be_a_health_result
+        expect(response).to be_warning
+        expect(response).to have_states(passing_except(:iiif_server_reachable))
+        expect(response.body).to include(expected_status.to_s)
+      end
+    end
+
+    context 'IIIF server bad hostname' do
+      let(:expected_msg) { 'Failed to open TCP connection to test.test:80 (getaddrinfo: nodename nor servname provided, or not known)' }
+
+      before(:each) do
+        stub_request(:any, /#{iiif_url}/).to_raise(SocketError.new(expected_msg))
+
+        create(:complete_item)
+      end
+
+      it 'returns a WARN response' do
+        get health_path
+
+        expect(response).to be_a_health_result
+        expect(response).to be_warning
+        expect(response).to have_states(passing_except(:iiif_server_reachable))
+        expect(response.body).to include(expected_msg)
       end
     end
 

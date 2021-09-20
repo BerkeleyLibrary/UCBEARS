@@ -54,7 +54,15 @@ module Health
 
     def iiif_server_reachable
       @iiif_server_reachable ||= without_exceptions do
-        iiif_server_reached ? Result.pass : Result.warn(ERR_IMG_SERVER_UNREACHABLE)
+        next Result.warn('unable to construct test image URI') unless (test_uri = iiif_test_uri)
+
+        response = Faraday.head(test_uri)
+        next Result.warn("HEAD #{iiif_test_uri} returned status #{response.status}") unless response.success?
+
+        acao_header = response.headers['Access-Control-Allow-Origin']
+        next Result.warn("HEAD #{iiif_test_uri} did not return Access-Control-Allow-Origin header") unless acao_header.present?
+
+        Result.pass
       end
     end
 
@@ -127,6 +135,8 @@ module Health
     # ##############################
     # Validation prerequisites
 
+    # TODO: could we simplify this check with a newer version of iipsrv?
+    #       see https://github.com/ruven/iipsrv/issues/190
     def find_iiif_test_uri
       return unless (base_uri = iiif_base_uri)
       return unless (item = complete_item)
@@ -135,22 +145,6 @@ module Health
       raise Errno::ENOENT, "No page images found in #{item.iiif_dir}" unless image_file_name # NOTE: should never happen
 
       BerkeleyLibrary::Util::URIs.append(base_uri, item.directory, image_file_name, 'info.json')
-    end
-
-    # TODO: could we simplify this check with a newer version of iipsrv?
-    #       see https://github.com/ruven/iipsrv/issues/190
-    def iiif_server_reached
-      return unless (test_uri = iiif_test_uri)
-
-      response = Faraday.head(test_uri)
-
-      f_successful = response.success?
-      errors.add(:iiif_server_reachable, "HEAD #{iiif_test_uri} returned status #{response.status}") unless f_successful
-
-      acao_header = response.headers['Access-Control-Allow-Origin']
-      errors.add(:iiif_server_reachable, "HEAD #{iiif_test_uri} did not return Access-Control-Allow-Origin header") unless acao_header.present?
-
-      f_successful && acao_header.present?
     end
 
   end
