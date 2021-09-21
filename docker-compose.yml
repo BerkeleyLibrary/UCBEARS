@@ -71,7 +71,6 @@ services:
       default:
         aliases:
           - iipsrv.test
-    entrypoint: ["/iipsrv-entrypoint.sh"]
 
   selenium:
     image: selenium/hub
