@@ -21,19 +21,21 @@ services:
       - 3000:3000
     restart: always
 
-  ucbears-collector:
-    build:
-      context: .
-      target: development
-    environment:
-      LIT_LENDING_ROOT: /ucbears
-      LIT_LENDING_COLLECTOR_STOP_FILE: collector-dev.stop
-      VIPS_DISC_THRESHOLD: 1g
-    ports: []
-    command: bin/lending/collect.rb
-    restart: "no"
-    volumes:
-      - ./spec/data/lending:/ucbears
+# Uncomment this to build and run a ucbears-collector container
+#
+#  ucbears-collector:
+#    build:
+#      context: .
+#      target: development
+#    environment:
+#      LIT_LENDING_ROOT: /ucbears
+#      LIT_LENDING_COLLECTOR_STOP_FILE: collector-dev.stop
+#      VIPS_DISC_THRESHOLD: 1g
+#    ports: []
+#    command: bin/lending/collect.rb
+#    restart: "no"
+#    volumes:
+#      - ./spec/data/lending:/ucbears
 
   db:
     environment:
