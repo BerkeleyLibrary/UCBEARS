@@ -1,3 +1,33 @@
+# 1.3.0 (2021-09-21)
+
+User-facing changes:
+
+- update to Mirador 3
+  - remove [`mirador_rails` Ruby gem](https://github.com/sul-dlss/mirador_rails) in favor of
+  [`mirador` JavaScript package](https://github.com/ProjectMirador/mirador)
+- update to 2019 UC Berkeley Library design standards and UCB brand guidelines
+  - remove [Bootsrap](https://github.com/twbs/bootstrap) in favor of custom CSS
+- fix issue where completed loans would sometimes produce spurious error messages,
+  or cause availability to be calculated incorrectly
+
+Technical changes:
+
+- add `/health` endpoint for monitoring
+- update to Rails 6.1n
+  - use Webpacker for JavaScript assets (Sprockets is still used for CSS/SCSS)
+  - remove `bootstrap`, `jquery-rails`, and `jquery-ui-rails` Ruby gems
+- fix IIPImage configuration in CI
+  - use [`iipsrv`](https://github.com/BerkeleyLibrary/iipsrv) instead of
+    [`iiip-nginx-single`](https://git.lib.berkeley.edu/lap/iiip-nginx-single)
+    (note that while `docker-compose.yml` still depends on an internal
+    Berkeley image, it can be built from the GitHub
+    [`iipsrv`](https://github.com/BerkeleyLibrary/iipsrv) repo)
+  - add `iipsrv` service to [Jenkinsfile](Jenkinsfile)
+  - move test data to `iipsrv-data` for interoperability with `iipsrv` Jenkins
+    pipeline
+  - make sure WebMock properly intercepts requests, at least outside of 
+    Capybara testing (see [webmock#955](https://github.com/bblimke/webmock/issues/955))
+
 # 1.2.0 (2021-09-10)
 
 - improves stats display
