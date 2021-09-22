@@ -142,9 +142,10 @@ body > header {
       label {
         &.nav-menu-label {
           display: block;
+          text-align: center;
 
           img {
-            max-height: 2em;
+            max-height: $font-size-xxxlarge;
           }
         }
       }
