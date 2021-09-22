@@ -15,9 +15,11 @@ $font-size-small: 5 * $rem / 6;
 $font-size-normal: $rem;
 $font-size-large: 11 * $rem / 9;
 $font-size-xlarge: 4 * $rem / 3;
-$font-size-xxlarge: 2 * $rem;
+$font-size-xxlarge: 3 * $rem / 2;
+$font-size-xxxlarge: 2 * $rem;
 
 $line-height: 4 * $em / 3;
+$line-height-tight: 7 * $em / 6;
 
 // //////////////////////////////
 // Box layout
@@ -31,7 +33,5 @@ $margin: $margin-large / 2;
 $margin-small: $margin / 2;
 $margin-xsmall: $rem / 3;
 $margin-xxsmall: $rem / 6;
-
-$padding-header-footer: $rem;
 
 $sitename-baseline-adjust: $font-size-xsmall;

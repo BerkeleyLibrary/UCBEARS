@@ -5,8 +5,8 @@ footer {
   color: white;
   font-size: $font-size-xsmall;
   line-height: $line-height;
-  margin-top: $margin-large;
-  padding: $padding-header-footer;
+
+  padding: $margin-xlarge;
 
   a {
     color: white;
@@ -139,14 +139,12 @@ footer {
 
       &#footer-links {
         font-size: $font-size-xxlarge;
+        line-height: $line-height-tight;
         text-align: center;
 
         ul {
-          margin-top: $margin-xlarge;
-          margin-bottom: $margin-xlarge;
-
           li {
-            margin-bottom: $margin-xlarge;
+            margin-bottom: $margin-large;
           }
         }
       }

@@ -6,7 +6,7 @@
 @media (min-width: $media-breakpoint-width) {
   body {
     > main {
-      margin: $margin;
+      padding: $margin-xlarge;
     }
   }
 }
@@ -14,7 +14,7 @@
 @media (max-width: $media-breakpoint-width) {
   body {
     > main {
-      margin: $margin-xxlarge;
+      padding: $margin;
     }
   }
 }

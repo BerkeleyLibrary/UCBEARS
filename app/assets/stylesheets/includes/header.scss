@@ -56,7 +56,9 @@ body > header {
 
 @media (min-width: $media-breakpoint-width) {
   body > header {
-    padding: $padding-header-footer $padding-header-footer 0;
+    padding-top: $margin-xlarge;
+    padding-right: $margin-xlarge;
+    padding-left: $margin-xlarge;
 
     div {
       &.header-logo {
@@ -128,7 +130,7 @@ body > header {
             display: block;
 
             li {
-              font-size: $font-size-xxlarge;
+              font-size: $font-size-xxxlarge;
               line-height: $line-height;
               margin-top: $margin;
               text-align: center;

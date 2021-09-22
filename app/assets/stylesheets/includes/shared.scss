@@ -85,9 +85,11 @@ h6 {
 // Block elements
 
 p {
-  font-size: $font-size-small;
   margin-top: $margin-small;
   margin-bottom: $margin-small;
+
+  font-size: $font-size-small;
+  line-height: $line-height;
 }
 
 input {
