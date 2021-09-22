@@ -32,8 +32,24 @@ section.viewer {
     background-color: black;
   }
 
-  .mirador-canvas-nav {
-    background-color: black;
+  .mirador-osd-container {
+    display: grid;
+    margin-top: $margin;
+    grid-row-gap: $margin;
+
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) min-content;
+
+    .openseadragon-container {
+      grid-row: 1;
+      box-sizing: border-box;
+    }
+
+    .mirador-canvas-nav {
+      background: black;
+      position: static;
+      grid-row: 2;
+    }
   }
 
   .MuiIconButton-root {
@@ -45,11 +61,17 @@ section.viewer {
   }
 
   .MuiButtonBase-root {
-    transition: background-color 0.25s, color 0.25s;
+    &.Mui-disabled {
+      color: $color-disabled;
+    }
 
-    &:hover {
-      background-color: $color-anchor-highlight;
-      color: $color-background-reversed !important;
+    &:not(.Mui-Disabled) {
+      transition: background-color 0.25s, color 0.25s;
+
+      &:hover {
+        background-color: $color-anchor-highlight;
+        color: $color-background-reversed !important;
+      }
     }
   }
 
