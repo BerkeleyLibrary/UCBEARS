@@ -95,12 +95,15 @@ window.addEventListener('load', () => {
   const viewer = Mirador.viewer(config)
   window.miradorInstance = viewer
 
+  // ------------------------------------------------------------
+  // Disable OpenSeadragon default scroll-to-zoom behavior
+
   // Test via a getter in the options object to see if the passive property is accessed
   // -- see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
   let supportsPassive = false
   try {
     const opts = Object.defineProperty({}, 'passive', {
-      get: function () {
+      get: () => {
         supportsPassive = true
       }
     })
@@ -113,12 +116,13 @@ window.addEventListener('load', () => {
   const unsubscriber = {}
   unsubscriber.unsubscribe = viewer.store.subscribe(() => {
     const osdCanvas = document.querySelector('div.openseadragon-canvas')
-
     if (osdCanvas) {
-      osdCanvas.addEventListener('wheel', (event) => {
-        event.stopPropagation()
-      }, supportsPassive ? { passive: false } : { capture: true })
-
+      const listener = (event) => event.stopPropagation()
+      if (supportsPassive) {
+        osdCanvas.addEventListener('wheel', listener, { passive: false, capture: true })
+      } else {
+        osdCanvas.addEventListener('wheel', listener, true)
+      }
       unsubscriber.unsubscribe()
     }
   })
