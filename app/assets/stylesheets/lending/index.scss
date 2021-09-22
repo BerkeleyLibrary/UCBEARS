@@ -13,6 +13,7 @@ section {
     // TODO: Share between index.scss, stats.scss
     h2 {
       width: 100%;
+      box-sizing: border-box;
     }
 
     section.lending-item {
@@ -30,6 +31,7 @@ section {
       // TODO: Share between index.scss, stats.scss
       h3 {
         width: 100%;
+        box-sizing: border-box;
       }
 
       ul.actions {

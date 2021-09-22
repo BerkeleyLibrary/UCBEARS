@@ -11,6 +11,7 @@ section {
       margin-bottom: $margin;
       margin-top: $margin;
       width: 100%;
+      box-sizing: border-box;
 
       thead {
         display: contents;
@@ -46,6 +47,7 @@ section {
   section {
     &.item {
       width: 100%;
+      box-sizing: border-box;
 
       table {
         display: grid;

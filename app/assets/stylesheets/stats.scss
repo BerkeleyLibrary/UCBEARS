@@ -7,11 +7,13 @@ section {
     // TODO: Share between index.scss, stats.scss
     h2 {
       width: 100%;
+      box-sizing: border-box;
     }
 
     // TODO: Share between index.scss, stats.scss
     h3 {
       width: 100%;
+      box-sizing: border-box;
     }
 
     ul {
@@ -48,6 +50,8 @@ section {
 
 table.stats-table {
   width: 100%;
+  box-sizing: border-box;
+
   font-size: $font-size-small;
   line-height: $line-height;
 
@@ -59,6 +63,7 @@ table.stats-table {
   td {
     &:last-child {
       width: 100%;
+      box-sizing: border-box;
     }
   }
 
