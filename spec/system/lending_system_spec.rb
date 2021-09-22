@@ -68,8 +68,13 @@ describe LendingController, type: :system do
     alerts.find("li.#{lvl}")
   end
 
-  def expect_no_alerts
-    expect(page).not_to have_selector('aside#flash')
+  def expect_no_alerts(lvl = nil)
+    alerts = page.find(:xpath, '//aside[@id="flash"]')
+    return unless alerts && lvl
+
+    expect(alerts).not_to have_xpath("//li[@class=\"#{lvl}\"]")
+  rescue Capybara::ElementNotFound
+    # expected
   end
 
   # ------------------------------------------------------------
@@ -474,6 +479,21 @@ describe LendingController, type: :system do
           expect(alert).to have_text('Checkout successful.')
 
           expect(page).to have_selector('div#iiif_viewer')
+        end
+
+        it 'does not show spurious "unavailable" messages after a checkout' do
+          item.update!(copies: 1)
+
+          visit lending_view_path(directory: item.directory)
+          checkout_link = page.find_link('Check out')
+
+          checkout_link.click
+
+          alert = find_alert('success')
+          expect(alert).to have_text('Checkout successful.')
+
+          expect(item).not_to be_available # just to be sure
+          expect_no_alerts('danger')
         end
 
         it 'allows a return' do

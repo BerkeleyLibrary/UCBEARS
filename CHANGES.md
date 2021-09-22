@@ -1,3 +1,8 @@
+# 1.3.1 (next)
+
+- fixed issue where successfully checking out the last copy of an item would show
+  an "item unavailable" message
+
 # 1.3.0 (2021-09-21)
 
 User-facing changes:

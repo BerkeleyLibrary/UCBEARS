@@ -78,7 +78,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def reason_unavailable
-    return if ok_to_check_out?
+    return if active? || ok_to_check_out?
 
     lending_item.reason_unavailable ||
       (LendingItem::MSG_CHECKED_OUT if already_checked_out?) ||
