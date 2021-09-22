@@ -32,27 +32,8 @@ section.viewer {
     background-color: black;
   }
 
-  dl.mirador-label-value-metadata {
-    margin-top: $margin-large;
-
-    // TODO: share w/h6
-    .MuiTypography-subtitle2 {
-      font-size: $font-size-xxsmall !important;
-      line-height: $line-height !important;
-
-      font-weight: $font-weight-bold !important;
-      text-transform: uppercase !important;
-
-      margin-bottom: $margin-small;
-    }
-
-    dd {
-      .mirador-third-party-html {
-        font-family: $font-family-serif;
-        font-size: $font-size-xsmall;
-        line-height: $line-height;
-      }
-    }
+  .mirador-canvas-nav {
+    background-color: black;
   }
 
   .MuiIconButton-root {
@@ -83,5 +64,74 @@ section.viewer {
   .MuiTab-textColorPrimary.Mui-selected {
     color: $color-success;
     border-right-color: $color-success-border !important;
+  }
+
+  div[class^="Connect(WithPlugins(CompanionArea))-toggle"] {
+    background-color: $color-background-reversed;
+    margin-top: 0;
+    border-left: none;
+    border-top: none;
+    width: auto;
+  }
+
+  // fix page forward/back button layout
+  .mirador-osd-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  dl.mirador-label-value-metadata {
+    margin-top: $margin-large;
+
+    // TODO: share w/h6
+    .MuiTypography-subtitle2 {
+      font-size: $font-size-xxsmall !important;
+      line-height: $line-height !important;
+
+      font-weight: $font-weight-bold !important;
+      text-transform: uppercase !important;
+
+      margin-bottom: $margin-small;
+    }
+
+    dd {
+      .mirador-third-party-html {
+        font-family: $font-family-serif;
+        font-size: $font-size-xsmall;
+        line-height: $line-height;
+      }
+    }
+  }
+
+  // ////////////////////////////////////////////////////////////
+  // Serious Mirador hacks
+
+  // TODO: can we just replace the info sidebar with a custom React component?
+  //       see https://github.com/ProjectMirador/mirador/blob/v3.2.0/src/components/WindowSideBarInfoPanel.js
+
+  aside.mirador-window-sidebar-info-panel {
+    border-right: 1px solid $color-background-reversed;
+
+    div.MuiToolbar-root {
+      display: none;
+    }
+
+    div.MuiPaper-root {
+      > div {
+
+        &:not(:first-of-type) {
+          display: none;
+        }
+
+        h4, h5, button {
+          display: none;
+        }
+
+        dl {
+          margin-top: 0;
+        }
+      }
+    }
   }
 }
