@@ -514,6 +514,35 @@ describe LendingController, type: :system do
             expect_no_alerts('danger')
           end
 
+          it 'disallows checkouts if the patron has hit the limit' do
+            other_item = inactive.first
+            other_item.update(active: true, copies: 1)
+            other_item.check_out_to(user.borrower_id)
+
+            visit lending_view_path(directory: item.directory)
+            expect_alert(:danger, LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+
+            expect(page).not_to have_link('Check out')
+          end
+
+          it 'displays an error on a double checkout, but displays the item' do
+            visit lending_view_path(directory: item.directory)
+
+            item.check_out_to(user.borrower_id)
+            count_before = LendingItemLoan.where(patron_identifier: user.borrower_id).count
+
+            checkout_link = page.find_link('Check out')
+            checkout_link.click
+
+            expect_alert(:danger, LendingItem::MSG_CHECKED_OUT)
+            expect_no_alerts(:success)
+
+            expect(page).to have_selector('div#iiif_viewer')
+            expect(page).to have_link('Return now')
+
+            count_after = LendingItemLoan.where(patron_identifier: user.borrower_id).count
+            expect(count_after).to eq(count_before)
+          end
         end
 
         describe 'returns' do
