@@ -2,19 +2,17 @@
 class ApplicationController < ActionController::Base
   include ExceptionHandling
 
-  # TODO: make this configurable
-  SUPPORT_EMAIL_STAFF = 'helpbox@library.berkeley.edu'.freeze
-  SUPPORT_EMAIL_PATRON = 'eref-library@berkeley.edu'.freeze
-
-  # Value of the "Questions?" mailto link in the footer
-  # @return [String]
-  def support_email
-    @support_email || SUPPORT_EMAIL_STAFF
-  end
-  helper_method :support_email
+  # ------------------------------------------------------------
+  # Global controller configuration
 
   # @see https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection/ClassMethods.html
   protect_from_forgery with: :exception
+
+  # ------------------------------------------------------------
+  # Public methods
+
+  # ------------------------------
+  # Authentication/Authorization
 
   # Require that the current user be authenticated
   #
@@ -46,16 +44,6 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.from_session(session).tap(&method(:ensure_session_count))
   end
   helper_method :current_user
-
-  def render_with_errors(view, errors, log_message)
-    logger.error(log_message, errors.full_messages)
-    render_422(view, errors)
-  end
-
-  def render_422(view, errors, locals: {})
-    flash.now[:danger] = errors.full_messages
-    render(view, status: :unprocessable_entity, locals: locals)
-  end
 
   # Sign in the user by storing their data in the session
   #
@@ -94,12 +82,68 @@ class ApplicationController < ActionController::Base
     raise Error::ForbiddenError, 'This page is restricted to active UC Berkeley faculty, staff, and students.'
   end
 
+  # ------------------------------
+  # Email helpers
+
+  # TODO: make this configurable
+  SUPPORT_EMAIL_STAFF = 'helpbox@library.berkeley.edu'.freeze
+  SUPPORT_EMAIL_PATRON = 'eref-library@berkeley.edu'.freeze
+
+  # Value of the "Questions?" mailto link in the footer
+  # @return [String]
+  def support_email
+    @support_email || SUPPORT_EMAIL_STAFF
+  end
+  helper_method :support_email
+
   # TODO: make this less awkward
   def use_patron_support_email!
     @support_email = SUPPORT_EMAIL_PATRON
   end
 
+  # ------------------------------
+  # Error pages
+
+  def render_with_errors(view, errors, log_message)
+    logger.error(log_message, errors.full_messages)
+    render_422(view, errors)
+  end
+
+  def render_422(view, errors, locals: {})
+    flash_now!(:danger, errors.full_messages)
+    render(view, status: :unprocessable_entity, locals: locals)
+  end
+
+  # ------------------------------
+  # Flash alerts
+
+  def flash!(lvl, msg)
+    add_flash(flash, lvl, msg)
+  end
+
+  def flash_now!(lvl, msg)
+    add_flash(flash.now, lvl, msg)
+  end
+
+  # ------------------------------------------------------------
+  # Private methods
+
   private
+
+  def add_flash(flash_obj, lvl, msg)
+    flash_array = ensure_flash_array(flash_obj, lvl)
+    if msg.is_a?(Array)
+      flash_array.concat(msg)
+    else
+      flash_array << msg
+    end
+  end
+
+  def ensure_flash_array(flash_obj, lvl)
+    return (flash_obj[lvl] = []) unless (current = flash_obj[lvl])
+
+    current.is_a?(Array) ? current : (flash_obj[lvl] = Array(current))
+  end
 
   def ensure_session_count(user)
     return if SessionCounter.exists_for?(user)

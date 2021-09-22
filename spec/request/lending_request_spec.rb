@@ -160,9 +160,6 @@ describe LendingController, type: :request do
           get '/lending'
           expect(response.status).to eq(404)
         end
-
-        xit 'only shows the viewer for complete items'
-        xit 'shows a message for incomplete items'
       end
 
       describe :edit do
@@ -320,7 +317,7 @@ describe LendingController, type: :request do
           expect(item.active?).to eq(false)
         end
 
-        it 'expires any checkouts' do
+        it 'makes any checkouts inactive' do
           loan = item.check_out_to!('patron-1')
 
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
@@ -527,33 +524,6 @@ describe LendingController, type: :request do
           expect(loan).to be_complete
 
           body = response.body
-
-          expect(body).to include('Check out')
-          expect(body).not_to include('Return now')
-        end
-
-        it 'pre-returns the loan if the number of copies is changed to zero' do
-          loan = item.check_out_to!(user.borrower_id)
-
-          item.update!(copies: 0, active: false)
-
-          loan.reload
-          expect(loan.complete?).to eq(true)
-          expect(loan.active?).to eq(false)
-
-          expect do
-            get lending_view_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
-          expect(response).to be_successful
-
-          loan.reload
-          expect(loan).to be_complete
-          expect(loan.return_date).to be_within(1.minute).of Time.current
-
-          body = response.body
-
-          return_date_str = loan.return_date.to_s(:short)
-          expect(body).to include(return_date_str)
 
           expect(body).to include('Check out')
           expect(body).not_to include('Return now')

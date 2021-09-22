@@ -17,7 +17,7 @@ class StatsController < ApplicationController
   # Stats page, but generate a profile result
   def profile_index
     RubyProf.start
-    flash.now[:info] = "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>"
+    flash_now!(:info, "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>")
     render(:index)
   ensure
     result = RubyProf.stop

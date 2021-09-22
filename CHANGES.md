@@ -1,7 +1,11 @@
 # 1.3.1 (next)
 
+- changed `LendingItemLoan` `active` scope and `active?` method to only include 
+  loans on active items
 - fixed issue where successfully checking out the last copy of an item would show
   an "item unavailable" message
+- fixed issue where returning an expired loan, or a loan for an inactive item,
+  would show potentially confusing error messages
 
 # 1.3.0 (2021-09-21)
 

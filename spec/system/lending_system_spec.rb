@@ -68,6 +68,19 @@ describe LendingController, type: :system do
     alerts.find("li.#{lvl}")
   end
 
+  # TODO: make this work with multiple alerts at same level
+  def expect_alert(lvl, msg)
+    alert = find_alert(lvl)
+    expect(alert).to have_text(msg)
+  end
+
+  def expect_no_alert(lvl, msg)
+    alert = find_alert(lvl)
+    expect(alert).not_to have_text(msg)
+  rescue Capybara::ElementNotFound
+    # expected
+  end
+
   def expect_no_alerts(lvl = nil)
     alerts = page.find(:xpath, '//aside[@id="flash"]')
     return unless alerts && lvl
@@ -249,8 +262,8 @@ describe LendingController, type: :system do
             active_section = find(:xpath, "//section[@id='lending-active']")
             expect(active_section).to have_xpath(".//section[@class='lending-item' and h3[contains(text(), '#{item.title}')]]")
 
-            alert = find_alert('success')
-            expect(alert).to have_text('Item now active.')
+            expect_alert(:success, 'Item now active.')
+            expect_no_alerts(:danger)
 
             item.reload
             expect(item).to be_active
@@ -268,8 +281,8 @@ describe LendingController, type: :system do
 
             delete_button.click
 
-            alert = find_alert('success')
-            expect(alert).to have_text('Item deleted.')
+            expect_alert(:success, 'Item deleted.')
+            expect_no_alerts(:danger)
 
             expect(page).not_to have_content(item.title)
 
@@ -296,8 +309,8 @@ describe LendingController, type: :system do
 
             delete_button.click
 
-            alert = find_alert('success')
-            expect(alert).to have_text('Item deleted.')
+            expect_alert(:success, 'Item deleted.')
+            expect_no_alerts(:danger)
 
             expect(page).not_to have_content(item.directory)
             expect(LendingItem.exists?(item.id)).to eq(false)
@@ -320,8 +333,7 @@ describe LendingController, type: :system do
             expect(item).to be_complete # just to be sure
 
             delete_button.click
-            alert = find_alert('danger')
-            expect(alert).to have_text('Only incomplete items can be deleted.')
+            expect_alert(:danger, 'Only incomplete items can be deleted.')
 
             expect(page).to have_content(item.title)
             expect(page).not_to have_content(delete_button_xpath)
@@ -356,6 +368,9 @@ describe LendingController, type: :system do
             expect(page).to have_content(loan.due_date.to_s(:short))
           end
         end
+
+        xit 'only shows the viewer for complete items'
+        xit 'shows a message for incomplete items'
       end
 
       describe :edit do
@@ -463,53 +478,106 @@ describe LendingController, type: :system do
       end
 
       describe :view do
-        it 'allows a checkout' do
-          expect(item).to be_available # just to be sure
-          expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
-          visit lending_view_path(directory: item.directory)
-          expect(page).not_to have_selector('div#iiif_viewer')
+        describe 'checkouts' do
 
-          checkout_path = lending_check_out_path(directory: item.directory)
-          checkout_link = page.find_link('Check out')
-          expect(URI.parse(checkout_link['href']).path).to eq(checkout_path)
-          checkout_link.click
+          it 'allows a checkout' do
+            expect(item).to be_available # just to be sure
+            expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
-          alert = find_alert('success')
-          expect(alert).to have_text('Checkout successful.')
+            visit lending_view_path(directory: item.directory)
+            expect(page).not_to have_selector('div#iiif_viewer')
 
-          expect(page).to have_selector('div#iiif_viewer')
+            checkout_path = lending_check_out_path(directory: item.directory)
+            checkout_link = page.find_link('Check out')
+            expect(URI.parse(checkout_link['href']).path).to eq(checkout_path)
+            checkout_link.click
+
+            expect_alert(:success, 'Checkout successful.')
+            expect_no_alerts(:danger)
+
+            expect(page).to have_selector('div#iiif_viewer')
+          end
+
+          it 'does not show spurious "unavailable" messages after a checkout' do
+            item.update!(copies: 1)
+
+            visit lending_view_path(directory: item.directory)
+            checkout_link = page.find_link('Check out')
+
+            checkout_link.click
+
+            expect_alert(:success, 'Checkout successful.')
+            expect_no_alerts(:danger)
+
+            expect(item).not_to be_available # just to be sure
+            expect_no_alerts('danger')
+          end
+
         end
 
-        it 'does not show spurious "unavailable" messages after a checkout' do
-          item.update!(copies: 1)
+        describe 'returns' do
 
-          visit lending_view_path(directory: item.directory)
-          checkout_link = page.find_link('Check out')
+          it 'allows a return' do
+            item.check_out_to(user.borrower_id)
 
-          checkout_link.click
+            visit lending_view_path(directory: item.directory)
 
-          alert = find_alert('success')
-          expect(alert).to have_text('Checkout successful.')
+            return_path = lending_return_path(directory: item.directory)
+            return_link = page.find_link('Return now')
+            expect(URI.parse(return_link['href']).path).to eq(return_path)
+            return_link.click
 
-          expect(item).not_to be_available # just to be sure
-          expect_no_alerts('danger')
-        end
+            expect_alert(:success, 'Item returned.')
+            expect_no_alerts(:danger)
 
-        it 'allows a return' do
-          item.check_out_to(user.borrower_id)
+            expect(page).not_to have_selector('div#iiif_viewer')
+          end
 
-          visit lending_view_path(directory: item.directory)
+          it 'does not show spurious "not checked out" messages after a return' do
+            item.check_out_to(user.borrower_id)
 
-          return_path = lending_return_path(directory: item.directory)
-          return_link = page.find_link('Return now')
-          expect(URI.parse(return_link['href']).path).to eq(return_path)
-          return_link.click
+            visit lending_view_path(directory: item.directory)
+            return_link = page.find_link('Return now')
 
-          alert = find_alert('success')
-          expect(alert).to have_text('Item returned.')
+            return_link.click
 
-          expect(page).not_to have_selector('div#iiif_viewer')
+            expect_alert(:success, 'Item returned.')
+            expect_no_alerts(:danger)
+
+            expect_no_alerts('danger')
+          end
+
+          it 'does not show spurious errors messages after returning an expired item' do
+            item.check_out_to(user.borrower_id)
+
+            visit lending_view_path(directory: item.directory)
+            return_link = page.find_link('Return now')
+
+            loan = item.lending_item_loans.active.find_by(patron_identifier: user.borrower_id)
+            expect(loan).not_to be_nil # just to be sure
+            loan.update!(loan_date: loan.loan_date - 1.days, due_date: loan.due_date - 1.days)
+
+            return_link.click
+
+            expect_alert(:success, 'Item returned.')
+            expect_no_alerts(:danger)
+          end
+
+          it 'allows a return of an item that has become inactive' do
+            item.check_out_to(user.borrower_id)
+
+            visit lending_view_path(directory: item.directory)
+            return_link = page.find_link('Return now')
+
+            item.update(active: false)
+
+            return_link.click
+
+            expect_alert(:success, 'Item returned.')
+            expect_alert(:danger, 'This item is not in active circulation.')
+            expect_no_alert(:danger, 'This item is not checked out.')
+          end
         end
 
         it 'requires a token' do
@@ -574,8 +642,7 @@ describe LendingController, type: :system do
 
           visit lending_view_path(directory: item.directory)
 
-          alert = find_alert('danger')
-          expect(alert).to have_text('Your loan term has expired.')
+          expect_alert(:danger, 'Your loan term has expired.')
 
           expect(page).not_to have_selector('div#iiif_viewer')
         end
@@ -617,8 +684,7 @@ describe LendingController, type: :system do
         it "doesn't leave spurious warnings on other pages" do
           visit lending_view_path(directory: item.directory)
 
-          alert = find_alert('danger')
-          expect(alert).to have_text('This item is not in active circulation.')
+          expect_alert(:danger, 'This item is not in active circulation.')
 
           available_item = available.first
           visit lending_view_path(directory: available_item.directory)

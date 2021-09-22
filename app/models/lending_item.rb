@@ -21,11 +21,6 @@ class LendingItem < ActiveRecord::Base
   validate :active_items_are_complete
 
   # ------------------------------------------------------------
-  # Callbacks
-
-  after_update :return_loans_if_inactive
-
-  # ------------------------------------------------------------
   # Constants
 
   DEBUG_ATTRIBUTES = %i[
@@ -356,12 +351,6 @@ class LendingItem < ActiveRecord::Base
     Lending::MarcMetadata.from_file(marc_path).tap do |md|
       Rails.logger.warn("No MARC metadata found in #{marc_path}") unless md
     end
-  end
-
-  def return_loans_if_inactive
-    return if active?
-
-    lending_item_loans.find_each(&:return!)
   end
 
   def ensure_record_id_and_barcode

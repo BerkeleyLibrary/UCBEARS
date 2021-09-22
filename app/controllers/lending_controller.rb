@@ -34,7 +34,7 @@ class LendingController < ApplicationController
   def profile_index
     RubyProf.start
     ensure_lending_items!
-    flash.now[:info] = "<a href=\"/#{PROFILE_INDEX_HTML}\">Profile generated.</a>"
+    flash_now!(:info, "<a href=\"/#{PROFILE_INDEX_HTML}\">Profile generated.</a>")
     render(:index)
   ensure
     result = RubyProf.stop
@@ -80,7 +80,7 @@ class LendingController < ApplicationController
       return render_with_errors(:edit, @lending_item.errors, "Updating #{@lending_item.directory} failed")
     end
 
-    flash[:success] = 'Item updated.'
+    flash!(:success, 'Item updated.')
     redirect_to lending_show_url(directory: directory)
   end
 
@@ -88,39 +88,39 @@ class LendingController < ApplicationController
     @lending_item_loan = @lending_item.check_out_to(patron_identifier)
     return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed") unless @lending_item_loan.persisted?
 
-    flash[:success] = 'Checkout successful.'
+    flash!(:success, 'Checkout successful.')
     # TODO: can we get Rails to just parameterize the token as a string?
     token_str = current_user.borrower_token.token_str
     redirect_to lending_view_url(directory: directory, token: token_str)
   end
 
   def return
-    if active_loan
-      active_loan.return!
-      flash[:success] = 'Item returned.'
+    loan = active_loan || most_recent_loan
+    if loan.nil? || loan.returned?
+      flash!(:danger, LendingItem::MSG_NOT_CHECKED_OUT)
     else
-      flash[:danger] = LendingItem::MSG_NOT_CHECKED_OUT
+      loan.return!
+      flash!(:success, 'Item returned.')
     end
-
     redirect_to lending_view_url(directory: directory)
   end
 
   def activate
     if @lending_item.active?
-      flash[:info] = 'Item already active.'
+      flash!(:info, 'Item already active.')
     else
       @lending_item.copies = 1 if @lending_item.copies < 1
       @lending_item.update!(active: true)
-      flash[:success] = 'Item now active.'
+      flash!(:success, 'Item now active.')
     end
     redirect_to(:index)
   end
 
   def deactivate
     if @lending_item.inactive?
-      flash[:info] = 'Item already inactive.'
+      flash!(:info, 'Item already inactive.')
     elsif @lending_item.update(active: false)
-      flash[:success] = 'Item now inactive.'
+      flash!(:success, 'Item now inactive.')
     end
 
     redirect_to(:index)
@@ -129,10 +129,10 @@ class LendingController < ApplicationController
   def destroy
     if @lending_item.complete?
       logger.warn('Failed to delete non-incomplete item', @lending_item.debug_hash)
-      flash[:danger] = 'Only incomplete items can be deleted.'
+      flash!(:danger, 'Only incomplete items can be deleted.')
     else
       @lending_item.destroy!
-      flash[:success] = 'Item deleted.'
+      flash!(:success, 'Item deleted.')
     end
 
     redirect_to(:index)
@@ -144,7 +144,7 @@ class LendingController < ApplicationController
     rescue StandardError => e
       msg = "Error reloading MARC metadata: #{e}"
       logger.error(msg, e)
-      flash[:danger] = msg
+      flash!(:danger, msg)
     end
 
     redirect_to lending_show_url(directory: @lending_item.directory)
@@ -160,19 +160,18 @@ class LendingController < ApplicationController
 
     changes = @lending_item.refresh_marc_metadata!
     if changes.empty?
-      flash[:info] = 'No changes found.'
+      flash!(:info, 'No changes found.')
     else
       logger.info("MARC metadata for #{@lending_item.id} reloaded", changes.transform_values { |(v2, v1)| { from_value: v1, to_value: v2 } })
-      flash[:success] = 'MARC metadata reloaded.'
+      flash!(:success, 'MARC metadata reloaded.')
     end
   end
 
   def populate_view_flash
-    flash.now[:danger] ||= []
-    flash.now[:danger] << 'Your loan term has expired.' if most_recent_loan&.expired? # TODO: something less awkward
+    flash_now!(:danger, 'Your loan term has expired.') if most_recent_loan&.expired? # TODO: something less awkward
     return unless (reason_unavailable = @lending_item_loan.reason_unavailable)
 
-    flash.now[:danger] = reason_unavailable
+    flash_now!(:danger, reason_unavailable)
   end
 
   # ------------------------------

@@ -11,7 +11,10 @@ class LendingItemLoan < ActiveRecord::Base
   # TODO: rename date columns to datetimes
 
   scope :pending, -> { where(loan_date: nil) }
-  scope :active, -> { where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc) }
+  scope :active, -> {
+    where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc)
+      .joins(:lending_item).where(lending_item: { active: true })
+  }
   scope :returned, -> { where('return_date IS NOT NULL') }
   scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
   scope :complete, -> { where('due_date <= ? OR return_date IS NOT NULL', Time.current.utc) }
@@ -53,7 +56,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def active?
-    return_date.nil? && !loan_term_expired? && loan_date.present?
+    return_date.nil? && !loan_term_expired? && loan_date.present? && lending_item.active?
   end
 
   def returned?
