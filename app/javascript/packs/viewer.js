@@ -75,8 +75,7 @@ window.addEventListener('load', () => {
       sideBarOpen: true,
       views: [
         { key: 'single' },
-        { key: 'book' },
-        { key: 'scroll' }
+        { key: 'book' }
       ]
     },
     thumbnailNavigation: {
