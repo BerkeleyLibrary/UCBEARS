@@ -11,7 +11,7 @@
         next unless @lending_item_loan&.active?
 
         redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
-        redirect_url = lending_return_url(directory: @lending_item_loan.lending_item.directory)
+        redirect_url = lending_view_url(directory: @lending_item_loan.lending_item.directory)
     %>
       <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
       <%= javascript_pack_tag('viewer') %>

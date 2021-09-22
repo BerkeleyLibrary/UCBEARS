@@ -6,6 +6,8 @@
   an "item unavailable" message
 - fixed issue where returning an expired loan, or a loan for an inactive item,
   would show potentially confusing error messages
+- `meta http-equiv="Refresh"` on view page now just redirects to the view itself
+  (allowing the loan to expire) rather than explicitly returning the item
 
 # 1.3.0 (2021-09-21)
 

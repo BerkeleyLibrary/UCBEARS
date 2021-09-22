@@ -650,17 +650,18 @@ describe LendingController, type: :system do
         it 'redirects when loan expires' do
           loan = item.check_out_to(user.borrower_id)
 
-          # Capybara doesn't seem to respect the meta-refresh, so we'll just
-          # make sure it's there
+          # Timing the meta-refresh with Capybara is tricky, so we'll just confirm that it's there
           visit lending_view_path(directory: item.directory)
           meta_refresh = page.find(:xpath, '/html/head/meta[@http-equiv="Refresh"]', visible: false)
 
           md = /([0-9]+); URL=(.*)/.match(meta_refresh[:content])
           redirect_uri = URI.parse(md[2])
-          expect(redirect_uri.path).to eq(lending_return_path(directory: item.directory))
+          expect(redirect_uri.path).to eq(lending_view_path(directory: item.directory, token: user.borrower_token))
 
+          remaining = loan.seconds_remaining
           redirect_after = md[1].to_i
-          expect(redirect_after).to be_within(60).of(loan.seconds_remaining)
+          expect(redirect_after).to be > remaining
+          expect(redirect_after).to be_within(60).of(remaining)
         end
       end
     end
