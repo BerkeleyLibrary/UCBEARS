@@ -6,14 +6,11 @@ en:
     formats:
       long: '%B %-d, %Y'                    # August 4, 2010
       short: '%F'                           # 2010-08-04
-      export: '%B %e, %Y'                   # August  4, 2010
-      input: '%m/%d/%y'                     # 07/02/21
 
   time:
     formats:
       long: '%B %-d, %Y, %-l:%M %p (%Z)'    # August 4, 2010, 9:33 AM (PDT)
       short: '%F %-l:%M %p %Z'              # 2010-08-04 9:33 AM PDT
-      export: '%D %r %Z'                    # 08/04/10 09:33 AM PDT
 
   omniauth_callbacks:
     calnet:
