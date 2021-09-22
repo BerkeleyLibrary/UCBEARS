@@ -70,7 +70,7 @@ window.addEventListener('load', () => {
       panels: {
         attribution: false,
         info: true,
-        search: true
+        search: true // TODO: implement search
       },
       sideBarOpen: true,
       views: [
