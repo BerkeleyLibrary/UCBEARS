@@ -88,12 +88,15 @@ section.viewer {
     border-right-color: $color-success-border !important;
   }
 
-  div[class^="Connect(WithPlugins(CompanionArea))-toggle"] {
-    background-color: $color-background-reversed;
-    margin-top: 0;
-    border-left: none;
-    border-top: none;
-    width: auto;
+  div.mirador-companion-area-left {
+    // the only CSS class on this div seems to be named at runtime
+    > div:not(:first-of-type) {
+      margin-top: 0 !important;
+      background-color: $color-background-reversed !important;
+      width: auto !important;
+      border-top: none !important;
+      border-left: none !important;
+    }
   }
 
   // fix page forward/back button layout
