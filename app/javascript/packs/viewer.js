@@ -76,6 +76,7 @@ window.addEventListener('load', () => {
       views: [
         { key: 'single' },
         { key: 'book' }
+        // TODO: get vertical scroll working, see [mirador#3021](https://github.com/ProjectMirador/mirador/pull/3021)
       ]
     },
     thumbnailNavigation: {
