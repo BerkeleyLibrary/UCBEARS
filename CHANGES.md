@@ -1,5 +1,15 @@
 # 1.3.1 (next)
 
+Viewer:
+
+- sidebar now only displays the OCR transcript (other metadata is concealed with CSS `display: none`)
+- canvas layout is adjusted so page images at 1x zoom don't overflow into the navigation area
+- mouse wheel scroll events in the canvas are properly intercepted to prevent mouse zoom and 
+  allow the browser window to scroll
+- "scroll" view is disabled pro tem till we figure out vertical scrolling
+
+Checkouts and returns:
+
 - changed `LendingItemLoan` `active` scope and `active?` method to only include 
   loans on active items
 - fixed issue where successfully checking out the last copy of an item would show
@@ -8,6 +18,11 @@
   would show potentially confusing error messages
 - `meta http-equiv="Refresh"` on view page now just redirects to the view itself
   (allowing the loan to expire) rather than explicitly returning the item
+
+Miscellaneous:
+
+- main document area margins and padding are adjusted to match header and footer
+- footer margins and font sizes are adjusted to better match Berkeley style
 
 # 1.3.0 (2021-09-21)
 
