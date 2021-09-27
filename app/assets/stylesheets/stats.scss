@@ -55,6 +55,14 @@ table.stats-table {
   font-size: $font-size-small;
   line-height: $line-height;
 
+  thead {
+    th {
+      background-color: inherit;
+      color: inherit;
+      font-weight: $font-weight-bold;
+    }
+  }
+
   th {
     text-align: left;
     font-weight: $font-weight-medium;

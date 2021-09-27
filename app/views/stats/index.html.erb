@@ -6,6 +6,14 @@
 
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
+<nav>
+  <ul>
+    <% %w[sessions items loans].each do |subsection| %>
+    <li><a href="#stats-<%= subsection %>"><%= subsection.capitalize %></a></li>
+    <% end %>
+  </ul>
+</nav>
+
 <%# TODO: use Rails I18n %>
 <section class="stats">
 
