@@ -5,6 +5,7 @@
 @import 'main';
 @import 'footer';
 @import 'table';
+@import 'actions';
 
 // ////////////////////////////////////////////////////////////
 // Structural elements
@@ -102,63 +103,6 @@ input {
     border: 1px solid $color-action-secondary;
     border-radius: $margin-small;
     padding: $margin-xxsmall $margin;
-  }
-}
-
-ul.actions {
-  display: flex;
-  flex-direction: row;
-  gap: $margin;
-
-  li {
-    display: contents;
-  }
-}
-
-a.btn, input[type=button], input[type=submit] {
-  font-size: $font-size-small;
-  line-height: $line-height;
-
-  border: 1px solid $color-action-secondary;
-  border-radius: $margin-small;
-  padding: $margin-xxsmall $margin;
-
-  box-shadow: none;
-  display: inline-block;
-
-  &:not(:disabled) {
-    transition: background-color 0.25s, color 0.25s;
-  }
-
-  color: white !important;
-
-  font-weight: $font-weight-medium;
-
-  &.disabled {
-    border-color: $color-disabled !important;
-    background-color: $color-disabled !important;
-  }
-
-  &:not(.disabled) {
-    &.primary {
-      background-color: $color-action-primary;
-      border-color: $color-background-reversed;
-    }
-
-    &.secondary {
-      background-color: $color-action-secondary;
-      border-color: $color-background-reversed;
-    }
-
-    &.danger {
-      border-color: $color-danger-border;
-      background-color: $color-danger;
-    }
-
-    &:hover {
-      color: $color-action-primary !important;
-      background-color: $color-anchor-highlight;
-    }
   }
 }
 

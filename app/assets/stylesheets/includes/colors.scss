@@ -17,6 +17,7 @@ $color-lawrence: #00b0da;
 $color-lap-lane: #00a598;
 $color-pacific: #46535e;
 $color-sather-gate: #b9d3b6;
+$color-soybean: #859438;
 $color-stone-pine: #584f29;
 $color-background-grey: #eeeeee;
 $color-web-grey: #888888;
@@ -25,6 +26,7 @@ $color-web-grey: #888888;
 // As used
 
 $color-background: white;
+$color-foreground: black;
 $color-background-reversed: $color-pacific;
 
 $color-site-name: $color-pacific;
@@ -35,8 +37,10 @@ $color-anchor-highlight: $color-california-gold;
 
 // Actions
 
-$color-action-primary: $color-berkeley-blue;
-$color-action-secondary: $color-founders-rock;
+$color-action-text: white;
+
+$color-action-primary:  $color-founders-rock;
+$color-action-secondary: $color-pacific;
 
 $color-disabled: $color-web-grey;
 
