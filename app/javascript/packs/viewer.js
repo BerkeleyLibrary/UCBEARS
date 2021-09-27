@@ -63,6 +63,12 @@ window.addEventListener('load', () => {
         }
       }
     },
+    translations: {
+      en: {
+        nextCanvas: 'Next page',
+        previousCanvas: 'Previous page'
+      }
+    },
     window: {
       allowFullscreen: true,
       allowMaximize: false,
