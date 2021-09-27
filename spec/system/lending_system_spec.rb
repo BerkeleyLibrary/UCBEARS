@@ -121,7 +121,14 @@ describe LendingController, type: :system do
         end
 
         def find_item_section(item)
-          find(:xpath, "//section[@id='#{LendingHelper.format_html_id(item.directory)}']")
+          xpath = item_section_xpath(item)
+          find(:xpath, xpath)
+        end
+
+        def item_section_xpath(item, absolute: true)
+          id = LendingHelper.format_html_id(item.directory)
+          path = "//section[@id='#{id}']"
+          absolute ? path : ".#{path}"
         end
 
         it 'lists the items' do
@@ -151,7 +158,7 @@ describe LendingController, type: :system do
             expect(row_count).to eq(item_count), "Expected #{item_count} rows for #{state}, got #{row_count}: #{item_sections.map(&:text).join(', ')}"
 
             items_for_state.each do |item|
-              item_section = section.find(:xpath, ".//section[@class='lending-item' and h3[contains(text(), '#{item.title}')]]")
+              item_section = section.find(:xpath, item_section_xpath(item, absolute: false))
               show_path = lending_show_path(directory: item.directory)
               expect(item_section).to have_link('Show', href: /#{Regexp.escape(show_path)}/)
             end
@@ -260,7 +267,7 @@ describe LendingController, type: :system do
             activate_link.click
 
             active_section = find(:xpath, "//section[@id='lending-active']")
-            expect(active_section).to have_xpath(".//section[@class='lending-item' and h3[contains(text(), '#{item.title}')]]")
+            expect(active_section).to have_xpath(item_section_xpath(item, absolute: false))
 
             expect_alert(:success, 'Item now active.')
             expect_no_alerts(:danger)
