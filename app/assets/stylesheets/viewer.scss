@@ -89,6 +89,30 @@ section.viewer {
     }
   }
 
+  .mirador-workspace-viewport {
+    padding-left: 0 !important;
+  }
+
+  // Hide everything except the Mirador branding
+  .mirador-workspace-control-panel {
+    display: contents;
+    width: 0;
+
+    .MuiToolbar-root {
+      display: none;
+    }
+
+    div {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1100;
+      width: min-content;
+      padding-left: 6px;
+      padding-bottom: $margin-xsmall;
+    }
+  }
+
   .MuiIconButton-root {
     padding: $margin-small;
   }

@@ -95,7 +95,9 @@ window.addEventListener('load', () => {
       type: null
     },
     workspaceControlPanel: {
-      enabled: false
+      // Enabled to display the Mirador branding, but
+      // we everything but that with CSS
+      enabled: true
     }
   }
 
