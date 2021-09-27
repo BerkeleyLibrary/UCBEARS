@@ -480,11 +480,6 @@ describe LendingController, type: :system do
       describe :view do
         describe 'skip link' do
           let(:skip_link_text) { 'Skip to main content' }
-          it 'is hidden by default' do
-            visit lending_view_path(directory: item.directory)
-
-            expect(page).not_to have_link(skip_link_text)
-          end
 
           it 'is tabbable' do
             path = lending_view_path(directory: item.directory)
