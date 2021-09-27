@@ -38,17 +38,54 @@ section.viewer {
     grid-row-gap: $margin;
 
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) min-content;
+    grid-template-rows: min-content minmax(0, 1fr);
 
     .openseadragon-container {
-      grid-row: 1;
+      grid-row: 2;
       box-sizing: border-box;
     }
 
     .mirador-canvas-nav {
       background: black;
       position: static;
-      grid-row: 2;
+      grid-row: 1;
+
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) min-content min-content;
+
+      padding-right: $margin;
+      box-sizing: border-box;
+
+      // no predictable class on this element
+      div:first-of-type {
+        grid-row: 1;
+        grid-column: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+      }
+
+      div.mirador-osd-navigation {
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      .mirador-osd-info {
+        grid-row: 1;
+        grid-column: 3;
+
+        padding-right: $margin-small;
+        padding-left: $margin-large;
+        padding-top: $margin-small;
+        padding-bottom: 0;
+        text-align: right;
+        box-sizing: border-box;
+
+        .mirador-canvas-count {
+          font-size: $font-size-xsmall;
+          line-height: $line-height;
+        }
+      }
     }
   }
 
