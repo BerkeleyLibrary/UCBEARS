@@ -37,9 +37,6 @@ section {
 
       ul.actions {
         display: flex;
-        margin-left: $margin;
-        margin-top: $margin-small;
-        margin-bottom: $margin-small;
         padding: 0;
 
         li.action {
@@ -61,6 +58,7 @@ section {
           content: '⚠️';
           margin-right: $margin-xsmall;
         }
+
         font-weight: bold;
         color: $color-warning;
       }
@@ -95,6 +93,7 @@ section {
             }
           }
         }
+
         &.lending-metadata {
           font-size: $font-size-xsmall;
           line-height: $line-height;
@@ -124,12 +123,33 @@ section {
 // Desktop layout
 
 @media (min-width: $media-breakpoint-width) {
-  section {
-    &.index {
-      section.lending-item {
-        ul.actions {
-          float: right;
+  section.index {
+    section.lending-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) min-content;
+
+      div.item-info {
+        grid-column: 1;
+      }
+
+      ul.actions {
+        margin-top: $margin-small;
+        margin-left: $margin;
+        grid-column: 2;
+
+        li {
+          white-space: nowrap;
         }
+      }
+    }
+  }
+}
+
+@media (max-width: $media-breakpoint-width) {
+  section.index {
+    section.lending-item {
+      ul.actions {
+        margin-top: $margin;
       }
     }
   }
