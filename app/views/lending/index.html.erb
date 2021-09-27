@@ -73,13 +73,13 @@
 
         <!-- <%= format_html_id(item.directory) %> (<%= item.status %>) -->
 
-        <h3><%= presenter.title %></h3>
-
         <ul class="actions">
           <% presenter.actions.each do |action| %>
             <li class="action"><%= action %></li>
           <% end %>
         </ul>
+
+        <h3><%= presenter.title %></h3>
 
         <p>
           <span class="author-name"><%= presenter.author %></span>

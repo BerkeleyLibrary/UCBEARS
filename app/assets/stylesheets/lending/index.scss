@@ -5,9 +5,7 @@
 
 section {
   &.index {
-    margin-top: $margin-xlarge;
-    padding-top: $margin-xlarge;
-    padding-bottom: $margin-xlarge;
+    padding-top: $margin-large;
     font-weight: $font-weight-light;
     max-width: 1000px;
     margin-left: auto;
@@ -22,13 +20,13 @@ section {
     section.lending-item {
       margin-left: $margin;
 
-      &:not(:first-of-type) {
-        margin-top: $margin-xlarge;
-        border-top: 1px solid $color-row-divider;
+      &:first-of-type {
+        margin-top: $margin-small;
       }
 
-      &:not(:last-of-type) {
-        padding-bottom: $margin-xlarge;
+      &:not(:first-of-type) {
+        margin-top: $margin;
+        border-top: 1px solid $color-row-divider;
       }
 
       // TODO: Share between index.scss, stats.scss
@@ -39,6 +37,9 @@ section {
 
       ul.actions {
         display: flex;
+        margin-left: $margin;
+        margin-top: $margin-small;
+        margin-bottom: $margin-small;
         padding: 0;
 
         li.action {

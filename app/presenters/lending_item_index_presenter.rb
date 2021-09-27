@@ -6,7 +6,7 @@ class LendingItemIndexPresenter < LendingItemPresenterBase
   end
 
   def actions
-    [action_edit, action_show, primary_action]
+    [primary_action, action_edit, action_show]
   end
 
   def tabular_fields
