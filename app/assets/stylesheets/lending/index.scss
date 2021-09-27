@@ -55,6 +55,15 @@ section {
         margin-bottom: $margin-xsmall;
       }
 
+      .problems {
+        &:before {
+          content: '⚠️';
+          margin-right: $margin-xsmall;
+        }
+        font-weight: bold;
+        color: $color-warning;
+      }
+
       p {
         font-size: $font-size-small;
         line-height: $line-height;
@@ -63,13 +72,6 @@ section {
         &.problems {
           font-size: $font-size-xsmall;
           line-height: $line-height;
-          font-weight: bold;
-          color: $color-warning;
-
-          &:before {
-            content: '⚠️';
-            margin-right: $margin-xsmall;
-          }
         }
       }
 
@@ -78,6 +80,20 @@ section {
       }
 
       table {
+        &.processing {
+          font-size: $font-size-xsmall;
+          line-height: $line-height;
+
+          // TODO: share with stats
+          thead {
+            th {
+              background-color: inherit;
+              color: inherit;
+              font-weight: $font-weight-bold;
+              padding-left: $margin-small;
+            }
+          }
+        }
         &.lending-metadata {
           font-size: $font-size-xsmall;
           line-height: $line-height;

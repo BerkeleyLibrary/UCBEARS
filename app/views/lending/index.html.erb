@@ -13,18 +13,61 @@
 
 <nav>
   <ul>
+    <li><a href="#lending-processing">In process</a></li>
     <% state_to_title.each do |state, state_title| %>
       <li><a href="#lending-<%= state %>"><%= state_title %></a></li>
     <% end %>
   </ul>
 </nav>
 
+<section id="lending-processing" class="index">
+  <h2>In process</h2>
+  <section class="lending-item">
+    <% processing_dirs = Lending.each_processing_dir.to_a %>
+    <% if processing_dirs.empty? %>
+      <p>No items to display.</p>
+    <% else %>
+      <table class="processing">
+        <thead>
+          <tr>
+            <th>Directory</th>
+            <th>Last modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% processing_dirs.sort_by(&:mtime).each do |d| %>
+            <tr>
+              <td>
+                <%= d.basename %>
+              </td>
+              <td>
+                <% mtime = d.mtime %>
+                <% age = (Time.current - mtime) %>
+                <% if age > 1.hours %>
+                  <span class="problems">
+                    <%= format_date(d.mtime) %>
+                  </span>
+                <% else %>
+                  <%= format_date(d.mtime) %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+</section>
+
 <%# TODO: don't load all items three times %>
 <% state_to_title.each do |state, state_title| %>
   <section id="lending-<%= state %>" class="index">
     <h2><%= state_title %></h2>
 
+    <%# TODO: something less awkward %>
+    <% no_items_for_state = true %>
     <% LendingItem.send(state).each do |item| %>
+      <% no_items_for_state = false %>
       <section class="lending-item" id="<%= format_html_id(item.directory) %>">
         <% presenter = LendingItemIndexPresenter.new(self, item) %>
 
@@ -74,6 +117,11 @@
           <% end %>
         </details>
 
+      </section>
+    <% end %>
+    <% if no_items_for_state %>
+      <section class="lending-item">
+        <p>No items to display.</p>
       </section>
     <% end %>
   </section>
