@@ -9,6 +9,9 @@ section {
     padding-top: $margin-xlarge;
     padding-bottom: $margin-xlarge;
     font-weight: $font-weight-light;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 
     // TODO: Share between index.scss, stats.scss
     h2 {

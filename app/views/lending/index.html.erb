@@ -11,11 +11,13 @@
   }
 %>
 
-<ul>
-  <% state_to_title.each do |state, state_title| %>
-    <li><a href="#lending-<%= state %>"><%= state_title %></a></li>
-  <% end %>
-</ul>
+<nav>
+  <ul>
+    <% state_to_title.each do |state, state_title| %>
+      <li><a href="#lending-<%= state %>"><%= state_title %></a></li>
+    <% end %>
+  </ul>
+</nav>
 
 <%# TODO: don't load all items three times %>
 <% state_to_title.each do |state, state_title| %>

@@ -3,6 +3,12 @@
 <% content_for(:page_title, "#{@lending_item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
+<nav>
+  <ul>
+    <li><%= link_to 'Edit this item', lending_edit_path(directory: @lending_item.directory) %></li>
+  </ul>
+</nav>
+
 <section class="item">
   <% if presenter.show_viewer? %>
     <% content_for(:head_additional) do %>

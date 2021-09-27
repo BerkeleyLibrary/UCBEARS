@@ -87,6 +87,6 @@ class LendingItemPresenterBase
 
   def add_direct_link(ff)
     view_url = lending_view_url(directory: directory)
-    ff['Direct link'] = link_to(view_url, view_url, target: '_blank')
+    ff['Patron view'] = link_to(view_url, view_url, target: '_blank')
   end
 end
