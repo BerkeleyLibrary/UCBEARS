@@ -48,6 +48,13 @@ module CapybaraHelper
       end
     end
 
+    def active_element
+      return unless browser
+      return unless browser.respond_to?(:switch_to)
+
+      browser.switch_to.active_element
+    end
+
     private
 
     def browser

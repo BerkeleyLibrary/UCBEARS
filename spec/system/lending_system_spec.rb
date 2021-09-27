@@ -478,6 +478,29 @@ describe LendingController, type: :system do
       end
 
       describe :view do
+        describe 'skip link' do
+          let(:skip_link_text) { 'Skip to main content' }
+          it 'is hidden by default' do
+            visit lending_view_path(directory: item.directory)
+
+            expect(page).not_to have_link(skip_link_text)
+          end
+
+          it 'is tabbable' do
+            path = lending_view_path(directory: item.directory)
+            visit path
+
+            page.send_keys(:tab)
+            elem = CapybaraHelper.active_element
+
+            expect(elem.tag_name).to eq('a')
+            href_uri = URI.parse(elem['href'])
+            expect(href_uri.path).to eq(path)
+            expect(href_uri.fragment).to eq('main')
+
+            # TODO: get Capybara to actually make it visible and clickable
+          end
+        end
 
         describe 'checkouts' do
 

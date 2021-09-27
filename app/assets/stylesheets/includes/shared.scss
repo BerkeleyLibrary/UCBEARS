@@ -132,15 +132,3 @@ code {
 strong {
   font-weight: $font-weight-bold;
 }
-
-// ////////////////////////////////////////////////////////////
-// Shared classes
-
-.visually-hidden {
-  position: absolute !important;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}

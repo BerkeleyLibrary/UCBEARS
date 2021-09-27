@@ -19,8 +19,9 @@
     <%= yield :head_additional %>
   </head>
   <body>
+    <a href="#main" class="visually-hidden focusable skip-link">Skip to main content</a>
     <%= render(partial: 'layouts/header') %>
-    <main>
+    <main id="main">
       <%= render(partial: 'layouts/flash') %>
       <%= yield %>
     </main>
