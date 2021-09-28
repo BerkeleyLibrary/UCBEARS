@@ -1,12 +1,19 @@
-# 1.3.1 (next)
+# 1.3.2 (next)
+
+Admin:
+
+- item list now has a maximum width of 1000px
+- buttons are rearranged and colors adjusted to better highlight the primary action
 
 Viewer:
 
 - sidebar now only displays the OCR transcript (other metadata is concealed with CSS `display: none`)
-- canvas layout is adjusted so page images at 1x zoom don't overflow into the navigation area
+- navigation area is at the upper right of the canvas instead of the lower center, and should
+  not overlap page images
 - mouse wheel scroll events in the canvas are properly intercepted to prevent mouse zoom and 
   allow the browser window to scroll
 - "scroll" view is disabled pro tem till we figure out vertical scrolling
+- Mirador brand icon and Project Mirador link now displayed in lower left corner
 
 Checkouts and returns:
 
@@ -21,6 +28,7 @@ Checkouts and returns:
 
 Miscellaneous:
 
+- accessibility "skip link" now displays properly when pressing tab on page load
 - main document area margins and padding are adjusted to match header and footer
 - footer margins and font sizes are adjusted to better match Berkeley style
 
@@ -32,6 +40,7 @@ User-facing changes:
   - remove [`mirador_rails` Ruby gem](https://github.com/sul-dlss/mirador_rails) in favor of
   [`mirador` JavaScript package](https://github.com/ProjectMirador/mirador)
 - update to 2019 UC Berkeley Library design standards and UCB brand guidelines
+  (color, typography, etc.)
   - remove [Bootsrap](https://github.com/twbs/bootstrap) in favor of custom CSS
 - fix issue where completed loans would sometimes produce spurious error messages,
   or cause availability to be calculated incorrectly
