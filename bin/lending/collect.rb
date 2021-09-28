@@ -12,6 +12,7 @@ require 'bundler/setup'
 require_relative '_zeitwerk'
 
 # Debug VIPS memory leaks, maybe
+require 'vips'
 Vips.leak_set(true)
 
 # Run collector
