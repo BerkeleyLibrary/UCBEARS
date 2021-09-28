@@ -41,6 +41,7 @@ module Lending
 
         expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/processing.*#{item_dirname}/).ordered
         expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/moving.*#{item_dirname}/).ordered
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/triggering garbage collection/).ordered
 
         [processing_dir, final_dir]
       end
@@ -140,6 +141,8 @@ module Lending
           obj.is_a?(Lending::ProcessingFailed)
           obj.message.include?(error_message)
         end).ordered
+        # GC.start should be called even if processing fails
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/triggering garbage collection/).ordered
 
         good_item_dir = 'b86753090_c86753090'
         good_processing_dir, good_final_dir = expect_to_process(good_item_dir)

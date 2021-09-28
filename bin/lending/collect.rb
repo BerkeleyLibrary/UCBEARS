@@ -11,6 +11,9 @@ $stderr.sync = true
 require 'bundler/setup'
 require_relative '_zeitwerk'
 
+# Debug VIPS memory leaks, maybe
+Vips.leak_set(true)
+
 # Run collector
 collector = Lending::Collector.from_environment
 collector.collect!

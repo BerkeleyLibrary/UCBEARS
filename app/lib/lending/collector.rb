@@ -99,6 +99,10 @@ module Lending
         process(ready_dir, processing_dir)
       rescue ProcessingFailed => e
         logger.error("#{self}: #{e}", e)
+      ensure
+        # see https://github.com/libvips/ruby-vips/issues/67#issuecomment-670201877
+        logger.info("#{self}: triggering garbage collection")
+        GC.start
       end
     end
 
