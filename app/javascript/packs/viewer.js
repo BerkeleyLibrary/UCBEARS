@@ -105,6 +105,9 @@ function miradorConfig (elementId, manifestId) {
       allowNewWindows: false,
       showZoomControls: true,
       type: null
+    },
+    workspaceControlPanel: {
+      enabled: false
     }
   }
 }

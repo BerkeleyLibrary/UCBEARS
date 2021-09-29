@@ -1,6 +1,7 @@
 <section class="viewer">
   <% if @lending_item.complete? %>
     <div id="iiif_viewer" data-manifest-id="<%= manifest_url %>"></div>
+    <a id="mirador-branding" rel="noopener" target="_blank" href="https://projectmirador.org/"><%= image_tag('icons/mirador.svg') %></a>
   <% else %>
     <p><%= LendingItem::MSG_INCOMPLETE %></p>
   <% end %>

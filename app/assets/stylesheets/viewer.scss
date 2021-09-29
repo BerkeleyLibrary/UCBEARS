@@ -10,213 +10,228 @@ section.viewer {
 
   background: black;
 
-  a {
-    box-shadow: none;
-    transition: none;
+  div#iiif_viewer {
+    a {
+      box-shadow: none;
+      transition: none;
 
-    &:hover {
-      background-color: inherit;
-    }
-  }
-
-  // ////////////////////////////////////////////////////////////
-  // Mirador styling overrides
-
-  // TODO: figure out how to override these in Material UI theme
-
-  .mirador-window-top-bar {
-    border-top: 2px solid transparent !important;
-  }
-
-  .mirador-primary-window {
-    background-color: black;
-  }
-
-  .mirador-osd-container {
-    display: grid;
-    margin-top: $margin;
-    grid-row-gap: $margin;
-
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: min-content minmax(0, 1fr);
-
-    .openseadragon-container {
-      grid-row: 2;
-      box-sizing: border-box;
+      &:hover {
+        background-color: inherit;
+      }
     }
 
-    .mirador-canvas-nav {
-      background: black;
-      position: static;
-      grid-row: 1;
+    // ////////////////////////////////////////////////////////////
+    // Mirador styling overrides
 
+    // TODO: figure out how to override these in Material UI theme
+
+    .mirador-window-top-bar {
+      border-top: 2px solid transparent !important;
+    }
+
+    .mirador-primary-window {
+      background-color: black;
+    }
+
+    .mirador-osd-container {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) min-content min-content;
+      margin-top: $margin;
+      grid-row-gap: $margin;
 
-      padding-right: $margin;
-      box-sizing: border-box;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: min-content minmax(0, 1fr);
 
-      // no predictable class on this element
-      div:first-of-type {
-        grid-row: 1;
-        grid-column: 1;
-        display: flex;
-        flex-direction: row;
-        justify-content: end;
+      .openseadragon-container {
+        grid-row: 2;
+        box-sizing: border-box;
       }
 
-      div.mirador-osd-navigation {
+      .mirador-canvas-nav {
+        background: black;
+        position: static;
         grid-row: 1;
-        grid-column: 2;
-      }
 
-      .mirador-osd-info {
-        grid-row: 1;
-        grid-column: 3;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) min-content min-content;
 
-        padding-right: $margin-small;
-        padding-left: $margin-large;
-        padding-top: $margin-small;
-        padding-bottom: 0;
-        text-align: right;
+        padding-right: $margin;
         box-sizing: border-box;
 
-        .mirador-canvas-count {
+        // no predictable class on this element
+        div:first-of-type {
+          grid-row: 1;
+          grid-column: 1;
+          display: flex;
+          flex-direction: row;
+          justify-content: end;
+        }
+
+        div.mirador-osd-navigation {
+          grid-row: 1;
+          grid-column: 2;
+        }
+
+        .mirador-osd-info {
+          grid-row: 1;
+          grid-column: 3;
+
+          padding-right: $margin-small;
+          padding-left: $margin-large;
+          padding-top: $margin-small;
+          padding-bottom: 0;
+          text-align: right;
+          box-sizing: border-box;
+
+          .mirador-canvas-count {
+            font-size: $font-size-xsmall;
+            line-height: $line-height;
+          }
+        }
+      }
+    }
+
+    .mirador-workspace-viewport {
+      padding-left: 0 !important;
+    }
+
+    .MuiIconButton-root {
+      padding: $margin-small;
+    }
+
+    .MuiSvgIcon-root {
+      font-size: $font-size-normal;
+    }
+
+    .MuiButtonBase-root {
+      &.Mui-disabled {
+        color: $color-disabled;
+      }
+
+      &:not(.Mui-Disabled) {
+        transition: background-color 0.25s, color 0.25s;
+
+        &:hover {
+          background-color: $color-anchor-highlight;
+          color: $color-background-reversed !important;
+        }
+      }
+    }
+
+    .MuiPaper-root {
+      background-color: $color-background-reversed;
+    }
+
+    .MuiToolbar-root {
+      background-color: $color-background-reversed;
+    }
+
+    .MuiTab-textColorPrimary.Mui-selected {
+      color: $color-success;
+      border-right-color: $color-success-border !important;
+    }
+
+    div.mirador-companion-area-left {
+      // the only CSS class on this div seems to be named at runtime
+      > div:not(:first-of-type) {
+        margin-top: 0 !important;
+        background-color: $color-background-reversed !important;
+        width: auto !important;
+        border-top: none !important;
+        border-left: none !important;
+      }
+    }
+
+    // fix page forward/back button layout
+    .mirador-osd-navigation {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    dl.mirador-label-value-metadata {
+      margin-top: $margin-large;
+
+      // TODO: share w/h6
+      .MuiTypography-subtitle2 {
+        font-size: $font-size-xxsmall !important;
+        line-height: $line-height !important;
+
+        font-weight: $font-weight-bold !important;
+        text-transform: uppercase !important;
+
+        margin-bottom: $margin-small;
+      }
+
+      dd {
+        .mirador-third-party-html {
+          font-family: $font-family-serif;
           font-size: $font-size-xsmall;
           line-height: $line-height;
         }
       }
     }
+
+    // ////////////////////////////////////////////////////////////
+    // Serious Mirador hacks
+
+    // TODO: can we just replace the info sidebar with a custom React component?
+    //       see https://github.com/ProjectMirador/mirador/blob/v3.2.0/src/components/WindowSideBarInfoPanel.js
+
+    aside.mirador-window-sidebar-info-panel {
+      border-right: 1px solid $color-background-reversed;
+
+      div.MuiToolbar-root {
+        display: none;
+      }
+
+      div.MuiPaper-root {
+        > div {
+
+          &:not(:first-of-type) {
+            display: none;
+          }
+
+          h4, h5, button {
+            display: none;
+          }
+
+          dl {
+            margin-top: 0;
+          }
+        }
+      }
+    }
   }
 
-  .mirador-workspace-viewport {
-    padding-left: 0 !important;
-  }
+  a#mirador-branding {
+    display: block;
+    position: absolute;
+    bottom: $margin;
+    left: $margin;
+    z-index: 1100;
 
-  // Hide everything except the Mirador branding
-  .mirador-workspace-control-panel {
-    display: contents;
-    width: 0;
+    // TODO: share w/footer (a)
+    color: white;
+    box-shadow: none;
+    transition: color 0.25s;
 
-    .MuiToolbar-root {
-      display: none;
+    &:hover {
+      color: $color-anchor-highlight;
+      background-color: transparent;
     }
 
-    div {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      z-index: 1100;
-      width: min-content;
-      padding-left: 6px;
-      padding-bottom: $margin-xsmall;
-    }
-  }
+    img {
+      display: block;
+      width: $font-size-large;
 
-  .MuiIconButton-root {
-    padding: $margin-small;
-  }
-
-  .MuiSvgIcon-root {
-    font-size: $font-size-normal;
-  }
-
-  .MuiButtonBase-root {
-    &.Mui-disabled {
-      color: $color-disabled;
-    }
-
-    &:not(.Mui-Disabled) {
-      transition: background-color 0.25s, color 0.25s;
+      // TODO: share w/footer (img.social-media-icon)
+      &:not(:hover) {
+        filter: grayscale(100%) brightness(200%);
+        transition: filter 0.25s;
+      }
 
       &:hover {
-        background-color: $color-anchor-highlight;
-        color: $color-background-reversed !important;
-      }
-    }
-  }
-
-  .MuiPaper-root {
-    background-color: $color-background-reversed;
-  }
-
-  .MuiToolbar-root {
-    background-color: $color-background-reversed;
-  }
-
-  .MuiTab-textColorPrimary.Mui-selected {
-    color: $color-success;
-    border-right-color: $color-success-border !important;
-  }
-
-  div.mirador-companion-area-left {
-    // the only CSS class on this div seems to be named at runtime
-    > div:not(:first-of-type) {
-      margin-top: 0 !important;
-      background-color: $color-background-reversed !important;
-      width: auto !important;
-      border-top: none !important;
-      border-left: none !important;
-    }
-  }
-
-  // fix page forward/back button layout
-  .mirador-osd-navigation {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  dl.mirador-label-value-metadata {
-    margin-top: $margin-large;
-
-    // TODO: share w/h6
-    .MuiTypography-subtitle2 {
-      font-size: $font-size-xxsmall !important;
-      line-height: $line-height !important;
-
-      font-weight: $font-weight-bold !important;
-      text-transform: uppercase !important;
-
-      margin-bottom: $margin-small;
-    }
-
-    dd {
-      .mirador-third-party-html {
-        font-family: $font-family-serif;
-        font-size: $font-size-xsmall;
-        line-height: $line-height;
-      }
-    }
-  }
-
-  // ////////////////////////////////////////////////////////////
-  // Serious Mirador hacks
-
-  // TODO: can we just replace the info sidebar with a custom React component?
-  //       see https://github.com/ProjectMirador/mirador/blob/v3.2.0/src/components/WindowSideBarInfoPanel.js
-
-  aside.mirador-window-sidebar-info-panel {
-    border-right: 1px solid $color-background-reversed;
-
-    div.MuiToolbar-root {
-      display: none;
-    }
-
-    div.MuiPaper-root {
-      > div {
-
-        &:not(:first-of-type) {
-          display: none;
-        }
-
-        h4, h5, button {
-          display: none;
-        }
-
-        dl {
-          margin-top: 0;
-        }
+        transition: filter 0.25s;
       }
     }
   }
