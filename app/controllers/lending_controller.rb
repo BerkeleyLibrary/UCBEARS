@@ -43,6 +43,7 @@ class LendingController < ApplicationController
     end
   end
 
+  # TODO: merge 'edit' and 'show'
   def edit; end
 
   # Admin view
