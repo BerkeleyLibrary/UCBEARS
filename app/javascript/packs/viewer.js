@@ -1,17 +1,29 @@
 import Mirador from 'mirador/dist/es/src/index.js'
 
-window.addEventListener('load', () => {
+window.addEventListener('load', initMiradorInstance)
+
+function initMiradorInstance () {
   const iiifViewer = document.getElementById('iiif_viewer')
   if (!iiifViewer) {
     console.log('iiif_viewer not found')
     return
   }
 
-  const manifestId = iiifViewer.dataset.manifestId
+  window.miradorInstance = createMiradorInstance(iiifViewer.id, iiifViewer.dataset.manifestId)
+}
 
-  // See https://github.com/ProjectMirador/mirador/blob/master/src/config/settings.js
-  const config = {
-    id: iiifViewer.id,
+function createMiradorInstance (elementId, manifestId) {
+  const config = miradorConfig(elementId, manifestId)
+  const miradorInstance = Mirador.viewer(config)
+  addConditionalListener(miradorInstance.store, disableOSDScrollToZoom)
+  return miradorInstance
+}
+
+// See https://github.com/ProjectMirador/mirador/blob/master/src/config/settings.js
+// TODO: externalize most of this?
+function miradorConfig (elementId, manifestId) {
+  return {
+    id: elementId,
     windows: [{ manifestId: manifestId }],
     selectedTheme: 'dark',
     themes: {
@@ -100,15 +112,37 @@ window.addEventListener('load', () => {
       enabled: true
     }
   }
+}
 
-  const viewer = Mirador.viewer(config)
-  window.miradorInstance = viewer
+function addConditionalListener (store, conditionalListener) {
+  const unsubscriber = {}
+  unsubscriber.unsubscribe = store.subscribe(() => {
+    const doneListening = conditionalListener()
+    if (doneListening) {
+      unsubscriber.unsubscribe()
+    }
+  })
+}
 
-  // ------------------------------------------------------------
-  // Disable OpenSeadragon default scroll-to-zoom behavior
+// Disable OpenSeadragon default scroll-to-zoom behavior
+function disableOSDScrollToZoom () {
+  const osdCanvas = document.querySelector('div.openseadragon-canvas')
+  if (osdCanvas) {
+    const supportsPassive = browserSupportsPassiveEventListeners()
+    const listener = (event) => event.stopPropagation()
+    if (supportsPassive) {
+      osdCanvas.addEventListener('wheel', listener, { passive: false, capture: true })
+    } else {
+      osdCanvas.addEventListener('wheel', listener, true)
+    }
+    return true
+  }
+  return false
+}
 
-  // Test via a getter in the options object to see if the passive property is accessed
-  // -- see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
+// Test via a getter in the options object to see if the passive property is accessed
+// -- see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
+function browserSupportsPassiveEventListeners () {
   let supportsPassive = false
   try {
     const opts = Object.defineProperty({}, 'passive', {
@@ -121,18 +155,5 @@ window.addEventListener('load', () => {
   } catch (e) {
     // passive event listeners not supported
   }
-
-  const unsubscriber = {}
-  unsubscriber.unsubscribe = viewer.store.subscribe(() => {
-    const osdCanvas = document.querySelector('div.openseadragon-canvas')
-    if (osdCanvas) {
-      const listener = (event) => event.stopPropagation()
-      if (supportsPassive) {
-        osdCanvas.addEventListener('wheel', listener, { passive: false, capture: true })
-      } else {
-        osdCanvas.addEventListener('wheel', listener, true)
-      }
-      unsubscriber.unsubscribe()
-    }
-  })
-})
+  return supportsPassive
+}
