@@ -105,11 +105,6 @@ function miradorConfig (elementId, manifestId) {
       allowNewWindows: false,
       showZoomControls: true,
       type: null
-    },
-    workspaceControlPanel: {
-      // Enabled to display the Mirador branding, but
-      // we everything but that with CSS
-      enabled: true
     }
   }
 }
