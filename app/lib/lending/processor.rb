@@ -8,6 +8,9 @@ module Lending
     MARC_XML_NAME = 'marc.xml'.freeze
     MILLENNIUM_RECORD_RE = /^(?<bib>b[0-9]{8})(?<check>[0-9a-z])?$/.freeze
 
+    # Warn if stuck in processing
+    WARN_AFTER = 1.hours
+
     attr_reader :indir, :outdir, :record_id, :barcode, :marc_path
 
     def initialize(indir, outdir)

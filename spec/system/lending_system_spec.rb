@@ -350,6 +350,42 @@ describe LendingController, type: :system do
             FileUtils.rm(mf.erb_path)
           end
         end
+
+        describe 'processing' do
+          it 'displays the list of in-process directories' do
+            final_actual = Lending.stage_root_path(:final).realpath
+
+            Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmp|
+              lending_root = Pathname.new(tmp)
+              FileUtils.ln_s(final_actual, lending_root.join('final')) # make unrelated code work
+
+              processing_tmp = lending_root.join('processing')
+              processing_tmp.mkdir
+
+              dirnames = ['b18357550_C106160623', 'b23752729_C118406204', 'b135297126_BT 7 064 812']
+              processing_dirs = dirnames.map.with_index do |dirname, i|
+                processing_tmp.join(dirname).tap do |dirpath|
+                  dirpath.mkdir
+                  new_mtime = (Time.current - (45 * i).minutes).to_time
+                  FileUtils.touch(dirpath, mtime: new_mtime)
+                end
+              end
+
+              allow(Lending::Config).to receive(:lending_root_path).and_return(lending_root)
+
+              visit index_path
+              processing_section = find(:xpath, '//section[@id="lending-processing"]')
+              rows = processing_section.find('tbody').find_all('tr')
+              processing_dirs.each do |dirpath|
+                row = rows.find { |r| r.has_selector?('td', text: dirpath.basename.to_s) }
+                expect(row).not_to be_nil
+
+                stale = (Time.current - dirpath.mtime) > Lending::Processor::WARN_AFTER
+                expect(row).to have_selector('td.problems', text: '⚠️') if stale
+              end
+            end
+          end
+        end
       end
 
       describe :stats do

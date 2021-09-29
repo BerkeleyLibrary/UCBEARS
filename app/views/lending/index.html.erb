@@ -13,51 +13,12 @@
 
 <nav>
   <ul>
-    <li><a href="#lending-processing">In process</a></li>
     <% state_to_title.each do |state, state_title| %>
       <li><a href="#lending-<%= state %>"><%= state_title %></a></li>
     <% end %>
+    <li><a href="#lending-processing">In process</a></li>
   </ul>
 </nav>
-
-<section id="lending-processing" class="index">
-  <h2>In process</h2>
-  <section class="lending-item">
-    <% processing_dirs = Lending.each_processing_dir.to_a %>
-    <% if processing_dirs.empty? %>
-      <p>No items to display.</p>
-    <% else %>
-      <table class="processing">
-        <thead>
-          <tr>
-            <th>Directory</th>
-            <th>Last modified</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% processing_dirs.sort_by(&:mtime).each do |d| %>
-            <tr>
-              <td>
-                <%= d.basename %>
-              </td>
-              <td>
-                <% mtime = d.mtime %>
-                <% age = (Time.current - mtime) %>
-                <% if age > 1.hours %>
-                  <span class="problems">
-                    <%= format_date(d.mtime) %>
-                  </span>
-                <% else %>
-                  <%= format_date(d.mtime) %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-  </section>
-</section>
 
 <%# TODO: don't load all items three times %>
 <% state_to_title.each do |state, state_title| %>
@@ -107,7 +68,7 @@
 
             <% if (reason_incomplete = item.reason_incomplete) %>
               <h4>Problems:</h4>
-              <p class="problems"><%= reason_incomplete %></p>
+              <p class="problems">⚠️ <%= reason_incomplete %></p>
             <% end %>
           </details>
 
@@ -126,5 +87,45 @@
         <p>No items to display.</p>
       </section>
     <% end %>
+
   </section>
 <% end %>
+
+<section id="lending-processing" class="index">
+  <h2>In process</h2>
+  <section class="lending-item">
+    <% processing_dirs = Lending.each_processing_dir.to_a %>
+    <% if processing_dirs.empty? %>
+      <p>No items to display.</p>
+    <% else %>
+      <table class="processing">
+        <thead>
+          <tr>
+            <th>Directory</th>
+            <th>Last modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% processing_dirs.sort_by(&:mtime).each do |d| %>
+            <tr>
+              <td>
+                <%= d.basename %>
+              </td>
+              <% mtime = d.mtime.in_time_zone %>
+              <% age = (Time.current.in_time_zone - mtime) %>
+              <% if age > Lending::Processor::WARN_AFTER %>
+                <td class="problems">
+                  <%= format_date(d.mtime) %> ⚠️
+                </td>
+              <% else %>
+                <td>
+                  <%= format_date(d.mtime) %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+</section>
