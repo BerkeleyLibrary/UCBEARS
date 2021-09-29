@@ -362,11 +362,13 @@ describe LendingController, type: :system do
               processing_tmp = lending_root.join('processing')
               processing_tmp.mkdir
 
+              processing_time_limit = Rails.application.config.processing_time_limit
+
               dirnames = ['b18357550_C106160623', 'b23752729_C118406204', 'b135297126_BT 7 064 812']
               processing_dirs = dirnames.map.with_index do |dirname, i|
                 processing_tmp.join(dirname).tap do |dirpath|
                   dirpath.mkdir
-                  new_mtime = (Time.current - (45 * i).minutes).to_time
+                  new_mtime = (Time.current - (2 * i * processing_time_limit / 3)).to_time
                   FileUtils.touch(dirpath, mtime: new_mtime)
                 end
               end
@@ -380,7 +382,7 @@ describe LendingController, type: :system do
                 row = rows.find { |r| r.has_selector?('td', text: dirpath.basename.to_s) }
                 expect(row).not_to be_nil
 
-                stale = (Time.current - dirpath.mtime) > Lending::Processor::WARN_AFTER
+                stale = (Time.current - dirpath.mtime) > processing_time_limit
                 expect(row).to have_selector('td.problems', text: '⚠️') if stale
               end
             end

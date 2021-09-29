@@ -34,6 +34,8 @@ module UCBEARS
     # Set time zone
     config.time_zone = 'America/Los_Angeles'
 
+    config.processing_time_limit = 1.hours
+
     # TODO: fail fast if ENV not configured?
   end
 end
