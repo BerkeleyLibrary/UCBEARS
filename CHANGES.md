@@ -1,12 +1,16 @@
-# 1.3.1 (next)
+# 1.3.1 (2021-09-30)
 
 Admin:
 
 - item list now has a maximum width of 1000px
 - buttons are rearranged and colors adjusted to better highlight the primary action
+- index page now includes a list of in-process item directories, with a warning for any
+  older than a configured limit (currently 1 hour, although 10 minutes would probably be
+  enough to indicate a problem)
 
 Viewer:
 
+- Mirador window is now sized dynamically to the viewport vertical size.
 - sidebar now only displays the OCR transcript (other metadata is concealed with CSS `display: none`)
 - navigation area is at the upper right of the canvas instead of the lower center, and should
   not overlap page images
@@ -31,6 +35,9 @@ Miscellaneous:
 - accessibility "skip link" now displays properly when pressing tab on page load
 - main document area margins and padding are adjusted to match header and footer
 - footer margins and font sizes are adjusted to better match Berkeley style
+- links now take on the same highlight colors for tab navigation focus as for mouse hover
+- responsive "hamburger menu" should now be highlighted properly via tab navigation
+- "danger" color is slightly darker to improve contrast
 
 # 1.3.0 (2021-09-21)
 
