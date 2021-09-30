@@ -13,7 +13,9 @@ body > header {
       margin-bottom: $margin-large;
 
       a {
-        display: contents;
+        display: block;
+        box-shadow: none;
+        background-color: transparent !important;
       }
 
       img {
