@@ -2,15 +2,17 @@
 
 section.viewer {
   position: relative;
-  margin-top: $margin;
+  padding-top: $margin;
+  padding-bottom: $margin;
 
-  height: 100vh; // TODO: something more sensible
+  height: calc(100vh - 1rem); // TODO: something more sensible
   width: 100%;
   box-sizing: border-box;
 
   background: black;
 
   div#iiif_viewer {
+
     a {
       box-shadow: none;
       transition: none;
