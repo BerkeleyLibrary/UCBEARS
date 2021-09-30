@@ -112,7 +112,7 @@ section.viewer {
       &:not(.Mui-Disabled) {
         transition: background-color 0.25s, color 0.25s;
 
-        &:hover, &:focus {
+        &:hover {
           background-color: $color-anchor-highlight;
           color: $color-background-reversed !important;
         }
@@ -217,24 +217,27 @@ section.viewer {
     box-shadow: none;
     transition: color 0.25s;
 
-    &:hover, &:focus {
-      color: $color-anchor-highlight;
-      background-color: transparent;
-    }
-
+    // TODO: share w/footer (img.social-media-icon)
     img {
       display: block;
       width: $font-size-large;
+    }
 
-      // TODO: share w/footer (img.social-media-icon)
-      &:not(:hover):not(:focus) {
+    &:not(:hover):not(:focus) {
+      img {
         filter: grayscale(100%) brightness(200%);
         transition: filter 0.25s;
       }
+    }
 
-      &:hover, &:focus {
+    &:hover, &:focus {
+      color: $color-anchor-highlight;
+      background-color: transparent;
+
+      img {
         transition: filter 0.25s;
       }
     }
+
   }
 }
