@@ -22,16 +22,7 @@ body {
 }
 
 // ////////////////////////////////////////////////////////////
-// Skip links & other accessibility features
-
-.visually-hidden {
-  position: absolute !important;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  width: 1px;
-  height: 1px;
-  word-wrap: normal;
-}
+// Skip links
 
 a {
   &.skip-link {
@@ -41,7 +32,14 @@ a {
     padding-left: $margin;
   }
 
-  a.visually-hidden {
+  &.visually-hidden {
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    width: 1px;
+    height: 1px;
+    word-wrap: normal;
+
     &.focusable:active, &.focusable:focus {
       position: relative !important;
       display: block;
