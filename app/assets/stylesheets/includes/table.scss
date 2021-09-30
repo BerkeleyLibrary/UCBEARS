@@ -49,16 +49,16 @@ table {
     th {
       padding: $margin-small $margin;
       white-space: nowrap;
+    }
+
+    td {
+      padding: $margin-small;
 
       &.action {
         padding-left: 5px;
         padding-right: 5px;
         white-space: normal;
       }
-    }
-
-    td {
-      padding: $margin-small;
 
       &.copyright {
         border-bottom: none;

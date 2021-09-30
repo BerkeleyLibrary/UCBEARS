@@ -93,6 +93,14 @@ p {
   line-height: $line-height;
 }
 
+fieldset {
+  display: contents;
+
+  legend {
+    display: contents;
+  }
+}
+
 input {
   font-family: $font-family-sans;
   font-weight: $font-weight-normal;

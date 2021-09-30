@@ -13,74 +13,77 @@
   <%= form_with(model: item, url: url, local: true) do |form| %>
     <table>
       <tbody>
-      <tr>
-        <th><%= form.label(:title) %></th>
-        <td><%= form.text_field(:title) %></td>
-      </tr>
+        <tr>
+          <th><%= form.label(:title) %></th>
+          <td><%= form.text_field(:title) %></td>
+        </tr>
 
-      <tr>
-        <th><%= form.label(:author) %></th>
-        <td><%= form.text_field(:author) %></td>
-      </tr>
+        <tr>
+          <th><%= form.label(:author) %></th>
+          <td><%= form.text_field(:author) %></td>
+        </tr>
 
-      <tr>
-        <th><%= form.label(:copies) %></th>
-        <td><%= form.text_field(:copies) %></td>
-      </tr>
+        <tr>
+          <th><%= form.label(:copies) %></th>
+          <td><%= form.text_field(:copies) %></td>
+        </tr>
 
-      <tr>
-        <th><%= form.label(:publisher) %></th>
-        <td><%= form.text_field(:publisher) %></td>
-      </tr>
+        <tr>
+          <th><%= form.label(:publisher) %></th>
+          <td><%= form.text_field(:publisher) %></td>
+        </tr>
 
-      <tr>
-        <th><%= form.label(:physical_desc, 'Physical description') %></th>
-        <td><%= form.text_field(:physical_desc) %></td>
-      </tr>
+        <tr>
+          <th><%= form.label(:physical_desc, 'Physical description') %></th>
+          <td><%= form.text_field(:physical_desc) %></td>
+        </tr>
 
-      <tr>
-        <th><%= form.label(:active) %></th>
-        <td>
-          <ul>
-            <li>
-              <%= form.radio_button(:active, 1, checked: item.active?, value: true) %>
-              <%= label(:lending_item_active, 1, 'Active') %>
-            </li>
-            <li>
-              <%= form.radio_button(:active, 0, checked: !item.active?, value: false) %>
-              <%= label(:lending_item_active, 0, 'Inactive') %>
-            </li>
-          </ul>
-        </td>
-      </tr>
+        <tr>
+          <th>Active</th>
+          <td>
+            <fieldset id='lending_item_active'>
+              <legend class="visually-hidden">Active</legend>
+              <ul>
+                <li>
+                  <%= form.radio_button(:active, 1, checked: item.active?, value: true) %>
+                  <%= label(:lending_item_active, 1, 'Active') %>
+                </li>
+                <li>
+                  <%= form.radio_button(:active, 0, checked: !item.active?, value: false) %>
+                  <%= label(:lending_item_active, 0, 'Inactive') %>
+                </li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
       </tbody>
 
       <tfoot>
-      <tr>
-        <th></th>
-        <th class="action" style="padding-bottom: 2rem;"><%# TODO: something less awkward %>
-          <%= form.submit(submit_label, class: 'btn primary', data: { disable_with: submit_label }) %>
-        </th>
-      </tr>
-      <tr>
-        <th></th>
-        <th class="action">
-          <% if item.has_marc_record? %>
-            <%=
-              link_to(
-                'Reload MARC metadata',
-                lending_reload_path(directory: item.directory),
-                class: 'btn danger',
-                data: {
-                  confirm: 'Reloading MARC metadata will discard all changes made on this form.'
-                }
-              )
-            %>
-          <% else %>
-            <a class="btn danger disabled">Reload MARC metadata</a>
-          <% end %>
-        </th>
-      </tr>
+        <tr>
+          <td></td>
+          <td class="action" style="padding-bottom: 2rem;"><%# TODO: something less awkward %>
+            <%= form.submit(submit_label, class: 'btn primary', data: { disable_with: submit_label }) %>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="action">
+            <% if item.has_marc_record? %>
+              <%=
+                link_to(
+                  'Reload MARC metadata',
+                  lending_reload_path(directory: item.directory),
+                  class: 'btn danger',
+                  data: {
+                    confirm: 'Reloading MARC metadata will discard all changes made on this form.'
+                  }
+                )
+              %>
+            <% else %>
+              <a class="btn danger disabled">Reload MARC metadata</a>
+            <% end %>
+          </td>
+        </tr>
       </tfoot>
     </table>
   <% end %>

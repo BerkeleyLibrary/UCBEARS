@@ -9,7 +9,11 @@ $color-founders-rock: #3b7ea1;
 $color-california-gold: #fdb515;
 $color-medalist: #c4820e;
 $color-wellman-tile: #d9661f;
-$color-rose-garden: #ee1f60;
+// NOTE: We tweak the "Rose Garden" color slightly vs. Berkeley
+//       brand guidelines so that provides enough contrast as a
+//       background for white text (4.66:1, WCAG AA)
+// $color-rose-garden: #ee1f60;
+$color-rose-garden: #e50c51;
 $color-golden-gate: #ed4e33;
 $color-south-hall: #6c3302;
 $color-bay-fog: #ddd5c7;
@@ -39,17 +43,17 @@ $color-anchor-highlight: $color-california-gold;
 
 $color-action-text: white;
 
-$color-action-primary:  $color-founders-rock;
+$color-action-primary:  $color-berkeley-blue;
 $color-action-secondary: $color-pacific;
 
 $color-disabled: $color-web-grey;
 
 // Messages
 
-$color-success: $color-lap-lane;
+$color-success: $color-berkeley-blue;
 $color-warning: $color-south-hall;
 $color-danger: $color-rose-garden;
 
-$color-success-border: $color-sather-gate;
+$color-success-border: $color-lawrence;
 $color-warning-border: $color-wellman-tile;
 $color-danger-border: $color-golden-gate;

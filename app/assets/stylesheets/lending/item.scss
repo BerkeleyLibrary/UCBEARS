@@ -64,16 +64,15 @@ section {
         th {
           grid-column: 1;
           text-align: right;
-
-          &.action {
-            grid-column: 2;
-            text-align: left;
-          }
         }
 
         td {
           grid-column: 2;
           word-break: break-all;
+
+          &.action {
+            text-align: left;
+          }
 
           &.description, &.copyright {
             grid-column: 1 / 3;

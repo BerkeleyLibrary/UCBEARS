@@ -55,9 +55,9 @@
         </td>
       </tr>
       <tr>
-        <th class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
+        <td class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
           <%= presenter.action %>
-        </th>
+        </td>
       </tr>
     <% elsif !presenter.loan.active? %>
       <tr>
@@ -82,15 +82,15 @@
         </td>
       </tr>
       <tr>
-        <th class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
+        <td class="action" style="grid-column: 1 / 3"><%# TODO: something less hacky %>
           <%= presenter.action %>
-        </th>
+        </td>
       </tr>
     <% else %>
       <tr>
-        <th class="action">
+        <td class="action">
           <%= presenter.action %>
-        </th>
+        </td>
       </tr>
     <% end %>
 
