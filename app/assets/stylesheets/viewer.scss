@@ -17,7 +17,7 @@ section.viewer {
       box-shadow: none;
       transition: none;
 
-      &:hover {
+      &:hover, &:focus {
         background-color: inherit;
       }
     }
@@ -112,7 +112,7 @@ section.viewer {
       &:not(.Mui-Disabled) {
         transition: background-color 0.25s, color 0.25s;
 
-        &:hover {
+        &:hover, &:focus {
           background-color: $color-anchor-highlight;
           color: $color-background-reversed !important;
         }
@@ -217,7 +217,7 @@ section.viewer {
     box-shadow: none;
     transition: color 0.25s;
 
-    &:hover {
+    &:hover, &:focus {
       color: $color-anchor-highlight;
       background-color: transparent;
     }
@@ -227,12 +227,12 @@ section.viewer {
       width: $font-size-large;
 
       // TODO: share w/footer (img.social-media-icon)
-      &:not(:hover) {
+      &:not(:hover):not(:focus) {
         filter: grayscale(100%) brightness(200%);
         transition: filter 0.25s;
       }
 
-      &:hover {
+      &:hover, &:focus {
         transition: filter 0.25s;
       }
     }

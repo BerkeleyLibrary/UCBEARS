@@ -51,7 +51,7 @@ a.btn, input[type=button], input[type=submit] {
       background-color: $color-danger;
     }
 
-    &:hover {
+    &:hover, &:focus {
       color: $color-foreground !important;
       background-color: $color-anchor-highlight;
     }

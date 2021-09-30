@@ -13,7 +13,7 @@ footer {
     box-shadow: none;
     transition: color 0.25s;
 
-    &:hover {
+    &:hover, &:focus {
       color: $color-anchor-highlight;
       background-color: transparent;
     }
@@ -43,19 +43,23 @@ footer {
       grid-column-gap: $margin-xxsmall;
       grid-template-columns: min-content min-content min-content min-content;
 
+      a {
+        &:not(:hover):not(:focus) {
+          img {
+            filter: grayscale(100%) brightness(200%);
+            transition: filter 0.25s;
+          }
+        }
+
+        &:hover, &:focus {
+          transition: filter 0.25s;
+        }
+      }
+
       img {
         &.social-media-icon {
           padding-right: 2pt;
           width: $font-size-xxlarge;
-
-          &:not(:hover) {
-            filter: grayscale(100%) brightness(200%);
-            transition: filter 0.25s;
-          }
-
-          &:hover {
-            transition: filter 0.25s;
-          }
         }
       }
     }

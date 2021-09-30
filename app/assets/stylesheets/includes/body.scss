@@ -24,30 +24,34 @@ body {
 // ////////////////////////////////////////////////////////////
 // Skip links
 
-a {
-  &.skip-link {
-    color: #fff !important;
-    background-color: $color-pacific;
+div.skip-link {
+  background-color: $color-background-reversed;
+  color: #fff !important;
+  font-size: $font-size-small;
+  line-height: $line-height;
+
+  a {
     box-shadow: none;
-    padding-left: $margin;
-  }
+    background-color: transparent !important;
+    padding-left: $margin-xsmall;
+    padding-right: $margin-xsmall;
 
-  &.visually-hidden {
-    position: absolute !important;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
-    width: 1px;
-    height: 1px;
-    word-wrap: normal;
+    &.visually-hidden {
+      position: absolute !important;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      width: 1px;
+      height: 1px;
+      word-wrap: normal;
 
-    &.focusable:active, &.focusable:focus {
-      position: relative !important;
-      display: block;
-      overflow: visible;
-      clip: auto;
-      width: auto;
-      height: auto;
-      z-index: 999;
+      &.focusable:active, &.focusable:focus {
+        position: relative !important;
+        overflow: visible;
+        clip: auto;
+        width: auto;
+        height: auto;
+        z-index: 999;
+      }
     }
   }
 }
