@@ -28,7 +28,7 @@ class LendingItem < ActiveRecord::Base
     directory
     status
     iiif_dir
-    has_iiif_dir?
+    iiif_dir_exists?
     has_page_images?
     marc_path
     has_marc_record?
@@ -108,6 +108,15 @@ class LendingItem < ActiveRecord::Base
   end
 
   # ------------------------------------------------------------
+  # ActiveRecord overrides
+
+  def reload(options = nil)
+    super
+
+    @iiif_directory = nil
+  end
+
+  # ------------------------------------------------------------
   # Instance methods
 
   # @return [LendingItemLoan] the created loan
@@ -181,7 +190,7 @@ class LendingItem < ActiveRecord::Base
   end
 
   def complete?
-    has_iiif_dir? && has_page_images? && has_marc_record? && has_manifest_template?
+    iiif_dir_exists? && has_page_images? && has_marc_record? && has_manifest_template?
   end
 
   def incomplete?
@@ -216,7 +225,7 @@ class LendingItem < ActiveRecord::Base
   # TODO: move these to an ItemValidator class or something
   def reason_incomplete
     return if complete?
-    return MSG_NO_IIIF_DIR unless has_iiif_dir?
+    return MSG_NO_IIIF_DIR unless iiif_dir_exists?
     return MSG_NO_PAGE_IMAGES unless has_page_images?
     return MSG_NO_MARC_XML unless has_marc_record?
     return MSG_NO_MANIFEST_TEMPLATE unless has_manifest_template?
@@ -238,11 +247,9 @@ class LendingItem < ActiveRecord::Base
   end
 
   def iiif_manifest
-    # TODO: always return manifest object unless iiif_dir is nil
-    return unless has_iiif_dir?
+    return unless iiif_directory.exists?
 
-    manifest = Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_dir)
-    return manifest if manifest.has_template?
+    Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_directory.path)
   end
 
   def marc_metadata
@@ -252,12 +259,11 @@ class LendingItem < ActiveRecord::Base
   end
 
   def iiif_dir
-    return unless directory
+    iiif_directory.path.to_s
+  end
 
-    @iiif_dir ||= begin
-      iiif_dir_relative = File.join(iiif_final_root, directory)
-      File.absolute_path(iiif_dir_relative)
-    end
+  def iiif_directory
+    @iiif_directory ||= IIIFDirectory.new(directory)
   end
 
   def record_id
@@ -270,19 +276,13 @@ class LendingItem < ActiveRecord::Base
     @barcode
   end
 
-  # rubocop:disable Naming/PredicateName
-  def has_iiif_dir?
-    return false unless iiif_dir
-
-    File.exist?(iiif_dir) && File.directory?(iiif_dir)
+  def iiif_dir_exists?
+    iiif_directory.exists?
   end
-  # rubocop:enable Naming/PredicateName
 
   # rubocop:disable Naming/PredicateName
   def has_page_images?
-    return false unless has_iiif_dir?
-
-    Dir.entries(iiif_dir).any? { |e| Lending::Page.page_image?(e) }
+    iiif_directory.page_images?
   end
   # rubocop:enable Naming/PredicateName
 
@@ -315,7 +315,7 @@ class LendingItem < ActiveRecord::Base
 
   # rubocop:disable Naming/PredicateName
   def has_marc_record?
-    !marc_path.nil? && marc_path.file?
+    iiif_directory.marc_record?
   end
   # rubocop:enable Naming/PredicateName
 
@@ -326,10 +326,7 @@ class LendingItem < ActiveRecord::Base
   # rubocop:enable Naming/PredicateName
 
   def marc_path
-    # TODO: stop checking whether iiif_dir is non-nil/present and just check whether files exist
-    return unless has_iiif_dir?
-
-    Pathname.new(iiif_dir).join(Lending::Processor::MARC_XML_NAME)
+    iiif_directory.marc_path
   end
 
   # ------------------------------------------------------------

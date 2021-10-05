@@ -141,10 +141,10 @@ module Health
       return unless (base_uri = iiif_base_uri)
       return unless (item = complete_item)
 
-      image_file_name = Dir.entries(item.iiif_dir).find { |e| Lending::Page.page_image?(e) }
-      raise Errno::ENOENT, "No page images found in #{item.iiif_dir}" unless image_file_name # NOTE: should never happen
+      image_path = item.iiif_directory.page_images.first
+      raise Errno::ENOENT, "No page images found in #{item.iiif_dir}" unless image_path # NOTE: should never happen
 
-      BerkeleyLibrary::Util::URIs.append(base_uri, item.directory, image_file_name, 'info.json')
+      BerkeleyLibrary::Util::URIs.append(base_uri, item.directory, image_path.basename.to_s, 'info.json')
     end
 
   end

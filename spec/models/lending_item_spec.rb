@@ -183,7 +183,7 @@ describe LendingItem, type: :model do
     describe :complete? do
       it 'returns false for items without IIIF directories' do
         item = items[:incomplete_no_directory]
-        expect(item.has_iiif_dir?).to eq(false)
+        expect(item.iiif_dir_exists?).to eq(false)
         expect(item.has_page_images?).to eq(false)
         expect(item.has_marc_record?).to eq(false)
         expect(item.has_manifest_template?).to eq(false)
@@ -192,7 +192,7 @@ describe LendingItem, type: :model do
 
       it 'returns false for items without page images' do
         item = items[:incomplete_no_images]
-        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.iiif_dir_exists?).to eq(true)
         expect(item.has_page_images?).to eq(false)
         expect(item.has_marc_record?).to eq(true)
         expect(item.has_manifest_template?).to eq(true)
@@ -201,7 +201,7 @@ describe LendingItem, type: :model do
 
       it 'returns false for items without MARC records' do
         item = items[:incomplete_no_marc]
-        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.iiif_dir_exists?).to eq(true)
         expect(item.has_page_images?).to eq(true)
         expect(item.has_marc_record?).to eq(false)
         expect(item.has_manifest_template?).to eq(true)
@@ -210,7 +210,7 @@ describe LendingItem, type: :model do
 
       it 'returns false for items without manifest templates' do
         item = items[:incomplete_no_manifest]
-        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.iiif_dir_exists?).to eq(true)
         expect(item.has_page_images?).to eq(true)
         expect(item.has_marc_record?).to eq(true)
         expect(item.has_manifest_template?).to eq(false)
@@ -219,7 +219,7 @@ describe LendingItem, type: :model do
 
       it 'returns false for items without manifest templates or page images' do
         item = items[:incomplete_marc_only]
-        expect(item.has_iiif_dir?).to eq(true)
+        expect(item.iiif_dir_exists?).to eq(true)
         expect(item.has_page_images?).to eq(false)
         expect(item.has_marc_record?).to eq(true)
         expect(item.has_manifest_template?).to eq(false)
@@ -230,7 +230,7 @@ describe LendingItem, type: :model do
         %i[inactive_item active_item].each do |fn|
           item = items[fn]
 
-          expect(item.has_iiif_dir?).to eq(true)
+          expect(item.iiif_dir_exists?).to eq(true)
           expect(item.has_page_images?).to eq(true)
           expect(item.has_marc_record?).to eq(true)
           expect(item.has_manifest_template?).to eq(true)
@@ -285,12 +285,16 @@ describe LendingItem, type: :model do
           expect(iiif_item.dir_path.to_s).to eq(item.iiif_dir)
         end
       end
+    end
 
-      it 'returns nil if the item has no IIIF directory or no manifest' do
+    describe :has_manifest_template? do
+      let(:with_manifest) { %i[inactive_item active_item incomplete_no_images incomplete_no_marc] }
+
+      it 'returns false if the item has no IIIF directory or no manifest' do
         items.each do |fn, item|
           next if with_manifest.include?(fn)
 
-          expect(item.iiif_manifest).to be_nil
+          expect(item.has_manifest_template?).to eq(false)
         end
       end
     end

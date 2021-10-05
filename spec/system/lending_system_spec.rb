@@ -337,7 +337,10 @@ describe LendingController, type: :system do
           mf = Lending::IIIFManifest.new(title: item.title, author: item.author, dir_path: item.iiif_dir)
           begin
             mf.write_manifest_erb!
-            expect(item).to be_complete # just to be sure
+            item.reload
+
+            # just to be sure
+            expect(item).to be_complete, -> { "Item #{item.directory} should be complete, but: #{item.reason_incomplete}" }
 
             delete_button.click
             expect_alert(:danger, 'Only incomplete items can be deleted.')
