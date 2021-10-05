@@ -321,7 +321,7 @@ class LendingItem < ActiveRecord::Base
 
   # rubocop:disable Naming/PredicateName
   def has_manifest_template?
-    !iiif_manifest.nil? && iiif_manifest.has_template?
+    iiif_directory.manifest_template?
   end
   # rubocop:enable Naming/PredicateName
 
@@ -354,11 +354,6 @@ class LendingItem < ActiveRecord::Base
     return if @record_id && @barcode
 
     @record_id, @barcode = directory.split('_')
-  end
-
-  # TODO: move this to a helper
-  def iiif_final_root
-    Lending.stage_root_path(:final)
   end
 end
 # rubocop:enable Metrics/ClassLength
