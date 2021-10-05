@@ -122,13 +122,7 @@ class ItemLendingStats
   # Stats methods
 
   def loan_count_total
-    loans.respond_to?(:count) ? loans.count : loans.size
-  end
-
-  def loan_count_by_status(loan_status)
-    return 0 unless (loans_for_status = loans_by_status[loan_status])
-
-    loans_for_status.size
+    @loan_count_total ||= loans.respond_to?(:count) ? loans.count : loans.size
   end
 
   def loan_counts_by_status
@@ -163,12 +157,7 @@ class ItemLendingStats
     order = other.loan_count_total <=> loan_count_total
     return order if order != 0
 
-    order = ItemLendingStats::CSV_ITEM_COLS
-      .lazy
-      .map { |attr| item.send(attr) <=> other.item.send(attr) }
-      .find { |o| o > 0 }
-
-    order || 0
+    compare_items(other.item) || 0
   end
 
   # ------------------------------------------------------------
@@ -176,10 +165,24 @@ class ItemLendingStats
 
   private
 
+  def compare_items(other_item)
+    ItemLendingStats::CSV_ITEM_COLS
+      .lazy
+      .map { |attr| item.send(attr) <=> other_item.send(attr) }
+      .find { |o| o != 0 }
+  end
+
   def loans_by_status
     @loans_by_status ||= {}.with_indifferent_access.tap do |lbs|
       LendingItemLoan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.send(scope) }
     end
   end
+
+  def loan_count_by_status(loan_status)
+    return 0 unless (loans_for_status = loans_by_status[loan_status])
+
+    loans_for_status.respond_to?(:count) ? loans_for_status.count : loans_for_status.size
+  end
+
 end
 # rubocop:enable Metrics/ClassLength
