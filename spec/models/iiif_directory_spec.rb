@@ -28,7 +28,7 @@ describe IIIFDirectory do
 
     describe :inspect do
       it 'includes the path' do
-        expect(iiif_directory.to_s).to include(expected_path.to_s)
+        expect(iiif_directory.inspect).to include(expected_path.to_s)
       end
     end
   end
