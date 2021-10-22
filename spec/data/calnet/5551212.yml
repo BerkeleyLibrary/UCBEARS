@@ -1,6 +1,6 @@
 # simulated student
 provider: calnet
-uid: 5551212
+uid: '5551212'
 info:
   name: Jane Doe
   email: jdoe@berkeley.test

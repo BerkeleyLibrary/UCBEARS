@@ -47,7 +47,7 @@ class User
       ensure_valid_provider(auth['provider'])
 
       new(
-        uid: auth['extra']['uid'],
+        uid: auth['extra']['uid'], # TODO: why not auth['uid']?
         affiliations: auth['extra']['berkeleyEduAffiliations'],
         cal_groups: (auth['extra']['berkeleyEduIsMemberOf'] || []) & User::KNOWN_CAL_GROUPS
       )
