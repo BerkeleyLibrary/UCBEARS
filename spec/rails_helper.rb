@@ -34,11 +34,11 @@ require 'support/factory_bot'
 
 module CalnetHelper
   IDS = {
-    student: '05551212'.freeze,
-    faculty: '05551213'.freeze,
-    staff: '05551214'.freeze,
-    lending_admin: '05551215'.freeze,
-    retiree: '05551216'.freeze
+    student: '5551212'.freeze,
+    faculty: '5551213'.freeze,
+    staff: '5551214'.freeze,
+    lending_admin: '5551215'.freeze,
+    retiree: '5551216'.freeze
   }.freeze
 
   def mock_login(type)

@@ -1,6 +1,6 @@
 # simulated student
 provider: calnet
-uid: jdoe
+uid: 5551212
 info:
   name: Jane Doe
   email: jdoe@berkeley.test
@@ -9,7 +9,7 @@ extra:
   surname: Doe
   displayName: Jane R. Doe
   berkeleyEduStuID: '5551212'
-  uid: '05551212'
+  uid: '5551212'
   berkeleyEduIsMemberOf:
     - cn=edu:berkeley:official:all,ou=campus groups,dc=berkeley,dc=edu
   berkeleyEduAffiliations:
