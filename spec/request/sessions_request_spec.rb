@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 describe SessionsController, type: :request do
-  before(:each) do
-    @logger_orig = Rails.logger
-  end
-
-  after(:each) do
-    Rails.logger = @logger_orig
-  end
-
   it 'logs CalNet/Omniauth parameters as JSON' do
     logdev = StringIO.new
     logger = BerkeleyLibrary::Logging::Loggers.new_json_logger(logdev)
