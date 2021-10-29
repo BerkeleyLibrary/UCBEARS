@@ -87,7 +87,6 @@ module CalnetHelper
   def logout!
     unless respond_to?(:page)
       # Selenium doesn't know anything about webmock and will just hit the real logout path
-      # TODO: backport these changes to Framework
       stub_request(:get, 'https://auth-test.berkeley.edu/cas/logout').to_return(status: 200)
       without_redirects { do_get logout_path }
     end

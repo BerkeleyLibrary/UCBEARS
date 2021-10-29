@@ -33,7 +33,6 @@ class SessionsController < ApplicationController
     sign_out
 
     # TODO: configure this more elegantly and make it play better with Selenium tests
-    #       also backport whatever the fix is to Framework
     redirect_to "https://auth#{'-test' unless Rails.env.production?}.berkeley.edu/cas/logout"
   end
 
