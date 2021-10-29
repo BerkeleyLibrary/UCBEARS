@@ -47,12 +47,12 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', '~> 3.36'
   gem 'concurrent-ruby', '~> 1.1'
   gem 'database_cleaner-active_record', '~> 2.0'
   gem 'rspec', '~> 3.10'
   gem 'rspec_junit_formatter'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '~> 4.0'
   gem 'simplecov', '~> 0.21', require: false
   gem 'simplecov-rcov', '~> 0.2', require: false
   gem 'webmock', require: false
