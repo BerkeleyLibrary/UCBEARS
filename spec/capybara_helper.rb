@@ -181,8 +181,8 @@ module CapybaraHelper
 
     GRID_DRIVER_OPTS = {
       browser: :remote,
-      url: "http://#{SELENIUM_HOSTNAME}:4444/wd/hub",
-    }
+      url: "http://#{SELENIUM_HOSTNAME}:4444/wd/hub"
+    }.freeze
 
     def initialize
       super(:selenium_grid, webmock_options: { allow: [SELENIUM_HOSTNAME] }, chrome_args: GRID_CHROME_ARGS, driver_opts: GRID_DRIVER_OPTS)
