@@ -26,7 +26,7 @@ module Lending
     end
 
     class << self
-      DIGITS_RE = /^\d+$/.freeze
+      DIGITS_RE = /^\d+$/
 
       def page_number?(path)
         PathUtils.stem(path) =~ DIGITS_RE

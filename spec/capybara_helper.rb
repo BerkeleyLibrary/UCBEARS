@@ -127,7 +127,7 @@ module CapybaraHelper
           )
         ]
         options = { capabilities: capabilities }.merge(driver_opts)
-        Capybara::Selenium::Driver.new(app, options)
+        Capybara::Selenium::Driver.new(app, **options)
       end
 
       Capybara.javascript_driver = driver_name

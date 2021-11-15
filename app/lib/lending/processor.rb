@@ -1,12 +1,13 @@
 require 'berkeley_library/marc'
 require 'berkeley_library/logging'
+require 'fileutils'
 
 module Lending
   class Processor
     include BerkeleyLibrary::Logging
 
     MARC_XML_NAME = 'marc.xml'.freeze
-    MILLENNIUM_RECORD_RE = /^(?<bib>b[0-9]{8})(?<check>[0-9a-z])?$/.freeze
+    MILLENNIUM_RECORD_RE = /^(?<bib>b[0-9]{8})(?<check>[0-9a-z])?$/
 
     attr_reader :indir, :outdir, :record_id, :barcode, :marc_path
 

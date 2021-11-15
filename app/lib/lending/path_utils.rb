@@ -2,9 +2,9 @@ require 'pathname'
 
 module Lending
   module PathUtils
-    DIRNAME_RE = /^(?<record_id>[^_]+)_(?<barcode>.+)$/.freeze
+    DIRNAME_RE = /^(?<record_id>[^_]+)_(?<barcode>.+)$/
     MSG_BAD_DIRNAME = "Item directory '%s' should be in the form <record_id>_<barcode>".freeze
-    SEGMENT_RE = /^([[:graph:]][[:print:]]*[[:graph:]]|[[:graph:]])$/.freeze
+    SEGMENT_RE = /^([[:graph:]][[:print:]]*[[:graph:]]|[[:graph:]])$/
     MSG_INVALID_BARCODE = "Item barcode '%s' contains invalid characters".freeze
     MSG_INVALID_RECORD_ID = "Item record ID '%s' contains invalid characters".freeze
 

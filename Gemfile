@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.2'
+ruby '~> 3.0.0'
 
 gem 'awesome_print', '>=1.8.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.3'
@@ -47,12 +47,12 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 3.36'
+  gem 'capybara'
   gem 'concurrent-ruby', '~> 1.1'
   gem 'database_cleaner-active_record', '~> 2.0'
   gem 'rspec', '~> 3.10'
   gem 'rspec_junit_formatter'
-  gem 'selenium-webdriver', '~> 4.0'
+  gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.21', require: false
   gem 'simplecov-rcov', '~> 0.2', require: false
   gem 'webmock', require: false
