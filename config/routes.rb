@@ -44,4 +44,6 @@ Rails.application.routes.draw do
   defaults format: 'json' do
     get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: { directory: %r{[^/]+} }
   end
+
+  resources :items, constraints: ->(req) { req.cormat == :json }
 end
