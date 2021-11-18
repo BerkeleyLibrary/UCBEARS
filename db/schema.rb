@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_182423) do
+ActiveRecord::Schema.define(version: 2021_11_18_185043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_182423) do
     t.index ["directory"], name: "index_items_on_directory", unique: true
   end
 
-  create_table "lending_item_loans", force: :cascade do |t|
+  create_table "loans", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.string "patron_identifier"
     t.datetime "loan_date"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 2021_11_18_182423) do
     t.datetime "return_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["item_id"], name: "index_lending_item_loans_on_item_id"
-    t.index ["patron_identifier"], name: "index_lending_item_loans_on_patron_identifier"
+    t.index ["item_id"], name: "index_loans_on_item_id"
+    t.index ["patron_identifier"], name: "index_loans_on_patron_identifier"
   end
 
   create_table "session_counters", force: :cascade do |t|
@@ -49,5 +49,5 @@ ActiveRecord::Schema.define(version: 2021_11_18_182423) do
     t.integer "count"
   end
 
-  add_foreign_key "lending_item_loans", "items"
+  add_foreign_key "loans", "items"
 end

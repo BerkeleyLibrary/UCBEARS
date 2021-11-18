@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ItemLendingStats do
-  let(:select_loan_date) { 'select loan_date from lending_item_loans where id = ?' }
+  let(:select_loan_date) { 'select loan_date from loans where id = ?' }
 
   before(:each) do
     {
@@ -73,7 +73,7 @@ describe ItemLendingStats do
       expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
 
       @loans_by_date = {}
-      LendingItemLoan.pluck(:id, :loan_date).each do |id, loan_date|
+      Loan.pluck(:id, :loan_date).each do |id, loan_date|
         loans_by_date[id] = loan_date.to_date
       end
     end

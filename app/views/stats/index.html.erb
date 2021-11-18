@@ -161,7 +161,7 @@
       %>
       <h3>Recent popular items</h3>
       <p>The <%= cutoff_items %> most popular items for each of the last <%= cutoff_days %> days.</p>
-      <% scopes = LendingItemLoan::LOAN_STATUS_SCOPES - [:pending] %>
+      <% scopes = Loan::LOAN_STATUS_SCOPES - [:pending] %>
       <table class="stats-table">
         <thead>
           <tr>

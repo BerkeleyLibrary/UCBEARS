@@ -182,7 +182,7 @@ describe StatsPresenter do
             all_stats_for_date.each do |stats|
               item = stats.item
               stats.loan_counts_by_status.each do |status, count|
-                expected_count = item.lending_item_loans.send(status).loaned_on(date).count
+                expected_count = item.loans.send(status).loaned_on(date).count
                 expect(count).to eq(expected_count)
               end
             end

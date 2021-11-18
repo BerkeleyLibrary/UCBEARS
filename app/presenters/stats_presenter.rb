@@ -23,23 +23,23 @@ class StatsPresenter
   # Loan stats
 
   def loan_count_total
-    LendingItemLoan.count
+    Loan.count
   end
 
   def loan_count_active
-    LendingItemLoan.active.count
+    Loan.active.count
   end
 
   def loan_count_returned
-    LendingItemLoan.returned.count
+    Loan.returned.count
   end
 
   def loan_count_expired
-    LendingItemLoan.expired.count
+    Loan.expired.count
   end
 
   def loan_count_complete
-    LendingItemLoan.complete.count
+    Loan.complete.count
   end
 
   def loan_duration_median

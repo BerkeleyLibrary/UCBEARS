@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe LendingItemLoan do
+describe Loan do
   attr_reader :borrower_id
   attr_reader :user
   attr_reader :item
@@ -99,7 +99,7 @@ describe LendingItemLoan do
 
         aggregate_failures "loaned_on [TZ = #{tz}]" do
           loans_by_date.each do |local_date, expected_loans|
-            actual = LendingItemLoan.loaned_on(local_date).map(&:loan_date)
+            actual = Loan.loaned_on(local_date).map(&:loan_date)
             expected = expected_loans.map(&:loan_date)
             expect(actual).to match_array(expected)
           end

@@ -549,7 +549,7 @@ describe LendingController, type: :system do
 
           it 'allows a checkout' do
             expect(item).to be_available # just to be sure
-            expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
+            expect(Loan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
             visit lending_view_path(directory: item.directory)
             expect(page).not_to have_selector('div#iiif_viewer')
@@ -595,7 +595,7 @@ describe LendingController, type: :system do
             visit lending_view_path(directory: item.directory)
 
             item.check_out_to(user.borrower_id)
-            count_before = LendingItemLoan.where(patron_identifier: user.borrower_id).count
+            count_before = Loan.where(patron_identifier: user.borrower_id).count
 
             checkout_link = page.find_link('Check out')
             checkout_link.click
@@ -606,7 +606,7 @@ describe LendingController, type: :system do
             expect(page).to have_selector('div#iiif_viewer')
             expect(page).to have_link('Return now')
 
-            count_after = LendingItemLoan.where(patron_identifier: user.borrower_id).count
+            count_after = Loan.where(patron_identifier: user.borrower_id).count
             expect(count_after).to eq(count_before)
           end
         end
@@ -649,7 +649,7 @@ describe LendingController, type: :system do
             visit lending_view_path(directory: item.directory)
             return_link = page.find_link('Return now')
 
-            loan = item.lending_item_loans.active.find_by(patron_identifier: user.borrower_id)
+            loan = item.loans.active.find_by(patron_identifier: user.borrower_id)
             expect(loan).not_to be_nil # just to be sure
             loan.update!(loan_date: loan.loan_date - 1.days, due_date: loan.due_date - 1.days)
 
@@ -727,7 +727,7 @@ describe LendingController, type: :system do
         it 'displays a warning when loan has expired' do
           loan_date = Time.current.utc - 3.weeks
           due_date = loan_date + Item::LOAN_DURATION_SECONDS.seconds
-          loan = LendingItemLoan.create(
+          loan = Loan.create(
             item_id: item.id,
             patron_identifier: user.borrower_id,
             loan_date: loan_date,
@@ -769,7 +769,7 @@ describe LendingController, type: :system do
       describe :view do
         it "doesn't allow a checkout" do
           expect(item).not_to be_available # just to be sure
-          expect(LendingItemLoan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
+          expect(Loan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
           visit lending_view_path(directory: item.directory)
           expect(page).not_to have_selector('div#iiif_viewer')

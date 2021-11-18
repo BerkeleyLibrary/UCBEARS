@@ -53,7 +53,7 @@ class LendingController < ApplicationController
     end
     ensure_lending_item_loan!
 
-    if token_str.nil? && @lending_item_loan.active?
+    if token_str.nil? && @loan.active?
       token_str = current_user.borrower_token.token_str
       redirect_to(lending_view_path(directory: directory, token: token_str))
     else
@@ -72,22 +72,24 @@ class LendingController < ApplicationController
   # Form handlers
 
   def update
-    unless @item.update(lending_item_params)
-      return render_with_errors(:edit, @item.errors, "Updating #{@item.directory} failed")
+    if @item.update(lending_item_params)
+      flash!(:success, 'Item updated.')
+      redirect_to lending_show_url(directory: directory)
+    else
+      render_with_errors(:edit, @item.errors, "Updating #{@item.directory} failed")
     end
-
-    flash!(:success, 'Item updated.')
-    redirect_to lending_show_url(directory: directory)
   end
 
   def check_out
-    @lending_item_loan = @item.check_out_to(patron_identifier)
-    return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@item.directory} failed") unless @lending_item_loan.persisted?
-
-    flash!(:success, 'Checkout successful.')
-    # TODO: can we get Rails to just parameterize the token as a string?
-    token_str = current_user.borrower_token.token_str
-    redirect_to lending_view_url(directory: directory, token: token_str)
+    @loan = @item.check_out_to(patron_identifier)
+    if @loan.persisted?
+      flash!(:success, 'Checkout successful.')
+      # TODO: can we get Rails to just parameterize the token as a string?
+      token_str = current_user.borrower_token.token_str
+      redirect_to lending_view_url(directory: directory, token: token_str)
+    else
+      render_with_errors(:view, @loan.errors, "Checking out #{@item.directory} failed")
+    end
   end
 
   def return
@@ -165,7 +167,7 @@ class LendingController < ApplicationController
 
   def populate_view_flash
     flash_now!(:danger, 'Your loan term has expired.') if most_recent_loan&.expired? # TODO: something less awkward
-    return unless (reason_unavailable = @lending_item_loan.reason_unavailable)
+    return unless (reason_unavailable = @loan.reason_unavailable)
 
     flash_now!(:danger, reason_unavailable)
   end
@@ -182,11 +184,11 @@ class LendingController < ApplicationController
   end
 
   def active_loan
-    @active_loan ||= LendingItemLoan.active.find_by(**loan_args)
+    @active_loan ||= Loan.active.find_by(**loan_args)
   end
 
   def most_recent_loan
-    @most_recent_loan ||= LendingItemLoan.where(**loan_args).order(:updated_at).last
+    @most_recent_loan ||= Loan.where(**loan_args).order(:updated_at).last
   end
 
   def manifest_url
@@ -247,7 +249,7 @@ class LendingController < ApplicationController
     require_eligible_patron!
 
     # TODO: stop requiring an empty loan object
-    @lending_item_loan = existing_loan || LendingItemLoan.new(**loan_args)
+    @loan = existing_loan || Loan.new(**loan_args)
   end
 
 end

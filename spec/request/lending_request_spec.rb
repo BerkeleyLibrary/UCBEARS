@@ -101,7 +101,7 @@ describe LendingController, type: :request do
 
         it 'treats expired loans as complete' do
           active.each do |items|
-            expect(items.lending_item_loans).to be_empty
+            expect(items.loans).to be_empty
           end
           loans = active.each_with_object([]) do |item, ll|
             item.copies.times do |copy|
@@ -327,7 +327,7 @@ describe LendingController, type: :request do
           loan.reload
           expect(loan.active?).to eq(false)
 
-          expect(item.lending_item_loans.active).to be_empty
+          expect(item.loans.active).to be_empty
         end
 
         it 'returns 404 not found for nonexistent items' do
@@ -468,7 +468,7 @@ describe LendingController, type: :request do
         it "doesn't create a new loan record" do
           expect do
             get lending_view_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
+          end.not_to change(Loan, :count)
 
           expect(response).to be_successful
           expect(response.body).to include('Check out')
@@ -487,7 +487,7 @@ describe LendingController, type: :request do
 
           expect do
             get lending_view_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
+          end.not_to change(Loan, :count)
 
           expected_path = lending_view_path(directory: item.directory, token: user.borrower_token.token_str)
           expect(response).to redirect_to(expected_path)
@@ -505,7 +505,7 @@ describe LendingController, type: :request do
         it 'pre-returns the loan if already expired' do
           loan_date = Time.current - 3.weeks
           due_date = loan_date + Item::LOAN_DURATION_SECONDS.seconds
-          loan = LendingItemLoan.create(
+          loan = Loan.create(
             item_id: item.id,
             patron_identifier: user.borrower_id,
             loan_date: loan_date,
@@ -517,7 +517,7 @@ describe LendingController, type: :request do
 
           expect do
             get lending_view_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
+          end.not_to change(Loan, :count)
           expect(response).to be_successful
 
           loan.reload
@@ -537,7 +537,7 @@ describe LendingController, type: :request do
 
           expect do
             get lending_view_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
+          end.not_to change(Loan, :count)
           expect(response).to be_successful
 
           body = response.body
@@ -556,9 +556,9 @@ describe LendingController, type: :request do
         # TODO: share these assertions
         expect do
           get lending_check_out_path(directory: item.directory)
-        end.to change(LendingItemLoan, :count).by(1)
+        end.to change(Loan, :count).by(1)
 
-        loan = LendingItemLoan.find_by(
+        loan = Loan.find_by(
           item_id: item.id,
           patron_identifier: user.borrower_id
         )
@@ -584,7 +584,7 @@ describe LendingController, type: :request do
 
         expect do
           get lending_check_out_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
+        end.not_to change(Loan, :count)
 
         expect(response.status).to eq(422) # unprocessable entity
         expect(response.body).to include(Item::MSG_CHECKED_OUT)
@@ -604,7 +604,7 @@ describe LendingController, type: :request do
 
           expect do
             get lending_check_out_path(directory: item.directory)
-          end.not_to change(LendingItemLoan, :count)
+          end.not_to change(Loan, :count)
 
           expect(response.status).to eq(422) # unprocessable entity
           expect(response.body).to include(Item::MSG_CHECKOUT_LIMIT_REACHED)
@@ -623,9 +623,9 @@ describe LendingController, type: :request do
           # TODO: share these assertions
           expect do
             get lending_check_out_path(directory: item.directory)
-          end.to change(LendingItemLoan, :count).by(1)
+          end.to change(Loan, :count).by(1)
 
-          loan = LendingItemLoan.find_by(
+          loan = Loan.find_by(
             item_id: item.id,
             patron_identifier: user.borrower_id
           )
@@ -654,9 +654,9 @@ describe LendingController, type: :request do
           # TODO: share these assertions
           expect do
             get lending_check_out_path(directory: item.directory)
-          end.to change(LendingItemLoan, :count).by(1)
+          end.to change(Loan, :count).by(1)
 
-          loan = LendingItemLoan.find_by(
+          loan = Loan.find_by(
             item_id: item.id,
             patron_identifier: user.borrower_id
           )
@@ -680,7 +680,7 @@ describe LendingController, type: :request do
 
         expect do
           get lending_check_out_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
+        end.not_to change(Loan, :count)
 
         expect(response.status).to eq(422) # unprocessable entity
         expect(response.body).to include(Item::MSG_UNAVAILABLE)
@@ -691,7 +691,7 @@ describe LendingController, type: :request do
 
         expect do
           get lending_check_out_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
+        end.not_to change(Loan, :count)
 
         expect(response.status).to eq(422) # unprocessable entity
         expect(response.body).to include(Item::MSG_INACTIVE)
@@ -722,7 +722,7 @@ describe LendingController, type: :request do
       it 'succeeds even if the item was never checked out' do
         expect do
           get lending_return_path(directory: item.directory)
-        end.not_to change(LendingItemLoan, :count)
+        end.not_to change(Loan, :count)
         expected_path = lending_view_path(directory: item.directory)
         expect(response).to redirect_to(expected_path)
       end

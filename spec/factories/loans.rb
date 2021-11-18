@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :lending_item_loan, aliases: %i[active_loan] do
+  factory :loan, aliases: %i[active_loan] do
     item_id { 1 }
     patron_identifier { BorrowerToken.next_borrower_id }
     loan_date { Time.current.utc }

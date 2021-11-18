@@ -7,7 +7,7 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Relations
 
-  has_many :lending_item_loans, dependent: :destroy
+  has_many :loans, dependent: :destroy
 
   # ------------------------------------------------------------
   # Validations
@@ -119,12 +119,12 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Instance methods
 
-  # @return [LendingItemLoan] the created loan
+  # @return [Loan] the created loan
   def check_out_to(patron_identifier)
     loan_date = Time.now.utc
     due_date = loan_date + LOAN_DURATION_SECONDS.seconds
 
-    LendingItemLoan.create(
+    Loan.create(
       item_id: id,
       patron_identifier: patron_identifier, # TODO: rename to borrower_id
       loan_date: loan_date,
@@ -233,7 +233,7 @@ class Item < ActiveRecord::Base
 
   def copies_available
     total_copies = copies || 0 # TODO: make this non-nullable
-    (total_copies - lending_item_loans.active.count)
+    (total_copies - loans.active.count)
   end
 
   def due_dates
@@ -310,7 +310,7 @@ class Item < ActiveRecord::Base
   end
 
   def active_loans
-    lending_item_loans.active.order(:due_date)
+    loans.active.order(:due_date)
   end
 
   # rubocop:disable Naming/PredicateName

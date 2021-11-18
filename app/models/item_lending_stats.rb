@@ -8,19 +8,19 @@ class ItemLendingStats
   SELECT_DISTINCT_LOAN_DATES_STMT = 'SELECT_DISTINCT_LOAN_DATES'.freeze
   SELECT_DISTINCT_LOAN_DATES = <<~SQL.freeze
       SELECT DISTINCT DATE(DATE_TRUNC('day', loan_date, :tz))
-        FROM lending_item_loans
+        FROM loans
     ORDER BY 1 DESC
   SQL
 
   SELECT_ALL_LOAN_DURATIONS = <<~SQL.freeze
     SELECT return_date - loan_date AS loan_duration
-      FROM lending_item_loans AS returned_loans
+      FROM loans AS returned_loans
      WHERE return_date IS NOT NULL
 
     UNION ALL
 
     SELECT due_date - loan_date AS loan_duration
-      FROM lending_item_loans AS expired_loans
+      FROM loans AS expired_loans
      WHERE return_date IS NULL
        AND (due_date AT TIME ZONE 'UTC')
            <= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
@@ -83,13 +83,13 @@ class ItemLendingStats
       return to_enum(:each_for_date, date) unless block_given?
 
       Item
-        .includes(:lending_item_loans)
-        .joins(:lending_item_loans) # INNER JOIN
-        .merge(LendingItemLoan.loaned_on(date))
+        .includes(:loans)
+        .joins(:loans) # INNER JOIN
+        .merge(Loan.loaned_on(date))
         .find_each do |item|
         # TODO: get scoped eager loading working properly so we don't have to pass the scope twice
-        # yield new(item, item.lending_item_loans)
-        yield new(item, item.lending_item_loans.loaned_on(date))
+        # yield new(item, item.loans)
+        yield new(item, item.loans.loaned_on(date))
       end
     end
 
@@ -126,7 +126,7 @@ class ItemLendingStats
   end
 
   def loan_counts_by_status
-    @loan_counts_by_status ||= LendingItemLoan::LOAN_STATUS_SCOPES.each_with_object({}) do |scope, counts|
+    @loan_counts_by_status ||= Loan::LOAN_STATUS_SCOPES.each_with_object({}) do |scope, counts|
       next if (count = loan_count_by_status(scope)) == 0
 
       counts[scope] = count
@@ -174,7 +174,7 @@ class ItemLendingStats
 
   def loans_by_status
     @loans_by_status ||= {}.with_indifferent_access.tap do |lbs|
-      LendingItemLoan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.send(scope) }
+      Loan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.send(scope) }
     end
   end
 

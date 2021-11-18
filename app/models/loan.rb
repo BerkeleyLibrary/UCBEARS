@@ -1,4 +1,4 @@
-class LendingItemLoan < ActiveRecord::Base
+class Loan < ActiveRecord::Base
 
   # ------------------------------------------------------------
   # Constants
@@ -22,7 +22,7 @@ class LendingItemLoan < ActiveRecord::Base
   scope :loaned_on, ->(date) do
     from_time = Time.zone.local(date.year, date.month, date.day)
     until_time = from_time + 1.days
-    where('lending_item_loans.loan_date >= ? AND lending_item_loans.loan_date < ?', from_time, until_time)
+    where('loans.loan_date >= ? AND loans.loan_date < ?', from_time, until_time)
   end
 
   # ------------------------------------------------------------
@@ -99,7 +99,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def other_checkouts
-    LendingItemLoan.active.where('item_id != ? AND patron_identifier = ?', item_id, patron_identifier)
+    Loan.active.where('item_id != ? AND patron_identifier = ?', item_id, patron_identifier)
   end
 
   # ------------------------------------------------------------
@@ -139,7 +139,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def already_checked_out?
-    LendingItemLoan.active
+    Loan.active
       .where(item_id: item_id, patron_identifier: patron_identifier)
       .where.not(id: id)
       .exists?
