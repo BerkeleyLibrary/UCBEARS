@@ -2,6 +2,7 @@ require 'pathname'
 
 module Lending
   module PathUtils
+    DIRNAME_RAW_RE = %r{[^/_]+_[^/]+}
     DIRNAME_RE = /^(?<record_id>[^_]+)_(?<barcode>.+)$/
     MSG_BAD_DIRNAME = "Item directory '%s' should be in the form <record_id>_<barcode>".freeze
     SEGMENT_RE = /^([[:graph:]][[:print:]]*[[:graph:]]|[[:graph:]])$/

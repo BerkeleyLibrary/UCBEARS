@@ -18,6 +18,13 @@ Rails.application.routes.draw do
     get '/stats/all_loan_dates', to: 'stats#all_loan_dates', as: :stats_all_loan_dates
   end
 
+  defaults format: 'json' do
+    resources :items, constraints: ->(req) { req.format == :json }
+  end
+
+  # Shared constraints
+  valid_dirname = { directory: Lending::PathUtils::DIRNAME_RAW_RE }
+
   defaults format: 'html' do
     # TODO: don't include this in production
     get '/stats', to: 'stats#index', as: :stats
@@ -26,24 +33,21 @@ Rails.application.routes.draw do
     # TODO: don't include this in production
     get '/profile_index', to: 'lending#profile_index', as: :lending_profile_index
 
-    # TODO: get Rails to use :directory as the primary key and this all gets a lot simpler
-    get '/:directory/edit', to: 'lending#edit', as: :lending_edit, constraints: { directory: %r{[^/]+} }
-    get '/:directory', to: 'lending#show', as: :lending_show, constraints: { directory: %r{[^/]+} }
-    get '/:directory/view(/:token)', to: 'lending#view', as: :lending_view, constraints: { directory: %r{[^/]+}, token: %r{[^/]+} }
-    patch '/:directory', to: 'lending#update', as: :lending_update, constraints: { directory: %r{[^/]+} }
-    delete '/:directory', to: 'lending#destroy', as: :lending_destroy, constraints: { directory: %r{[^/]+} }
+    get '/:directory/edit', to: 'lending#edit', as: :lending_edit, constraints: valid_dirname
+    get '/:directory', to: 'lending#show', as: :lending_show, constraints: valid_dirname
+    get '/:directory/view(/:token)', to: 'lending#view', as: :lending_view, constraints: valid_dirname.merge({ token: %r{[^/]+} })
+    patch '/:directory', to: 'lending#update', as: :lending_update, constraints: valid_dirname
+    delete '/:directory', to: 'lending#destroy', as: :lending_destroy, constraints: valid_dirname
     # TODO: something more RESTful
-    get '/:directory/checkout', to: 'lending#check_out', as: :lending_check_out, constraints: { directory: %r{[^/]+} }
-    get '/:directory/return', to: 'lending#return', as: :lending_return, constraints: { directory: %r{[^/]+} }
-    get '/:directory/activate', to: 'lending#activate', as: :lending_activate, constraints: { directory: %r{[^/]+} }
-    get '/:directory/deactivate', to: 'lending#deactivate', as: :lending_deactivate, constraints: { directory: %r{[^/]+} }
-    get '/:directory/reload', to: 'lending#reload', as: :lending_reload, constraints: { directory: %r{[^/]+} }
+    get '/:directory/checkout', to: 'lending#check_out', as: :lending_check_out, constraints: valid_dirname
+    get '/:directory/return', to: 'lending#return', as: :lending_return, constraints: valid_dirname
+    get '/:directory/activate', to: 'lending#activate', as: :lending_activate, constraints: valid_dirname
+    get '/:directory/deactivate', to: 'lending#deactivate', as: :lending_deactivate, constraints: valid_dirname
+    get '/:directory/reload', to: 'lending#reload', as: :lending_reload, constraints: valid_dirname
   end
 
   # TODO: get Rails to use :directory as the primary key and this all gets a lot simpler
   defaults format: 'json' do
-    get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: { directory: %r{[^/]+} }
+    get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: valid_dirname
   end
-
-  resources :items, constraints: ->(req) { req.cormat == :json }
 end

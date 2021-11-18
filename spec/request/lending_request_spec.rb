@@ -156,9 +156,8 @@ describe LendingController, type: :request do
           expect(response.status).to eq(404)
         end
 
-        it 'returns 404 not found for /lending' do
-          get '/lending'
-          expect(response.status).to eq(404)
+        it 'raises RoutingError for /lending' do
+          expect { get '/lending' }.to raise_error(ActionController::RoutingError)
         end
       end
 
@@ -850,13 +849,6 @@ describe LendingController, type: :request do
     describe 'GET lending_show_path' do
       it 'GET lending_show_path redirects to login' do
         get(path = lending_show_path(directory: item.directory))
-        login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
-        expect(response).to redirect_to(login_with_callback_url)
-      end
-
-      it 'redirects to login' do
-        get '/lending'
-        path = lending_show_path(directory: 'lending')
         login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
         expect(response).to redirect_to(login_with_callback_url)
       end

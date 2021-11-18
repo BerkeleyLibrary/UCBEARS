@@ -1,4 +1,3 @@
-require 'lending'
 require 'berkeley_library/util/uris'
 
 # rubocop:disable Metrics/ClassLength
@@ -292,7 +291,7 @@ class Item < ActiveRecord::Base
   # TODO: move all of these to an ItemValidator class or something
 
   def correct_directory_format
-    return if directory && directory.split('_').size == 2
+    return if Lending::PathUtils::DIRNAME_RE =~ directory
 
     errors.add(:base, CGI.escapeHTML(MSG_INVALID_DIRECTORY))
   end

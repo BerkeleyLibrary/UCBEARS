@@ -28,13 +28,13 @@ module Lending
 
       def default_iiif_base
         (env_iiif_base || rails_iiif_base).tap do |iiif_base|
-          raise(ConfigError, "IIIF base URL not set in #{ENV_IIIF_BASE} or #{RAILS_CONFIG_IIIF_BASE}") unless iiif_base
+          raise(ConfigException, "IIIF base URL not set in #{ENV_IIIF_BASE} or #{RAILS_CONFIG_IIIF_BASE}") unless iiif_base
         end
       end
 
       def default_lending_root
         (env_lending_root || rails_lending_root).tap do |lending_root|
-          raise(ConfigError, "Lending root not set in #{ENV_ROOT} or #{RAILS_CONFIG_ROOT}") unless lending_root
+          raise(ConfigException, "Lending root not set in #{ENV_ROOT} or #{RAILS_CONFIG_ROOT}") unless lending_root
         end
       end
 
