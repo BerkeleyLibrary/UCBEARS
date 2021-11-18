@@ -49,15 +49,15 @@ describe ItemLendingStats do
       @loans = []
       users.each do |user|
         borrower_id = user.borrower_id
-        loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: borrower_id)
+        loans << create(:active_loan, item_id: items[0].id, patron_identifier: borrower_id)
 
         date = (Date.current - 7.days)
         year, month, day = %i[year month day].map { |attr| date.send(attr) }
         [1, 7, 13, 19].each do |hour|
           expired_loan_date = Time.utc(year, month, day, hour)
-          loans << create(:expired_loan, loan_date: expired_loan_date, lending_item_id: items[0].id, patron_identifier: borrower_id)
+          loans << create(:expired_loan, loan_date: expired_loan_date, item_id: items[0].id, patron_identifier: borrower_id)
           completed_loan_date = Time.utc(year, month, day, hour + 3)
-          loans << create(:completed_loan, loan_date: completed_loan_date, lending_item_id: items[1].id, patron_identifier: borrower_id)
+          loans << create(:completed_loan, loan_date: completed_loan_date, item_id: items[1].id, patron_identifier: borrower_id)
         end
       end
 

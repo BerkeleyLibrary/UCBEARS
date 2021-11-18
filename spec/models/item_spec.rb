@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe LendingItem, type: :model do
+describe Item, type: :model do
   let(:factory_names) do
     %i[
       inactive_item
@@ -32,7 +32,7 @@ describe LendingItem, type: :model do
       expect(original_item.persisted?).to eq(true) # just to be sure
       modified_values.each { |attr, v| expect(original_item.send(attr)).to eq(v) } # just to be sure
 
-      refreshed_item = LendingItem.find(original_item.id).tap(&:refresh_marc_metadata!)
+      refreshed_item = Item.find(original_item.id).tap(&:refresh_marc_metadata!)
       original_values.each { |attr, v| expect(refreshed_item.send(attr)).to eq(v) }
 
       original_item.reload
@@ -80,10 +80,10 @@ describe LendingItem, type: :model do
       attributes = attributes_for(:active_item).tap do |attrs|
         attrs[:directory] = 'I am not a valid directory'
       end
-      item = LendingItem.create(attributes)
+      item = Item.create(attributes)
       expect(item.persisted?).to eq(false)
       messages = item.errors.full_messages.map { |msg| CGI.unescapeHTML(msg) }
-      expect(messages).to include(LendingItem::MSG_INVALID_DIRECTORY)
+      expect(messages).to include(Item::MSG_INVALID_DIRECTORY)
     end
   end
 
@@ -110,7 +110,7 @@ describe LendingItem, type: :model do
 
   context 'without existing items' do
     before(:each) do
-      expect(LendingItem.count).to eq(0) # just to be sure
+      expect(Item.count).to eq(0) # just to be sure
     end
 
     describe :scan_for_new_items! do
@@ -121,12 +121,12 @@ describe LendingItem, type: :model do
           Lending::PathUtils.item_dir?(d) &&
             d.join(Lending::MARC_XML_NAME).file?
         end
-        items = LendingItem.scan_for_new_items!
+        items = Item.scan_for_new_items!
         expect(items.size).to eq(expected_dirs.size)
       end
 
       it 'populates the publication metadata' do
-        items = LendingItem.scan_for_new_items!
+        items = Item.scan_for_new_items!
         items.each { |it| expect(it.publisher).not_to be_nil }
       end
     end
@@ -150,7 +150,7 @@ describe LendingItem, type: :model do
     attr_reader :items
 
     before(:each) do
-      expect(LendingItem.count).to eq(0) # just to be sure
+      expect(Item.count).to eq(0) # just to be sure
       # NOTE: we're deliberately not validating here, because we want some invalid items
       @items = factory_names.each_with_object({}) do |fn, items|
         items[fn] = build(fn).tap { |it| it.save!(validate: false) }

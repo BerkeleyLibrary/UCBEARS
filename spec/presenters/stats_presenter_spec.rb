@@ -86,9 +86,9 @@ describe StatsPresenter do
 
       @loans = []
       users.each do |user|
-        loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-        loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-        loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
+        loans << create(:active_loan, item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:expired_loan, item_id: items[0].id, patron_identifier: user.borrower_id)
+        loans << create(:completed_loan, item_id: items[1].id, patron_identifier: user.borrower_id)
       end
 
       @returned_loans = loans.select(&:return_date)
@@ -171,7 +171,7 @@ describe StatsPresenter do
             stats_for_date.each do |item_stats|
               item = item_stats.item
               item_stats.loans.each do |loan|
-                expect(loan.lending_item).to eq(item)
+                expect(loan.item).to eq(item)
               end
             end
           end

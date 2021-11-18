@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :lending_item, aliases: %i[item active_item] do
+  factory :item, aliases: %i[active_item] do
 
     directory { 'b135297126_C068087930' }
     title { 'The great depression in Europe, 1929-1939' }

@@ -1,11 +1,11 @@
-<% presenter = LendingItemShowPresenter.new(self, @lending_item) %>
+<% presenter = LendingItemShowPresenter.new(self, @item) %>
 
-<% content_for(:page_title, "#{@lending_item.title}") %>
+<% content_for(:page_title, "#{@item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
 <nav>
   <ul>
-    <li><%= link_to 'Edit this item', lending_edit_path(directory: @lending_item.directory) %></li>
+    <li><%= link_to 'Edit this item', lending_edit_path(directory: @item.directory) %></li>
   </ul>
 </nav>
 

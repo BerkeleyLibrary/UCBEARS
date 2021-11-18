@@ -105,13 +105,13 @@ module Health
     def active_item
       return @active_item if instance_variable_defined?(:@active_item)
 
-      @active_item = LendingItem.active.first
+      @active_item = Item.active.first
     end
 
     def inactive_item
       return @inactive_item if instance_variable_defined?(:@inactive_item)
 
-      @inactive_item = LendingItem.inactive.first
+      @inactive_item = Item.inactive.first
     end
 
     def complete_item

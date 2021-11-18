@@ -2,7 +2,7 @@ require 'lending'
 require 'berkeley_library/util/uris'
 
 # rubocop:disable Metrics/ClassLength
-class LendingItem < ActiveRecord::Base
+class Item < ActiveRecord::Base
 
   # ------------------------------------------------------------
   # Relations
@@ -71,16 +71,16 @@ class LendingItem < ActiveRecord::Base
     # TODO: cache completeness status in DB
 
     def active
-      LendingItem.where(active: true).order(:title).lazy.select(&:complete?)
+      Item.where(active: true).order(:title).lazy.select(&:complete?)
     end
 
     def inactive
-      LendingItem.where(active: false).order(:title).lazy.select(&:complete?)
+      Item.where(active: false).order(:title).lazy.select(&:complete?)
     end
 
     def incomplete
       # TODO: get order working (requires abandoning find_each)
-      LendingItem.order(:title).find_each.lazy.reject(&:complete?)
+      Item.order(:title).find_each.lazy.reject(&:complete?)
     end
 
     def scan_for_new_items!
@@ -95,7 +95,7 @@ class LendingItem < ActiveRecord::Base
     def create_from(directory)
       logger.info("Creating item for directory #{directory}")
 
-      LendingItem.new(directory: directory, copies: 0).tap do |item|
+      Item.new(directory: directory, copies: 0).tap do |item|
         unless item.marc_metadata
           logger.error("Unable to read MARC record from #{item.marc_path}")
           return nil
@@ -125,7 +125,7 @@ class LendingItem < ActiveRecord::Base
     due_date = loan_date + LOAN_DURATION_SECONDS.seconds
 
     LendingItemLoan.create(
-      lending_item_id: id,
+      item_id: id,
       patron_identifier: patron_identifier, # TODO: rename to borrower_id
       loan_date: loan_date,
       due_date: due_date
@@ -214,12 +214,12 @@ class LendingItem < ActiveRecord::Base
   # TODO: move these to an ItemValidator class or something
   def reason_unavailable
     return if available?
-    return LendingItem::MSG_INACTIVE unless active?
-    return LendingItem::MSG_INCOMPLETE unless complete?
-    return LendingItem::MSG_UNAVAILABLE unless (due_date = next_due_date)
+    return Item::MSG_INACTIVE unless active?
+    return Item::MSG_INCOMPLETE unless complete?
+    return Item::MSG_UNAVAILABLE unless (due_date = next_due_date)
 
     date_str = due_date.to_s(:long)
-    "#{LendingItem::MSG_UNAVAILABLE} It will be returned on #{date_str}"
+    "#{Item::MSG_UNAVAILABLE} It will be returned on #{date_str}"
   end
 
   # TODO: move these to an ItemValidator class or something

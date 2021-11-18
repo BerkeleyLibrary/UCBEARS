@@ -1,6 +1,6 @@
-<% presenter = LendingItemViewPresenter.new(self, @lending_item, @lending_item_loan) %>
+<% presenter = LendingItemViewPresenter.new(self, @item, @lending_item_loan) %>
 
-<% content_for(:page_title, "#{@lending_item.title}") %>
+<% content_for(:page_title, "#{@item.title}") %>
 <h1>UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</h1>
 
 <section class="item">
@@ -11,7 +11,7 @@
         next unless @lending_item_loan&.active?
 
         redirect_s = 5 + @lending_item_loan.seconds_remaining.to_i
-        redirect_url = lending_view_url(directory: @lending_item_loan.lending_item.directory)
+        redirect_url = lending_view_url(directory: @lending_item_loan.item.directory)
     %>
       <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
       <%= javascript_pack_tag('viewer') %>
@@ -70,7 +70,7 @@
             <ul style="padding-left: 1rem; list-style-type: square;"><%# TODO: style this properly %>
               <% other_checkouts.each do |other_loan| %>
                 <%
-                  other_item = other_loan.lending_item
+                  other_item = other_loan.item
                   view_url = lending_view_url(directory: other_item.directory, token: presenter.borrower_token_str)
                 %>
                 <li>

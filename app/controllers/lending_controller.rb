@@ -64,7 +64,7 @@ class LendingController < ApplicationController
   def manifest
     require_active_loan! unless lending_admin?
 
-    manifest = @lending_item.to_json_manifest(manifest_url)
+    manifest = @item.to_json_manifest(manifest_url)
     render(json: manifest)
   end
 
@@ -72,8 +72,8 @@ class LendingController < ApplicationController
   # Form handlers
 
   def update
-    unless @lending_item.update(lending_item_params)
-      return render_with_errors(:edit, @lending_item.errors, "Updating #{@lending_item.directory} failed")
+    unless @item.update(lending_item_params)
+      return render_with_errors(:edit, @item.errors, "Updating #{@item.directory} failed")
     end
 
     flash!(:success, 'Item updated.')
@@ -81,8 +81,8 @@ class LendingController < ApplicationController
   end
 
   def check_out
-    @lending_item_loan = @lending_item.check_out_to(patron_identifier)
-    return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@lending_item.directory} failed") unless @lending_item_loan.persisted?
+    @lending_item_loan = @item.check_out_to(patron_identifier)
+    return render_with_errors(:view, @lending_item_loan.errors, "Checking out #{@item.directory} failed") unless @lending_item_loan.persisted?
 
     flash!(:success, 'Checkout successful.')
     # TODO: can we get Rails to just parameterize the token as a string?
@@ -93,7 +93,7 @@ class LendingController < ApplicationController
   def return
     loan = active_loan || most_recent_loan
     if loan.nil? || loan.returned?
-      flash!(:danger, LendingItem::MSG_NOT_CHECKED_OUT)
+      flash!(:danger, Item::MSG_NOT_CHECKED_OUT)
     else
       loan.return!
       flash!(:success, 'Item returned.')
@@ -102,20 +102,20 @@ class LendingController < ApplicationController
   end
 
   def activate
-    if @lending_item.active?
+    if @item.active?
       flash!(:info, 'Item already active.')
     else
-      @lending_item.copies = 1 if @lending_item.copies < 1
-      @lending_item.update!(active: true)
+      @item.copies = 1 if @item.copies < 1
+      @item.update!(active: true)
       flash!(:success, 'Item now active.')
     end
     redirect_to(:index)
   end
 
   def deactivate
-    if @lending_item.inactive?
+    if @item.inactive?
       flash!(:info, 'Item already inactive.')
-    elsif @lending_item.update(active: false)
+    elsif @item.update(active: false)
       flash!(:success, 'Item now inactive.')
     end
 
@@ -123,11 +123,11 @@ class LendingController < ApplicationController
   end
 
   def destroy
-    if @lending_item.complete?
-      logger.warn('Failed to delete non-incomplete item', @lending_item.debug_hash)
+    if @item.complete?
+      logger.warn('Failed to delete non-incomplete item', @item.debug_hash)
       flash!(:danger, 'Only incomplete items can be deleted.')
     else
-      @lending_item.destroy!
+      @item.destroy!
       flash!(:success, 'Item deleted.')
     end
 
@@ -143,7 +143,7 @@ class LendingController < ApplicationController
       flash!(:danger, msg)
     end
 
-    redirect_to lending_show_url(directory: @lending_item.directory)
+    redirect_to lending_show_url(directory: @item.directory)
   end
 
   # ------------------------------------------------------------
@@ -152,13 +152,13 @@ class LendingController < ApplicationController
   private
 
   def refresh_and_notify
-    raise ArgumentError, "No MARC record found at #{@lending_item.marc_path}" unless @lending_item.has_marc_record?
+    raise ArgumentError, "No MARC record found at #{@item.marc_path}" unless @item.has_marc_record?
 
-    changes = @lending_item.refresh_marc_metadata!
+    changes = @item.refresh_marc_metadata!
     if changes.empty?
       flash!(:info, 'No changes found.')
     else
-      logger.info("MARC metadata for #{@lending_item.id} reloaded", changes.transform_values { |(v2, v1)| { from_value: v1, to_value: v2 } })
+      logger.info("MARC metadata for #{@item.id} reloaded", changes.transform_values { |(v2, v1)| { from_value: v1, to_value: v2 } })
       flash!(:success, 'MARC metadata reloaded.')
     end
   end
@@ -203,13 +203,13 @@ class LendingController < ApplicationController
 
   # create/update parameters
   def lending_item_params # TODO: better/more consistent name
-    params.require(:lending_item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active)
+    params.require(:item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active)
   end
 
   # loan lookup parameters
   def loan_args # TODO: better/more consistent name
     {
-      lending_item: ensure_lending_item!,
+      item: ensure_lending_item!,
       patron_identifier: patron_identifier
     }
   end
@@ -232,15 +232,15 @@ class LendingController < ApplicationController
   def require_active_loan!
     require_eligible_patron!
 
-    raise Error::ForbiddenError, LendingItem::MSG_NOT_CHECKED_OUT unless active_loan
+    raise Error::ForbiddenError, Item::MSG_NOT_CHECKED_OUT unless active_loan
   end
 
   def ensure_lending_items!
-    LendingItem.scan_for_new_items!
+    Item.scan_for_new_items!
   end
 
   def ensure_lending_item!
-    @lending_item ||= LendingItem.find_by!(directory: directory)
+    @item ||= Item.find_by!(directory: directory)
   end
 
   def ensure_lending_item_loan!

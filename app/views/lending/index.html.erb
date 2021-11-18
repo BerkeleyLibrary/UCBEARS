@@ -27,7 +27,7 @@
 
     <%# TODO: something less awkward %>
     <% no_items_for_state = true %>
-    <% LendingItem.send(state).each do |item| %>
+    <% Item.send(state).each do |item| %>
       <% no_items_for_state = false %>
       <section class="lending-item" id="<%= format_html_id(item.directory) %>">
         <% presenter = LendingItemIndexPresenter.new(self, item) %>

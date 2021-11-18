@@ -60,7 +60,7 @@ class StatsPresenter
       active: 'Active',
       incomplete: 'Incomplete'
     }.each_with_object({}) do |(scope, title), counts|
-      counts[title] = LendingItem.send(scope).count
+      counts[title] = Item.send(scope).count
     end
   end
 

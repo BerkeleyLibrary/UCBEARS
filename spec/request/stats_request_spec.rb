@@ -28,9 +28,9 @@ RSpec.describe StatsController, type: :request do
 
     @loans = []
     users.each do |user|
-      loans << create(:active_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-      loans << create(:expired_loan, lending_item_id: items[0].id, patron_identifier: user.borrower_id)
-      loans << create(:completed_loan, lending_item_id: items[1].id, patron_identifier: user.borrower_id)
+      loans << create(:active_loan, item_id: items[0].id, patron_identifier: user.borrower_id)
+      loans << create(:expired_loan, item_id: items[0].id, patron_identifier: user.borrower_id)
+      loans << create(:completed_loan, item_id: items[1].id, patron_identifier: user.borrower_id)
     end
 
     @returned_loans = loans.select(&:return_date)

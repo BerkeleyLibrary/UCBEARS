@@ -82,7 +82,7 @@ class ItemLendingStats
       raise ArgumentError, "#{date.inspect} is not a date object" unless date.respond_to?(:to_date) && (date.to_date == date)
       return to_enum(:each_for_date, date) unless block_given?
 
-      LendingItem
+      Item
         .includes(:lending_item_loans)
         .joins(:lending_item_loans) # INNER JOIN
         .merge(LendingItemLoan.loaned_on(date))

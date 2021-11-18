@@ -105,7 +105,7 @@ describe LendingController, type: :system do
 
     context 'with items' do
       before(:each) do
-        expect(LendingItem.count).to eq(0) # just to be sure
+        expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
           items[fn] = build(fn).tap { |it| it.save!(validate: false) }
@@ -293,14 +293,14 @@ describe LendingController, type: :system do
 
             expect(page).not_to have_content(item.title)
 
-            expect(LendingItem.exists?(item.id)).to eq(false)
+            expect(Item.exists?(item.id)).to eq(false)
           end
 
           it 'works for incomplete items that differ from complete items only by "file extension"' do
             attributes = attributes_for(:complete_item).tap do |attrs|
               attrs[:directory] = "#{attrs[:directory]}.orig"
             end
-            item = LendingItem.create!(attributes)
+            item = Item.create!(attributes)
             expect(item.directory).to end_with('.orig') # just to be sure
 
             visit index_path
@@ -320,12 +320,12 @@ describe LendingController, type: :system do
             expect_no_alerts(:danger)
 
             expect(page).not_to have_content(item.directory)
-            expect(LendingItem.exists?(item.id)).to eq(false)
+            expect(Item.exists?(item.id)).to eq(false)
           end
         end
 
         it 'does not delete a complete item' do
-          item = LendingItem.find_by(directory: 'b23752729_C118406204')
+          item = Item.find_by(directory: 'b23752729_C118406204')
           expect(item).not_to be_complete # just to be sure
 
           item_section = find_item_section(item)
@@ -348,7 +348,7 @@ describe LendingController, type: :system do
             expect(page).to have_content(item.title)
             expect(page).not_to have_content(delete_button_xpath)
 
-            expect(LendingItem.exists?(item.id)).to eq(true)
+            expect(Item.exists?(item.id)).to eq(true)
           ensure
             FileUtils.rm(mf.erb_path)
           end
@@ -433,7 +433,7 @@ describe LendingController, type: :system do
             copies: 12
           }
           new_values.each do |attr, value|
-            field_id = "lending_item_#{attr}"
+            field_id = "item_#{attr}"
             field = page.find_field(field_id)
             field.fill_in(with: value, fill_options: { clear: :backspace })
 
@@ -443,7 +443,7 @@ describe LendingController, type: :system do
 
           expect(item).to be_active # just to be sure
 
-          page.choose('lending_item_active_0')
+          page.choose('item_active_0')
 
           submit_button = find(:xpath, "//input[@type='submit']")
           submit_button.click
@@ -511,7 +511,7 @@ describe LendingController, type: :system do
 
     before(:each) do
       @user = mock_login(:student)
-      expect(LendingItem.count).to eq(0) # just to be sure
+      expect(Item.count).to eq(0) # just to be sure
       # NOTE: we're deliberately not validating here, because we want some invalid items
       @items = factory_names.each_with_object({}) do |fn, items|
         items[fn] = build(fn).tap { |it| it.save!(validate: false) }
@@ -586,7 +586,7 @@ describe LendingController, type: :system do
             other_item.check_out_to(user.borrower_id)
 
             visit lending_view_path(directory: item.directory)
-            expect_alert(:danger, LendingItem::MSG_CHECKOUT_LIMIT_REACHED)
+            expect_alert(:danger, Item::MSG_CHECKOUT_LIMIT_REACHED)
 
             expect(page).not_to have_link('Check out')
           end
@@ -600,7 +600,7 @@ describe LendingController, type: :system do
             checkout_link = page.find_link('Check out')
             checkout_link.click
 
-            expect_alert(:danger, LendingItem::MSG_CHECKED_OUT)
+            expect_alert(:danger, Item::MSG_CHECKED_OUT)
             expect_no_alerts(:success)
 
             expect(page).to have_selector('div#iiif_viewer')
@@ -726,9 +726,9 @@ describe LendingController, type: :system do
 
         it 'displays a warning when loan has expired' do
           loan_date = Time.current.utc - 3.weeks
-          due_date = loan_date + LendingItem::LOAN_DURATION_SECONDS.seconds
+          due_date = loan_date + Item::LOAN_DURATION_SECONDS.seconds
           loan = LendingItemLoan.create(
-            lending_item_id: item.id,
+            item_id: item.id,
             patron_identifier: user.borrower_id,
             loan_date: loan_date,
             due_date: due_date

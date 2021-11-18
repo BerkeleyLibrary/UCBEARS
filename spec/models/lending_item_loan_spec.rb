@@ -24,7 +24,7 @@ describe LendingItemLoan do
       loan = item.check_out_to!(user.borrower_id)
       expect(loan).to be_persisted # just to be sure
 
-      expect { item.check_out_to!(user.borrower_id) }.to raise_error(ArgumentError, LendingItem::MSG_CHECKED_OUT)
+      expect { item.check_out_to!(user.borrower_id) }.to raise_error(ArgumentError, Item::MSG_CHECKED_OUT)
     end
   end
 
@@ -83,7 +83,7 @@ describe LendingItemLoan do
       year, month, day = %i[year month day].map { |attr| local_date.send(attr) }
       [2, 8, 14, 20].each do |hour|
         loan_date = Time.zone.local(year, month, day, hour)
-        loan = create(:expired_loan, loan_date: loan_date, lending_item_id: item.id, patron_identifier: user.borrower_id)
+        loan = create(:expired_loan, loan_date: loan_date, item_id: item.id, patron_identifier: user.borrower_id)
         (loans_by_date[local_date] ||= []) << loan
       end
     end

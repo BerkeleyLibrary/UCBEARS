@@ -13,7 +13,7 @@ class LendingItemLoan < ActiveRecord::Base
   scope :pending, -> { where(loan_date: nil) }
   scope :active, -> {
     where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc)
-      .joins(:lending_item).where(lending_item: { active: true })
+      .joins(:item).where(item: { active: true })
   }
   scope :returned, -> { where('return_date IS NOT NULL') }
   scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
@@ -28,12 +28,12 @@ class LendingItemLoan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Relations
 
-  belongs_to :lending_item
+  belongs_to :item
 
   # ------------------------------------------------------------
   # Validations
 
-  validates :lending_item, presence: true
+  validates :item, presence: true
   validates :patron_identifier, presence: true
   validate :patron_can_check_out
   validate :item_available
@@ -56,7 +56,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def active?
-    return_date.nil? && !loan_term_expired? && loan_date.present? && lending_item.active?
+    return_date.nil? && !loan_term_expired? && loan_date.present? && item.active?
   end
 
   def returned?
@@ -77,15 +77,15 @@ class LendingItemLoan < ActiveRecord::Base
 
   def ok_to_check_out?
     # TODO: clean this up
-    lending_item.available? && !(active? || already_checked_out? || checkout_limit_reached)
+    item.available? && !(active? || already_checked_out? || checkout_limit_reached)
   end
 
   def reason_unavailable
     return if active? || ok_to_check_out?
 
-    lending_item.reason_unavailable ||
-      (LendingItem::MSG_CHECKED_OUT if already_checked_out?) ||
-      (LendingItem::MSG_CHECKOUT_LIMIT_REACHED if checkout_limit_reached)
+    item.reason_unavailable ||
+      (Item::MSG_CHECKED_OUT if already_checked_out?) ||
+      (Item::MSG_CHECKOUT_LIMIT_REACHED if checkout_limit_reached)
   end
 
   def seconds_remaining
@@ -99,7 +99,7 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def other_checkouts
-    LendingItemLoan.active.where('lending_item_id != ? AND patron_identifier = ?', lending_item_id, patron_identifier)
+    LendingItemLoan.active.where('item_id != ? AND patron_identifier = ?', item_id, patron_identifier)
   end
 
   # ------------------------------------------------------------
@@ -108,24 +108,24 @@ class LendingItemLoan < ActiveRecord::Base
   def patron_can_check_out
     return if complete?
 
-    errors.add(:base, LendingItem::MSG_CHECKED_OUT) if already_checked_out?
-    errors.add(:base, LendingItem::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached
+    errors.add(:base, Item::MSG_CHECKED_OUT) if already_checked_out?
+    errors.add(:base, Item::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached
   end
 
   def item_available
     return if complete?
-    return if lending_item.available?
+    return if item.available?
     # Don't count this loan against number of available copies
-    return if lending_item.active_loans.include?(self)
+    return if item.active_loans.include?(self)
 
-    errors.add(:base, lending_item.reason_unavailable)
+    errors.add(:base, item.reason_unavailable)
   end
 
   def item_active
     return if complete?
-    return if lending_item.active?
+    return if item.active?
 
-    errors.add(:base, LendingItem::MSG_INACTIVE)
+    errors.add(:base, Item::MSG_INACTIVE)
   end
 
   private
@@ -135,12 +135,12 @@ class LendingItemLoan < ActiveRecord::Base
   end
 
   def checkout_limit_reached
-    other_checkouts.count >= LendingItem::MAX_CHECKOUTS_PER_PATRON
+    other_checkouts.count >= Item::MAX_CHECKOUTS_PER_PATRON
   end
 
   def already_checked_out?
     LendingItemLoan.active
-      .where(lending_item_id: lending_item_id, patron_identifier: patron_identifier)
+      .where(item_id: item_id, patron_identifier: patron_identifier)
       .where.not(id: id)
       .exists?
   end
