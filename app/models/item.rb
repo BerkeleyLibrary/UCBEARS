@@ -224,7 +224,7 @@ class Item < ActiveRecord::Base
   # TODO: move these to an ItemValidator class or something
   def reason_incomplete
     return if complete?
-    return MSG_NO_IIIF_DIR unless iiif_dir_exists?
+    return "#{MSG_NO_IIIF_DIR}: #{iiif_dir}" unless iiif_dir_exists?
     return MSG_NO_PAGE_IMAGES unless has_page_images?
     return MSG_NO_MARC_XML unless has_marc_record?
     return MSG_NO_MANIFEST_TEMPLATE unless has_manifest_template?

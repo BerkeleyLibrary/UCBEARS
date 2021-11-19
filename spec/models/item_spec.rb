@@ -352,7 +352,7 @@ describe Item, type: :model do
       it 'returns the MARC metadata for items that have it' do
         expect(items_with_marc).not_to be_empty # just to be sure
 
-        aggregate_failures :marc_metadata do
+        aggregate_failures do
           items_with_marc.each do |item|
             md = item.marc_metadata
             expect(md).to be_a(Lending::MarcMetadata), "Expected MARC metadata for item #{item.directory}, got #{md.inspect}"
@@ -362,7 +362,7 @@ describe Item, type: :model do
 
       it "returns nil for items that don't" do
         expect(items_without_marc).not_to be_empty # just to be sure
-        aggregate_failures :marc_metadata do
+        aggregate_failures do
           items_without_marc.each do |item|
             md = item.marc_metadata
             expect(md).to be_nil, "Expected MARC metadata for item #{item.directory} to be nil, got #{md.inspect}"

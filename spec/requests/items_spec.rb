@@ -55,13 +55,23 @@ RSpec.describe '/items', type: :request do
           post items_url,
                params: { item: valid_attributes }, headers: valid_headers, as: :json
         end.to change(Item, :count).by(1)
+
+        item = Item.find_by!(directory: valid_attributes[:directory])
+        valid_attributes.each { |attr, value| expect(item.send(attr)).to eq(value) }
       end
 
       it 'renders a JSON response with the new item' do
         post items_url,
              params: { item: valid_attributes }, headers: valid_headers, as: :json
+
+        item = Item.find_by!(directory: valid_attributes[:directory])
+        expected_json = item.as_json
+
+        actual_json = JSON.parse(response.body)
+        expect(actual_json).to include(**expected_json)
+
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.content_type).to match(%r{^application/json})
       end
     end
 
@@ -77,7 +87,7 @@ RSpec.describe '/items', type: :request do
         post items_url,
              params: { item: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.content_type).to match(%r{^application/json})
       end
     end
   end
@@ -90,18 +100,24 @@ RSpec.describe '/items', type: :request do
 
       it 'updates the requested item' do
         item = Item.create! valid_attributes
-        patch item_url(item),
-              params: { item: new_attributes }, headers: valid_headers, as: :json
+        patch item_url(item), params: { item: new_attributes }, headers: valid_headers, as: :json
+
         item.reload
-        skip('Add assertions for updated state')
+        new_attributes.each { |attr, value| expect(item.send(attr)).to eq(value) }
       end
 
       it 'renders a JSON response with the item' do
         item = Item.create! valid_attributes
-        patch item_url(item),
-              params: { item: new_attributes }, headers: valid_headers, as: :json
+        patch item_url(item), params: { item: new_attributes }, headers: valid_headers, as: :json
+
+        item.reload
+        expected_json = item.as_json
+
+        actual_json = JSON.parse(response.body)
+        expect(actual_json).to include(**expected_json)
+
+        expect(response.content_type).to match(%r{^application/json})
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
@@ -111,7 +127,7 @@ RSpec.describe '/items', type: :request do
         patch item_url(item),
               params: { item: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.content_type).to match(%r{^application/json})
       end
     end
   end
