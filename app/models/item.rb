@@ -293,7 +293,7 @@ class Item < ActiveRecord::Base
   def correct_directory_format
     return if Lending::PathUtils::DIRNAME_RE =~ directory
 
-    errors.add(:base, CGI.escapeHTML(MSG_INVALID_DIRECTORY))
+    errors.add(:base, MSG_INVALID_DIRECTORY)
   end
 
   def active_items_have_copies

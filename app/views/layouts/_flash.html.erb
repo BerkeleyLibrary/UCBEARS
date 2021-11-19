@@ -12,7 +12,7 @@
       <% flash_messages.each do |lvl, messages| %>
         <% messages.each do |msg| %>
           <li class="<%= lvl %>">
-            <p><%= msg %></p>
+            <p><%= CGI.escapeHTML(msg) %></p>
           </li>
         <% end %>
       <% end %>
