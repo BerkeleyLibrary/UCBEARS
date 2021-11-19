@@ -26,6 +26,11 @@ module Lending
 
       private
 
+      def reset!
+        @iiif_base_uri = nil
+        @lending_root_path = nil
+      end
+
       def default_iiif_base
         (env_iiif_base || rails_iiif_base).tap do |iiif_base|
           raise(ConfigException, "IIIF base URL not set in #{ENV_IIIF_BASE} or #{RAILS_CONFIG_IIIF_BASE}") unless iiif_base

@@ -18,9 +18,8 @@ Rails.application.routes.draw do
     get '/stats/all_loan_dates', to: 'stats#all_loan_dates', as: :stats_all_loan_dates
   end
 
-  defaults format: 'json' do
-    resources :items, constraints: ->(req) { req.format == :json }
-  end
+  resources :items, only: :index # index supports both HTML and JSON
+  resources :items, except: :index, defaults: { format: 'json' }, constraints: ->(req) { req.format == :json }
 
   # Shared constraints
   valid_dirname = { directory: Lending::PathUtils::DIRNAME_RAW_RE }

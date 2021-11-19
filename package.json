@@ -5,6 +5,7 @@
     "@babel/runtime": ">=7",
     "@rails/ujs": "^6.1.4-1",
     "@rails/webpacker": "5.4.0",
+    "axios": "^0.24.0",
     "css-loader": "^4.3",
     "jquery": "^3.6.0",
     "mirador": "^3.2.0",
