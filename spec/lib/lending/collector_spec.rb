@@ -14,6 +14,7 @@ module Lending
 
     after(:each) do
       FileUtils.remove_dir(lending_root.to_s, true)
+      Lending::Config.send(:reset!)
     end
 
     describe :collect do
