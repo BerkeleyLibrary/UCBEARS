@@ -12,7 +12,6 @@
     <tr v-for="item in items" :key="item.directory">
       <td> {{ item.title }}</td>
       <td> {{ item.author }}</td>
-      <td> {{ item.pub_metadata }}</td>
       <td> {{ item.status }}</td>
     </tr>
     </tbody>
@@ -20,11 +19,19 @@
 </template>
 
 <script>
-module.exports = {
+import axios from 'axios'
+
+export default {
   data: function () {
     return {
-      
+      items: null
     }
+  },
+  mounted: function () {
+    const itemApiUrl = new URL('/items.json', window.location)
+    axios.get(itemApiUrl.toString(), {headers: {'Accept': 'application/json'}})
+    .then(response => this.items = response.data)
+    .catch(error => console.log(error))
   }
 }
 </script>
