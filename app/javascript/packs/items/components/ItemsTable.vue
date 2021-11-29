@@ -4,7 +4,8 @@
     <tr>
       <th>Title</th>
       <th>Author</th>
-      <th>Publication Metadata</th>
+      <th>Publisher</th>
+      <th>Physical Description</th>
       <th>Status</th>
     </tr>
     </thead>
@@ -12,6 +13,8 @@
     <tr v-for="item in items" :key="item.directory">
       <td> {{ item.title }}</td>
       <td> {{ item.author }}</td>
+      <td> {{ item.publisher }}</td>
+      <td> {{ item.physical_desc }}</td>
       <td> {{ item.status }}</td>
     </tr>
     </tbody>
@@ -30,7 +33,10 @@ export default {
   mounted: function () {
     const itemApiUrl = new URL('/items.json', window.location)
     axios.get(itemApiUrl.toString(), {headers: {'Accept': 'application/json'}})
-    .then(response => this.items = response.data)
+    .then(response => {
+      console.log(response.data)
+      return this.items = response.data
+    })
     .catch(error => console.log(error))
   }
 }
