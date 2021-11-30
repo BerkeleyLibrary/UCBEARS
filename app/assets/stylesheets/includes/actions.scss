@@ -28,7 +28,7 @@ a.btn, input[type=button], input[type=submit] {
 
   color: $color-action-text !important;
   font-family: $font-family-sans;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-bold;
 
   &.disabled {
     border-color: $color-disabled !important;
