@@ -7,6 +7,8 @@
       <th>Publisher</th>
       <th>Physical Description</th>
       <th>Status</th>
+      <th>Created</th>
+      <th>Updated</th>
     </tr>
     </thead>
     <tbody>
@@ -16,6 +18,8 @@
       <td> {{ item.publisher }}</td>
       <td> {{ item.physical_desc }}</td>
       <td> {{ item.status }}</td>
+      <td> {{ item.created_at }}</td>
+      <td> {{ item.updated_at }}</td>
     </tr>
     </tbody>
   </table>
