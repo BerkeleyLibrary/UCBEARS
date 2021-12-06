@@ -1,0 +1,19 @@
+@import 'includes/globals';
+
+section.items-table {
+  nav {
+    display: flex;
+    justify-content: center;
+
+    ul {
+      display: flex;
+      gap: $margin;
+      margin: $margin;
+      font-size: $font-size-small;
+
+      li {
+        display: inline-block;
+      }
+    }
+  }
+}

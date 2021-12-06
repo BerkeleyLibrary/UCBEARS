@@ -15,6 +15,10 @@
 # Pagy::DEFAULT[:items]  = 20                                 # default
 # Pagy::DEFAULT[:outset] = 0                                  # default
 
+if Rails.env.development?
+  Pagy::DEFAULT[:items] = 2
+end
+
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables
 # Pagy::DEFAULT[:size]       = [1,4,4,1]                       # default
