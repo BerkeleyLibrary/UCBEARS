@@ -3,12 +3,18 @@
 # rubocop:disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include ExceptionHandling
+  include Pagy::Backend
 
   # ------------------------------------------------------------
   # Global controller configuration
 
   # @see https://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection/ClassMethods.html
   protect_from_forgery with: :exception
+
+  # ------------------------------------------------------------
+  # Global hooks
+
+  after_action { pagy_headers_merge(@pagy) if @pagy }
 
   # ------------------------------------------------------------
   # Public methods

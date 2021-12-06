@@ -19,6 +19,7 @@ gem 'omniauth-cas',
     git: 'https://github.com/dlindahl/omniauth-cas.git',
     ref: '7087bda829e14c0f7cab2aece5045ad7015669b1'
 gem 'ougai', '>=1.8.2'
+gem 'pagy', '~> 5.6'
 gem 'pg', '~> 1.2'
 gem 'puma', '~> 4.3', '>= 4.3.8'
 gem 'rails', '~> 6.1.4'

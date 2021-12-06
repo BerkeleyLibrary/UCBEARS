@@ -4,7 +4,8 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    Item.scan_for_new_items!
+    @pagy, @items = pagy(Item.all)
   end
 
   # GET /items/1

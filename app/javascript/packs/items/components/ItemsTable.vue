@@ -27,19 +27,46 @@
 
 <script>
 import axios from 'axios'
+import Link from 'http-link-header'
+
+/*
+# Pagy::DEFAULT[:headers] = { page: 'Current-Page',
+#                            items: 'Page-Items',
+#                            count: 'Total-Count',
+#                            pages: 'Total-Pages' }     # default
+
+ */
 
 export default {
   data: function () {
     return {
-      items: null
+      items: null,
+      links: null
     }
   },
   mounted: function () {
     const itemApiUrl = new URL('/items.json', window.location)
     axios.get(itemApiUrl.toString(), {headers: {'Accept': 'application/json'}})
     .then(response => {
-      console.log(response.data)
-      return this.items = response.data
+      let items = response.data
+      console.log(items)
+
+      let headers = response.headers
+      console.log(headers)
+
+      let link = Link.parse(headers['link'])
+      console.log(link)
+
+      let links = {}
+      for (const rel of ['first', 'prev', 'next', 'last']) {
+        if (link.has('rel', rel)) {
+          links[rel] = link.get('rel', rel)[0].uri
+        }
+      }
+      console.log(links)
+
+      this.items = items
+      this.links = links
     })
     .catch(error => console.log(error))
   }
