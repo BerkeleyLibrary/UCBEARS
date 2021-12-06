@@ -8,9 +8,9 @@ json.extract!(
   :active,
   :publisher,
   :physical_desc,
-  :created_at,
-  :updated_at,
   # synthetic attributes
   :status
 )
+json.created_at(I18n.l(item.created_at, format: :short))
+json.updated_at(I18n.l(item.updated_at, format: :short))
 json.url item_url(item, format: :json)

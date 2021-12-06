@@ -9,10 +9,40 @@ section.items-table {
       display: flex;
       gap: $margin;
       margin: $margin;
-      font-size: $font-size-small;
+      font-size: $font-size-xsmall;
 
       li {
         display: inline-block;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+
+    thead {
+      th {
+        text-align: left;
+        font-size: $font-size-xsmall;
+        line-height: $line-height;
+
+        padding: $margin-small $margin;
+      }
+    }
+
+    tbody {
+      font-size: $font-size-xxsmall;
+      line-height: $line-height;
+
+      td {
+        &:not(:last-of-type) {
+          padding-right: 0;
+        }
+        padding-left: $margin-small;
+
+        &.date {
+          white-space: nowrap;
+        }
       }
     }
   }

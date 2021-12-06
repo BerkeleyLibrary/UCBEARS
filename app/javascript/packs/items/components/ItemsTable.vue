@@ -1,5 +1,30 @@
 <template>
   <section class="items-table">
+    <table>
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Physical Description</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Updated</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="item in items" :key="item.directory">
+        <td>{{ item.title }}</td>
+        <td>{{ item.author }}</td>
+        <td>{{ item.publisher }}</td>
+        <td>{{ item.physical_desc }}</td>
+        <td>{{ item.status }}</td>
+        <td class="date">{{ item.created_at }}</td>
+        <td class="date">{{ item.updated_at }}</td>
+      </tr>
+      </tbody>
+    </table>
+
     <!-- TODO: extract this to its own component -->
     <nav v-if="links">
       <ul>
@@ -24,30 +49,6 @@
         </li>
       </ul>
     </nav>
-    <table>
-      <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Physical Description</th>
-        <th>Status</th>
-        <th>Created</th>
-        <th>Updated</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="item in items" :key="item.directory">
-        <td> {{ item.title }}</td>
-        <td> {{ item.author }}</td>
-        <td> {{ item.publisher }}</td>
-        <td> {{ item.physical_desc }}</td>
-        <td> {{ item.status }}</td>
-        <td> {{ item.created_at }}</td>
-        <td> {{ item.updated_at }}</td>
-      </tr>
-      </tbody>
-    </table>
   </section>
 </template>
 
