@@ -1,5 +1,14 @@
 <template>
   <section class="items-table">
+    <aside class="flash" v-if="errors">
+      <input type="checkbox" class="flash-dismiss" id="flash-dismiss-items-table" :checked="!!errors" v-on:change="setErrors(null)">
+      <label class="flash-dismiss-label" for="flash-dismiss-items-table">
+        <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon"/>
+      </label>
+      <ul class="flash">
+        <li class="alert" v-for="error in errors">{{ error }}</li>
+      </ul>
+    </aside>
     <table>
       <thead>
       <tr>
@@ -7,18 +16,20 @@
         <th>Author</th>
         <th>Publisher</th>
         <th>Physical Description</th>
-        <th>Status</th>
+        <th>Copies</th>
+        <th>Active</th>
         <th>Created</th>
         <th>Updated</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="item in items" :key="item.directory">
+      <tr v-for="item in items" :key="item.directory" class="item">
         <td>{{ item.title }}</td>
         <td>{{ item.author }}</td>
         <td>{{ item.publisher }}</td>
         <td>{{ item.physical_desc }}</td>
-        <td>{{ item.status }}</td>
+        <td class="control"><input type="number" v-model.number.lazy="item.copies" v-on:change="updateItem(item)"></td>
+        <td class="control"><input type="checkbox" v-model.lazy="item.active" v-on:change="updateItem(item)"></td>
         <td class="date">{{ item.created_at }}</td>
         <td class="date">{{ item.updated_at }}</td>
       </tr>
@@ -29,22 +40,26 @@
     <nav v-if="links">
       <ul>
         <li>
-          <a v-if="links.first && links.currentPage !== 1" @click="loadItems(links.first)" href="#" rel="first" title="First page">≪</a>
+          <a v-if="links.first && links.currentPage !== 1" @click="loadItems(links.first)" href="#" rel="first"
+             title="First page">≪</a>
           <template v-else>≪</template>
         </li>
         <li>
-          <a v-if="links.prev && links.currentPage > 1" @click="loadItems(links.prev)" href="#" rel="prev" title="Previous page">&lt;</a>
+          <a v-if="links.prev && links.currentPage > 1" @click="loadItems(links.prev)" href="#" rel="prev"
+             title="Previous page">&lt;</a>
           <template v-else>&lt;</template>
         </li>
         <li>
           Page {{ links.currentPage }} of {{ links.totalPages }}
         </li>
         <li>
-          <a v-if="links.next && links.currentPage < links.totalPages" @click="loadItems(links.next)" href="#" rel="next" title="Next page">&gt;</a>
+          <a v-if="links.next && links.currentPage < links.totalPages" @click="loadItems(links.next)" href="#"
+             rel="next" title="Next page">&gt;</a>
           <template v-else>&gt;</template>
         </li>
         <li>
-          <a v-if="links.last && links.currentPage !== links.totalPages" @click="loadItems(links.last)" href="#" rel="last" title="Last page">≫</a>
+          <a v-if="links.last && links.currentPage !== links.totalPages" @click="loadItems(links.last)" href="#"
+             rel="last" title="Last page">≫</a>
           <template v-else>≫</template>
         </li>
       </ul>
@@ -64,21 +79,46 @@ import Link from 'http-link-header'
 
  */
 
-function linksFromLinkHeader (response) {
-  let headers = response.headers
+function patchItem (item) {
+  return axios.patch(item.url, { item: {
+    title: item.title,
+    author: item.author,
+    copies: item.copies,
+    active: item.active,
+    publisher: item.publisher,
+    physical_desc: item.physical_desc
+  }})
+  .then(response => response.data)
+}
+
+function getItem(item_url) {
+  return axios.get(item_url).then(response => response.data)
+}
+
+function itemsByDirectory (itemArray) {
+  const items = {}
+  for (const item of itemArray) {
+    items[item.directory] = item
+  }
+  return items
+}
+
+function linksFromHeaders (headers) {
   console.log(headers)
 
-  let link = Link.parse(headers['link'])
-  console.log(link)
-
+  let currentPageHeader = headers['current-page']
+  let totalPagesHeader = headers['total-pages']
   let links = {
-    currentPage: parseInt(headers['current-page']) || null,
-    totalPages: parseInt(headers['total-pages']) || null
+    currentPage: parseInt(currentPageHeader) || null,
+    totalPages: parseInt(totalPagesHeader) || null
   }
 
+  let linkHeader = headers['link']
+  let parsedLinks = Link.parse(linkHeader)
+
   for (const rel of ['first', 'prev', 'next', 'last']) {
-    if (link.has('rel', rel)) {
-      links[rel] = link.get('rel', rel)[0].uri
+    if (parsedLinks.has('rel', rel)) {
+      links[rel] = parsedLinks.get('rel', rel)[0].uri
     }
   }
   console.log(links)
@@ -89,16 +129,44 @@ export default {
   data: function () {
     return {
       items: null,
-      links: null
+      links: null,
+      errors: null
     }
   },
   methods: {
     loadItems: function (itemApiUrl) {
       axios.get(itemApiUrl.toString(), {headers: {'Accept': 'application/json'}})
       .then(response => {
-        this.items = response.data
-        this.links = linksFromLinkHeader(response)
+        this.items = itemsByDirectory(response.data)
+        this.links = linksFromHeaders(response.headers)
       }).catch(error => console.log(error))
+    },
+    updateItem: function (item) {
+      patchItem(item)
+      .then(item => {
+        console.log(item)
+        this.setItem(item)
+      })
+      .catch(error => {
+        console.log(error)
+        if (error.response) {
+          console.log(error.response)
+          let errors = error.response.data
+          this.setErrors(errors)
+        }
+        this.refreshItem(item)
+      })
+    },
+    refreshItem: function(item) {
+      getItem(item.url).then(item => this.setItem(item))
+    },
+    setItem: function (item) {
+      this.items[item.directory] = item
+    },
+    setErrors: function(errors) {
+      this.errors = errors
+      console.log("Setting errors to:")
+      console.log(this.errors)
     }
   },
   mounted: function () {

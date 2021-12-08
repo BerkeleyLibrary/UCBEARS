@@ -1,40 +1,66 @@
 @import 'globals';
 
 aside.flash {
-}
+  position: relative;
 
-ul.flash {
-  display: contents;
+  input.flash-dismiss {
+    display:none;
 
-  li {
-    display: block;
-
-    background-color: $color-action-secondary;
-    color: white !important;
-
-    font-size: $font-size-small;
-    line-height: $line-height;
-
-    font-weight: $font-weight-medium;
-    border: 1px solid transparent;
-    border-radius: $margin-small;
-    padding: $margin $margin-large;
-    margin-top: $margin;
-    margin-bottom: $margin;
-
-    &.success, &.notice {
-      border-color: $color-success-border;
-      background-color: $color-success;
+    &:not(:checked) ~ ul {
+      display: none;
     }
 
-    &.warning {
-      border-color: $color-warning-border;
-      background-color: $color-warning;
+    &:not(:checked) ~ label {
+      display: none;
     }
+  }
 
-    &.alert, &.danger {
-      border-color: $color-danger-border;
-      background-color: $color-danger;
+  // TODO: support dismissing individual messages
+  label.flash-dismiss-label {
+    position: absolute;
+    left: $margin;
+    top: $margin;
+  }
+
+  img.flash-dismiss-icon {
+    height: $font-size-small;
+    width: $font-size-small;
+    filter: invert(100%);
+  }
+
+  ul.flash {
+    display: contents;
+
+    li {
+      display: block;
+
+      background-color: $color-action-secondary;
+      color: white !important;
+
+      font-size: $font-size-small;
+      line-height: $line-height;
+
+      font-weight: $font-weight-medium;
+      border: 1px solid transparent;
+      border-radius: $margin-small;
+      padding: $margin $margin-large $margin $margin-xxlarge;
+      margin-top: $margin;
+      margin-bottom: $margin;
+
+      &.success, &.notice {
+        border-color: $color-success-border;
+        background-color: $color-success;
+      }
+
+      &.warning {
+        border-color: $color-warning-border;
+        background-color: $color-warning;
+      }
+
+      &.alert, &.danger {
+        border-color: $color-danger-border;
+        background-color: $color-danger;
+      }
     }
   }
 }

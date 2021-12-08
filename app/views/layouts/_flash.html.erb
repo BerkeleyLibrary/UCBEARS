@@ -8,6 +8,10 @@
 %>
 <% if flash_messages.any? %>
   <aside id="flash" class="flash">
+    <input type="checkbox" class="flash-dismiss" id="flash-dismiss-global" checked>
+    <label class="flash-dismiss-label" for="flash-dismiss-global">
+      <% image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon')%>
+    </label>
     <ul class="flash">
       <% flash_messages.each do |lvl, messages| %>
         <% messages.each do |msg| %>

@@ -30,7 +30,8 @@ class ItemsController < ApplicationController
     if @item.update(item_params)
       render :show, status: :ok, location: @item
     else
-      render json: @item.errors, status: :unprocessable_entity
+      logger.warn(@item.errors.full_messages)
+      render json: @item.errors.full_messages, status: :unprocessable_entity
     end
   end
 

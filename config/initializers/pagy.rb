@@ -15,9 +15,7 @@
 # Pagy::DEFAULT[:items]  = 20                                 # default
 # Pagy::DEFAULT[:outset] = 0                                  # default
 
-if Rails.env.development?
-  Pagy::DEFAULT[:items] = 2
-end
+Pagy::DEFAULT[:items] = 2 if Rails.env.development?
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables

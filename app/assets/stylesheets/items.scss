@@ -38,12 +38,25 @@ section.items-table {
         &:not(:last-of-type) {
           padding-right: 0;
         }
+
         padding-left: $margin-small;
+
+        &.control {
+          text-align: center;
+          padding-left: 0;
+        }
 
         &.date {
           white-space: nowrap;
         }
       }
     }
+  }
+
+  input[type="number"] {
+    width: $font-size-xxlarge;
+    text-align: center;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-family: sans-serif;
   }
 }
