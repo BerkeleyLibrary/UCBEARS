@@ -29,7 +29,9 @@
         <td>{{ item.publisher }}</td>
         <td>{{ item.physical_desc }}</td>
         <td class="control"><input type="number" v-model.number.lazy="item.copies" v-on:change="updateItem(item)"></td>
-        <td class="control"><input type="checkbox" v-model.lazy="item.active" v-on:change="updateItem(item)"></td>
+        <td class="control">
+          <input type="checkbox" v-model.lazy="item.active" v-on:change="updateItem(item)" :disabled="!!item.reason_inactive" :title="item.reason_inactive">
+        </td>
         <td class="date">{{ item.created_at }}</td>
         <td class="date">{{ item.updated_at }}</td>
       </tr>
@@ -80,6 +82,7 @@ import Link from 'http-link-header'
  */
 
 function patchItem (item) {
+  console.log(`Saving item ${item.directory}`)
   return axios.patch(item.url, { item: {
     title: item.title,
     author: item.author,
@@ -88,7 +91,10 @@ function patchItem (item) {
     publisher: item.publisher,
     physical_desc: item.physical_desc
   }})
-  .then(response => response.data)
+  .then(response => {
+    console.log(`Item ${item.directory} saved`)
+    return response.data
+  })
 }
 
 function getItem(item_url) {
@@ -104,8 +110,6 @@ function itemsByDirectory (itemArray) {
 }
 
 function linksFromHeaders (headers) {
-  console.log(headers)
-
   let currentPageHeader = headers['current-page']
   let totalPagesHeader = headers['total-pages']
   let links = {
@@ -121,7 +125,6 @@ function linksFromHeaders (headers) {
       links[rel] = parsedLinks.get('rel', rel)[0].uri
     }
   }
-  console.log(links)
   return links
 }
 
@@ -134,39 +137,37 @@ export default {
     }
   },
   methods: {
-    loadItems: function (itemApiUrl) {
+    loadItems (itemApiUrl) {
       axios.get(itemApiUrl.toString(), {headers: {'Accept': 'application/json'}})
       .then(response => {
         this.items = itemsByDirectory(response.data)
         this.links = linksFromHeaders(response.headers)
       }).catch(error => console.log(error))
     },
-    updateItem: function (item) {
+    updateItem (item) {
+      this.setErrors(null)
+
       patchItem(item)
-      .then(item => {
-        console.log(item)
-        this.setItem(item)
-      })
+      .then(item => this.setItem(item))
       .catch(error => {
-        console.log(error)
         if (error.response) {
-          console.log(error.response)
           let errors = error.response.data
+          console.log(`Error saving item ${item.directory}: ${errors.join('; ')}`)
           this.setErrors(errors)
+        } else {
+          console.log(`Error saving item ${item.directory}`)
         }
         this.refreshItem(item)
       })
     },
-    refreshItem: function(item) {
+    refreshItem (item) {
       getItem(item.url).then(item => this.setItem(item))
     },
-    setItem: function (item) {
+    setItem (item) {
       this.items[item.directory] = item
     },
-    setErrors: function(errors) {
+    setErrors (errors) {
       this.errors = errors
-      console.log("Setting errors to:")
-      console.log(this.errors)
     }
   },
   mounted: function () {
