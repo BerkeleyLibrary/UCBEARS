@@ -194,7 +194,7 @@ class Item < ActiveRecord::Base
   end
 
   def complete?
-    iiif_dir_exists? && has_page_images? && has_marc_record? && has_manifest_template?
+    iiif_directory.complete?
   end
 
   def incomplete?
@@ -226,7 +226,7 @@ class Item < ActiveRecord::Base
     "#{Item::MSG_UNAVAILABLE} It will be returned on #{date_str}"
   end
 
-  # TODO: move these to an ItemValidator class or something
+  # TODO: move these to IIIFDirectory
   def reason_incomplete
     return if complete?
     return "#{MSG_NO_IIIF_DIR}: #{iiif_dir}" unless iiif_dir_exists?

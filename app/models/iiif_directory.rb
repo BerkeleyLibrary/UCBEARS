@@ -18,6 +18,10 @@ class IIIFDirectory
   # ------------------------------------------------------------
   # Flags
 
+  def complete?
+    exists? && page_images? && marc_record? && manifest_template?
+  end
+
   def exists?
     return @exists if instance_variable_defined?(:@exists)
 

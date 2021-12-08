@@ -26,11 +26,27 @@ class ItemQuery
     filtered_results.each(&block)
   end
 
+  def size
+    return db_results.count unless filtered?
+
+    db_directories.count(&method(:includes_directory?))
+  end
+
+  def exists?
+    return db_results.exists? unless filtered?
+
+    db_directories.any?(&method(:includes_directory?))
+  end
+
+  def empty?
+    !exists?
+  end
+
   # ------------------------------------------------------------
   # Pagination support
 
   def limit(n)
-    return ItemQuery.new(
+    ItemQuery.new(
       active: @active,
       complete: @complete,
       limit: n,
@@ -39,7 +55,7 @@ class ItemQuery
   end
 
   def offset(n)
-    return ItemQuery.new(
+    ItemQuery.new(
       active: @active,
       complete: @complete,
       limit: @limit,
@@ -52,15 +68,19 @@ class ItemQuery
 
   private
 
+  def filtered?
+    !@complete.nil?
+  end
+
   def filtered_results
-    return db_results if complete.nil?
+    return db_results unless filtered?
 
     # TODO: figure out how to query in batches while preserving order
     db_results.select { |item| item.complete? == @complete }
   end
 
   def db_results
-    return Item.none unless (rel = base_relation)
+    rel = @active.nil? ? Item.all : Item.where(active: @active)
 
     rel = rel.order(:title)
     rel = rel.limit(@limit) if @limit
@@ -68,15 +88,19 @@ class ItemQuery
     rel
   end
 
-  def base_relation
-    @active.nil? ? Item.all : Item.where(active: @active)
+  def db_directories
+    db_results.pluck(:directory).lazy.reject(&:nil?)
+  end
+
+  def includes_directory?(d)
+    IIIFDirectory.new(d).complete? == @complete
   end
 
   # ------------------------------
   # Attribute validation
 
   def boolean_or_nil(flag)
-    return nil if flag.nil? || flag == ''
+    return if flag.nil? || flag == ''
 
     !FALSE_VALUES.include?(flag)
   end
