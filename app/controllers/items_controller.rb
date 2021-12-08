@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     Item.scan_for_new_items!
-    @pagy, @items = pagy(Item.all)
+    @pagy, @items = pagy(items)
   end
 
   # GET /items/1
@@ -43,6 +43,12 @@ class ItemsController < ApplicationController
 
   private
 
+  def items
+    return Item.all unless query_params
+
+    ItemQuery.new(**query_params)
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_item
     @item = Item.find(params[:id])
@@ -51,5 +57,9 @@ class ItemsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def item_params
     params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc)
+  end
+
+  def query_params
+    params.permit(query: [:active, :complete])[:query]
   end
 end

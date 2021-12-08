@@ -34,11 +34,53 @@ RSpec.describe '/items', type: :request do
       expect(actual_json).to include(**expected_json)
     end
 
-    # it 'returns an HTML response' do
-    #   get items_url, headers: valid_headers
-    #   expect(response).to be_successful
-    #   expect(response.content_type).to match(%r{^text/html})
-    # end
+    context 'with query' do
+      let(:factory_names) do
+        %i[
+          complete_item
+          active_item
+          incomplete_no_directory
+          incomplete_no_images
+          incomplete_no_marc
+          incomplete_no_manifest
+          incomplete_marc_only
+        ]
+      end
+
+      attr_reader :items
+
+      def template_result(template_path, bind)
+        json = JbuilderTemplate.new(JbuilderHandler)
+        bind.local_variable_set(:json, json)
+        bind.eval(File.read(template_path), File.basename(template_path))
+        JSON.parse(json.target!)
+      end
+
+      before(:each) do
+        expect(Item.count).to eq(0) # just to be sure
+        # NOTE: we're deliberately not validating here, because we want some invalid items
+        @items = factory_names.each_with_object({}) do |fn, items|
+          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+        end
+      end
+
+      it 'returns all items by default' do
+        get items_url, headers: valid_headers, as: :json
+        expect(response).to be_successful
+        expect(response.content_type).to match(%r{^application/json})
+
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_an(Array)
+
+        expect(parsed_response.size).to eq(Item.count)
+
+        # noinspection RubyUnusedLocalVariable
+        Item.order(:title).each_with_index do |item, i| # item is used by `binding`
+          expected_json = template_result('app/views/items/_item.json.jbuilder', binding)
+          expect(parsed_response[i]).to eq(expected_json)
+        end
+      end
+    end
   end
 
   describe 'GET /show' do
@@ -125,8 +167,7 @@ RSpec.describe '/items', type: :request do
     context 'with invalid parameters' do
       it 'renders a JSON response with errors for the item' do
         item = Item.create! valid_attributes
-        patch item_url(item),
-              params: { item: invalid_attributes }, headers: valid_headers, as: :json
+        patch item_url(item), params: { item: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(%r{^application/json})
       end

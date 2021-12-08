@@ -63,6 +63,11 @@ class Item < ActiveRecord::Base
   MSG_CHECKOUT_LIMIT_REACHED = "You may only check out #{MAX_CHECKOUTS_PER_PATRON} item at a time.".freeze
 
   # ------------------------------------------------------------
+  # Scopes
+
+  default_scope { order(:title) }
+
+  # ------------------------------------------------------------
   # Class methods
 
   class << self
