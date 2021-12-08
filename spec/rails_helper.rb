@@ -30,6 +30,16 @@ end
 require 'support/factory_bot'
 
 # ------------------------------------------------------------
+# Jbuilder templates
+
+def template_result(template_path, bind)
+  json = JbuilderTemplate.new(JbuilderHandler)
+  bind.local_variable_set(:json, json)
+  bind.eval(File.read(template_path), File.basename(template_path))
+  JSON.parse(json.target!)
+end
+
+# ------------------------------------------------------------
 # Calnet
 
 module CalnetHelper
