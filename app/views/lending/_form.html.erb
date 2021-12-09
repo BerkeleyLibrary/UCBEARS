@@ -45,11 +45,11 @@
               <ul>
                 <li>
                   <%= form.radio_button(:active, 1, checked: item.active?, value: true) %>
-                  <%= label(:lending_item_active, 1, 'Active') %>
+                  <%= label(:item_active, 1, 'Active') %>
                 </li>
                 <li>
                   <%= form.radio_button(:active, 0, checked: !item.active?, value: false) %>
-                  <%= label(:lending_item_active, 0, 'Inactive') %>
+                  <%= label(:item_active, 0, 'Inactive') %>
                 </li>
               </ul>
             </fieldset>
