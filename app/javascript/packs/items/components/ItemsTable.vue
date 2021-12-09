@@ -1,14 +1,15 @@
 <template>
   <section class="items-table">
     <aside class="flash" v-if="errors">
-      <div class="flash alert" v-for="(error, index) in errors">
-        <!-- TODO: fix dismiss logic for individual errors -->
-        <input type="checkbox" class="flash-dismiss" :id="`flash-dismiss-items-table-${index}`" :checked="!!errors" v-on:change="setErrors(null)">
-        <label class="flash-dismiss-label" :for="`flash-dismiss-items-table-${index}`">
-          <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon"/>
-        </label>
-        <p class="flash">{{ error }}</p>
-      </div>
+      <template v-for="(error, index) in errors">
+        <input type="checkbox" class="flash-dismiss" checked :id="`flash-dismiss-items-table-${index}`" v-on:change="errors.splice(index, 1)"        >
+        <div class="flash alert">
+          <label class="flash-dismiss-label" :for="`flash-dismiss-items-table-${index}`">
+            <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon"/>
+          </label>
+          <p class="flash">{{ error }}</p>
+        </div>
+      </template>
     </aside>
 
     <table>
@@ -20,6 +21,7 @@
         <th>Physical Description</th>
         <th>Copies</th>
         <th>Active</th>
+        <th>Complete</th>
         <th>Created</th>
         <th>Updated</th>
       </tr>
@@ -32,7 +34,8 @@
         <td>{{ item.physical_desc }}</td>
         <td class="control"><input type="number" v-model.number.lazy="item.copies" v-on:change="updateItem(item)"></td>
         <td class="control">
-          <input type="checkbox" v-model.lazy="item.active" v-on:change="updateItem(item)" :disabled="!!item.reason_inactive" :title="item.reason_inactive">
+          <input type="checkbox" v-model.lazy="item.active" v-on:change="updateItem(item)"
+                 :disabled="!!item.reason_inactive" :title="item.reason_inactive">
         </td>
         <td class="date">{{ item.created_at }}</td>
         <td class="date">{{ item.updated_at }}</td>
@@ -85,21 +88,23 @@ import Link from 'http-link-header'
 
 function patchItem (item) {
   console.log(`Saving item ${item.directory}`)
-  return axios.patch(item.url, { item: {
-    title: item.title,
-    author: item.author,
-    copies: item.copies,
-    active: item.active,
-    publisher: item.publisher,
-    physical_desc: item.physical_desc
-  }})
+  return axios.patch(item.url, {
+    item: {
+      title: item.title,
+      author: item.author,
+      copies: item.copies,
+      active: item.active,
+      publisher: item.publisher,
+      physical_desc: item.physical_desc
+    }
+  })
   .then(response => {
     console.log(`Item ${item.directory} saved`)
     return response.data
   })
 }
 
-function getItem(item_url) {
+function getItem (item_url) {
   return axios.get(item_url).then(response => response.data)
 }
 

@@ -11,8 +11,8 @@
     <% flash_messages.each do |lvl, messages| %>
       <% messages.each_with_index do |msg, i| %>
         <% dismiss_checkbox_id = "flash-dismiss-global-#{lvl}-#{i}" %>
+        <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
         <div class="flash <%= lvl %>">
-          <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
           <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
             <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon') %>
           </label>

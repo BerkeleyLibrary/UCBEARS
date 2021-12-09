@@ -3,6 +3,14 @@
 aside.flash {
   width: 100%;
 
+  input.flash-dismiss {
+    display: none;
+
+    &:not(:checked) + div.flash {
+      display: none;
+    }
+  }
+
   div.flash {
     display: grid;
     grid-template-columns: min-content minmax(0, 1fr);
@@ -33,18 +41,6 @@ aside.flash {
     &.alert, &.danger {
       border-color: $color-danger-border;
       background-color: $color-danger;
-    }
-
-    input.flash-dismiss {
-      display: none;
-
-      &:not(:checked) ~ p {
-        display: none;
-      }
-
-      &:not(:checked) ~ label {
-        display: none;
-      }
     }
 
     label.flash-dismiss-label {

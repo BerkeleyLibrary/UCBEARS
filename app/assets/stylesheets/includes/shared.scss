@@ -140,3 +140,19 @@ code {
 strong {
   font-weight: $font-weight-bold;
 }
+
+// ////////////////////////////////////////////////////////////
+// Classes applicable to various elements
+
+// Cf. https://www.w3.org/WAI/tutorials/forms/labels/#note-on-hiding-elements
+.visually-hidden {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  border: 0 !important;
+  margin: -1px !important;;
+  padding: 0 !important;
+}
