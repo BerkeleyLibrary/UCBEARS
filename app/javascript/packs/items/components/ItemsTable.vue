@@ -10,7 +10,6 @@
           :key="error"
           type="checkbox"
           class="flash-dismiss"
-          checked
           @change="errors.splice(index, 1)"
         >
         <div :key="error" class="flash alert">
@@ -21,7 +20,7 @@
             <img
               src="/assets/icons/times-circle.svg"
               class="flash-dismiss-icon"
-              alt="dismiss alert"
+              alt="Hide alert"
             >
           </label>
           <p

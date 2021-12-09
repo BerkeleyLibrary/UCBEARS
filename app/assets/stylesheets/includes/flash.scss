@@ -6,7 +6,7 @@ aside.flash {
   input.flash-dismiss {
     display: none;
 
-    &:not(:checked) + div.flash {
+    &:checked + div.flash {
       display: none;
     }
   }
@@ -55,7 +55,7 @@ aside.flash {
       }
     }
 
-    p {
+    p.flash {
       grid-column: 2;
       width: 100%;
       box-sizing: border-box;

@@ -11,10 +11,10 @@
     <% flash_messages.each do |lvl, messages| %>
       <% messages.each_with_index do |msg, i| %>
         <% dismiss_checkbox_id = "flash-dismiss-global-#{lvl}-#{i}" %>
-        <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
+        <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>">
         <div class="flash <%= lvl %>">
           <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
-            <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon', alt: 'hide alert') %>
+            <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon', alt: 'Hide alert') %>
           </label>
           <p class="flash" role="alert"><%= CGI.escapeHTML(msg) %></p>
         </div>
