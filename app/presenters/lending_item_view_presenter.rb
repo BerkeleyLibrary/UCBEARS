@@ -63,10 +63,10 @@ class LendingItemViewPresenter < LendingItemPresenterBase
   end
 
   def action_return
-    link_to('Return now', lending_return_path(directory: directory), class: 'btn danger')
+    button_to('Return now', lending_return_path(directory: directory), class: 'btn danger', method: :get)
   end
 
   def action_check_out
-    link_to('Check out', lending_check_out_path(directory: directory), class: 'btn primary')
+    button_to('Check out', lending_check_out_path(directory: directory), class: 'btn primary', method: :get)
   end
 end
