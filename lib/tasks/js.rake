@@ -85,6 +85,7 @@ module BerkeleyLibrary
     def eslint_cmd(*args)
       %w[yarn eslint].tap do |cmd|
         cmd.concat(args)
+        cmd.concat(%w[--ext .js,.vue])
         cmd.concat(js_dirs)
       end
     end
