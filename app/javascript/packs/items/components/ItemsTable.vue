@@ -21,7 +21,7 @@
             <img
               src="/assets/icons/times-circle.svg"
               class="flash-dismiss-icon"
-              alt="dismiss"
+              alt="dismiss alert"
             >
           </label>
           <p
