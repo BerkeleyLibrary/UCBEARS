@@ -14,9 +14,9 @@
         <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
         <div class="flash <%= lvl %>">
           <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
-            <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon') %>
+            <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon', alt: 'dismiss') %>
           </label>
-          <p class="flash"><%= CGI.escapeHTML(msg) %></p>
+          <p class="flash" role="alert"><%= CGI.escapeHTML(msg) %></p>
         </div>
       <% end %>
     <% end %>
