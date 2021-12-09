@@ -59,4 +59,9 @@ section.items-table {
     font-variant-numeric: tabular-nums lining-nums;
     font-family: sans-serif;
   }
+
+  img.action {
+    height: $font-size-small;
+    width: $font-size-small;
+  }
 }

@@ -36,15 +36,16 @@
     <table>
       <thead>
         <tr>
+          <th>Edit</th>
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
           <th>Physical Description</th>
-          <th>Copies</th>
-          <th>Active</th>
-          <th>Complete</th>
           <th>Created</th>
           <th>Updated</th>
+          <th>Complete</th>
+          <th>Copies</th>
+          <th>Active</th>
         </tr>
       </thead>
       <tbody>
@@ -53,10 +54,17 @@
           :key="item.directory"
           class="item"
         >
+          <td class="control">
+            <a :href="item.edit_url"><img src="/assets/icons/edit.svg" :alt="`Edit ${item.title}`" class="action"></a>
+          </td>
           <td>{{ item.title }}</td>
           <td>{{ item.author }}</td>
           <td>{{ item.publisher }}</td>
           <td>{{ item.physical_desc }}</td>
+          <td class="date">{{ item.created_at }}</td>
+          <td class="date">{{ item.updated_at }}</td>
+          <td v-if="item.complete" class="control">Yes</td>
+          <td v-else :title="item.reason_inactive" class="control">No</td>
           <td class="control">
             <input
               v-model.number.lazy="item.copies"
@@ -72,14 +80,6 @@
               :title="item.reason_inactive"
               @change="updateItem(item)"
             >
-          </td>
-          <td v-if="item.complete">Yes</td>
-          <td v-else :title="item.reason_inactive">No</td>
-          <td class="date">
-            {{ item.created_at }}
-          </td>
-          <td class="date">
-            {{ item.updated_at }}
           </td>
         </tr>
       </tbody>
