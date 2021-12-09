@@ -1,14 +1,16 @@
 <template>
   <section class="items-table">
     <aside class="flash" v-if="errors">
-      <input type="checkbox" class="flash-dismiss" id="flash-dismiss-items-table" :checked="!!errors" v-on:change="setErrors(null)">
-      <label class="flash-dismiss-label" for="flash-dismiss-items-table">
-        <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon"/>
-      </label>
-      <ul class="flash">
-        <li class="alert" v-for="error in errors">{{ error }}</li>
-      </ul>
+      <div class="flash alert" v-for="(error, index) in errors">
+        <!-- TODO: fix dismiss logic for individual errors -->
+        <input type="checkbox" class="flash-dismiss" :id="`flash-dismiss-items-table-${index}`" :checked="!!errors" v-on:change="setErrors(null)">
+        <label class="flash-dismiss-label" :for="`flash-dismiss-items-table-${index}`">
+          <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon"/>
+        </label>
+        <p class="flash">{{ error }}</p>
+      </div>
     </aside>
+
     <table>
       <thead>
       <tr>
@@ -39,7 +41,7 @@
     </table>
 
     <!-- TODO: extract this to its own component -->
-    <nav v-if="links">
+    <nav class="pagination" v-if="links">
       <ul>
         <li>
           <a v-if="links.first && links.currentPage !== 1" @click="loadItems(links.first)" href="#" rel="first"

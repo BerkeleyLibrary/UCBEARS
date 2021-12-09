@@ -1,68 +1,75 @@
 @import 'globals';
 
 aside.flash {
-  position: absolute;
-  top: 80px;
-  left: $margin-xlarge;
+  width: 100%;
 
-  input.flash-dismiss {
-    display:none;
+  div.flash {
+    display: grid;
+    grid-template-columns: min-content minmax(0, 1fr);
+    align-items: center;
+    justify-items: left;
+    gap: $margin;
 
-    &:not(:checked) ~ ul {
-      display: none;
+    margin-bottom: $margin;
+    padding-left: $margin;
+    padding-right: $margin;
+
+    background-color: $color-action-secondary;
+    color: white !important;
+
+    //border: 1px solid transparent;
+    border-radius: $margin-small;
+
+    &.success, &.notice {
+      border-color: $color-success-border;
+      background-color: $color-success;
     }
 
-    &:not(:checked) ~ label {
-      display: none;
+    &.warning {
+      border-color: $color-warning-border;
+      background-color: $color-warning;
     }
-  }
 
-  // TODO: support dismissing individual messages
-  label.flash-dismiss-label {
-    position: absolute;
-    left: $margin;
-    top: $margin-xlarge;
-  }
+    &.alert, &.danger {
+      border-color: $color-danger-border;
+      background-color: $color-danger;
+    }
 
-  img.flash-dismiss-icon {
-    height: $font-size-small;
-    width: $font-size-small;
-    filter: invert(100%);
-  }
+    input.flash-dismiss {
+      display: none;
 
-  ul.flash {
-    display: contents;
+      &:not(:checked) ~ p {
+        display: none;
+      }
 
-    li {
+      &:not(:checked) ~ label {
+        display: none;
+      }
+    }
+
+    label.flash-dismiss-label {
+      grid-column: 1;
       display: block;
+      box-sizing: border-box;
 
-      background-color: $color-action-secondary;
-      color: white !important;
+      img.flash-dismiss-icon {
+        height: $font-size-small;
+        width: $font-size-small;
+        filter: invert(100%);
+      }
+    }
 
-      font-size: $font-size-small;
-      line-height: $line-height;
+    p {
+      grid-column: 2;
+      width: 100%;
+      box-sizing: border-box;
 
-      font-weight: $font-weight-medium;
-      border: 1px solid transparent;
-      border-radius: $margin-small;
-      padding: $margin $margin-large $margin $margin-xxlarge;
       margin-top: $margin;
       margin-bottom: $margin;
 
-      &.success, &.notice {
-        border-color: $color-success-border;
-        background-color: $color-success;
-      }
-
-      &.warning {
-        border-color: $color-warning-border;
-        background-color: $color-warning;
-      }
-
-      &.alert, &.danger {
-        border-color: $color-danger-border;
-        background-color: $color-danger;
-      }
+      font-size: $font-size-small;
+      line-height: $line-height;
+      font-weight: $font-weight-medium;
     }
   }
 }

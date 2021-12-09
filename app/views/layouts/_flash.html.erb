@@ -8,18 +8,17 @@
 %>
 <% if flash_messages.any? %>
   <aside id="flash" class="flash">
-    <input type="checkbox" class="flash-dismiss" id="flash-dismiss-global" checked>
-    <label class="flash-dismiss-label" for="flash-dismiss-global">
-      <% image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon')%>
-    </label>
-    <ul class="flash">
-      <% flash_messages.each do |lvl, messages| %>
-        <% messages.each do |msg| %>
-          <li class="<%= lvl %>">
-            <p><%= CGI.escapeHTML(msg) %></p>
-          </li>
-        <% end %>
+    <% flash_messages.each do |lvl, messages| %>
+      <% messages.each_with_index do |msg, i| %>
+        <% dismiss_checkbox_id = "flash-dismiss-global-#{lvl}-#{i}" %>
+        <div class="flash <%= lvl %>">
+          <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
+          <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
+            <%= image_tag('icons/times-circle.svg', class: 'flash-dismiss-icon') %>
+          </label>
+          <p class="flash"><%= CGI.escapeHTML(msg) %></p>
+        </div>
       <% end %>
-    </ul>
+    <% end %>
   </aside>
 <% end %>

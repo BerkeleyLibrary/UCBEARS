@@ -47,7 +47,7 @@ class Item < ActiveRecord::Base
   MSG_UNAVAILABLE = 'There are no available copies of this item.'.freeze
   MSG_INCOMPLETE = 'This item has not yet been processed for viewing.'.freeze
   MSG_NOT_CHECKED_OUT = 'This item is not checked out.'.freeze
-  MSG_ZERO_COPIES = 'Items without copies cannot be made active.'.freeze
+  MSG_ZERO_COPIES = 'Active items must have at least one copy.'.freeze
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
   MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
 
