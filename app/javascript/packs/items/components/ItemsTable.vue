@@ -73,6 +73,8 @@
               @change="updateItem(item)"
             >
           </td>
+          <td v-if="item.complete">Yes</td>
+          <td v-else :title="item.reason_inactive">No</td>
           <td class="date">
             {{ item.created_at }}
           </td>
