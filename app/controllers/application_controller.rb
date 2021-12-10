@@ -1,4 +1,6 @@
 # Base class for all controllers
+# TODO: extract some concerns or something so we can shorten this
+# rubocop:disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include ExceptionHandling
 
@@ -102,6 +104,27 @@ class ApplicationController < ActionController::Base
   end
 
   # ------------------------------
+  # Misc. utilities
+
+  def public_dir
+    File.expand_path('../../public', __dir__)
+  end
+
+  # ------------------------------
+  # Profiling
+
+  def with_profile(report_filename, &block)
+    flash_now!(:info, "Generating <a href=\"/#{report_filename}\">profile</a>.".html_safe)
+    do_profile(report_filename, &block)
+  rescue StandardError => e
+    log.error(e)
+    return if performed?
+
+    flash_now!(:danger, "Error generating profile: #{e.message}")
+    render('application/standard_error', locals: { exception: e })
+  end
+
+  # ------------------------------
   # Error pages
 
   def render_with_errors(view, errors, log_message)
@@ -145,6 +168,23 @@ class ApplicationController < ActionController::Base
     current.is_a?(Array) ? current : (flash_obj[lvl] = Array(current))
   end
 
+  def do_profile(report_filename, &block)
+    RubyProf.stop if RubyProf.running?
+    RubyProf.start
+    begin
+      block.call
+    ensure
+      write_profile_report(report_filename) if RubyProf.running?
+    end
+  end
+
+  def write_profile_report(report_filename)
+    result = RubyProf.stop
+    File.open(File.join(public_dir, report_filename), 'w') do |f|
+      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
+    end
+  end
+
   def ensure_session_count(user)
     return if SessionCounter.exists_for?(user)
 
@@ -152,3 +192,4 @@ class ApplicationController < ActionController::Base
     SessionCounter.increment_count_for(user)
   end
 end
+# rubocop:enable Metrics/ClassLength

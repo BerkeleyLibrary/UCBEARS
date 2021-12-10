@@ -16,14 +16,7 @@ class StatsController < ApplicationController
 
   # Stats page, but generate a profile result
   def profile_index
-    RubyProf.start
-    flash_now!(:info, "<a href=\"/#{PROFILE_STATS_HTML}\">Profile generated.</a>".html_safe)
-    render(:index)
-  ensure
-    result = RubyProf.stop
-    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_STATS_HTML), 'w') do |f|
-      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
-    end
+    with_profile(PROFILE_STATS_HTML) { render(:index) }
   end
 
   private

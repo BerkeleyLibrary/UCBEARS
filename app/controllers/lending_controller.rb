@@ -32,14 +32,9 @@ class LendingController < ApplicationController
 
   # Index page, but generate a profile result
   def profile_index
-    RubyProf.start
-    ensure_lending_items!
-    flash_now!(:info, "<a href=\"/#{PROFILE_INDEX_HTML}\">Profile generated.</a>".html_safe)
-    render(:index)
-  ensure
-    result = RubyProf.stop
-    File.open(File.join(File.expand_path('../../public', __dir__), PROFILE_INDEX_HTML), 'w') do |f|
-      RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
+    with_profile(PROFILE_INDEX_HTML) do
+      ensure_lending_items!
+      render(:index)
     end
   end
 
