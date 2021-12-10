@@ -44,7 +44,7 @@ class ItemsController < ApplicationController
   private
 
   def items
-    return Item.all unless query_params
+    return Item.all unless query_params && !query_params.empty?
 
     query_param_hash = query_params.to_h.symbolize_keys
     ItemQuery.new(**query_param_hash)
@@ -61,6 +61,6 @@ class ItemsController < ApplicationController
   end
 
   def query_params
-    params.permit(query: %i[active complete])[:query]
+    params.permit(:active, :complete)
   end
 end

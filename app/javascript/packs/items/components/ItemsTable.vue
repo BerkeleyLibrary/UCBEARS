@@ -33,6 +33,22 @@
       </template>
     </aside>
 
+    <form>
+      <input id="query-active-true" v-model="query.active" name="query-active" :value="true" type="radio" @change="reload()">
+      <label for="query-active-true">Active items only</label>
+      <input id="query-active-false" v-model="query.active" name="query-active" :value="false" type="radio" @change="reload()">
+      <label for="query-active-false">Inactive items only</label>
+      <input id="query-active-nil" v-model="query.active" name="query-active" :value="null" type="radio" @change="reload()">
+      <label for="query-active-nil">Both active and inactive items</label>
+
+      <input id="query-complete-true" v-model="query.complete" name="query-complete" :value="true" type="radio" @change="reload()">
+      <label for="query-complete-true">Complete items only</label>
+      <input id="query-complete-false" v-model="query.complete" name="query-complete" :value="false" type="radio" @change="reload()">
+      <label for="query-complete-false">Incomplete items only</label>
+      <input id="query-complete-nil" v-model="query.complete" name="query-complete" :value="null" type="radio" @change="reload()">
+      <label for="query-complete-nil">Both complete and incomplete items</label>
+    </form>
+
     <table>
       <thead>
         <tr>
@@ -55,7 +71,8 @@
           class="item"
         >
           <td class="control">
-            <a :href="item.edit_url"><img src="/assets/icons/edit.svg" :alt="`Edit ${item.title}`" class="action"></a>
+            <!-- TODO: style this properly -->
+            <a :href="item.edit_url"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
           </td>
           <td>{{ item.title }}</td>
           <td>{{ item.author }}</td>
@@ -213,16 +230,23 @@ export default {
     return {
       items: null,
       links: null,
-      errors: null
+      errors: null,
+      query: {
+        active: null,
+        complete: null
+      }
     }
   },
   mounted: function () {
-    const itemApiUrl = new URL('/items.json', window.location)
-    this.loadItems(itemApiUrl)
+    this.reload()
   },
   methods: {
+    reload () {
+      const itemApiUrl = new URL('/items.json', window.location)
+      this.loadItems(itemApiUrl)
+    },
     loadItems (itemApiUrl) {
-      axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' } })
+      axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.query })
         .then(response => {
           this.items = itemsByDirectory(response.data)
           this.links = linksFromHeaders(response.headers)
