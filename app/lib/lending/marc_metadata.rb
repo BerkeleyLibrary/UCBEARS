@@ -20,7 +20,7 @@ module Lending
         nil.tap do
           return load_marc_record(marc_path)
         rescue StandardError => e
-          logger.error(e)
+          logger.warn(e.message)
         end
       end
 
