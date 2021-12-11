@@ -141,10 +141,8 @@ module Health
       return unless (base_uri = iiif_base_uri)
       return unless (item = complete_item)
 
-      image_path = item.iiif_directory.page_images.first
-      raise Errno::ENOENT, "No page images found in #{item.iiif_dir}" unless image_path # NOTE: should never happen
-
-      BerkeleyLibrary::Util::URIs.append(base_uri, item.directory, image_path.basename.to_s, 'info.json')
+      iiif_directory = item.iiif_directory
+      BerkeleyLibrary::Util::URIs.append(base_uri, iiif_directory.first_image_url_path, 'info.json')
     end
 
   end

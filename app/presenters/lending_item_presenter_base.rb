@@ -79,7 +79,7 @@ class LendingItemPresenterBase
 
   def add_processing_metadata(ff)
     if item.complete?
-      ff['IIIF directory'] = item.iiif_dir
+      ff['IIIF directory'] = item.iiif_directory.path
     else
       ff['Directory'] = directory
     end

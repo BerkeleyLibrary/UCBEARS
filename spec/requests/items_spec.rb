@@ -23,14 +23,14 @@ RSpec.describe '/items', type: :request do
   describe 'GET /index' do
     let(:factory_names) do
       %i[
-          complete_item
-          active_item
-          incomplete_no_directory
-          incomplete_no_images
-          incomplete_no_marc
-          incomplete_no_manifest
-          incomplete_marc_only
-        ]
+        complete_item
+        active_item
+        incomplete_no_directory
+        incomplete_no_images
+        incomplete_no_marc
+        incomplete_no_manifest
+        incomplete_marc_only
+      ]
     end
 
     attr_reader :items

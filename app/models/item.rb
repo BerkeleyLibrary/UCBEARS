@@ -22,24 +22,6 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Constants
 
-  DEBUG_ATTRIBUTES = %i[
-    id
-    directory
-    status
-    iiif_dir
-    iiif_dir_exists?
-    has_page_images?
-    marc_path
-    has_marc_record?
-    manifest_template_path
-    has_manifest_template?
-    complete?
-    active?
-    copies
-    copies_available
-    available?
-  ].freeze
-
   LOAN_DURATION_SECONDS = 2 * 3600 # TODO: make this configurable
 
   # TODO: Use Rails i18n
@@ -50,13 +32,6 @@ class Item < ActiveRecord::Base
   MSG_ZERO_COPIES = 'Active items must have at least one copy.'.freeze
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
   MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
-
-  # TODO: make these warnings rather than validation-fatal errors
-  #       then we can stop littering save(validate: false) everywhere
-  MSG_NO_IIIF_DIR = 'The item directory does not exist, or is not a directory'.freeze
-  MSG_NO_PAGE_IMAGES = 'The item directory has no page images'.freeze
-  MSG_NO_MANIFEST_TEMPLATE = 'The item directory does not have a IIIF manifest template'.freeze
-  MSG_NO_MARC_XML = "The item directory does not contain a #{Lending::Processor::MARC_XML_NAME} file".freeze
 
   # TODO: make this configurable
   MAX_CHECKOUTS_PER_PATRON = 1
@@ -99,13 +74,14 @@ class Item < ActiveRecord::Base
     def create_from(directory)
       logger.info("Creating item for directory #{directory}")
 
-      Item.new(directory: directory, copies: 0).tap do |item|
-        unless item.marc_metadata
-          logger.error("Unable to read MARC record from #{item.marc_path}")
-          return nil
-        end
+      iiif_directory = IIIFDirectory.new(directory)
+      unless (marc_metadata = iiif_directory.marc_metadata)
+        logger.error("Unable to read MARC record from #{iiif_directory.marc_path}")
+        return
+      end
 
-        item.read_marc_metadata
+      Item.new(directory: directory, copies: 0).tap do |item|
+        item.read_marc_attributes(marc_metadata)
         item.save(validate: false)
       end
     end
@@ -164,14 +140,20 @@ class Item < ActiveRecord::Base
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  def refresh_marc_metadata!
-    read_marc_metadata
-    save(validate: false) if changed?
+  def refresh_marc_metadata!(raise_if_missing: false)
+    marc_metadata = iiif_directory.marc_metadata
+    if marc_metadata.nil?
+      raise ArgumentError, "No MARC record found at #{iiif_directory.marc_path}" if raise_if_missing
 
+      return
+    end
+
+    read_marc_attributes(marc_metadata)
+    save(validate: false) if changed?
     previous_changes
   end
 
-  def read_marc_metadata
+  def read_marc_attributes(marc_metadata)
     return unless marc_metadata
 
     attrs = {
@@ -185,13 +167,6 @@ class Item < ActiveRecord::Base
 
   # ------------------------------------------------------------
   # Synthetic accessors
-
-  def debug_hash
-    DEBUG_ATTRIBUTES.map do |attr|
-      raw_value = send(attr)
-      [attr, loggable_value_for(raw_value)]
-    end.to_h
-  end
 
   def complete?
     iiif_directory.complete?
@@ -226,13 +201,8 @@ class Item < ActiveRecord::Base
     "#{Item::MSG_UNAVAILABLE} It will be returned on #{date_str}"
   end
 
-  # TODO: move these to IIIFDirectory
   def reason_incomplete
-    return if complete?
-    return "#{MSG_NO_IIIF_DIR}: #{iiif_dir}" unless iiif_dir_exists?
-    return MSG_NO_PAGE_IMAGES unless has_page_images?
-    return MSG_NO_MARC_XML unless has_marc_record?
-    return MSG_NO_MANIFEST_TEMPLATE unless has_manifest_template?
+    iiif_directory.reason_incomplete
   end
 
   def copies_available
@@ -253,17 +223,7 @@ class Item < ActiveRecord::Base
   def iiif_manifest
     return unless iiif_directory.exists?
 
-    Lending::IIIFManifest.new(title: title, author: author, dir_path: iiif_directory.path)
-  end
-
-  def marc_metadata
-    return @marc_metadata if instance_variable_defined?(:@marc_metadata)
-
-    @marc_metadata = load_marc_metadata
-  end
-
-  def iiif_dir
-    iiif_directory.path.to_s
+    iiif_directory.new_manifest(title: title, author: author)
   end
 
   def iiif_directory
@@ -279,16 +239,6 @@ class Item < ActiveRecord::Base
     ensure_record_id_and_barcode
     @barcode
   end
-
-  def iiif_dir_exists?
-    iiif_directory.exists?
-  end
-
-  # rubocop:disable Naming/PredicateName
-  def has_page_images?
-    iiif_directory.page_images?
-  end
-  # rubocop:enable Naming/PredicateName
 
   # ------------------------------------------------------------
   # Custom validators
@@ -317,22 +267,6 @@ class Item < ActiveRecord::Base
     loans.active.order(:due_date)
   end
 
-  # rubocop:disable Naming/PredicateName
-  def has_marc_record?
-    iiif_directory.marc_record?
-  end
-  # rubocop:enable Naming/PredicateName
-
-  # rubocop:disable Naming/PredicateName
-  def has_manifest_template?
-    iiif_directory.manifest_template?
-  end
-  # rubocop:enable Naming/PredicateName
-
-  def marc_path
-    iiif_directory.marc_path
-  end
-
   # ------------------------------------------------------------
   # Private methods
 
@@ -342,16 +276,6 @@ class Item < ActiveRecord::Base
     return raw_value.to_s if raw_value.is_a?(Pathname)
 
     raw_value
-  end
-
-  def manifest_template_path
-    iiif_manifest&.erb_path
-  end
-
-  def load_marc_metadata
-    Lending::MarcMetadata.from_file(marc_path).tap do |md|
-      Rails.logger.warn("No MARC metadata found in #{marc_path}") unless md
-    end
   end
 
   def ensure_record_id_and_barcode

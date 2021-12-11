@@ -126,7 +126,7 @@ class LendingController < ApplicationController
 
   def destroy
     if @item.complete?
-      logger.warn('Failed to delete non-incomplete item', @item.debug_hash)
+      logger.warn('Failed to delete non-incomplete item', @item.directory)
       flash!(:danger, 'Only incomplete items can be deleted.')
     else
       @item.destroy!
@@ -154,9 +154,7 @@ class LendingController < ApplicationController
   private
 
   def refresh_and_notify
-    raise ArgumentError, "No MARC record found at #{@item.marc_path}" unless @item.has_marc_record?
-
-    changes = @item.refresh_marc_metadata!
+    changes = @item.refresh_marc_metadata!(raise_if_missing: true)
     if changes.empty?
       flash!(:info, 'No changes found.')
     else

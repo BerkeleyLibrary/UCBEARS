@@ -354,7 +354,7 @@ describe LendingController, type: :request do
           allow(Rails.logger).to receive(:warn)
 
           expect(item).to be_complete # just to be sure
-          expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.debug_hash)
+          expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.directory)
 
           delete lending_destroy_path(directory: item.directory)
           expect(response).to redirect_to index_path
@@ -423,7 +423,7 @@ describe LendingController, type: :request do
         end
 
         it 'shows an error for items without MARC metadata' do
-          item = incomplete.find { |it| !it.has_marc_record? }
+          item = incomplete.find { |it| !it.iiif_directory.marc_record? }
           expect(item).not_to be_nil # just to be sure
 
           get lending_reload_path(directory: item.directory)

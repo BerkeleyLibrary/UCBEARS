@@ -10,8 +10,8 @@
     end
 
   %>
-  <%= form_with(model: item, url: url, local: true) do |form| %>
-    <table>
+  <table>
+    <%= form_with(model: item, url: url, local: true) do |form| %>
       <tbody>
         <tr>
           <th><%= form.label(:title) %></th>
@@ -55,36 +55,37 @@
             </fieldset>
           </td>
         </tr>
-      </tbody>
-
-      <tfoot>
         <tr>
-          <td></td>
+          <th></th>
           <td class="action" style="padding-bottom: 2rem;"><%# TODO: something less awkward %>
             <%= form.submit(submit_label, class: 'btn primary', data: { disable_with: submit_label }) %>
           </td>
         </tr>
-        <tr>
-          <td></td>
-          <td class="action">
-            <% if item.has_marc_record? %>
-              <%=
-                link_to(
-                  'Reload MARC metadata',
-                  lending_reload_path(directory: item.directory),
-                  class: 'btn danger',
-                  data: {
-                    confirm: 'Reloading MARC metadata will discard all changes made on this form.'
-                  }
-                )
-              %>
-            <% else %>
-              <a class="btn danger disabled">Reload MARC metadata</a>
-            <% end %>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  <% end %>
+      </tbody>
+    <% end %>
+
+    <tfoot>
+      <tr>
+        <th></th>
+        <td class="action">
+          <% if item.iiif_directory.marc_record? %>
+            <%=
+              button_to(
+                'Reload MARC metadata',
+                lending_reload_path(directory: item.directory),
+                method: :get,
+                class: 'btn danger',
+                data: {
+                  confirm: 'Reloading MARC metadata will discard all changes made on this form.'
+                }
+              )
+            %>
+          <% else %>
+            <button disabled class="btn danger disabled" title="<%= IIIFDirectory::MSG_NO_MARC_XML %>>">Reload MARC metadata</button>
+          <% end %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 
 </section>

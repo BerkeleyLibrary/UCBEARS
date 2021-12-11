@@ -65,7 +65,7 @@ describe LendingController, type: :system do
 
   def find_alert(lvl)
     alerts = find_alerts
-    alerts.find("li.#{lvl}")
+    alerts.find("div.#{lvl}")
   end
 
   # TODO: make this work with multiple alerts at same level
@@ -85,9 +85,28 @@ describe LendingController, type: :system do
     alerts = page.find(:xpath, '//aside[@id="flash"]')
     return unless alerts && lvl
 
-    expect(alerts).not_to have_xpath("//li[@class=\"#{lvl}\"]")
+    expect(alerts).not_to have_xpath("//div[@class=\"#{lvl}\"]")
   rescue Capybara::ElementNotFound
     # expected
+  end
+
+  def expect_link_or_button(element, text, href)
+    link_or_button = element.find(:link_or_button, text)
+    expect_target(link_or_button, href)
+  end
+
+  def expect_target(link_or_button, target)
+    tag_name = link_or_button.tag_name
+    if tag_name == 'input'
+      form = link_or_button.find(:xpath, './ancestor::form')
+      expect(form['action']).to match(target)
+    else
+      expect(link_or_button['href']).to match(target)
+    end
+  end
+
+  def expect_no_link_or_button(element, text, msg = "'#{text}' link or button should not be present")
+    expect(element).not_to have_selector(:link_or_button, text), msg
   end
 
   # ------------------------------------------------------------
@@ -160,7 +179,8 @@ describe LendingController, type: :system do
             items_for_state.each do |item|
               item_section = section.find(:xpath, item_section_xpath(item, absolute: false))
               show_path = lending_show_path(directory: item.directory)
-              expect(item_section).to have_link('Show', href: /#{Regexp.escape(show_path)}/)
+
+              expect_link_or_button(item_section, 'Show', show_path)
             end
           end
         end
@@ -169,12 +189,10 @@ describe LendingController, type: :system do
           items.each_value do |item|
             item_section = find_item_section(item)
             show_path = lending_show_path(directory: item.directory)
-            show_link = item_section.find_link('Show')
-            expect(URI.parse(show_link['href']).path).to eq(show_path)
+            expect_link_or_button(item_section, 'Show', show_path)
 
             edit_path = lending_edit_path(directory: item.directory)
-            edit_link = item_section.find_link('Edit item')
-            expect(URI.parse(edit_link['href']).path).to eq(edit_path)
+            expect_link_or_button(item_section, 'Edit item', edit_path)
           end
         end
 
@@ -183,13 +201,12 @@ describe LendingController, type: :system do
             item_section = find_item_section(item)
             expect(item_section).to have_content(item.title)
 
-            activate_path = lending_activate_path(directory: item.directory)
-
             if item.active? || item.incomplete?
-              expect(item_section).not_to have_link('Make Active'), "Item #{item.directory} (#{item.status}) should not have 'Make Active' link"
+              expect(item_section).not_to have_selector(:link_or_button, 'Make Active'),
+                                          "Item #{item.directory} (#{item.status}) should not have 'Make Active' link"
             else
-              activate_link = item_section.find_link('Make Active')
-              expect(URI.parse(activate_link['href']).path).to eq(activate_path)
+              activate_path = lending_activate_path(directory: item.directory)
+              expect_link_or_button(item_section, 'Make Active', activate_path)
             end
           end
         end
@@ -197,12 +214,12 @@ describe LendingController, type: :system do
         it 'has "make inactive" only for processed, active items' do
           items.each_value do |item|
             item_section = find_item_section(item)
-            deactivate_path = lending_deactivate_path(directory: item.directory)
             if item.incomplete? || !item.active?
-              expect(item_section).not_to have_link('Make Inactive'), "Item #{item.directory} should not have 'Make Inactive' link"
+              expect(item_section).not_to have_selector(:link_or_button, 'Make Inactive'),
+                                          "Item #{item.directory} should not have 'Make Inactive' link"
             else
-              link = item_section.find_link('Make Inactive')
-              expect(URI.parse(link['href']).path).to eq(deactivate_path)
+              deactivate_path = lending_deactivate_path(directory: item.directory)
+              expect_link_or_button(item_section, 'Make Inactive', deactivate_path)
             end
           end
         end
@@ -212,11 +229,9 @@ describe LendingController, type: :system do
             item_section = find_item_section(item)
             delete_path = lending_destroy_path(directory: item.directory)
             if item.incomplete?
-              delete_form = item_section.find(:xpath, ".//form[@action='#{delete_path}']")
-              expect(delete_form).to have_button('Delete')
+              expect_link_or_button(item_section, 'Delete', delete_path)
             else
-              expect(item_section).not_to have_xpath(".//form[@action='#{delete_path}']")
-              expect(item_section).not_to have_button('Delete'), "Item #{item.directory} should not have 'Delete' button"
+              expect(item_section).not_to have_selector(:link_or_button, 'Delete'), "Item #{item.directory} should not have 'Delete' button"
             end
           end
         end
@@ -227,9 +242,7 @@ describe LendingController, type: :system do
             item_section = find_item_section(item)
 
             show_path = lending_show_path(directory: item.directory)
-            show_link = item_section.find_link('Show')
-            expect(URI.parse(show_link['href']).path).to eq(show_path)
-            show_link.click
+            item_section.click_link_or_button('Show')
 
             expect_no_alerts
             expect(page).to have_current_path(show_path)
@@ -242,9 +255,7 @@ describe LendingController, type: :system do
             item_section = find_item_section(item)
 
             edit_path = lending_edit_path(directory: item.directory)
-            edit_link = item_section.find_link('Edit item')
-            expect(URI.parse(edit_link['href']).path).to eq(edit_path)
-            edit_link.click
+            item_section.click_link_or_button('Edit item')
 
             expect_no_alerts
             expect(page).to have_current_path(edit_path)
@@ -261,16 +272,13 @@ describe LendingController, type: :system do
             item = inactive.find { |it| it.copies > 0 }
             item_section = find_item_section(item)
 
-            activate_path = lending_activate_path(directory: item.directory)
-            activate_link = item_section.find_link('Make Active')
-            expect(URI.parse(activate_link['href']).path).to eq(activate_path)
-            activate_link.click
-
-            active_section = find(:xpath, "//section[@id='lending-active']")
-            expect(active_section).to have_xpath(item_section_xpath(item, absolute: false))
+            item_section.click_link_or_button('Make Active')
 
             expect_alert(:success, 'Item now active.')
             expect_no_alerts(:danger)
+
+            active_section = find(:xpath, "//section[@id='lending-active']")
+            expect(active_section).to have_xpath(item_section_xpath(item, absolute: false))
 
             item.reload
             expect(item).to be_active
@@ -281,12 +289,7 @@ describe LendingController, type: :system do
           it 'deletes an inactive item' do
             item = incomplete.first
             item_section = find_item_section(item)
-
-            delete_path = lending_destroy_path(directory: item.directory)
-            delete_form = item_section.find(:xpath, ".//form[@action='#{delete_path}']")
-            delete_button = delete_form.find_button('Delete')
-
-            delete_button.click
+            item_section.click_link_or_button('Delete')
 
             expect_alert(:success, 'Item deleted.')
             expect_no_alerts(:danger)
@@ -306,15 +309,7 @@ describe LendingController, type: :system do
             visit index_path
 
             item_section = find_item_section(item)
-
-            delete_path = lending_destroy_path(directory: item.directory)
-            expect(delete_path).to end_with(item.directory) # just to be sure
-
-            delete_path = lending_destroy_path(directory: item.directory)
-            delete_form = item_section.find(:xpath, ".//form[@action='#{delete_path}']")
-            delete_button = delete_form.find_button('Delete')
-
-            delete_button.click
+            item_section.click_link_or_button('Delete')
 
             expect_alert(:success, 'Item deleted.')
             expect_no_alerts(:danger)
@@ -330,11 +325,7 @@ describe LendingController, type: :system do
 
           item_section = find_item_section(item)
 
-          delete_button_xpath = ".//form[@action='#{lending_destroy_path(directory: item.directory)}']"
-          delete_form = item_section.find(:xpath, delete_button_xpath)
-          delete_button = delete_form.find_button('Delete')
-
-          mf = Lending::IIIFManifest.new(title: item.title, author: item.author, dir_path: item.iiif_dir)
+          mf = item.iiif_manifest
           begin
             mf.write_manifest_erb!
             item.reload
@@ -342,11 +333,12 @@ describe LendingController, type: :system do
             # just to be sure
             expect(item).to be_complete, -> { "Item #{item.directory} should be complete, but: #{item.reason_incomplete}" }
 
-            delete_button.click
+            item_section.click_link_or_button('Delete')
             expect_alert(:danger, 'Only incomplete items can be deleted.')
 
             expect(page).to have_content(item.title)
-            expect(page).not_to have_content(delete_button_xpath)
+            item_section = find_item_section(item)
+            expect_no_link_or_button(item_section, 'Delete')
 
             expect(Item.exists?(item.id)).to eq(true)
           ensure
@@ -445,8 +437,7 @@ describe LendingController, type: :system do
 
           page.choose('item_active_0')
 
-          submit_button = find(:xpath, "//input[@type='submit']")
-          submit_button.click
+          page.click_link_or_button('Save Changes')
 
           expect(page).to have_content('Item updated.')
 
@@ -482,10 +473,8 @@ describe LendingController, type: :system do
 
           visit lending_edit_path(directory: item.directory)
 
-          reload_link = page.find_link('Reload MARC metadata')
-
           page.accept_alert 'Reloading MARC metadata will discard all changes made on this form.' do
-            reload_link.click
+            page.click_link_or_button('Reload MARC metadata')
           end
 
           expect(page).to have_content('MARC metadata reloaded.')
@@ -548,36 +537,19 @@ describe LendingController, type: :system do
         describe 'checkouts' do
 
           it 'allows a checkout' do
+            item.update(copies: 1)
             expect(item).to be_available # just to be sure
             expect(Loan.where(patron_identifier: user.borrower_id)).not_to exist # just to be sure
 
             visit lending_view_path(directory: item.directory)
             expect(page).not_to have_selector('div#iiif_viewer')
 
-            checkout_path = lending_check_out_path(directory: item.directory)
-            checkout_link = page.find_link('Check out')
-            expect(URI.parse(checkout_link['href']).path).to eq(checkout_path)
-            checkout_link.click
-
+            page.click_link_or_button('Check out')
             expect_alert(:success, 'Checkout successful.')
             expect_no_alerts(:danger)
 
             expect(page).to have_selector('div#iiif_viewer')
-          end
-
-          it 'does not show spurious "unavailable" messages after a checkout' do
-            item.update!(copies: 1)
-
-            visit lending_view_path(directory: item.directory)
-            checkout_link = page.find_link('Check out')
-
-            checkout_link.click
-
-            expect_alert(:success, 'Checkout successful.')
-            expect_no_alerts(:danger)
-
             expect(item).not_to be_available # just to be sure
-            expect_no_alerts('danger')
           end
 
           it 'disallows checkouts if the patron has hit the limit' do
@@ -588,7 +560,7 @@ describe LendingController, type: :system do
             visit lending_view_path(directory: item.directory)
             expect_alert(:danger, Item::MSG_CHECKOUT_LIMIT_REACHED)
 
-            expect(page).not_to have_link('Check out')
+            expect(page).not_to have_selector(:link_or_button, 'Check out')
           end
 
           it 'displays an error on a double checkout, but displays the item' do
@@ -597,14 +569,13 @@ describe LendingController, type: :system do
             item.check_out_to(user.borrower_id)
             count_before = Loan.where(patron_identifier: user.borrower_id).count
 
-            checkout_link = page.find_link('Check out')
-            checkout_link.click
+            page.click_link_or_button('Check out')
 
             expect_alert(:danger, Item::MSG_CHECKED_OUT)
             expect_no_alerts(:success)
 
             expect(page).to have_selector('div#iiif_viewer')
-            expect(page).to have_link('Return now')
+            expect_link_or_button(page, 'Return now', lending_return_path(directory: item.directory))
 
             count_after = Loan.where(patron_identifier: user.borrower_id).count
             expect(count_after).to eq(count_before)
@@ -617,11 +588,7 @@ describe LendingController, type: :system do
             item.check_out_to(user.borrower_id)
 
             visit lending_view_path(directory: item.directory)
-
-            return_path = lending_return_path(directory: item.directory)
-            return_link = page.find_link('Return now')
-            expect(URI.parse(return_link['href']).path).to eq(return_path)
-            return_link.click
+            page.click_link_or_button('Return now')
 
             expect_alert(:success, 'Item returned.')
             expect_no_alerts(:danger)
@@ -629,31 +596,16 @@ describe LendingController, type: :system do
             expect(page).not_to have_selector('div#iiif_viewer')
           end
 
-          it 'does not show spurious "not checked out" messages after a return' do
-            item.check_out_to(user.borrower_id)
-
-            visit lending_view_path(directory: item.directory)
-            return_link = page.find_link('Return now')
-
-            return_link.click
-
-            expect_alert(:success, 'Item returned.')
-            expect_no_alerts(:danger)
-
-            expect_no_alerts('danger')
-          end
-
           it 'does not show spurious errors messages after returning an expired item' do
             item.check_out_to(user.borrower_id)
 
             visit lending_view_path(directory: item.directory)
-            return_link = page.find_link('Return now')
 
             loan = item.loans.active.find_by(patron_identifier: user.borrower_id)
             expect(loan).not_to be_nil # just to be sure
             loan.update!(loan_date: loan.loan_date - 1.days, due_date: loan.due_date - 1.days)
 
-            return_link.click
+            page.click_link_or_button('Return now')
 
             expect_alert(:success, 'Item returned.')
             expect_no_alerts(:danger)
@@ -663,11 +615,9 @@ describe LendingController, type: :system do
             item.check_out_to(user.borrower_id)
 
             visit lending_view_path(directory: item.directory)
-            return_link = page.find_link('Return now')
-
             item.update(active: false)
 
-            return_link.click
+            page.click_link_or_button('Return now')
 
             expect_alert(:success, 'Item returned.')
             expect_alert(:danger, 'This item is not in active circulation.')
@@ -774,7 +724,7 @@ describe LendingController, type: :system do
           visit lending_view_path(directory: item.directory)
           expect(page).not_to have_selector('div#iiif_viewer')
 
-          expect(page).not_to have_link('Check out')
+          expect(page).not_to have_selector(:link_or_button, 'Check out')
         end
 
         it "doesn't leave spurious warnings on other pages" do
@@ -785,7 +735,7 @@ describe LendingController, type: :system do
           available_item = available.first
           visit lending_view_path(directory: available_item.directory)
 
-          expect(page).to have_link('Check out')
+          expect(page).to have_selector(:link_or_button, 'Check out')
           expect_no_alerts
         end
       end

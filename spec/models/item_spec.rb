@@ -70,7 +70,8 @@ describe Item, type: :model do
         last_updated_at = item.updated_at
         expect { item.refresh_marc_metadata! }.not_to raise_error
 
-        expect(item.updated_at).to eq(last_updated_at) if item.marc_metadata.nil?
+        iiif_directory = item.iiif_directory
+        expect(item.updated_at).to eq(last_updated_at) if iiif_directory.marc_metadata.nil?
       end
     end
   end
@@ -183,46 +184,50 @@ describe Item, type: :model do
     describe :complete? do
       it 'returns false for items without IIIF directories' do
         item = items[:incomplete_no_directory]
-        expect(item.iiif_dir_exists?).to eq(false)
-        expect(item.has_page_images?).to eq(false)
-        expect(item.has_marc_record?).to eq(false)
-        expect(item.has_manifest_template?).to eq(false)
+        iiif_directory = item.iiif_directory
+        expect(iiif_directory.exists?).to eq(false)
+        expect(iiif_directory.page_images?).to eq(false)
+        expect(iiif_directory.marc_record?).to eq(false)
+        expect(iiif_directory.manifest_template?).to eq(false)
         expect(item).not_to be_complete
       end
 
       it 'returns false for items without page images' do
         item = items[:incomplete_no_images]
-        expect(item.iiif_dir_exists?).to eq(true)
-        expect(item.has_page_images?).to eq(false)
-        expect(item.has_marc_record?).to eq(true)
-        expect(item.has_manifest_template?).to eq(true)
+        iiif_directory = item.iiif_directory
+        expect(iiif_directory.exists?).to eq(true)
+        expect(iiif_directory.page_images?).to eq(false)
+        expect(iiif_directory.marc_record?).to eq(true)
+        expect(iiif_directory.manifest_template?).to eq(true)
         expect(item).not_to be_complete
       end
 
       it 'returns false for items without MARC records' do
         item = items[:incomplete_no_marc]
-        expect(item.iiif_dir_exists?).to eq(true)
-        expect(item.has_page_images?).to eq(true)
-        expect(item.has_marc_record?).to eq(false)
-        expect(item.has_manifest_template?).to eq(true)
+        iiif_directory = item.iiif_directory
+        expect(iiif_directory.exists?).to eq(true)
+        expect(iiif_directory.page_images?).to eq(true)
+        expect(iiif_directory.marc_record?).to eq(false)
+        expect(iiif_directory.manifest_template?).to eq(true)
         expect(item).not_to be_complete
       end
 
       it 'returns false for items without manifest templates' do
         item = items[:incomplete_no_manifest]
-        expect(item.iiif_dir_exists?).to eq(true)
-        expect(item.has_page_images?).to eq(true)
-        expect(item.has_marc_record?).to eq(true)
-        expect(item.has_manifest_template?).to eq(false)
+        iiif_directory = item.iiif_directory
+        expect(iiif_directory.exists?).to eq(true)
+        expect(iiif_directory.page_images?).to eq(true)
+        expect(iiif_directory.marc_record?).to eq(true)
+        expect(iiif_directory.manifest_template?).to eq(false)
         expect(item).not_to be_complete
       end
 
       it 'returns false for items without manifest templates or page images' do
         item = items[:incomplete_marc_only]
-        expect(item.iiif_dir_exists?).to eq(true)
-        expect(item.has_page_images?).to eq(false)
-        expect(item.has_marc_record?).to eq(true)
-        expect(item.has_manifest_template?).to eq(false)
+        expect(item.iiif_directory.exists?).to eq(true)
+        expect(item.iiif_directory.page_images?).to eq(false)
+        expect(item.iiif_directory.marc_record?).to eq(true)
+        expect(item.iiif_directory.manifest_template?).to eq(false)
         expect(item).not_to be_complete
       end
 
@@ -230,10 +235,10 @@ describe Item, type: :model do
         %i[inactive_item active_item].each do |fn|
           item = items[fn]
 
-          expect(item.iiif_dir_exists?).to eq(true)
-          expect(item.has_page_images?).to eq(true)
-          expect(item.has_marc_record?).to eq(true)
-          expect(item.has_manifest_template?).to eq(true)
+          expect(item.iiif_directory.exists?).to eq(true)
+          expect(item.iiif_directory.page_images?).to eq(true)
+          expect(item.iiif_directory.marc_record?).to eq(true)
+          expect(item.iiif_directory.manifest_template?).to eq(true)
           expect(item).to be_complete
         end
       end
@@ -278,11 +283,11 @@ describe Item, type: :model do
       it 'returns the manifest if the item has one' do
         with_manifest.each do |fn|
           item = items[fn]
-          iiif_item = item.iiif_manifest
-          expect(iiif_item).to be_a(Lending::IIIFManifest)
-          expect(iiif_item.title).to eq(item.title)
-          expect(iiif_item.author).to eq(item.author)
-          expect(iiif_item.dir_path.to_s).to eq(item.iiif_dir)
+          manifest = item.iiif_manifest
+          expect(manifest).to be_a(Lending::IIIFManifest)
+          expect(manifest.title).to eq(item.title)
+          expect(manifest.author).to eq(item.author)
+          expect(manifest.dir_path).to eq(item.iiif_directory.path)
         end
       end
     end
@@ -294,7 +299,7 @@ describe Item, type: :model do
         items.each do |fn, item|
           next if with_manifest.include?(fn)
 
-          expect(item.has_manifest_template?).to eq(false)
+          expect(item.iiif_directory.manifest_template?).to eq(false)
         end
       end
     end
@@ -344,7 +349,7 @@ describe Item, type: :model do
         @items_with_marc = []
         @items_without_marc = []
         items.each_value do |item|
-          marc_xml = File.join(item.iiif_dir, 'marc.xml')
+          marc_xml = item.iiif_directory.marc_path
           (File.exist?(marc_xml) ? @items_with_marc : @items_without_marc) << item
         end
       end
@@ -354,7 +359,8 @@ describe Item, type: :model do
 
         aggregate_failures do
           items_with_marc.each do |item|
-            md = item.marc_metadata
+            iiif_directory = item.iiif_directory
+            md = iiif_directory.marc_metadata
             expect(md).to be_a(Lending::MarcMetadata), "Expected MARC metadata for item #{item.directory}, got #{md.inspect}"
           end
         end
@@ -364,7 +370,8 @@ describe Item, type: :model do
         expect(items_without_marc).not_to be_empty # just to be sure
         aggregate_failures do
           items_without_marc.each do |item|
-            md = item.marc_metadata
+            iiif_directory = item.iiif_directory
+            md = iiif_directory.marc_metadata
             expect(md).to be_nil, "Expected MARC metadata for item #{item.directory} to be nil, got #{md.inspect}"
           end
         end
