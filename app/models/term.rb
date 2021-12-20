@@ -1,6 +1,11 @@
 class Term < ActiveRecord::Base
 
   # ------------------------------------------------------------
+  # Items
+
+  has_and_belongs_to_many :items
+
+  # ------------------------------------------------------------
   # Validations
 
   validates :name, presence: true, uniqueness: true

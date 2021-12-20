@@ -7,6 +7,7 @@ class Item < ActiveRecord::Base
   # Relations
 
   has_many :loans, dependent: :destroy
+  has_and_belongs_to_many :terms
 
   # ------------------------------------------------------------
   # Validations
