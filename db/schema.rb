@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_185043) do
+ActiveRecord::Schema.define(version: 2021_12_20_170430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(version: 2021_11_18_185043) do
     t.boolean "faculty"
     t.boolean "admin"
     t.integer "count"
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.string "name", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_terms_on_name", unique: true
   end
 
   add_foreign_key "loans", "items"
