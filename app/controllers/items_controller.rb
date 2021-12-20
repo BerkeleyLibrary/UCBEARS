@@ -5,7 +5,9 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     Item.scan_for_new_items!
-    @pagy, @items = pagy(items)
+    requested_items = items
+    logger.info("initial query: #{requested_items}")
+    @pagy, @items = pagy(requested_items)
   end
 
   # GET /items/1
@@ -44,9 +46,11 @@ class ItemsController < ApplicationController
   private
 
   def items
+    logger.info("query_params: #{query_params}")
     return Item.all unless query_params && !query_params.empty?
 
     query_param_hash = query_params.to_h.symbolize_keys
+    logger.info("query_param_hash: #{query_param_hash}")
     ItemQuery.new(**query_param_hash)
   end
 

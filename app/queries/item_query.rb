@@ -17,6 +17,30 @@ class ItemQuery
   end
 
   # ------------------------------------------------------------
+  # Object
+
+  def inspect
+    args = [
+      "active: #{@active.inspect}",
+      "complete: #{@complete.inspect}",
+      "limit: #{@limit.inspect}",
+      "offset: #{@offset.inspect}"
+    ]
+
+    "#{self.class.name}(#{args.join(', ')})"
+  end
+
+  def to_s
+    args = []
+    args << (@active ? 'active' : 'inactive') unless @active.nil?
+    args << (@complete ? 'complete' : 'incomplete') unless @complete.nil?
+    args << "limit: #{@limit}" if @limit
+    args << "offset: #{@offset}" if @offset
+
+    "#{self.class.name}(#{args.join(', ')})"
+  end
+
+  # ------------------------------------------------------------
   # Enumerable
 
   def each(&block)

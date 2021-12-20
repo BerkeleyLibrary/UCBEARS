@@ -61,7 +61,7 @@ RSpec.describe '/items', type: :request do
     end
 
     it 'can exclude incomplete items' do
-      get items_url, params: { query: { complete: true } }, as: :json
+      get items_url, params: { complete: true }, as: :json
       expect(response).to be_successful
       expect(response.content_type).to match(%r{^application/json})
 
@@ -79,7 +79,7 @@ RSpec.describe '/items', type: :request do
     end
 
     it 'can exclude complete items' do
-      get items_url, params: { query: { complete: false } }, as: :json
+      get items_url, params: { complete: false }, as: :json
       expect(response).to be_successful
       expect(response.content_type).to match(%r{^application/json})
 
@@ -97,7 +97,7 @@ RSpec.describe '/items', type: :request do
     end
 
     it 'can exclude inactive items' do
-      get items_url, params: { query: { active: true } }, as: :json
+      get items_url, params: { active: true }, as: :json
       expect(response).to be_successful
       expect(response.content_type).to match(%r{^application/json})
 
@@ -114,8 +114,8 @@ RSpec.describe '/items', type: :request do
       end
     end
 
-    it 'can exclude inactive items' do
-      get items_url, params: { query: { active: false } }, as: :json
+    it 'can exclude active items' do
+      get items_url, params: { active: false }, as: :json
       expect(response).to be_successful
       expect(response.content_type).to match(%r{^application/json})
 
@@ -133,7 +133,7 @@ RSpec.describe '/items', type: :request do
     end
 
     it 'can filter inactive items by completeness' do
-      get items_url, params: { query: { active: false, complete: true } }, as: :json
+      get items_url, params: { active: false, complete: true }, as: :json
       expect(response).to be_successful
       expect(response.content_type).to match(%r{^application/json})
 
