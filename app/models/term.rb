@@ -1,4 +1,5 @@
 class Term < ActiveRecord::Base
+
   # ------------------------------------------------------------
   # Validations
 
@@ -10,4 +11,17 @@ class Term < ActiveRecord::Base
 
     errors.add(:start_date, 'Term start date must precede end date')
   end
+
+  # ------------------------------------------------------------
+  # Scopes
+
+  scope :current, -> { where("DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?)) BETWEEN start_date AND end_date", Time.zone.name) }
+
+  # ------------------------------------------------------------
+  # Synthetic accessors
+
+  def current?
+    Date.current >= start_date && Date.current <= end_date
+  end
+
 end
