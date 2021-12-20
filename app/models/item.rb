@@ -291,12 +291,6 @@ class Item < ActiveRecord::Base
 
   private
 
-  def loggable_value_for(raw_value)
-    return raw_value.to_s if raw_value.is_a?(Pathname)
-
-    raw_value
-  end
-
   def ensure_record_id_and_barcode
     return if @record_id && @barcode
 
