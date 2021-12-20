@@ -21,6 +21,11 @@ class Item < ActiveRecord::Base
   validate :active_items_are_complete
 
   # ------------------------------------------------------------
+  # Hooks
+
+  after_create :set_default_term
+
+  # ------------------------------------------------------------
   # Constants
 
   LOAN_DURATION_SECONDS = 2 * 3600 # TODO: make this configurable
@@ -95,6 +100,19 @@ class Item < ActiveRecord::Base
     super
 
     @iiif_directory = nil
+  end
+
+  # ------------------------------------------------------------
+  # Hooks
+
+  def set_default_term
+    return if terms.exists?
+
+    if (term_for_new_items = Term.for_new_items).exists?
+      self.terms = term_for_new_items
+    else
+      logger.warn("No default term found for current date #{Date.current}")
+    end
   end
 
   # ------------------------------------------------------------

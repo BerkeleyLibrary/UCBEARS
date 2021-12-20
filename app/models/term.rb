@@ -20,6 +20,8 @@ class Term < ActiveRecord::Base
   # ------------------------------------------------------------
   # Scopes
 
+  default_scope { order(start_date: :desc) }
+
   scope :current, -> { where("DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?)) BETWEEN start_date AND end_date", Time.zone.name) }
 
   # ------------------------------------------------------------
@@ -27,6 +29,15 @@ class Term < ActiveRecord::Base
 
   def current?
     Date.current >= start_date && Date.current <= end_date
+  end
+
+  # ------------------------------------------------------------
+  # Class methods
+
+  class << self
+    def for_new_items
+      where('end_date >= ?', Date.current).order(:start_date).limit(1)
+    end
   end
 
 end
