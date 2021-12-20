@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
     flash_now!(:info, "Generating <a href=\"/#{report_filename}\">profile</a>.".html_safe)
     do_profile(report_filename, &block)
   rescue StandardError => e
-    log.error(e)
+    logger.error(e)
     return if performed?
 
     flash_now!(:danger, "Error generating profile: #{e.message}")

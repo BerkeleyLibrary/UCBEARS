@@ -68,6 +68,15 @@ RSpec.describe StatsController, type: :request do
       ensure
         FileUtils.rm_f(profile_file)
       end
+
+      it 'does something sensible in the event of a failure' do
+        allow(StatsPresenter).to receive(:new).and_raise('Oops')
+
+        get stats_profile_path
+        expect(response.body).to include('Error generating profile')
+      ensure
+        FileUtils.rm_f(profile_file)
+      end
     end
 
     describe :download do

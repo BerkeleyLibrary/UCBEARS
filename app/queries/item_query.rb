@@ -19,17 +19,6 @@ class ItemQuery
   # ------------------------------------------------------------
   # Object
 
-  def inspect
-    args = [
-      "active: #{@active.inspect}",
-      "complete: #{@complete.inspect}",
-      "limit: #{@limit.inspect}",
-      "offset: #{@offset.inspect}"
-    ]
-
-    "#{self.class.name}(#{args.join(', ')})"
-  end
-
   def to_s
     args = []
     args << (@active ? 'active' : 'inactive') unless @active.nil?
