@@ -108,8 +108,8 @@ class Item < ActiveRecord::Base
   def set_default_term
     return if terms.exists?
 
-    if (term_for_new_items = Term.for_new_items).exists?
-      self.terms = term_for_new_items
+    if (term_for_new_items = Term.for_new_items)
+      terms << term_for_new_items
     else
       logger.warn("No default term found for current date #{Date.current}")
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_190228) do
+ActiveRecord::Schema.define(version: 2021_12_20_231709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,14 @@ ActiveRecord::Schema.define(version: 2021_12_20_190228) do
     t.integer "count"
   end
 
+  create_table "settings", id: :integer, default: 1, force: :cascade do |t|
+    t.bigint "default_term_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["default_term_id"], name: "index_settings_on_default_term_id"
+    t.check_constraint "id = 1", name: "max_one_settings_row"
+  end
+
   create_table "terms", force: :cascade do |t|
     t.string "name", null: false
     t.date "start_date", null: false
@@ -66,4 +74,5 @@ ActiveRecord::Schema.define(version: 2021_12_20_190228) do
   end
 
   add_foreign_key "loans", "items"
+  add_foreign_key "settings", "terms", column: "default_term_id"
 end

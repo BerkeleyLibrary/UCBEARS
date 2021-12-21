@@ -3,9 +3,12 @@ class Term < ActiveRecord::Base; end unless defined?(Term)
 class Item < ActiveRecord::Base; end unless defined?(Item)
 
 class SetDefaultTerms < ActiveRecord::Migration[6.1]
+  FALL_2021 = '2021 Fall Semester'
+  SPRING_2021 = '2021 Spring Semester'
+
   def up
-    fall_2021 = Term.create!(name: '2021 Fall Semester', start_date: Date.new(2021, 8, 18), end_date: Date.new(2021, 12, 17))
-    _spring_2022 = Term.create!(name: '2021 Spring Semester', start_date: Date.new(2022, 1, 22), end_date: Date.new(2022, 5, 13))
+    fall_2021 = Term.create!(name: FALL_2021, start_date: Date.new(2021, 8, 18), end_date: Date.new(2021, 12, 17))
+    _spring_2022 = Term.create!(name: SPRING_2021, start_date: Date.new(2022, 1, 22), end_date: Date.new(2022, 5, 13))
 
     insert_stmt = <<~SQL
       INSERT INTO items_terms (item_id, term_id)
@@ -25,7 +28,7 @@ class SetDefaultTerms < ActiveRecord::Migration[6.1]
   end
 
   def down
-    ['2021 Fall Semester', '2021 Spring Semester'].each do |term_name|
+    [FALL_2021, SPRING_2021].each do |term_name|
       next unless (term = Term.find_by(name: term_name))
 
       term.items.clear

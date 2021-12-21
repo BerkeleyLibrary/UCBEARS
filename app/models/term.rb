@@ -36,7 +36,7 @@ class Term < ActiveRecord::Base
 
   class << self
     def for_new_items
-      where('end_date >= ?', Date.current).order(:start_date).limit(1)
+      Settings.default_term
     end
   end
 

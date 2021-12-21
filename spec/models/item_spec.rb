@@ -20,14 +20,19 @@ describe Item, type: :model do
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
     end
-
   end
 
-  describe 'with active term' do
+  describe 'with default term' do
     attr_reader :current_term
 
     before(:each) do
+      @prev_default_term = Settings.default_term
       @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+      Settings.default_term = current_term
+    end
+
+    after(:each) do
+      Settings.default_term = @prev_default_term
     end
 
     describe :refresh_marc_metadata! do
@@ -413,7 +418,7 @@ describe Item, type: :model do
     end
   end
 
-  describe 'without active term' do
+  describe 'without default term' do
     before(:each) do
       Term.destroy_all
     end
