@@ -38,6 +38,7 @@ class Item < ActiveRecord::Base
   MSG_ZERO_COPIES = 'Active items must have at least one copy.'.freeze
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
   MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
+  MSG_NOT_CURRENT_TERM = 'This item is not available for the current term.'.freeze
 
   # TODO: make this configurable
   MAX_CHECKOUTS_PER_PATRON = 1
@@ -196,7 +197,7 @@ class Item < ActiveRecord::Base
   end
 
   def available?
-    active? && complete? && copies_available > 0
+    active? && for_current_term? && copies_available > 0 && complete?
   end
 
   def inactive?
@@ -209,15 +210,25 @@ class Item < ActiveRecord::Base
     active? ? 'Active' : 'Inactive'
   end
 
+  def for_current_term?
+    terms.current.exists?
+  end
+
+  def next_active_term
+    current_or_future_terms.limit(1).take
+  end
+
+  def current_or_future_terms
+    terms.current_or_future.order(:start_date)
+  end
+
   # TODO: move these to an ItemValidator class or something
   def reason_unavailable
     return if available?
     return Item::MSG_INACTIVE unless active?
+    return msg_not_current_term unless for_current_term?
+    return msg_unavailable if copies_available <= 0
     return Item::MSG_INCOMPLETE unless complete?
-    return Item::MSG_UNAVAILABLE unless (due_date = next_due_date)
-
-    date_str = due_date.to_s(:long)
-    "#{Item::MSG_UNAVAILABLE} It will be returned on #{date_str}"
   end
 
   def reason_incomplete
@@ -290,6 +301,20 @@ class Item < ActiveRecord::Base
   # Private methods
 
   private
+
+  def msg_not_current_term
+    msg = Item::MSG_NOT_CURRENT_TERM
+    return msg unless (term = next_active_term)
+
+    "#{msg} It will be available in #{term.name}."
+  end
+
+  def msg_unavailable
+    msg = Item::MSG_UNAVAILABLE
+    return msg unless (due_date = next_due_date)
+
+    "#{msg} It will be returned on #{due_date.to_s(:long)}"
+  end
 
   def ensure_record_id_and_barcode
     return if @record_id && @barcode

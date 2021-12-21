@@ -9,9 +9,19 @@ describe StatsPresenter do
 
   attr_reader :users, :sp
 
+  attr_reader :current_term
+
   before(:each) do
+    @prev_default_term = Settings.default_term
+    @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+    Settings.default_term = current_term
+
     @users = user_types.map { |t| mock_user_without_login(t) }
     @sp = StatsPresenter.new
+  end
+
+  after(:each) do
+    Settings.default_term = @prev_default_term
   end
 
   context 'session stats' do

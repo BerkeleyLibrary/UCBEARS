@@ -23,6 +23,7 @@ class Term < ActiveRecord::Base
   default_scope { order(start_date: :desc) }
 
   scope :current, -> { where("DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?)) BETWEEN start_date AND end_date", Time.zone.name) }
+  scope :current_or_future, -> { where("end_date >= DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?))", Time.zone.name) }
 
   # ------------------------------------------------------------
   # Synthetic accessors

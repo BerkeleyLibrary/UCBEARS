@@ -22,7 +22,7 @@ describe Item, type: :model do
     end
   end
 
-  describe 'with default term' do
+  describe 'with active default term' do
     attr_reader :current_term
 
     before(:each) do
@@ -149,6 +149,7 @@ describe Item, type: :model do
           items.each do |item|
             expect(item.terms.count).to eq(1)
             expect(item.terms).to include(current_term)
+            expect(item.next_active_term).to eq(current_term)
           end
         end
       end
@@ -280,6 +281,16 @@ describe Item, type: :model do
             expect(item).to be_complete
           end
         end
+
+        describe :reason_unavailable do
+          it 'returns an appropriate message for incomplete items' do
+            item = items[:incomplete_no_directory]
+            item.active = true
+            item.copies = 3
+
+            expect(item.reason_unavailable).to include(Item::MSG_INCOMPLETE)
+          end
+        end
       end
 
       describe :available? do
@@ -312,6 +323,23 @@ describe Item, type: :model do
           item.update!(copies: 2)
           expect(item.copies_available).to be > 0 # just to be sure
           expect(item).not_to be_available
+        end
+
+        it 'returns false if the item is not for an active term' do
+          item = items[:active_item]
+          expect(item).to be_available # just to be sure
+
+          future_term = Term.create(name: 'Future Term', start_date: Time.current + 1.week, end_date: Time.current + 1.month)
+          expect(future_term).not_to be_current # just to be sure
+
+          item.update!(terms: [future_term])
+          expect(item.terms.count).to eq(1) # just to be sure
+          expect(item.for_current_term?).to eq(false)
+          expect(item.next_active_term).to eq(future_term)
+
+          expect(item).not_to be_available
+          expect(item.reason_unavailable).to include(Item::MSG_NOT_CURRENT_TERM)
+          expect(item.reason_unavailable).to include(future_term.name)
         end
       end
 
@@ -418,15 +446,49 @@ describe Item, type: :model do
     end
   end
 
+  describe 'with future default term' do
+    attr_reader :future_term
+
+    before(:each) do
+      @future_term = Term.create(name: 'Future Term', start_date: Time.current + 1.week, end_date: Time.current + 1.month)
+      Settings.default_term = future_term
+    end
+
+    after(:each) do
+      Settings.default_term = @prev_default_term
+    end
+
+    describe :create do
+      it 'sets the default term' do
+        items = Item.scan_for_new_items!
+        expect(Item.exists?).to eq(true) # just to be sure
+
+        items.each do |item|
+          expect(item.terms.count).to eq(1)
+          expect(item.next_active_term).to eq(future_term)
+        end
+      end
+    end
+  end
+
   describe 'without default term' do
     before(:each) do
-      Term.destroy_all
+      @prev_default_term = Settings.default_term
+      Settings.default_term = nil
+    end
+
+    after(:each) do
+      Settings.default_term = @prev_default_term
     end
 
     describe :create do
       it "doesn't set a term" do
         items = Item.scan_for_new_items!
-        items.each { |item| expect(item.terms.count).to eq(0) }
+        expect(Item.exists?).to eq(true) # just to be sure
+        items.each do |item|
+          expect(item.terms.count).to eq(0)
+          expect(item.next_active_term).to be_nil
+        end
       end
     end
   end

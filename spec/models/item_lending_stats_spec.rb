@@ -3,6 +3,8 @@ require 'rails_helper'
 describe ItemLendingStats do
   let(:select_loan_date) { 'select loan_date from loans where id = ?' }
 
+  attr_reader :current_term
+
   before(:each) do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
@@ -10,6 +12,14 @@ describe ItemLendingStats do
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
     end
+
+    @prev_default_term = Settings.default_term
+    @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+    Settings.default_term = current_term
+  end
+
+  after(:each) do
+    Settings.default_term = @prev_default_term
   end
 
   attr_reader :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans

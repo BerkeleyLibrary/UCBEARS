@@ -5,7 +5,12 @@ describe Loan do
   attr_reader :user
   attr_reader :item
 
+  attr_reader :current_term
+
   before(:each) do
+    @prev_default_term = Settings.default_term
+    @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+    Settings.default_term = current_term
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -17,6 +22,10 @@ describe Loan do
     @borrower_id = user.borrower_id
 
     @item = create(:active_item)
+  end
+
+  after(:each) do
+    Settings.default_term = @prev_default_term
   end
 
   describe 'validations' do
