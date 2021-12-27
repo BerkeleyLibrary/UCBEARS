@@ -55,6 +55,13 @@ class ItemQuery
     !exists?
   end
 
+  def count(*args)
+    return db_results.count(*args) unless filtered?
+    return size if args == [:all] # pagination hack; see Pagy::Backend#pagy_get_vars
+
+    super
+  end
+
   # ------------------------------------------------------------
   # Pagination support
 
