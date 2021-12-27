@@ -15,6 +15,7 @@ gem 'jwt', '~> 2.2'
 gem 'listen' # TODO: what actually uses this?
 gem 'lograge', '>=0.11.2'
 gem 'net-ssh'
+gem 'non-stupid-digest-assets'
 gem 'omniauth-cas',
     git: 'https://github.com/dlindahl/omniauth-cas.git',
     ref: '7087bda829e14c0f7cab2aece5045ad7015669b1'
