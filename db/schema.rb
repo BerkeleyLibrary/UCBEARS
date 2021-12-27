@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_231709) do
+ActiveRecord::Schema.define(version: 2021_12_27_222517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2021_12_20_231709) do
     t.boolean "active", default: false, null: false
     t.string "publisher"
     t.string "physical_desc"
+    t.boolean "complete", default: false, null: false
     t.index ["directory"], name: "index_items_on_directory", unique: true
   end
 

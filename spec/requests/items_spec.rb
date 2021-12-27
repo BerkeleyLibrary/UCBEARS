@@ -72,7 +72,7 @@ RSpec.describe '/items', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
 
-        expected_items = Item.all.reject(&:incomplete?)
+        expected_items = Item.complete
         expect(expected_items.any?).to eq(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.size)
 
@@ -90,7 +90,7 @@ RSpec.describe '/items', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
 
-        expected_items = Item.all.select(&:incomplete?)
+        expected_items = Item.incomplete
         expect(expected_items.any?).to eq(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.size)
 
@@ -144,7 +144,7 @@ RSpec.describe '/items', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
 
-        expected_items = Item.where(active: false).select(&:complete?)
+        expected_items = Item.inactive.complete
         expect(expected_items.any?).to eq(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.count)
 

@@ -36,19 +36,15 @@ class ItemQuery
     return to_enum(:each) unless block_given?
 
     # TODO: figure out how to query in batches while preserving order
-    filtered_results.each(&block)
+    db_results.each(&block)
   end
 
   def size
-    return db_results.count unless filtered?
-
-    db_directories.count(&method(:includes_directory?))
+    db_results.count
   end
 
   def exists?
-    return db_results.exists? unless filtered?
-
-    db_directories.any?(&method(:includes_directory?))
+    db_results.exists?
   end
 
   def empty?
@@ -56,10 +52,7 @@ class ItemQuery
   end
 
   def count(*args)
-    return db_results.count(*args) unless filtered?
-    return size if args == [:all] # pagination hack; see Pagy::Backend#pagy_get_vars
-
-    super
+    db_results.count(*args)
   end
 
   # ------------------------------------------------------------
@@ -88,32 +81,12 @@ class ItemQuery
 
   private
 
-  def filtered?
-    !@complete.nil?
-  end
-
-  def filtered_results
-    return db_results unless filtered?
-
-    # TODO: figure out how to query in batches while preserving order
-    db_results.select { |item| item.complete? == @complete }
-  end
-
   def db_results
     rel = @active.nil? ? Item.all : Item.where(active: @active)
-
-    rel = rel.order(:title)
+    rel = rel.where(complete: @complete) unless @complete.nil?
     rel = rel.limit(@limit) if @limit
     rel = rel.offset(@offset) if @offset
-    rel
-  end
-
-  def db_directories
-    db_results.pluck(:directory).lazy.reject(&:nil?)
-  end
-
-  def includes_directory?(d)
-    IIIFDirectory.new(d).complete? == @complete
+    rel.order(:title)
   end
 
   # ------------------------------

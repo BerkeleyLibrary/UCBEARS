@@ -8,6 +8,7 @@ FactoryBot.define do
     physical_desc { 'viii, 244 p. : ill. ; 23 cm.' }
     copies { 3 }
     active { true }
+    complete { true }
 
     factory :complete_item, aliases: %i[inactive_item] do
       directory { 'B135491460_C106083325' }
@@ -17,6 +18,7 @@ FactoryBot.define do
       physical_desc { '240 p. : ill. (some col.), col. maps ; 31 cm.' }
       copies { 0 }
       active { false }
+      complete { true }
     end
 
     factory :incomplete_item, aliases: %i[incomplete_no_directory] do
@@ -27,6 +29,7 @@ FactoryBot.define do
       physical_desc { 'ix, 171 p. ; c23 cm.' }
       copies { 0 }
       active { false }
+      complete { false }
     end
 
     factory :incomplete_no_images do
@@ -37,6 +40,7 @@ FactoryBot.define do
       author { 'Corcoran, Lorelei Hilda, 1953-' }
       copies { 2 }
       active { true }
+      complete { false }
     end
 
     factory :incomplete_no_manifest do
@@ -45,6 +49,7 @@ FactoryBot.define do
       publisher { 'New York, New York : Thames & Hudson Inc.' }
       physical_desc { '376 pages : illustrations (chiefly color) ; 28 cm' }
       author { 'Bahrani, Zainab' }
+      complete { false }
     end
 
     factory :incomplete_no_marc do
@@ -53,6 +58,7 @@ FactoryBot.define do
       author { 'Clavin, Patricia.' }
       publisher { "New York : St. Martin's Press, 2000." }
       physical_desc { 'viii, 244 p. : ill. ; 23 cm.' }
+      complete { false }
     end
 
     factory :incomplete_marc_only do
@@ -61,6 +67,7 @@ FactoryBot.define do
       author { 'Canada. Department of Agriculture.' }
       publisher { 'Ottawa, 1922-1935.' }
       physical_desc { '168 v. ill. 20-25 cm.' }
+      complete { false }
     end
   end
 end

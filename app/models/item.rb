@@ -23,7 +23,9 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Hooks
 
-  after_create :set_default_term
+  after_create :set_default_term!
+  before_save :set_complete_flag!
+  after_find :update_complete_flag!
 
   # ------------------------------------------------------------
   # Constants
@@ -49,26 +51,15 @@ class Item < ActiveRecord::Base
 
   default_scope { order(:title) }
 
+  scope :complete, -> { where(complete: true) }
+  scope :incomplete, -> { where(complete: false) }
+  scope :active, -> { complete.where(active: true) }
+  scope :inactive, -> { complete.where(active: false) }
+
   # ------------------------------------------------------------
   # Class methods
 
   class << self
-    # TODO: smarter sorting
-    # TODO: cache completeness status in DB
-
-    def active
-      Item.where(active: true).order(:title).lazy.select(&:complete?)
-    end
-
-    def inactive
-      Item.where(active: false).order(:title).lazy.select(&:complete?)
-    end
-
-    def incomplete
-      # TODO: get order working (requires abandoning find_each)
-      Item.order(:title).find_each.lazy.reject(&:complete?)
-    end
-
     def scan_for_new_items!
       Lending.each_final_dir.map do |dir_path|
         basename = dir_path.basename.to_s
@@ -106,7 +97,7 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Hooks
 
-  def set_default_term
+  def set_default_term!
     return if terms.exists?
 
     if (term_for_new_items = Term.for_new_items)
@@ -114,6 +105,17 @@ class Item < ActiveRecord::Base
     else
       logger.warn("No default term found for current date #{Date.current}")
     end
+  end
+
+  def set_complete_flag!
+    self.complete = iiif_directory.complete?
+  end
+
+  def update_complete_flag!
+    return if (directory_complete = iiif_directory.complete?) == complete
+
+    self.complete = directory_complete
+    save(validate: false)
   end
 
   # ------------------------------------------------------------
@@ -189,7 +191,7 @@ class Item < ActiveRecord::Base
   # Synthetic accessors
 
   def complete?
-    iiif_directory.complete?
+    complete
   end
 
   def incomplete?

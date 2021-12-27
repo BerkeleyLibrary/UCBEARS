@@ -31,17 +31,17 @@ describe ItemQuery do
   it 'can exclude incomplete items' do
     query = ItemQuery.new(complete: true)
 
-    expected_items = Item.all.reject(&:incomplete?)
+    expected_items = Item.where(complete: true)
     expect(expected_items.any?).to eq(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
   end
 
-  it 'can exclude incomplete items' do
+  it 'can exclude complete items' do
     query = ItemQuery.new(complete: false)
 
-    expected_items = Item.all.select(&:incomplete?)
+    expected_items = Item.where(complete: false)
     expect(expected_items.any?).to eq(true) # just to be sure
 
     actual_items = query.to_a
@@ -51,7 +51,7 @@ describe ItemQuery do
   it 'can exclude inactive items' do
     query = ItemQuery.new(active: true)
 
-    expected_items = Item.all.select(&:active?)
+    expected_items = Item.where(active: true)
     expect(expected_items.any?).to eq(true) # just to be sure
 
     actual_items = query.to_a
@@ -61,7 +61,7 @@ describe ItemQuery do
   it 'can exclude active items' do
     query = ItemQuery.new(active: false)
 
-    expected_items = Item.all.reject(&:active?)
+    expected_items = Item.where(active: false)
     expect(expected_items.any?).to eq(true) # just to be sure
 
     actual_items = query.to_a
@@ -71,7 +71,7 @@ describe ItemQuery do
   it 'can filter inactive items by completeness' do
     query = ItemQuery.new(active: false, complete: true)
 
-    expected_items = Item.all.reject(&:active?).select(&:complete?)
+    expected_items = Item.where(active: false).where(complete: true)
     expect(expected_items.any?).to eq(true) # just to be sure
 
     actual_items = query.to_a
