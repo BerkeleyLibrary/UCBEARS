@@ -40,7 +40,10 @@ node_modules
 
 # Assets are rebuilt each deploy
 public/assets
+public/packs
+public/packs-test
 
+# Ignore Ruby debug history
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
@@ -48,6 +51,9 @@ public/assets
 
 # Ignore Sublime Text project files
 *.sublime*
+
+# Ignore IDEA/RubyMine project files
+.idea/*
 
 # Add back any .keep files
 !.keep
