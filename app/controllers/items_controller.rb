@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show update destroy]
-  # before_action :require_lending_admin!, only: %i[index create update destroy]
+  before_action :require_lending_admin!, only: %i[index create update destroy]
 
   # GET /items
   # GET /items.json

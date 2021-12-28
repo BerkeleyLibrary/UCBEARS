@@ -15,6 +15,7 @@
 # Pagy::DEFAULT[:items]  = 20                                 # default
 # Pagy::DEFAULT[:outset] = 0                                  # default
 
+# TODO: something more configurable
 Pagy::DEFAULT[:items] = 2 if Rails.env.development?
 
 # Other Variables

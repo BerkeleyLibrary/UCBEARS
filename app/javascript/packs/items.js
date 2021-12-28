@@ -4,7 +4,10 @@ import ItemsTable from '../packs/items/components/ItemsTable.vue'
 import axios from 'axios'
 
 document.addEventListener('DOMContentLoaded', () => {
-  axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')
+  if (csrfToken) { // this won't be present in test
+    axios.defaults.headers.common['X-CSRF-Token'] = csrfToken.getAttribute('content')
+  }
 
   const itemsTable = new Vue({
     render: h => h(ItemsTable)
