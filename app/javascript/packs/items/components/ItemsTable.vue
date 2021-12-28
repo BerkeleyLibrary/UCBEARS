@@ -35,6 +35,15 @@
 
     <form class="item-facets">
       <fieldset>
+        <legend>Term</legend>
+
+        <template v-for="term in terms">
+          <!-- TODO: add term selection UI -->
+          <label>{{ term.name }}</label>
+        </template>
+      </fieldset>
+
+      <fieldset>
         <legend>Status</legend>
 
         <input id="itemQuery-active" type="checkbox" v-model="itemQuery.active" true-value="true" :false-value="null" @change="reload()">
@@ -63,10 +72,10 @@
           <th>Author</th>
           <th>Publisher</th>
           <th>Physical Description</th>
-          <th>Created</th>
           <th>Updated</th>
           <th>Complete</th>
           <th>Copies</th>
+          <th>Term</th>
           <th>Active</th>
         </tr>
       </thead>
@@ -84,7 +93,6 @@
           <td>{{ item.author }}</td>
           <td>{{ item.publisher }}</td>
           <td>{{ item.physical_desc }}</td>
-          <td class="date">{{ item.created_at }}</td>
           <td class="date">{{ item.updated_at }}</td>
           <td v-if="item.complete" class="control">Yes</td>
           <td v-else :title="item.reason_inactive" class="control">No</td>
@@ -94,6 +102,9 @@
               type="number"
               @change="updateItem(item)"
             >
+          </td>
+          <td>
+            {{ item.terms && item.terms.join(', ') }}
           </td>
           <td class="control">
             <input
@@ -236,6 +247,7 @@ export default {
   data: function () {
     return {
       items: null,
+      terms: null,
       links: null,
       errors: null,
       itemQuery: {
@@ -249,11 +261,20 @@ export default {
   },
   methods: {
     reload () {
+      const termsUrl = new URL('/terms.json', window.location)
+      this.loadTerms(termsUrl)
+
       const itemApiUrl = new URL('/items.json', window.location)
       this.loadItems(itemApiUrl)
     },
+    loadTerms (termApiUrl) {
+      axios.get(termApiUrl.toString())
+        .then(response => {
+          this.terms = response.data
+        }).catch(error => console.log(error))
+    },
     loadItems (itemApiUrl) {
-      // TODO: Merge itemQuery params instead of letting axios append them
+      // TODO: Merge itemQuery params instead of letting axios append them, or else set pagination params explicitly
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {
           this.items = itemsByDirectory(response.data)
