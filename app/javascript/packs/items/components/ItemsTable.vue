@@ -39,27 +39,28 @@
 
         <template v-for="term in terms">
           <!-- TODO: add term selection UI -->
-          <label>{{ term.name }}</label>
+          <input id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemQuery.terms" type="checkbox" :value="term.name" @change="reload()">
+          <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
 
       <fieldset>
         <legend>Status</legend>
 
-        <input id="itemQuery-active" type="checkbox" v-model="itemQuery.active" true-value="true" :false-value="null" @change="reload()">
+        <input id="itemQuery-active" v-model="itemQuery.active" type="checkbox" true-value="true" :false-value="null" @change="reload()">
         <label for="itemQuery-active">Active only</label>
 
-        <input id="itemQuery-inactive" type="checkbox" v-model="itemQuery.active" true-value="false" :false-value="null" @change="reload()">
+        <input id="itemQuery-inactive" v-model="itemQuery.active" type="checkbox" true-value="false" :false-value="null" @change="reload()">
         <label for="itemQuery-active">Inactive only</label>
       </fieldset>
 
       <fieldset>
-        <legend>Completeness</legend>
+        <legend>Complete?</legend>
 
-        <input id="itemQuery-complete" type="checkbox" v-model="itemQuery.complete" true-value="true" :false-value="null" @change="reload()">
+        <input id="itemQuery-complete" v-model="itemQuery.complete" type="checkbox" true-value="true" :false-value="null" @change="reload()">
         <label for="itemQuery-complete">Complete only</label>
 
-        <input id="itemQuery-incomplete" type="checkbox" v-model="itemQuery.complete" true-value="false" :false-value="null" @change="reload()">
+        <input id="itemQuery-incomplete" v-model="itemQuery.complete" type="checkbox" true-value="false" :false-value="null" @change="reload()">
         <label for="itemQuery-complete">Incomplete only</label>
       </fieldset>
     </form>
@@ -178,7 +179,6 @@
         </li>
       </ul>
     </nav>
-
   </section>
 </template>
 
@@ -237,7 +237,8 @@ function linksFromHeaders (headers) {
 
   for (const rel of ['first', 'prev', 'next', 'last']) {
     if (parsedLinks.has('rel', rel)) {
-      links[rel] = parsedLinks.get('rel', rel)[0].uri
+      const urlStr = parsedLinks.get('rel', rel)[0].uri
+      links[rel] = new URL(urlStr)
     }
   }
   return links
@@ -252,7 +253,8 @@ export default {
       errors: null,
       itemQuery: {
         active: null,
-        complete: null
+        complete: null,
+        terms: []
       }
     }
   },
@@ -274,7 +276,16 @@ export default {
         }).catch(error => console.log(error))
     },
     loadItems (itemApiUrl) {
-      // TODO: Merge itemQuery params instead of letting axios append them, or else set pagination params explicitly
+      // TODO: clean this up -- if it's a next/prev URL with query parameters we don't need to append params at all
+      const searchParams = itemApiUrl.searchParams
+      if (searchParams) {
+        searchParams.delete('active')
+        searchParams.delete('inactive')
+        searchParams.delete('complete')
+        searchParams.delete('incomplete')
+        searchParams.delete('terms')
+      }
+
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {
           this.items = itemsByDirectory(response.data)
