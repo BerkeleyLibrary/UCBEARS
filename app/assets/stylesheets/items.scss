@@ -1,23 +1,45 @@
 @import 'includes/globals';
 
 section.items-table {
-  nav.pagination {
-    display: flex;
-    justify-content: center;
 
-    ul {
-      display: flex;
-      gap: $margin;
-      margin: $margin;
-      font-size: $font-size-xsmall;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: $margin;
 
-      li {
+  form.item-facets {
+    grid-column: 1;
+    font-size: $font-size-xsmall;
+
+    padding-right: $margin;
+    border-right: 1px dotted $color-row-divider;
+
+    fieldset {
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
+      align-items: center;
+      column-gap: $margin-small;
+
+      legend {
+        display: block;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        font-weight: bold;
+      }
+
+      input[type="checkbox"] {
+        grid-column: 1;
+      }
+
+      label {
+        grid-column: 2;
+        white-space: nowrap;
         display: inline-block;
       }
     }
   }
 
   table {
+    grid-column: 2;
     width: 100%;
 
     thead {
@@ -49,6 +71,24 @@ section.items-table {
         &.date {
           white-space: nowrap;
         }
+      }
+    }
+  }
+
+  nav.pagination {
+    grid-column: 2;
+
+    display: flex;
+    justify-content: center;
+
+    ul {
+      display: flex;
+      gap: $margin;
+      margin: $margin;
+      font-size: $font-size-xsmall;
+
+      li {
+        display: inline-block;
       }
     }
   }

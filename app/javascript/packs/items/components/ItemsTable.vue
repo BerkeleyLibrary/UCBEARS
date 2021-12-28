@@ -33,20 +33,26 @@
       </template>
     </aside>
 
-    <form>
-      <input id="query-active-true" v-model="query.active" name="query-active" :value="true" type="radio" @change="reload()">
-      <label for="query-active-true">Active items only</label>
-      <input id="query-active-false" v-model="query.active" name="query-active" :value="false" type="radio" @change="reload()">
-      <label for="query-active-false">Inactive items only</label>
-      <input id="query-active-nil" v-model="query.active" name="query-active" :value="null" type="radio" @change="reload()">
-      <label for="query-active-nil">Both active and inactive items</label>
+    <form class="item-facets">
+      <fieldset>
+        <legend>Status</legend>
 
-      <input id="query-complete-true" v-model="query.complete" name="query-complete" :value="true" type="radio" @change="reload()">
-      <label for="query-complete-true">Complete items only</label>
-      <input id="query-complete-false" v-model="query.complete" name="query-complete" :value="false" type="radio" @change="reload()">
-      <label for="query-complete-false">Incomplete items only</label>
-      <input id="query-complete-nil" v-model="query.complete" name="query-complete" :value="null" type="radio" @change="reload()">
-      <label for="query-complete-nil">Both complete and incomplete items</label>
+        <input id="itemQuery-active" type="checkbox" v-model="itemQuery.active" true-value="true" :false-value="null" @change="reload()">
+        <label for="itemQuery-active">Active only</label>
+
+        <input id="itemQuery-inactive" type="checkbox" v-model="itemQuery.active" true-value="false" :false-value="null" @change="reload()">
+        <label for="itemQuery-active">Inactive only</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Completeness</legend>
+
+        <input id="itemQuery-complete" type="checkbox" v-model="itemQuery.complete" true-value="true" :false-value="null" @change="reload()">
+        <label for="itemQuery-complete">Complete only</label>
+
+        <input id="itemQuery-incomplete" type="checkbox" v-model="itemQuery.complete" true-value="false" :false-value="null" @change="reload()">
+        <label for="itemQuery-complete">Incomplete only</label>
+      </fieldset>
     </form>
 
     <table>
@@ -161,6 +167,7 @@
         </li>
       </ul>
     </nav>
+
   </section>
 </template>
 
@@ -231,7 +238,7 @@ export default {
       items: null,
       links: null,
       errors: null,
-      query: {
+      itemQuery: {
         active: null,
         complete: null
       }
@@ -246,7 +253,8 @@ export default {
       this.loadItems(itemApiUrl)
     },
     loadItems (itemApiUrl) {
-      axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.query })
+      // TODO: Merge itemQuery params instead of letting axios append them
+      axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {
           this.items = itemsByDirectory(response.data)
           this.links = linksFromHeaders(response.headers)
