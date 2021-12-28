@@ -4,14 +4,16 @@ class ItemQuery
   # ------------------------------------------------------------
   # Constants
 
+  INT_RE = /(0x\h+|\d+)/
   FALSE_VALUES = ActiveModel::Type::Boolean::FALSE_VALUES
 
   # ------------------------------------------------------------
   # Initializer
 
-  def initialize(active: nil, complete: nil, limit: nil, offset: nil)
+  def initialize(active: nil, complete: nil, terms: nil, limit: nil, offset: nil)
     @active = boolean_or_nil(active)
     @complete = boolean_or_nil(complete)
+    @terms = strings_or_nil(terms)
     @limit = int_or_nil(limit)
     @offset = int_or_nil(offset)
   end
@@ -62,6 +64,7 @@ class ItemQuery
     ItemQuery.new(
       active: @active,
       complete: @complete,
+      terms: @terms,
       limit: n,
       offset: @offset
     )
@@ -71,6 +74,7 @@ class ItemQuery
     ItemQuery.new(
       active: @active,
       complete: @complete,
+      terms: @terms,
       limit: @limit,
       offset: n
     )
@@ -84,6 +88,7 @@ class ItemQuery
   def db_results
     rel = @active.nil? ? Item.all : Item.where(active: @active)
     rel = rel.where(complete: @complete) unless @complete.nil?
+    rel = rel.joins(:terms).where('terms.name' => @terms) if @terms
     rel = rel.limit(@limit) if @limit
     rel = rel.offset(@offset) if @offset
     rel.order(:title)
@@ -102,6 +107,13 @@ class ItemQuery
     return opt if opt.is_a?(Integer)
 
     v_str = opt.to_s
-    return Integer(v_str) if v_str =~ /(0x\h+|\d+)/
+    return Integer(v_str) if v_str =~ INT_RE
+  end
+
+  def strings_or_nil(opt)
+    return unless opt.is_a?(Array)
+    return if opt.empty?
+
+    opt.map(&:to_s)
   end
 end

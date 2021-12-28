@@ -23,8 +23,8 @@ describe ItemQuery do
     end
 
     # NOTE: we're deliberately not validating here, because we want some invalid items
-    @items = factory_names.each_with_object({}) do |fn, items|
-      items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+    @items = factory_names.each_with_object([]) do |fn, items|
+      items << build(fn).tap { |it| it.save!(validate: false) }
     end
   end
 
@@ -76,5 +76,52 @@ describe ItemQuery do
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
+  end
+
+  describe 'filtering by term' do
+    attr_reader :term_fall_2021
+    attr_reader :term_spring_2022
+
+    before(:each) do
+      @term_fall_2021 = create(:term_fall_2021)
+      @term_spring_2022 = create(:term_spring_2022)
+
+      items.each_with_index do |it, ix|
+        expect(it.terms).to be_empty # just to be sure
+
+        term = ix.even? ? term_fall_2021 : term_spring_2022
+        it.terms << term
+      end
+    end
+
+    it 'can filter by term' do
+      query = ItemQuery.new(terms: [term_fall_2021.name])
+      expected_items = term_fall_2021.items
+      expect(expected_items).not_to be_empty # just to be sure
+
+      expect(query).to contain_exactly(*expected_items)
+    end
+
+    it 'can find by multiple terms' do
+      query = ItemQuery.new(terms: Term.pluck(:name))
+      expect(query).to contain_exactly(*items)
+    end
+
+    it 'can handle nonexistent terms' do
+      query = ItemQuery.new(terms: ['Not a term', term_spring_2022.name])
+      expected_items = term_spring_2022.items
+      expect(expected_items).not_to be_empty # just to be sure
+
+      expect(query).to contain_exactly(*expected_items)
+    end
+
+    it 'can filter by term with other conditions' do
+      query = ItemQuery.new(active: true, complete: false, terms: [term_fall_2021.name])
+      expected_items = term_fall_2021.items.incomplete.where(active: true)
+      expect(expected_items).not_to be_empty # just to be sure
+
+      expect(query).to contain_exactly(*expected_items)
+    end
+
   end
 end

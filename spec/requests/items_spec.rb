@@ -41,8 +41,8 @@ RSpec.describe '/items', type: :request do
 
       before(:each) do
         # NOTE: we're deliberately not validating here, because we want some invalid items
-        @items = factory_names.each_with_object({}) do |fn, items|
-          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+        @items = factory_names.each_with_object([]) do |fn, items|
+          items << build(fn).tap { |it| it.save!(validate: false) }
         end
       end
 
@@ -151,6 +151,42 @@ RSpec.describe '/items', type: :request do
         # noinspection RubyUnusedLocalVariable
         expected_items.each_with_index do |item, i|
           expect(parsed_response[i]).to eq(expected_json(item))
+        end
+      end
+
+      describe 'filtering by term' do
+        attr_reader :term_fall_2021
+        attr_reader :term_spring_2022
+
+        before(:each) do
+          @term_fall_2021 = create(:term_fall_2021)
+          @term_spring_2022 = create(:term_spring_2022)
+
+          items.each_with_index do |it, ix|
+            expect(it.terms).to be_empty # just to be sure
+
+            term = ix.even? ? term_fall_2021 : term_spring_2022
+            it.terms << term
+          end
+        end
+
+        it 'can filter by term' do
+          get items_url, params: { active: true, complete: false, terms: ['Not a term', term_fall_2021.name] }, as: :json
+          expect(response).to be_successful
+          expect(response.content_type).to match(%r{^application/json})
+
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response).to be_an(Array)
+
+          expected_items = term_fall_2021.items.incomplete.where(active: true)
+          expect(expected_items).not_to be_empty # just to be sure
+
+          expect(parsed_response.size).to eq(expected_items.count)
+
+          # noinspection RubyUnusedLocalVariable
+          expected_items.each_with_index do |item, i|
+            expect(parsed_response[i]).to eq(expected_json(item))
+          end
         end
       end
     end

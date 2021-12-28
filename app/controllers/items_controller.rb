@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show update destroy]
-  before_action :require_lending_admin!, only: %i[index create update destroy]
+  # before_action :require_lending_admin!, only: %i[index create update destroy]
 
   # GET /items
   # GET /items.json
@@ -63,10 +63,10 @@ class ItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def item_params
-    params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc)
+    params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc, :terms)
   end
 
   def query_params
-    params.permit(:active, :complete)
+    params.permit(:active, :complete, terms: [])
   end
 end

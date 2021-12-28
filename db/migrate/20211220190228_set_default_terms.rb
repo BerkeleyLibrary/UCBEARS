@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base; end unless defined?(Item)
 
 class SetDefaultTerms < ActiveRecord::Migration[6.1]
   FALL_2021 = '2021 Fall Semester'
-  SPRING_2021 = '2021 Spring Semester'
+  SPRING_2021 = '2021 Spring Semester' # oops; fixed in RenameDefaultTerms
 
   def up
     fall_2021 = Term.create!(name: FALL_2021, start_date: Date.new(2021, 8, 18), end_date: Date.new(2021, 12, 17))

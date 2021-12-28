@@ -15,7 +15,7 @@ class Item < ActiveRecord::Base
   validates :directory, presence: true
   validates_uniqueness_of :directory
   validates :title, presence: true
-  validates :copies, numericality: { greater_than_or_equal_to: 0 }
+  validates :copies, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :correct_directory_format
   validate :active_items_have_copies
   validate :active_items_are_complete
@@ -103,7 +103,7 @@ class Item < ActiveRecord::Base
     if (term_for_new_items = Term.for_new_items)
       terms << term_for_new_items
     else
-      logger.warn("No default term found for current date #{Date.current}")
+      logger.warn('No default term found')
     end
   end
 
@@ -284,7 +284,7 @@ class Item < ActiveRecord::Base
   end
 
   def active_items_have_copies
-    return if inactive? || copies > 0
+    return if inactive? || copies && copies > 0
 
     errors.add(:base, MSG_ZERO_COPIES)
   end
