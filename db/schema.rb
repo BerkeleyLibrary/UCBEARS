@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_205550) do
+ActiveRecord::Schema.define(version: 2021_12_29_223302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_205550) do
   create_table "items_terms", id: false, force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "term_id", null: false
-    t.index ["item_id", "term_id"], name: "index_items_terms_on_item_id_and_term_id"
-    t.index ["term_id", "item_id"], name: "index_items_terms_on_term_id_and_item_id"
+    t.index ["item_id", "term_id"], name: "index_items_terms_on_item_id_and_term_id", unique: true
+    t.index ["term_id", "item_id"], name: "index_items_terms_on_term_id_and_item_id", unique: true
   end
 
   create_table "loans", force: :cascade do |t|
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_205550) do
     t.index ["name"], name: "index_terms_on_name", unique: true
   end
 
+  add_foreign_key "items_terms", "items"
+  add_foreign_key "items_terms", "terms"
   add_foreign_key "loans", "items"
   add_foreign_key "settings", "terms", column: "default_term_id"
 end
