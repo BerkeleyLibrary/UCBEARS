@@ -10,10 +10,11 @@ class ItemQuery
   # ------------------------------------------------------------
   # Initializer
 
-  def initialize(active: nil, complete: nil, terms: nil, limit: nil, offset: nil)
+  def initialize(active: nil, complete: nil, terms: nil, keywords: nil, limit: nil, offset: nil)
     @active = boolean_or_nil(active)
     @complete = boolean_or_nil(complete)
     @terms = strings_or_nil(terms)
+    @keywords = keywords_or_nil(keywords)
     @limit = int_or_nil(limit)
     @offset = int_or_nil(offset)
   end
@@ -65,6 +66,7 @@ class ItemQuery
       active: @active,
       complete: @complete,
       terms: @terms,
+      keywords: @keywords,
       limit: n,
       offset: @offset
     )
@@ -75,6 +77,7 @@ class ItemQuery
       active: @active,
       complete: @complete,
       terms: @terms,
+      keywords: @keywords,
       limit: @limit,
       offset: n
     )
@@ -86,6 +89,7 @@ class ItemQuery
   private
 
   def db_results
+    # TODO: keywords
     rel = @active.nil? ? Item.all : Item.where(active: @active)
     rel = rel.where(complete: @complete) unless @complete.nil?
     rel = rel.joins(:terms).where('terms.name' => @terms) if @terms
@@ -108,6 +112,14 @@ class ItemQuery
 
     v_str = opt.to_s
     return Integer(v_str) if v_str =~ INT_RE
+  end
+
+  # TODO: something more clever
+  #       - see https://www.postgresql.org/docs/12/pgtrgm.html
+  #       - see https://pganalyze.com/blog/full-text-search-ruby-rails-postgres
+  def keywords_or_nil(opt)
+    keywords = opt.to_s.trim.split
+    return keywords unless keywords.empty?
   end
 
   def strings_or_nil(opt)
