@@ -12,7 +12,7 @@
 class SessionsController < ApplicationController
   # Redirect the user to Calnet for authentication
   def new
-    redirect_args = { origin: params[:url] || index_path }.to_query
+    redirect_args = { origin: params[:url] || request.base_url }.to_query
     redirect_to "/auth/calnet?#{redirect_args}"
   end
 

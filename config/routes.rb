@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'lending#index', as: :index
+  root 'items#index', as: :items
 
   defaults format: 'json' do
     get 'health', to: 'health#index'
@@ -33,6 +33,8 @@ Rails.application.routes.draw do
 
     # TODO: don't include this in production
     get '/profile_index', to: 'lending#profile_index', as: :lending_profile_index
+
+    get '/index', to: 'lending#index', as: :index
 
     get '/:directory/edit', to: 'lending#edit', as: :lending_edit, constraints: valid_dirname
     get '/:directory', to: 'lending#show', as: :lending_show, constraints: valid_dirname

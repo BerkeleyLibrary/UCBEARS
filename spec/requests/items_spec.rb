@@ -199,45 +199,6 @@ RSpec.describe '/items', type: :request do
       end
     end
 
-    describe 'POST /create' do
-      context 'with valid parameters' do
-        it 'creates a new Item' do
-          expect do
-            post items_url, params: { item: valid_attributes }, as: :json
-          end.to change(Item, :count).by(1)
-
-          item = Item.find_by!(directory: valid_attributes[:directory])
-          valid_attributes.each { |attr, value| expect(item.send(attr)).to eq(value) }
-        end
-
-        it 'renders a JSON response with the new item' do
-          post items_url, params: { item: valid_attributes }, as: :json
-
-          item = Item.find_by!(directory: valid_attributes[:directory])
-
-          actual_json = JSON.parse(response.body)
-          expect(actual_json).to eq(expected_json(item))
-
-          expect(response).to have_http_status(:created)
-          expect(response.content_type).to match(%r{^application/json})
-        end
-      end
-
-      context 'with invalid parameters' do
-        it 'does not create a new Item' do
-          expect do
-            post items_url, params: { item: invalid_attributes }, as: :json
-          end.to change(Item, :count).by(0)
-        end
-
-        it 'renders a JSON response with errors for the new item' do
-          post items_url, params: { item: invalid_attributes }, as: :json
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.content_type).to match(%r{^application/json})
-        end
-      end
-    end
-
     describe 'PATCH /update' do
       context 'with valid parameters' do
         let(:new_attributes) do

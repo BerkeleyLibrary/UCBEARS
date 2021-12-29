@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show update destroy]
-  before_action :require_lending_admin!, only: %i[index create update destroy]
+  before_action :require_lending_admin!, only: %i[index update destroy]
 
   # GET /items
   # GET /items.json
@@ -15,18 +15,6 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show; end
-
-  # POST /items
-  # POST /items.json
-  def create
-    @item = Item.new(item_params)
-
-    if @item.save
-      render :show, status: :created, location: @item
-    else
-      render json: @item.errors, status: :unprocessable_entity
-    end
-  end
 
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json

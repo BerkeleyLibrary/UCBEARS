@@ -15,12 +15,12 @@
       </svg>
     </label>
     <ul>
-      <li>
-        <%= logout_link %>
-      </li>
       <% if current_user.lending_admin? %>
         <li>
-          <%= link_to('Index', index_path) %>
+          <%= link_to('Items', items_path) %>
+        </li>
+        <li>
+          <%= link_to('Index (old)', index_path) %>
         </li>
         <li>
           <%= link_to('Statistics', stats_path) %>
@@ -28,6 +28,9 @@
       <% end %>
       <li>
         <a href="https://www.lib.berkeley.edu/">Library Home</a>
+      </li>
+      <li>
+        <%= logout_link %>
       </li>
     </ul>
   </nav>
