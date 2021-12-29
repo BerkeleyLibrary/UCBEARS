@@ -10,6 +10,7 @@ class ItemQuery
   # ------------------------------------------------------------
   # Initializer
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(active: nil, complete: nil, terms: nil, keywords: nil, limit: nil, offset: nil)
     @active = boolean_or_nil(active)
     @complete = boolean_or_nil(complete)
@@ -18,6 +19,7 @@ class ItemQuery
     @limit = int_or_nil(limit)
     @offset = int_or_nil(offset)
   end
+  # rubocop:enable Metrics/ParameterLists
 
   # ------------------------------------------------------------
   # Object
@@ -118,7 +120,7 @@ class ItemQuery
   #       - see https://www.postgresql.org/docs/12/pgtrgm.html
   #       - see https://pganalyze.com/blog/full-text-search-ruby-rails-postgres
   def keywords_or_nil(opt)
-    keywords = opt.to_s.trim.split
+    keywords = opt.to_s.strip.split
     return keywords unless keywords.empty?
   end
 
