@@ -12,11 +12,22 @@ class LendingItemShowPresenter < LendingItemPresenterBase
   end
 
   def build_fields
-    { 'Title' => item.title, 'Author' => item.author }.tap do |ff|
+    {
+      'Title' => item.title,
+      'Author' => item.author,
+      'Terms' => terms_value
+    }.tap do |ff|
       ff.merge!(pub_metadata)
       ff.merge!(internal_metadata_fields)
       add_circ_metadata(ff)
     end
+  end
+
+  def terms_value
+    term_names = item.terms.pluck(:name)
+    return '(none)' unless term_names.any?
+
+    term_names.join(', ')
   end
 
 end

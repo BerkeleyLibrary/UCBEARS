@@ -39,6 +39,11 @@
         </tr>
 
         <tr>
+          <th><%= form.label(:term_ids, 'Terms') %></th>
+          <td><%= form.select(:term_ids, options_from_collection_for_select(Term.all, :id, :name, item.terms.pluck(:id)), {}, { multiple: true }) %></td>
+        </tr>
+
+        <tr>
           <th>Active</th>
           <td>
             <fieldset id='lending_item_active'>

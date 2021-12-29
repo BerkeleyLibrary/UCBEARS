@@ -203,7 +203,7 @@ class LendingController < ApplicationController
 
   # create/update parameters
   def lending_item_params # TODO: better/more consistent name
-    params.require(:item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active)
+    params.require(:item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active, term_ids: [])
   end
 
   # loan lookup parameters

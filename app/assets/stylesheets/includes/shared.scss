@@ -109,9 +109,19 @@ input {
     font-size: $font-size-small;
     line-height: $line-height;
     border: 1px solid $color-action-secondary;
-    border-radius: $margin-small;
+    border-radius: $margin-xxsmall;
     padding: $margin-xxsmall $margin;
   }
+}
+
+select {
+  font-family: $font-family-sans;
+  font-weight: $font-weight-normal;
+  font-size: $font-size-small;
+  line-height: $line-height;
+  border: 1px solid $color-action-secondary;
+  border-radius: $margin-xxsmall;
+  padding: $margin-xxsmall $margin;
 }
 
 // ////////////////////////////////////////////////////////////
