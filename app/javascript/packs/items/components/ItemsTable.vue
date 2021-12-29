@@ -33,7 +33,7 @@
       </template>
     </aside>
 
-    <form class="item-search">
+    <form class="item-search" @submit.prevent>
       <label for="itemQuery-keywords">Keyword search:</label>
       <div class="item-search-field">
         <input
@@ -41,9 +41,10 @@
           v-model="itemQuery.keywords"
           type="search"
           placeholder="Search by title, author, publisher, or physical description"
+          @keydown.enter.prevent
           @keyup.enter="reload()"
         >
-        <button type="button" @click="reload()">Go</button>
+        <button type="button" class="primary" @click="$event.target.blur(); reload()">Go</button>
       </div>
     </form>
 
