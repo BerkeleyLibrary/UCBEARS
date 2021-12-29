@@ -123,5 +123,12 @@ describe ItemQuery do
       expect(query).to contain_exactly(*expected_items)
     end
 
+    it 'can filter by term with keywords' do
+      query = ItemQuery.new(active: true, complete: false, keywords: 'depression', terms: [term_fall_2021.name])
+      expected_items = term_fall_2021.items.incomplete.where(active: true).where('title LIKE ?', '%depression%')
+      expect(expected_items).not_to be_empty # just to be sure
+
+      expect(query).to contain_exactly(*expected_items)
+    end
   end
 end

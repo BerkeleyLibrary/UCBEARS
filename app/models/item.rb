@@ -2,6 +2,7 @@ require 'berkeley_library/util/uris'
 
 # rubocop:disable Metrics/ClassLength
 class Item < ActiveRecord::Base
+  include PgSearch::Model
 
   # ------------------------------------------------------------
   # Relations
@@ -55,6 +56,14 @@ class Item < ActiveRecord::Base
   scope :incomplete, -> { where(complete: false) }
   scope :active, -> { complete.where(active: true) }
   scope :inactive, -> { complete.where(active: false) }
+
+  pg_search_scope(
+    :search_by_metadata,
+    against: { title: 'A', author: 'B', publisher: 'C', physical_desc: 'D' },
+    using: {
+      tsearch: { prefix: true }
+    }
+  )
 
   # ------------------------------------------------------------
   # Class methods

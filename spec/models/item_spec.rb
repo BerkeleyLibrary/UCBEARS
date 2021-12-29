@@ -443,6 +443,80 @@ describe Item, type: :model do
           end
         end
       end
+
+      describe :search_by_metadata do
+        it 'matches on title' do
+          keyword = 'depression'
+
+          expected = Item.where('title LIKE ?', "%#{keyword}%")
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+
+        it 'matches on author' do
+          keyword = 'Clavin'
+
+          expected = Item.where('author LIKE ?', "%#{keyword}%")
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+
+        it 'matches on publisher' do
+          keyword = 'York'
+
+          expected = Item.where('publisher LIKE ?', "%#{keyword}%")
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+
+        it 'matches on physical description' do
+          keyword = 'ill'
+
+          expected = Item.where('physical_desc LIKE ?', "%#{keyword}%")
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+
+        it 'ignores keyword order' do
+          keyword = 'Patricia Clavin'
+
+          expected = Item.where('author LIKE ?', '%Clavin%')
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+
+        it 'can be combined with other criteria' do
+          keyword = 'Patricia Clavin'
+
+          expected = Item.complete.where('author LIKE ?', '%Clavin%')
+          expect(expected).to exist # just to be sure
+
+          actual = Item.complete.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+
+          actual.each { |it| expect(it).to be_complete } # just to be sure
+        end
+
+        it 'ignores case' do
+          keyword = 'patricia clavin'
+
+          expected = Item.where('author LIKE ?', '%Clavin%')
+          expect(expected).to exist # just to be sure
+
+          actual = Item.search_by_metadata(keyword)
+          expect(actual).to contain_exactly(*expected)
+        end
+      end
     end
   end
 

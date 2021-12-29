@@ -22,6 +22,7 @@ gem 'omniauth-cas',
 gem 'ougai', '>=1.8.2'
 gem 'pagy', '~> 5.6'
 gem 'pg', '~> 1.2'
+gem 'pg_search', '~> 2.3'
 gem 'puma', '~> 4.3', '>= 4.3.8'
 gem 'rails', '~> 6.1.4'
 gem 'ruby-prof', '~> 0.17.0' # TODO: move this back to dev/test

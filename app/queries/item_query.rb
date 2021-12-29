@@ -97,7 +97,9 @@ class ItemQuery
     rel = rel.joins(:terms).where('terms.name' => @terms) if @terms
     rel = rel.limit(@limit) if @limit
     rel = rel.offset(@offset) if @offset
-    rel.order(:title)
+    return rel.order(:title) unless @keywords
+
+    rel.search_by_metadata(@keywords)
   end
 
   # ------------------------------
@@ -116,11 +118,8 @@ class ItemQuery
     return Integer(v_str) if v_str =~ INT_RE
   end
 
-  # TODO: something more clever
-  #       - see https://www.postgresql.org/docs/12/pgtrgm.html
-  #       - see https://pganalyze.com/blog/full-text-search-ruby-rails-postgres
   def keywords_or_nil(opt)
-    keywords = opt.to_s.strip.split
+    keywords = opt.to_s.strip
     return keywords unless keywords.empty?
   end
 
