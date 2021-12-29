@@ -105,7 +105,7 @@ input {
   font-family: $font-family-sans;
   font-weight: $font-weight-normal;
 
-  &[type=text] {
+  &[type=text], &[type=search] {
     font-size: $font-size-small;
     line-height: $line-height;
     border: 1px solid $color-action-secondary;

@@ -1,14 +1,48 @@
 @import 'includes/globals';
 
 section.items-table {
-
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   column-gap: $margin;
+  row-gap: $margin-large;
+
+  form.item-search {
+    grid-column: 1 / 3;
+    display: contents;
+
+    font-size: $font-size-xsmall;
+    line-height: $line-height;
+
+    label {
+      grid-column: 1;
+      font-weight: bold;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    div.item-search-field {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: 40% min-content;
+      justify-content: start;
+      gap: $margin;
+
+      input {
+        font-size: $font-size-xsmall;
+        line-height: $line-height;
+      }
+
+      button {
+        font-size: $font-size-xxsmall;
+        line-height: $line-height;
+      }
+    }
+  }
 
   form.item-facets {
     grid-column: 1;
     font-size: $font-size-xsmall;
+    line-height: $line-height;
 
     padding-right: $margin;
     border-right: 1px dotted $color-row-divider;
@@ -18,6 +52,7 @@ section.items-table {
       grid-template-columns: min-content minmax(0, 1fr);
       align-items: center;
       column-gap: $margin-small;
+      margin-bottom: $margin;
 
       legend {
         display: block;
@@ -76,7 +111,7 @@ section.items-table {
   }
 
   nav.pagination {
-    grid-column: 2;
+    grid-column: 1 / 3;
 
     display: flex;
     justify-content: center;

@@ -33,6 +33,20 @@
       </template>
     </aside>
 
+    <form class="item-search">
+      <label for="itemQuery-keywords">Keyword search:</label>
+      <div class="item-search-field">
+        <input
+          id="itemQuery-keywords"
+          v-model="itemQuery.keywords"
+          type="search"
+          placeholder="Search by title, author, publisher, or physical description"
+          @keyup.enter="reload()"
+        >
+        <button type="button" @click="reload()">Go</button>
+      </div>
+    </form>
+
     <form class="item-facets">
       <fieldset>
         <legend>Term</legend>
@@ -254,6 +268,7 @@ export default {
       itemQuery: {
         active: null,
         complete: null,
+        keywords: null,
         terms: []
       }
     }
@@ -283,8 +298,10 @@ export default {
         searchParams.delete('inactive')
         searchParams.delete('complete')
         searchParams.delete('incomplete')
+        searchParams.delete('keywords')
         searchParams.delete('terms')
       }
+      console.log(this.itemQuery)
 
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {

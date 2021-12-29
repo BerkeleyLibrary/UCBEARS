@@ -67,6 +67,6 @@ class ItemsController < ApplicationController
   end
 
   def query_params
-    params.permit(:active, :complete, terms: [])
+    params.permit(:active, :complete, :keywords, terms: [])
   end
 end
