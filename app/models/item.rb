@@ -8,7 +8,7 @@ class Item < ActiveRecord::Base
   # Relations
 
   has_many :loans, dependent: :destroy
-  has_and_belongs_to_many :terms
+  has_and_belongs_to_many :terms, after_add: :ensure_updated_at, after_remove: :ensure_updated_at
 
   # ------------------------------------------------------------
   # Validations
@@ -125,6 +125,10 @@ class Item < ActiveRecord::Base
 
     self.complete = directory_complete
     save(validate: false)
+  end
+
+  def ensure_updated_at(*_args)
+    touch if persisted?
   end
 
   # ------------------------------------------------------------

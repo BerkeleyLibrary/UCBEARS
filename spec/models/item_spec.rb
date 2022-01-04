@@ -27,7 +27,7 @@ describe Item, type: :model do
 
     before(:each) do
       @prev_default_term = Settings.default_term
-      @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+      @current_term = create(:term, name: 'Test Term', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
       Settings.default_term = current_term
     end
 
@@ -119,6 +119,72 @@ describe Item, type: :model do
           .gsub(/(?<=")#{original_title}(?=")/, new_title)
           .gsub(/(?<=")#{original_author}(?=")/, new_author)
         expect(new_manifest).to eq(expected_manifest)
+      end
+
+      it 'updates updated_at when adding a term' do
+        item = create(:active_item)
+
+        previously_updated_at = item.updated_at
+        sleep(0.1) while Time.current <= previously_updated_at # just to be sure
+
+        addl_term = create(:term, name: 'Additional Term', start_date: Date.current + 1.weeks, end_date: Date.current + 2.weeks)
+        item.terms << addl_term
+
+        item.reload
+        expect(item.updated_at).to be > previously_updated_at
+      end
+
+      it 'updates updated_at when removing a term' do
+        item = create(:active_item)
+
+        previously_updated_at = item.updated_at
+        sleep(0.1) while Time.current <= previously_updated_at # just to be sure
+
+        existing_term = item.terms.take
+        expect(existing_term).not_to be_nil # just to be sure
+        item.terms.delete(existing_term)
+
+        item.reload
+        expect(item.updated_at).to be > previously_updated_at
+      end
+
+      it 'updates updated_at when batch setting the term list' do
+        item = create(:active_item)
+
+        previously_updated_at = item.updated_at
+        sleep(0.1) while Time.current <= previously_updated_at # just to be sure
+
+        new_term_1 = create(:term, name: 'New Term 1', start_date: Date.current + 1.weeks, end_date: Date.current + 2.weeks)
+        new_term_2 = create(:term, name: 'New Term 2', start_date: Date.current + 3.weeks, end_date: Date.current + 5.weeks)
+        item.terms = [new_term_1, new_term_2]
+
+        item.reload
+        expect(item.updated_at).to be > previously_updated_at
+      end
+
+      it 'updates updated_at when batch setting the term list by update' do
+        item = create(:active_item)
+
+        previously_updated_at = item.updated_at
+        sleep(0.1) while Time.current <= previously_updated_at # just to be sure
+
+        new_term_1 = create(:term, name: 'New Term 1', start_date: Date.current + 1.weeks, end_date: Date.current + 2.weeks)
+        new_term_2 = create(:term, name: 'New Term 2', start_date: Date.current + 3.weeks, end_date: Date.current + 5.weeks)
+        item.update(term_ids: [new_term_1.id, new_term_2.id])
+
+        item.reload
+        expect(item.updated_at).to be > previously_updated_at
+      end
+
+      it 'does not change updated_at when the term list does not change' do
+        item = create(:active_item)
+
+        previously_updated_at = item.updated_at
+        sleep(0.1) while Time.current <= previously_updated_at # just to be sure
+
+        item.update(term_ids: item.terms.pluck(:id))
+        item.reload
+        expect(item.updated_at).to eq previously_updated_at
       end
     end
 
