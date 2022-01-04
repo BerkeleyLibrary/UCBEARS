@@ -106,6 +106,19 @@ section.items-table {
         &.date {
           white-space: nowrap;
         }
+
+        ul {
+          li {
+            white-space: nowrap;
+            input {
+              vertical-align: baseline;
+            }
+            label {
+              display: inline-block;
+              vertical-align: top;
+            }
+          }
+        }
       }
     }
   }

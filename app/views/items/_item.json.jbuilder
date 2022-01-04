@@ -15,4 +15,4 @@ json.complete(item.complete?)
 json.reason_inactive(item.reason_incomplete || (Item::MSG_ZERO_COPIES if item.copies < 1))
 json.url item_url(item, format: :json)
 json.edit_url lending_edit_url(directory: item.directory)
-json.terms item.terms.pluck(:name)
+json.terms item.terms, partial: 'terms/term', as: :term

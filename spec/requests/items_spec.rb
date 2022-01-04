@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe '/items', type: :request do
 
   def expected_json(item)
-    bind = binding.tap { |b| b.local_variable_set(:item, item) }
-    template_result('app/views/items/_item.json.jbuilder', bind)
+    renderer = ApplicationController.renderer.new(http_host: request.host)
+    expected_json = renderer.render(template: 'items/show', assigns: { item: item })
+    JSON.parse(expected_json)
   end
 
   let(:valid_attributes) { attributes_for(:inactive_item) }
@@ -39,10 +40,23 @@ RSpec.describe '/items', type: :request do
 
       attr_reader :items
 
+      attr_reader :term_fall_2021
+      attr_reader :term_spring_2022
+
       before(:each) do
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object([]) do |fn, items|
           items << build(fn).tap { |it| it.save!(validate: false) }
+        end
+
+        @term_fall_2021 = create(:term_fall_2021)
+        @term_spring_2022 = create(:term_spring_2022)
+
+        items.each_with_index do |it, ix|
+          expect(it.terms).to be_empty # just to be sure
+
+          term = ix.even? ? term_fall_2021 : term_spring_2022
+          it.terms << term
         end
       end
 
@@ -59,8 +73,7 @@ RSpec.describe '/items', type: :request do
 
         # noinspection RubyUnusedLocalVariable
         expected_items.each_with_index do |item, i|
-          expected_json = template_result('app/views/items/_item.json.jbuilder', binding)
-          expect(parsed_response[i]).to eq(expected_json)
+          expect(parsed_response[i]).to eq(expected_json(item))
         end
       end
 
@@ -154,39 +167,22 @@ RSpec.describe '/items', type: :request do
         end
       end
 
-      describe 'filtering by term' do
-        attr_reader :term_fall_2021
-        attr_reader :term_spring_2022
+      it 'can filter by term' do
+        get items_url, params: { active: true, complete: false, terms: ['Not a term', term_fall_2021.name] }, as: :json
+        expect(response).to be_successful
+        expect(response.content_type).to match(%r{^application/json})
 
-        before(:each) do
-          @term_fall_2021 = create(:term_fall_2021)
-          @term_spring_2022 = create(:term_spring_2022)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_an(Array)
 
-          items.each_with_index do |it, ix|
-            expect(it.terms).to be_empty # just to be sure
+        expected_items = term_fall_2021.items.incomplete.where(active: true)
+        expect(expected_items).not_to be_empty # just to be sure
 
-            term = ix.even? ? term_fall_2021 : term_spring_2022
-            it.terms << term
-          end
-        end
+        expect(parsed_response.size).to eq(expected_items.count)
 
-        it 'can filter by term' do
-          get items_url, params: { active: true, complete: false, terms: ['Not a term', term_fall_2021.name] }, as: :json
-          expect(response).to be_successful
-          expect(response.content_type).to match(%r{^application/json})
-
-          parsed_response = JSON.parse(response.body)
-          expect(parsed_response).to be_an(Array)
-
-          expected_items = term_fall_2021.items.incomplete.where(active: true)
-          expect(expected_items).not_to be_empty # just to be sure
-
-          expect(parsed_response.size).to eq(expected_items.count)
-
-          # noinspection RubyUnusedLocalVariable
-          expected_items.each_with_index do |item, i|
-            expect(parsed_response[i]).to eq(expected_json(item))
-          end
+        # noinspection RubyUnusedLocalVariable
+        expected_items.each_with_index do |item, i|
+          expect(parsed_response[i]).to eq(expected_json(item))
         end
       end
     end

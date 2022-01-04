@@ -53,8 +53,7 @@
         <legend>Term</legend>
 
         <template v-for="term in terms">
-          <!-- TODO: add term selection UI -->
-          <input id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemQuery.terms" type="checkbox" :value="term.name" @change="reload()">
+          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemQuery.terms" type="checkbox" :value="term.name" @change="reload()">
           <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
@@ -120,7 +119,12 @@
             >
           </td>
           <td>
-            {{ item.terms && item.terms.join(', ') }}
+            <ul>
+              <li v-for="term in terms" :key="`${item.id}-term-${term.id}`">
+                <input :id="`${item.id}-term-${term.id}`" v-model.lazy="item.terms" type="checkbox" :value="term" @change="updateItem(item)">
+                <label :for="`${item.id}-term-${term.id}`">{{ term.name }}</label>
+              </li>
+            </ul>
           </td>
           <td class="control">
             <input
@@ -218,7 +222,8 @@ function patchItem (item) {
       copies: item.copies,
       active: item.active,
       publisher: item.publisher,
-      physical_desc: item.physical_desc
+      physical_desc: item.physical_desc,
+      term_ids: item.terms.map(t => t.id)
     }
   })
     .then(response => {
@@ -235,6 +240,8 @@ function itemsByDirectory (itemArray) {
   const items = {}
   for (const item of itemArray) {
     items[item.directory] = item
+    console.log(`${item.title} terms:`)
+    console.log(item.terms)
   }
   return items
 }
@@ -302,7 +309,6 @@ export default {
         searchParams.delete('keywords')
         searchParams.delete('terms')
       }
-      console.log(this.itemQuery)
 
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {

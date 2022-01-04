@@ -19,7 +19,8 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
-    if @item.update(item_params)
+    pp = item_params
+    if @item.update(pp)
       render :show, status: :ok, location: @item
     else
       logger.warn(@item.errors.full_messages)
@@ -51,7 +52,7 @@ class ItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def item_params
-    params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc, :terms)
+    params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc, term_ids: [])
   end
 
   def query_params
