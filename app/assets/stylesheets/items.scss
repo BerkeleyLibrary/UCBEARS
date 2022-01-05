@@ -104,7 +104,7 @@ section.items-table {
         }
 
         &.date {
-          white-space: nowrap;
+          text-align: justify;
         }
 
         ul {
@@ -119,6 +119,17 @@ section.items-table {
               display: inline-block;
               vertical-align: top;
             }
+          }
+        }
+
+        p {
+          font-size: inherit;
+          margin-top: $margin-xxsmall;
+          margin-bottom: 0;
+
+          &.title {
+            font-weight: $font-weight-bold;
+            margin-top: 0;
           }
         }
       }
@@ -150,7 +161,7 @@ section.items-table {
     font-family: sans-serif;
   }
 
-  a.edit {
+  a.icon-link {
     display: contents;
   }
 
@@ -179,8 +190,8 @@ section.items-table {
 
   img.action {
     display: inline-block;
-    height: $font-size-small;
-    width: $font-size-small;
+    height: $font-size-xxsmall;
+    width: $font-size-xxsmall;
     border: 3px solid transparent;
     border-radius: 4px;
 
@@ -189,4 +200,9 @@ section.items-table {
       background-color: $color-anchor-highlight;
     }
   }
+
+  .author-name {
+    font-weight: $font-weight-medium;
+  }
+
 }

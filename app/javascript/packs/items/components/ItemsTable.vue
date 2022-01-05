@@ -83,9 +83,8 @@
       <thead>
         <tr>
           <th>Edit</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Publisher</th>
+          <th>Item</th>
+          <th>Link</th>
           <th>Updated</th>
           <th>Complete</th>
           <th>Copies</th>
@@ -101,12 +100,22 @@
           class="item"
         >
           <td class="control">
-            <!-- TODO: style this properly -->
-            <a :href="item.edit_url" class="edit"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
+            <a :href="item.edit_url" class="icon-link" :title="`Edit '${item.title}'`"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
           </td>
-          <td>{{ item.title }}</td>
-          <td>{{ item.author }}</td>
-          <td>{{ item.publisher }}</td>
+          <td>
+            <p class="title">
+              {{ item.title }}
+            </p>
+            <p class="metadata">
+              <span class="author-name">{{ item.author }}</span>
+            </p>
+            <p class="metadata">
+              {{ item.publisher }}
+            </p>
+          </td>
+          <td class="control">
+            <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to '${item.title}'`"><img src="/assets/icons/link.svg" :alt="`Permalink to '${item.title}'`" class="action"></a>
+          </td>
           <td class="date">{{ item.updated_at }}</td>
           <td v-if="item.complete" class="control">Yes</td>
           <td v-else :title="item.reason_inactive" class="control">No</td>

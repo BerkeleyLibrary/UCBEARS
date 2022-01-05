@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
       log_signin(user)
     end
 
-    redirect_to request.env['omniauth.origin'] || index_path # TODO: better default redirect path
+    redirect_to request.env['omniauth.origin'] || root_path # TODO: better default redirect path
   end
 
   # Logout the user by redirecting to CAS logout screen

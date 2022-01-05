@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'items#index', as: :items
+  root 'items#index'
 
   defaults format: 'json' do
     get 'health', to: 'health#index'

@@ -12,6 +12,7 @@ en:
       long: '%B %-d, %Y, %-l:%M %p (%Z)'    # August 4, 2010, 9:33 AM (PDT)
       short: '%F %-l:%M %p %Z'              # 2010-08-04 9:33 AM PDT
       xshort: '%F %-l:%M %p'                # 2010-08-04 9:33 AM
+      xxshort: '%F %-l:%M %p'                # 2010-08-04 9:33AM
 
   omniauth_callbacks:
     calnet:

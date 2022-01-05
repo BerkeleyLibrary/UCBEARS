@@ -19,8 +19,8 @@ module ApplicationHelper
   # ------------------------------------------------------------
   # Link helpers
 
-  def index_link
-    link_to(app_title_short, index_path)
+  def root_link
+    link_to(app_title_short, root_path)
   end
 
   def logout_link
