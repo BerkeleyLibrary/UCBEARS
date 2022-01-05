@@ -86,12 +86,12 @@
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
-          <th>Physical Description</th>
           <th>Updated</th>
           <th>Complete</th>
           <th>Copies</th>
           <th>Term</th>
           <th>Active</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -102,12 +102,11 @@
         >
           <td class="control">
             <!-- TODO: style this properly -->
-            <a :href="item.edit_url"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
+            <a :href="item.edit_url" class="edit"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
           </td>
           <td>{{ item.title }}</td>
           <td>{{ item.author }}</td>
           <td>{{ item.publisher }}</td>
-          <td>{{ item.physical_desc }}</td>
           <td class="date">{{ item.updated_at }}</td>
           <td v-if="item.complete" class="control">Yes</td>
           <td v-else :title="item.reason_inactive" class="control">No</td>
@@ -134,6 +133,9 @@
               :title="item.reason_inactive"
               @change="updateItem(item)"
             >
+          </td>
+          <td class="control">
+            <button class="delete" :disabled="item.active" :title="item.active ? 'Active items cannot be deleted.' : ''"><img class="action" src="/assets/icons/trash-alt.svg"></button>
           </td>
         </tr>
       </tbody>

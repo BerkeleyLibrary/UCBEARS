@@ -23,15 +23,16 @@ class ItemsController < ApplicationController
     if @item.update(pp)
       render :show, status: :ok, location: @item
     else
-      logger.warn(@item.errors.full_messages)
-      render json: @item.errors.full_messages, status: :unprocessable_entity
+      render_item_errors
     end
   end
 
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    @item.destroy
+    return if @item.destroy
+
+    render_item_errors
   end
 
   private
@@ -57,5 +58,10 @@ class ItemsController < ApplicationController
 
   def query_params
     params.permit(:active, :complete, :keywords, terms: [])
+  end
+
+  def render_item_errors
+    logger.warn(@item.errors.full_messages)
+    render json: @item.errors.full_messages, status: :unprocessable_entity
   end
 end

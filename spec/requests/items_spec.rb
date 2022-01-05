@@ -234,11 +234,23 @@ RSpec.describe '/items', type: :request do
     end
 
     describe 'DELETE /destroy' do
-      it 'destroys the requested item' do
-        item = Item.create! valid_attributes
+      it 'deletes an incomplete item' do
+        item = build(:incomplete_item)
+        item.save!(validate: false)
+
         expect do
           delete item_url(item), as: :json
         end.to change(Item, :count).by(-1)
+      end
+
+      it 'will not delete a complete item' do
+        item = create(:complete_item)
+
+        expect do
+          delete item_url(item), as: :json
+        end.not_to change(Item, :count)
+
+        expect(response).not_to be_successful
       end
     end
   end

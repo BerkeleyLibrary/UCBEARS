@@ -88,7 +88,7 @@ section.items-table {
     }
 
     tbody {
-      font-size: $font-size-xxsmall;
+      font-size: $font-size-xsmall;
       line-height: $line-height;
 
       td {
@@ -110,9 +110,11 @@ section.items-table {
         ul {
           li {
             white-space: nowrap;
+
             input {
               vertical-align: baseline;
             }
+
             label {
               display: inline-block;
               vertical-align: top;
@@ -148,8 +150,43 @@ section.items-table {
     font-family: sans-serif;
   }
 
-  img.action {
+  a.edit {
+    display: contents;
+  }
+
+  button.delete {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    background: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
     height: $font-size-small;
     width: $font-size-small;
+
+    &[disabled] {
+      img.action {
+        filter: invert(75%);
+
+        &:hover, &:focus {
+          border: 3px solid transparent;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  img.action {
+    display: inline-block;
+    height: $font-size-small;
+    width: $font-size-small;
+    border: 3px solid transparent;
+    border-radius: 4px;
+
+    &:hover, &:focus {
+      border: 3px solid $color-anchor-highlight;
+      background-color: $color-anchor-highlight;
+    }
   }
 }

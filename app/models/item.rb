@@ -27,6 +27,7 @@ class Item < ActiveRecord::Base
   after_create :set_default_term!
   before_save :set_complete_flag!
   after_find :update_complete_flag!
+  before_destroy :verify_incomplete
 
   # ------------------------------------------------------------
   # Constants
@@ -129,6 +130,15 @@ class Item < ActiveRecord::Base
 
   def ensure_updated_at(*_args)
     touch if persisted?
+  end
+
+  def verify_incomplete
+    update_complete_flag!
+    return if incomplete?
+
+    logger.warn('Failed to delete non-incomplete item', directory)
+    errors[:base] << 'Only incomplete items can be deleted.'
+    throw :abort
   end
 
   # ------------------------------------------------------------
