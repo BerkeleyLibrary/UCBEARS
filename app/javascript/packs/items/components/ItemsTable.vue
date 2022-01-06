@@ -107,11 +107,12 @@
             <p class="title">
               {{ item.title }}
             </p>
-            <p class="metadata">
-              <span class="author-name">{{ item.author }}</span>
+            <p class="author-name">
+              {{ item.author }}
             </p>
             <p class="metadata">
               {{ item.publisher }}
+              {{ item.physical_desc }}
             </p>
           </td>
           <td class="control">

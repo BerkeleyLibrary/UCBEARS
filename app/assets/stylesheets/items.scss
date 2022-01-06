@@ -10,7 +10,7 @@ section.items-table {
     grid-column: 1 / 3;
     display: contents;
 
-    font-size: $font-size-xsmall;
+    font-size: $font-size-small;
     line-height: $line-height;
 
     label {
@@ -33,7 +33,7 @@ section.items-table {
       }
 
       button {
-        font-size: $font-size-xxsmall;
+        font-size: $font-size-xsmall;
         line-height: $line-height;
       }
     }
@@ -41,7 +41,7 @@ section.items-table {
 
   form.item-facets {
     grid-column: 1;
-    font-size: $font-size-xsmall;
+    font-size: $font-size-small;
     line-height: $line-height;
 
     padding-right: $margin;
@@ -80,7 +80,7 @@ section.items-table {
     thead {
       th {
         text-align: left;
-        font-size: $font-size-xsmall;
+        font-size: $font-size-small;
         line-height: $line-height;
 
         padding: $margin-small $margin;
@@ -88,7 +88,7 @@ section.items-table {
     }
 
     tbody {
-      font-size: $font-size-xsmall;
+      font-size: $font-size-small;
       line-height: $line-height;
 
       td {
@@ -125,12 +125,20 @@ section.items-table {
 
         p {
           font-size: inherit;
-          margin-top: $margin-xxsmall;
-          margin-bottom: 0;
+          margin: 0;
 
           &.title {
             font-weight: $font-weight-bold;
             margin-top: 0;
+          }
+
+          &.author-name {
+            font-weight: $font-weight-medium;
+          }
+
+          &.metadata {
+            font-size: $font-size-xxsmall;
+            line-height: $line-height;
           }
         }
       }
@@ -156,6 +164,8 @@ section.items-table {
   }
 
   input[type="number"] {
+    font-size: $font-size-xsmall;
+    line-height: $line-height;
     width: $font-size-xxlarge;
     text-align: center;
     font-variant-numeric: tabular-nums lining-nums;
@@ -191,8 +201,8 @@ section.items-table {
 
   img.action {
     display: inline-block;
-    height: $font-size-xxsmall;
-    width: $font-size-xxsmall;
+    height: $font-size-xsmall;
+    width: $font-size-xsmall;
     border: 3px solid transparent;
     border-radius: 4px;
 
@@ -200,10 +210,6 @@ section.items-table {
       border: 3px solid $color-anchor-highlight;
       background-color: $color-anchor-highlight;
     }
-  }
-
-  .author-name {
-    font-weight: $font-weight-medium;
   }
 
 }
