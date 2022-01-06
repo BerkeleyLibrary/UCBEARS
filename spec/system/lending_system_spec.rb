@@ -187,7 +187,7 @@ describe LendingController, type: :system do
               item_section = section.find(:xpath, item_section_xpath(item, absolute: false))
               show_path = lending_show_path(directory: item.directory)
 
-              expect_link_or_button(item_section, 'Show', show_path)
+              expect_link_or_button(item_section, 'Admin View', show_path)
             end
           end
         end
@@ -196,7 +196,7 @@ describe LendingController, type: :system do
           items.each_value do |item|
             item_section = find_item_section(item)
             show_path = lending_show_path(directory: item.directory)
-            expect_link_or_button(item_section, 'Show', show_path)
+            expect_link_or_button(item_section, 'Admin View', show_path)
 
             edit_path = lending_edit_path(directory: item.directory)
             expect_link_or_button(item_section, 'Edit item', edit_path)
@@ -243,13 +243,13 @@ describe LendingController, type: :system do
           end
         end
 
-        describe 'Show' do
+        describe 'Admin View' do
           it 'shows the item preview' do
             item = active.first
             item_section = find_item_section(item)
 
             show_path = lending_show_path(directory: item.directory)
-            item_section.click_link_or_button('Show')
+            item_section.click_link_or_button('Admin View')
 
             expect_no_alerts
             expect(page).to have_current_path(show_path)

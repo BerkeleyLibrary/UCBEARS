@@ -105,6 +105,7 @@ section.items-table {
 
         &.date {
           text-align: justify;
+          font-variant-numeric: tabular-nums lining-nums;
         }
 
         ul {

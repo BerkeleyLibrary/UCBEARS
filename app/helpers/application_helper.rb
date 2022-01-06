@@ -12,12 +12,20 @@ module ApplicationHelper
     t(:app_title_short)
   end
 
+  def page_header
+    content_for(:page_title)
+  end
+
   def page_title
-    (title = content_for(:page_title)) ? "#{app_title_short}: #{title}" : app_title
+    (title = page_header) ? "#{app_title_short}: #{title}" : app_title
   end
 
   # ------------------------------------------------------------
   # Link helpers
+
+  def admin_path
+    items_path
+  end
 
   def root_link
     link_to(app_title_short, root_path)

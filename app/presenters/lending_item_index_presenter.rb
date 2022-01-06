@@ -33,7 +33,7 @@ class LendingItemIndexPresenter < LendingItemPresenterBase
   end
 
   def action_show
-    button_to('Show', lending_show_path(directory: directory), class: 'btn secondary', method: :get)
+    button_to('Admin View', lending_show_path(directory: directory), class: 'btn secondary', method: :get)
   end
 
   def action_activate

@@ -1,7 +1,7 @@
 <template>
   <section class="items-table">
     <aside
-      v-if="errors"
+      v-if="Array.isArray(errors) && errors.length"
       class="flash"
     >
       <template v-for="(error, index) in errors">
@@ -84,6 +84,7 @@
         <tr>
           <th>Edit</th>
           <th>Item</th>
+          <th>View</th>
           <th>Link</th>
           <th>Updated</th>
           <th>Complete</th>
@@ -100,7 +101,7 @@
           class="item"
         >
           <td class="control">
-            <a :href="item.edit_url" class="icon-link" :title="`Edit '${item.title}'`"><img src="/assets/icons/edit.svg" :alt="`Edit '${item.title}'`" class="action"></a>
+            <a :href="item.edit_url" class="icon-link" target="_blank" :title="`Edit “${item.title}”`"><img src="/assets/icons/edit.svg" :alt="`Edit “${item.title}”`" class="action"></a>
           </td>
           <td>
             <p class="title">
@@ -114,7 +115,10 @@
             </p>
           </td>
           <td class="control">
-            <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to '${item.title}'`"><img src="/assets/icons/link.svg" :alt="`Permalink to '${item.title}'`" class="action"></a>
+            <a :href="item.show_url" class="icon-link" target="_blank" :title="`Admin view of “${item.title}”`"><img src="/assets/icons/eye.svg" :alt="`Admin view of “${item.title}”`" class="action"></a>
+          </td>
+          <td class="control">
+            <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to “${item.title}” patron view`"><img src="/assets/icons/link.svg" :alt="`Permalink to “${item.title}” patron view`" class="action"></a>
           </td>
           <td class="date">{{ item.updated_at }}</td>
           <td v-if="item.complete" class="control">Yes</td>
@@ -144,7 +148,7 @@
             >
           </td>
           <td class="control">
-            <button class="delete" :disabled="item.active" :title="item.active ? 'Active items cannot be deleted.' : ''"><img class="action" src="/assets/icons/trash-alt.svg"></button>
+            <button class="delete" :disabled="item.active" :title="item.active ? 'Active items cannot be deleted.' : `Delete “${item.title}”`"><img class="action" src="/assets/icons/trash-alt.svg"></button>
           </td>
         </tr>
       </tbody>

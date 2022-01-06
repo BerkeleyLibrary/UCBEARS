@@ -1,10 +1,10 @@
 <% content_for(:page_title, "Editing #{@item.title}") %>
 
-<h1><%= app_title %></h1>
+<h1><%= page_header %></h1>
 
 <nav>
   <ul>
-    <li><%= link_to 'Item', lending_show_path(directory: @item.directory) %></li>
+    <li><%= link_to 'Admin view', lending_show_path(directory: @item.directory) %></li>
   </ul>
 </nav>
 
