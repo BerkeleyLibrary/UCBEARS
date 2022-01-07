@@ -306,11 +306,6 @@ export default {
       }
     }
   },
-  computed: {
-    itemCount: function() {
-      return this.items ? Object.keys(this.items).length : 0
-    }
-  },
   mounted: function () {
     this.reload()
   },
@@ -350,9 +345,7 @@ export default {
       deleteItem(item)
         .then(() => {
           console.log(`Deleted item ${item.directory} (${item.id})`)
-          console.log(this.itemCount)
           Vue.delete(this.items, item.directory)
-          console.log(this.itemCount)
         }).catch(error => {
           console.log(error)
           if (error.response) {
