@@ -1,3 +1,23 @@
+# 1.5 (2022-01-07)
+
+New features:
+
+- default admin home page is a new item administration interface with
+  sorting, filtering, pagination, and in-line editing
+- items are now assigned to terms, and only available for checkout during
+  assigned term dates
+  - default terms are Berkeley's Fall 2021 and Spring 2022
+  - existing items are assigned by default to Fall 2021
+  - specified items are also assigned to Spring 2022
+
+Technical updates:
+
+- item completeness is now cached in the database to simplify searching
+  and filtering
+- Ruby version updated to 3.0.2
+- `Gemfile.lock` now specifies both `x86_64` and `arm64` and both
+  `linux-musl` (Alpine Linux) and `darwin` (macOS)
+
 # 1.3.1 (2021-09-30)
 
 Admin:
