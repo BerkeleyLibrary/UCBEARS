@@ -15,6 +15,11 @@ module ExceptionHandling
 
     rescue_from Error::ForbiddenError do |error|
       logger.error(error)
+
+      # TODO: is this the best that can be done?
+      #       see https://stackoverflow.com/a/31673280/27358
+      self.formats = request.formats.map(&:ref)
+
       render :forbidden, status: :forbidden, locals: { exception: error }
     end
 
@@ -22,11 +27,17 @@ module ExceptionHandling
       # this isn't really an error condition, it just means the user's
       # not logged in, so we don't need the full stack trace etc.
       logger.info(error.to_s)
+      # TODO: something clever for JSON requests
       redirect_to login_path(url: request.fullpath)
     end
 
     def handle_not_found(error)
       logger.error(error)
+
+      # TODO: is this the best that can be done?
+      #       see https://stackoverflow.com/a/31673280/27358
+      self.formats = request.formats.map(&:ref)
+
       render :not_found, status: :not_found, locals: { exception: error }
     end
   end
