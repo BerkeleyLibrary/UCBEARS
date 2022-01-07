@@ -1,0 +1,7 @@
+<h1>Forbidden</h1>
+
+<p>The page <b><%= request.original_fullpath %></b> is restricted to UC BEARS administrators.</p>
+
+<% if defined?(exception) && exception && Rails.env.test? %>
+  <%= render(partial: 'exception_details', locals: { exception: exception }) %>
+<% end %>
