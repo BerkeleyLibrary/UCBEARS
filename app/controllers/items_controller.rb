@@ -5,11 +5,15 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    Item.scan_for_new_items!
-    # TODO: don't hit the DB for HTML SPA requests
-    requested_items = items
-    logger.info("initial query: #{requested_items}")
-    @pagy, @items = pagy(requested_items)
+    respond_to do |format|
+      format.html
+
+      format.json do
+        Item.scan_for_new_items!
+        @pagy, @items = pagy(items)
+        response.headers['Current-Page-Items'] = @items.count
+      end
+    end
   end
 
   # GET /items/1

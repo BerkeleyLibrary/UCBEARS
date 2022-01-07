@@ -80,6 +80,7 @@
     </form>
 
     <table>
+      <caption v-if="paging">Viewing results {{ paging.fromItem }} to {{ paging.toItem }} of {{ paging.totalItems }}</caption>
       <thead>
         <tr>
           <th>Edit</th>
@@ -159,17 +160,17 @@
 
     <!-- TODO: extract this to its own component -->
     <nav
-      v-if="links"
+      v-if="paging"
       class="pagination"
     >
       <ul>
         <li>
           <a
-            v-if="links.first && links.currentPage !== 1"
+            v-if="paging.first && paging.currentPage !== 1"
             href="#"
             rel="first"
             title="First page"
-            @click="loadItems(links.first)"
+            @click="loadItems(paging.first)"
           >≪</a>
           <template v-else>
             ≪
@@ -177,26 +178,26 @@
         </li>
         <li>
           <a
-            v-if="links.prev && links.currentPage > 1"
+            v-if="paging.prev && paging.currentPage > 1"
             href="#"
             rel="prev"
             title="Previous page"
-            @click="loadItems(links.prev)"
+            @click="loadItems(paging.prev)"
           >&lt;</a>
           <template v-else>
             &lt;
           </template>
         </li>
         <li>
-          Page {{ links.currentPage }} of {{ links.totalPages }}
+          Page {{ paging.currentPage }} of {{ paging.totalPages }}
         </li>
         <li>
           <a
-            v-if="links.next && links.currentPage < links.totalPages"
+            v-if="paging.next && paging.currentPage < paging.totalPages"
             href="#"
             rel="next"
             title="Next page"
-            @click="loadItems(links.next)"
+            @click="loadItems(paging.next)"
           >&gt;</a>
           <template v-else>
             &gt;
@@ -204,11 +205,11 @@
         </li>
         <li>
           <a
-            v-if="links.last && links.currentPage !== links.totalPages"
+            v-if="paging.last && paging.currentPage !== paging.totalPages"
             href="#"
             rel="last"
             title="Last page"
-            @click="loadItems(links.last)"
+            @click="loadItems(paging.last)"
           >≫</a>
           <template v-else>
             ≫
@@ -223,14 +224,6 @@
 import axios from 'axios'
 import Link from 'http-link-header'
 import Vue from 'vue'
-
-/*
-# Pagy::DEFAULT[:headers] = { page: 'Current-Page',
-#                            items: 'Page-Items',
-#                            count: 'Total-Count',
-#                            pages: 'Total-Pages' }     # default
-
- */
 
 function deleteItem (item) {
   console.log(`Deleting item ${item.directory} (${item.id})`)
@@ -265,13 +258,26 @@ function itemsByDirectory (itemArray) {
   return items
 }
 
-function linksFromHeaders (headers) {
-  const currentPageHeader = headers['current-page']
-  const totalPagesHeader = headers['total-pages']
+/*
+# Pagy::DEFAULT[:headers] = { page: 'Current-Page',
+#                            items: 'Page-Items',
+#                            count: 'Total-Count',
+#                            pages: 'Total-Pages' }     # default
+
+ */
+
+function pagingFromHeaders (headers) {
+  // TODO: just make this a class
   const links = {
-    currentPage: parseInt(currentPageHeader) || null,
-    totalPages: parseInt(totalPagesHeader) || null
+    currentPage: parseInt(headers['current-page']) || 0,
+    totalPages: parseInt(headers['total-pages']) || 0,
+    itemsPerPage: parseInt(headers['page-items']) || 0,
+    currentPageItems: parseInt(headers['current-page-items']) || 0,
+    totalItems: parseInt(headers['total-count']) || 0
   }
+
+  links.fromItem = (links.currentPage * links.itemsPerPage) - 1
+  links.toItem = (links.fromItem + links.currentPageItems) - 1
 
   const linkHeader = headers.link
   const parsedLinks = Link.parse(linkHeader)
@@ -290,7 +296,7 @@ export default {
     return {
       items: null,
       terms: null,
-      links: null,
+      paging: null,
       errors: null,
       itemQuery: {
         active: null,
@@ -337,7 +343,7 @@ export default {
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {
           this.items = itemsByDirectory(response.data)
-          this.links = linksFromHeaders(response.headers)
+          this.paging = pagingFromHeaders(response.headers)
         }).catch(error => console.log(error))
     },
     removeItem (item) {

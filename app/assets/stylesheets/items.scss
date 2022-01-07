@@ -18,6 +18,8 @@ section.items-table {
       font-weight: bold;
       white-space: nowrap;
       align-self: center;
+
+      margin-bottom: $margin;
     }
 
     div.item-search-field {
@@ -26,6 +28,8 @@ section.items-table {
       grid-template-columns: 40% min-content;
       justify-content: start;
       gap: $margin;
+
+      margin-bottom: $margin;
 
       input {
         font-size: $font-size-xsmall;
@@ -76,6 +80,17 @@ section.items-table {
   table {
     grid-column: 2;
     width: 100%;
+
+    caption {
+      text-align: left;
+      font-size: $font-size-xsmall;
+      line-height: $line-height;
+
+      // TODO: find less hacky way to align with facets
+      margin-top: -(7 * $line-height / 6);
+      margin-bottom: $line-height / 6;
+      margin-left: $margin-xxsmall;
+    }
 
     thead {
       th {
