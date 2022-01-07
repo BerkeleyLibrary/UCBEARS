@@ -43,6 +43,7 @@ class Item < ActiveRecord::Base
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
   MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
   MSG_NOT_CURRENT_TERM = 'This item is not available for the current term.'.freeze
+  MSG_CANNOT_DELETE_COMPLETE_ITEM = 'Only incomplete items can be deleted.'.freeze
 
   # TODO: make this configurable
   MAX_CHECKOUTS_PER_PATRON = 1
@@ -137,7 +138,7 @@ class Item < ActiveRecord::Base
     return if incomplete?
 
     logger.warn('Failed to delete non-incomplete item', directory)
-    errors[:base] << 'Only incomplete items can be deleted.'
+    errors.add(:base, MSG_CANNOT_DELETE_COMPLETE_ITEM)
     throw :abort
   end
 

@@ -63,7 +63,7 @@ RSpec.describe '/items', type: :request do
       it 'returns all items by default' do
         get items_url, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -80,7 +80,7 @@ RSpec.describe '/items', type: :request do
       it 'can exclude incomplete items' do
         get items_url, params: { complete: true }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -98,7 +98,7 @@ RSpec.describe '/items', type: :request do
       it 'can exclude complete items' do
         get items_url, params: { complete: false }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -116,7 +116,7 @@ RSpec.describe '/items', type: :request do
       it 'can exclude inactive items' do
         get items_url, params: { active: true }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -134,7 +134,7 @@ RSpec.describe '/items', type: :request do
       it 'can exclude active items' do
         get items_url, params: { active: false }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -152,7 +152,7 @@ RSpec.describe '/items', type: :request do
       it 'can filter inactive items by completeness' do
         get items_url, params: { active: false, complete: true }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -170,7 +170,7 @@ RSpec.describe '/items', type: :request do
       it 'can filter by term' do
         get items_url, params: { active: true, complete: false, terms: ['Not a term', term_fall_2021.name] }, as: :json
         expect(response).to be_successful
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
@@ -190,8 +190,20 @@ RSpec.describe '/items', type: :request do
     describe 'GET /show' do
       it 'renders a successful response' do
         item = Item.create! valid_attributes
+
         get item_url(item), as: :json
         expect(response).to be_successful
+        expect(response.content_type).to start_with('application/json')
+      end
+
+      it 'does something sensible for nonexistent objects' do
+        item = build(:incomplete_item)
+        item.save!(validate: false)
+        item.destroy!
+
+        get item_url(item), as: :json
+        expect(response).to have_http_status(404)
+        expect(response.content_type).to start_with('application/json')
       end
     end
 
@@ -218,7 +230,7 @@ RSpec.describe '/items', type: :request do
           actual_json = JSON.parse(response.body)
           expect(actual_json).to eq(expected_json(item))
 
-          expect(response.content_type).to match(%r{^application/json})
+          expect(response.content_type).to start_with('application/json')
           expect(response).to have_http_status(:ok)
         end
       end
@@ -228,7 +240,7 @@ RSpec.describe '/items', type: :request do
           item = Item.create! valid_attributes
           patch item_url(item), params: { item: invalid_attributes }, as: :json
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.content_type).to match(%r{^application/json})
+          expect(response.content_type).to start_with('application/json')
         end
       end
     end
@@ -241,6 +253,8 @@ RSpec.describe '/items', type: :request do
         expect do
           delete item_url(item), as: :json
         end.to change(Item, :count).by(-1)
+
+        expect(response).to be_successful
       end
 
       it 'will not delete a complete item' do
@@ -251,6 +265,22 @@ RSpec.describe '/items', type: :request do
         end.not_to change(Item, :count)
 
         expect(response).not_to be_successful
+        expect(response.content_type).to start_with('application/json')
+
+        response_json = JSON.parse(response.body)
+        expect(response_json).to include(Item::MSG_CANNOT_DELETE_COMPLETE_ITEM)
+      end
+
+      it 'succeeds if the item has already been deleted' do
+        item = build(:incomplete_item)
+        item.save!(validate: false)
+        item.destroy!
+
+        expect do
+          delete item_url(item), as: :json
+        end.not_to change(Item, :count)
+
+        expect(response).to be_successful
       end
     end
   end

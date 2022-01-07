@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show update destroy]
+  before_action :set_item, only: %i[show update]
   before_action :require_lending_admin!, only: %i[index update destroy]
 
   # GET /items
@@ -30,7 +30,14 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    return if @item.destroy
+    item_id = params.require(:id)
+    return unless (@item = Item.find_by(id: item_id))
+
+    if @item.destroy
+      logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
+      render body: nil, status: :no_content
+      return
+    end
 
     render_item_errors
   end
@@ -48,7 +55,8 @@ class ItemsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_item
-    @item = Item.find(params[:id])
+    item_id = params.require(:id)
+    @item = Item.find(item_id)
   end
 
   # Only allow a list of trusted parameters through.

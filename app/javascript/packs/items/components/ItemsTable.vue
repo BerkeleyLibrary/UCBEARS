@@ -149,7 +149,9 @@
             >
           </td>
           <td class="control">
-            <button class="delete" :disabled="item.active" :title="item.active ? 'Active items cannot be deleted.' : `Delete “${item.title}”`"><img class="action" src="/assets/icons/trash-alt.svg"></button>
+            <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="removeItem(item)">
+              <img class="action" src="/assets/icons/trash-alt.svg">
+            </button>
           </td>
         </tr>
       </tbody>
@@ -220,6 +222,7 @@
 <script>
 import axios from 'axios'
 import Link from 'http-link-header'
+import Vue from 'vue'
 
 /*
 # Pagy::DEFAULT[:headers] = { page: 'Current-Page',
@@ -229,8 +232,13 @@ import Link from 'http-link-header'
 
  */
 
+function deleteItem (item) {
+  console.log(`Deleting item ${item.directory} (${item.id})`)
+  return axios.delete(item.url).then(response => response.data)
+}
+
 function patchItem (item) {
-  console.log(`Saving item ${item.directory}`)
+  console.log(`Saving item ${item.directory} (${item.id})`)
   return axios.patch(item.url, {
     item: {
       title: item.title,
@@ -242,10 +250,7 @@ function patchItem (item) {
       term_ids: item.terms.map(t => t.id)
     }
   })
-    .then(response => {
-      console.log(`Item ${item.directory} saved`)
-      return response.data
-    })
+    .then(response => response.data)
 }
 
 function getItem (itemUrl) {
@@ -256,8 +261,6 @@ function itemsByDirectory (itemArray) {
   const items = {}
   for (const item of itemArray) {
     items[item.directory] = item
-    console.log(`${item.title} terms:`)
-    console.log(item.terms)
   }
   return items
 }
@@ -297,6 +300,11 @@ export default {
       }
     }
   },
+  computed: {
+    itemCount: function() {
+      return this.items ? Object.keys(this.items).length : 0
+    }
+  },
   mounted: function () {
     this.reload()
   },
@@ -332,11 +340,33 @@ export default {
           this.links = linksFromHeaders(response.headers)
         }).catch(error => console.log(error))
     },
+    removeItem (item) {
+      deleteItem(item)
+        .then(() => {
+          console.log(`Deleted item ${item.directory} (${item.id})`)
+          console.log(this.itemCount)
+          Vue.delete(this.items, item.directory)
+          console.log(this.itemCount)
+        }).catch(error => {
+          console.log(error)
+          if (error.response) {
+            const errors = error.response.data
+            console.log(`Error deleting item ${item.directory}: ${errors.join('; ')}`)
+            this.setErrors(errors)
+          } else {
+            console.log(`Error deleting item ${item.directory}`)
+          }
+          this.refreshItem(item)
+        })
+    },
     updateItem (item) {
       this.setErrors(null)
 
       patchItem(item)
-        .then(item => this.setItem(item))
+        .then(item => {
+          console.log(`Item ${item.directory} saved`)
+          this.setItem(item)
+        })
         .catch(error => {
           if (error.response) {
             const errors = error.response.data
