@@ -92,6 +92,8 @@ class AddSpringTermToDec2ItemList < ActiveRecord::Migration[6.1]
     return unless (term_id = term_id_spring_2022)
 
     item_ids = Item.where(directory: DEC_2_ITEM_DIRS).pluck(:id)
+    return if item_ids.empty?
+
     values = item_ids.map { |item_id| { item_id: item_id, term_id: term_id } }
     ItemsTerm.insert_all(values)
   end
@@ -100,6 +102,8 @@ class AddSpringTermToDec2ItemList < ActiveRecord::Migration[6.1]
     return unless (term_id = term_id_spring_2022)
 
     item_ids = Item.where(directory: DEC_2_ITEM_DIRS).pluck(:id)
+    return if item_ids.empty?
+
     ItemsTerm.where(item_id: item_ids, term_id: term_id).delete_all
   end
 
