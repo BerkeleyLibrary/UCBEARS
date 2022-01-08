@@ -78,6 +78,23 @@ describe ItemQuery do
     expect(actual_items).to contain_exactly(*expected_items)
   end
 
+  describe :to_s do
+    it 'includes all the relevant parameters' do
+      term = create(:term_fall_2021)
+      keywords = 'some keywords'
+      limit = 5
+      offset = 12
+
+      query = ItemQuery.new(active: true, complete: false, terms: [term.name], keywords: keywords, limit: limit, offset: offset)
+      query_str = query.to_s
+
+      expected_params = ['active', 'incomplete', term.name, keywords, limit.to_s, offset.to_s]
+      expected_params.each do |expected_param|
+        expect(query_str).to include(expected_param)
+      end
+    end
+  end
+
   describe 'filtering by term' do
     attr_reader :term_fall_2021
     attr_reader :term_spring_2022

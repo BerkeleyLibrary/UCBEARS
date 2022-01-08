@@ -24,15 +24,19 @@ class ItemQuery
   # ------------------------------------------------------------
   # Object
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def to_s
     args = []
     args << (@active ? 'active' : 'inactive') unless @active.nil?
     args << (@complete ? 'complete' : 'incomplete') unless @complete.nil?
+    args << "terms: #{@terms.join(', ')}" unless @terms.empty?
+    args << "keywords: #{@keywords}" if @keywords
     args << "limit: #{@limit}" if @limit
     args << "offset: #{@offset}" if @offset
 
     "#{self.class.name}(#{args.join(', ')})"
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # ------------------------------------------------------------
   # Enumerable
