@@ -1,3 +1,11 @@
+# 1.5.1 (2022-01-07)
+
+- admin page now includes an item count
+- fixes an issue where the delete button on the admin page was not
+  enabled/disabled correctly
+- fixes an issue where the delete button on the admin page was not
+  actually deleting items
+
 # 1.5 (2022-01-07)
 
 New features:
