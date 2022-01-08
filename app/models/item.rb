@@ -71,6 +71,7 @@ class Item < ActiveRecord::Base
   # Class methods
 
   class << self
+    # TODO: something more efficient and concurrent
     def scan_for_new_items!
       Lending.each_final_dir.map do |dir_path|
         basename = dir_path.basename.to_s
@@ -80,6 +81,8 @@ class Item < ActiveRecord::Base
       end.compact
     end
 
+    # TODO: something more efficient and concurrent
+    # rubocop:disable Metrics/MethodLength
     def create_from(directory)
       logger.info("Creating item for directory #{directory}")
 
@@ -93,7 +96,10 @@ class Item < ActiveRecord::Base
         item.read_marc_attributes(marc_metadata)
         item.save(validate: false)
       end
+    rescue ActiveRecord::RecordNotUnique => e
+      logger.warn(e)
     end
+    # rubocop:enable Metrics/MethodLength
   end
 
   # ------------------------------------------------------------
