@@ -269,14 +269,14 @@ function itemsByDirectory (itemArray) {
 function pagingFromHeaders (headers) {
   // TODO: just make this a class
   const links = {
-    currentPage: parseInt(headers['current-page']) || 0,
-    totalPages: parseInt(headers['total-pages']) || 0,
+    currentPage: parseInt(headers['current-page']) || 1,
+    totalPages: parseInt(headers['total-pages']) || 1,
     itemsPerPage: parseInt(headers['page-items']) || 0,
     currentPageItems: parseInt(headers['current-page-items']) || 0,
     totalItems: parseInt(headers['total-count']) || 0
   }
 
-  links.fromItem = (links.currentPage * links.itemsPerPage) - 1
+  links.fromItem = ((links.currentPage - 1) * links.itemsPerPage) + 1
   links.toItem = (links.fromItem + links.currentPageItems) - 1
 
   const linkHeader = headers.link
