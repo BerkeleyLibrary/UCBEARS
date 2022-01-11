@@ -97,7 +97,9 @@ class Item < ActiveRecord::Base
         item.save(validate: false)
       end
     rescue ActiveRecord::RecordNotUnique => e
+      # Can happen when multiple requests trigger scan_for_new_items! concurrently
       logger.warn(e)
+      Item.find_by(directory: directory)
     end
     # rubocop:enable Metrics/MethodLength
   end

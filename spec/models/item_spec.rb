@@ -583,6 +583,19 @@ describe Item, type: :model do
           expect(actual).to contain_exactly(*expected)
         end
       end
+
+      describe :create_from do
+        it 'handles existing directories' do
+          item1 = items[:incomplete_no_manifest]
+          item2 = nil
+
+          expect do
+            item2 = Item.create_from(item1.directory)
+          end.not_to change(Item, :count)
+
+          expect(item2).to eq(item1)
+        end
+      end
     end
   end
 
