@@ -222,76 +222,12 @@
 
 <script>
 import axios from 'axios'
-import Link from 'http-link-header'
 import Vue from 'vue'
-
-function deleteItem (item) {
-  console.log(`Deleting item ${item.directory} (${item.id})`)
-  return axios.delete(item.url).then(response => response.data)
-}
-
-function patchItem (item) {
-  console.log(`Saving item ${item.directory} (${item.id})`)
-  return axios.patch(item.url, {
-    item: {
-      title: item.title,
-      author: item.author,
-      copies: item.copies,
-      active: item.active,
-      publisher: item.publisher,
-      physical_desc: item.physical_desc,
-      term_ids: item.terms.map(t => t.id)
-    }
-  })
-    .then(response => response.data)
-}
-
-function getItem (itemUrl) {
-  return axios.get(itemUrl).then(response => response.data)
-}
-
-function itemsByDirectory (itemArray) {
-  const items = {}
-  for (const item of itemArray) {
-    items[item.directory] = item
-  }
-  return items
-}
-
-/*
-# Pagy::DEFAULT[:headers] = { page: 'Current-Page',
-#                            items: 'Page-Items',
-#                            count: 'Total-Count',
-#                            pages: 'Total-Pages' }     # default
-
- */
-
-function pagingFromHeaders (headers) {
-  // TODO: just make this a class
-  const links = {
-    currentPage: parseInt(headers['current-page']) || 1,
-    totalPages: parseInt(headers['total-pages']) || 1,
-    itemsPerPage: parseInt(headers['page-items']) || 0,
-    currentPageItems: parseInt(headers['current-page-items']) || 0,
-    totalItems: parseInt(headers['total-count']) || 0
-  }
-
-  links.fromItem = ((links.currentPage - 1) * links.itemsPerPage) + 1
-  links.toItem = (links.fromItem + links.currentPageItems) - 1
-
-  const linkHeader = headers.link
-  const parsedLinks = Link.parse(linkHeader)
-
-  for (const rel of ['first', 'prev', 'next', 'last']) {
-    if (parsedLinks.has('rel', rel)) {
-      const urlStr = parsedLinks.get('rel', rel)[0].uri
-      links[rel] = new URL(urlStr)
-    }
-  }
-  return links
-}
+import items from '../api/items'
+import paging from '../api/paging'
 
 export default {
+  // TODO: use VueX
   data: function () {
     return {
       items: null,
@@ -337,12 +273,12 @@ export default {
 
       axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
         .then(response => {
-          this.items = itemsByDirectory(response.data)
-          this.paging = pagingFromHeaders(response.headers)
+          this.items = items.byDirectory(response.data)
+          this.paging = paging.fromHeaders(response.headers)
         }).catch(error => console.log(error))
     },
     removeItem (item) {
-      deleteItem(item)
+      items.destroy(item)
         .then(() => {
           console.log(`Deleted item ${item.directory} (${item.id})`)
           Vue.delete(this.items, item.directory)
@@ -361,7 +297,7 @@ export default {
     updateItem (item) {
       this.setErrors(null)
 
-      patchItem(item)
+      items.update(item)
         .then(item => {
           console.log(`Item ${item.directory} saved`)
           this.setItem(item)
@@ -378,7 +314,7 @@ export default {
         })
     },
     refreshItem (item) {
-      getItem(item.url).then(item => this.setItem(item))
+      items.get(item.url).then(item => this.setItem(item))
     },
     setItem (item) {
       this.items[item.directory] = item
