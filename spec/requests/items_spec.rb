@@ -71,7 +71,6 @@ RSpec.describe '/items', type: :request do
         expected_items = Item.order(:title)
         expect(parsed_response.size).to eq(expected_items.size)
 
-        # noinspection RubyUnusedLocalVariable
         expected_items.each_with_index do |item, i|
           expect(parsed_response[i]).to eq(expected_json(item))
         end

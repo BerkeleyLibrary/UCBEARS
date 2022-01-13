@@ -17,3 +17,8 @@ en:
   omniauth_callbacks:
     calnet:
       forbidden: <strong>Forbidden:</strong> You're not allowed to access the requested page.
+
+  activerecord:
+    errors:
+      messages:
+        taken: "already exists"

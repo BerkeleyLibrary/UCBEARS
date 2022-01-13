@@ -36,14 +36,10 @@ class ItemsController < ApplicationController
   def destroy
     item_id = params.require(:id)
     return unless (@item = Item.find_by(id: item_id))
+    return render_item_errors unless @item.destroy
 
-    if @item.destroy
-      logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
-      render body: nil, status: :no_content
-      return
-    end
-
-    render_item_errors
+    logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
+    render body: nil, status: :no_content
   end
 
   private

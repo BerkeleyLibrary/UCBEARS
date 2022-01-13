@@ -1,6 +1,11 @@
 class Term < ActiveRecord::Base
 
   # ------------------------------------------------------------
+  # Constants
+
+  MSG_START_MUST_PRECEDE_END = 'Term start date must precede end date'.freeze
+
+  # ------------------------------------------------------------
   # Items
 
   has_and_belongs_to_many :items
@@ -14,7 +19,7 @@ class Term < ActiveRecord::Base
   def start_date_before_end_date
     return if start_date < end_date
 
-    errors.add(:start_date, 'Term start date must precede end date')
+    errors.add(:start_date, MSG_START_MUST_PRECEDE_END)
   end
 
   # ------------------------------------------------------------
