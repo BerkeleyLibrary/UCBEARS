@@ -147,5 +147,22 @@ describe ItemQuery do
 
       expect(query).to contain_exactly(*expected_items)
     end
+
+    it 'does not produce duplicate entries if items are in multiple terms' do
+      term_spring_2021 = Term.create(name: 'Spring 2021', start_date: Date.new(2021, 0o1, 12), end_date: Date.new(2021, 5, 14))
+      keyword = 'Egypt'
+
+      expected_items = []
+      term_names = [term_spring_2021.name]
+      Item.where('title LIKE ?', "%#{keyword}%").find_each do |it|
+        it.terms.pluck(:name).each { |tn| term_names << tn unless term_names.include?(tn) }
+        it.terms << term_spring_2021
+        expected_items << it
+      end
+
+      query = ItemQuery.new(keywords: keyword, terms: term_names)
+      expect(query.count).to eq(expected_items.size)
+      expect(query).to contain_exactly(*expected_items)
+    end
   end
 end

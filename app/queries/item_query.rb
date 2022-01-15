@@ -94,17 +94,21 @@ class ItemQuery
 
   private
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def db_results
-    # TODO: keywords
     rel = @active.nil? ? Item.all : Item.where(active: @active)
     rel = rel.where(complete: @complete) unless @complete.nil?
-    rel = rel.joins(:terms).where('terms.name' => @terms) if @terms
+    if @terms
+      term_ids = Term.where(name: @terms).select(:id)
+      item_ids = ItemsTerm.where(term_id: term_ids).select(:item_id)
+      rel = rel.where(id: item_ids)
+    end
+    rel = rel.search_by_metadata(@keywords) if @keywords
     rel = rel.limit(@limit) if @limit
     rel = rel.offset(@offset) if @offset
-    return rel.order(:title) unless @keywords
-
-    rel.search_by_metadata(@keywords)
+    rel.order(:title)
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # ------------------------------
   # Attribute validation
