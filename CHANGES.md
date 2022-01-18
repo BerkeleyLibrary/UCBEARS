@@ -1,3 +1,11 @@
+# 1.5.2 (2022-01-18)
+
+- fixes an issue where paging in the admin item list could be 
+  incorrect when selecting multiple terms
+- fixes an issue where multiple requests could trigger scanning 
+  for new items simultaneously, resulting in failed attempts to 
+  create duplicate records
+
 # 1.5.1 (2022-01-07)
 
 - admin page now includes an item count
