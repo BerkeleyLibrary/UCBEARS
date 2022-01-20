@@ -36,15 +36,16 @@
     <form class="item-search" @submit.prevent>
       <label for="itemQuery-keywords">Keyword search:</label>
       <div class="item-search-field">
+        <!-- TODO: trigger reload on clear -->
         <input
           id="itemQuery-keywords"
-          v-model="itemQuery.keywords"
+          v-model="queryParams.keywords"
           type="search"
           placeholder="Search by title, author, publisher, or physical description"
           @keydown.enter.prevent
-          @keyup.enter="reload()"
+          @keyup.enter="loadItems()"
         >
-        <button type="button" class="primary" @click="$event.target.blur(); reload()">Go</button>
+        <button type="button" class="primary" @click="$event.target.blur(); loadItems()">Go</button>
       </div>
     </form>
 
@@ -53,7 +54,7 @@
         <legend>Term</legend>
 
         <template v-for="term in terms">
-          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemQuery.terms" type="checkbox" :value="term.name" @change="reload()">
+          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="queryParams.terms" type="checkbox" :value="term.name" @change="loadItems()">
           <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
@@ -61,20 +62,20 @@
       <fieldset>
         <legend>Status</legend>
 
-        <input id="itemQuery-active" v-model="itemQuery.active" type="checkbox" true-value="true" :false-value="null" @change="reload()">
+        <input id="itemQuery-active" v-model="queryParams.active" type="checkbox" true-value="true" :false-value="null" @change="loadItems()">
         <label for="itemQuery-active">Active only</label>
 
-        <input id="itemQuery-inactive" v-model="itemQuery.active" type="checkbox" true-value="false" :false-value="null" @change="reload()">
+        <input id="itemQuery-inactive" v-model="queryParams.active" type="checkbox" true-value="false" :false-value="null" @change="loadItems()">
         <label for="itemQuery-active">Inactive only</label>
       </fieldset>
 
       <fieldset>
         <legend>Complete?</legend>
 
-        <input id="itemQuery-complete" v-model="itemQuery.complete" type="checkbox" true-value="true" :false-value="null" @change="reload()">
+        <input id="itemQuery-complete" v-model="queryParams.complete" type="checkbox" true-value="true" :false-value="null" @change="loadItems()">
         <label for="itemQuery-complete">Complete only</label>
 
-        <input id="itemQuery-incomplete" v-model="itemQuery.complete" type="checkbox" true-value="false" :false-value="null" @change="reload()">
+        <input id="itemQuery-incomplete" v-model="queryParams.complete" type="checkbox" true-value="false" :false-value="null" @change="loadItems()">
         <label for="itemQuery-complete">Incomplete only</label>
       </fieldset>
     </form>
@@ -96,65 +97,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr
+        <item-row
           v-for="item in items"
           :key="item.directory"
-          class="item"
-        >
-          <td class="control">
-            <a :href="item.edit_url" class="icon-link" target="_blank" :title="`Edit “${item.title}”`"><img src="/assets/icons/edit.svg" :alt="`Edit “${item.title}”`" class="action"></a>
-          </td>
-          <td>
-            <p class="title">
-              {{ item.title }}
-            </p>
-            <p class="author-name">
-              {{ item.author }}
-            </p>
-            <p class="metadata">
-              {{ item.publisher }}
-              {{ item.physical_desc }}
-            </p>
-          </td>
-          <td class="control">
-            <a :href="item.show_url" class="icon-link" target="_blank" :title="`Admin view of “${item.title}”`"><img src="/assets/icons/eye.svg" :alt="`Admin view of “${item.title}”`" class="action"></a>
-          </td>
-          <td class="control">
-            <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to “${item.title}” patron view`"><img src="/assets/icons/link.svg" :alt="`Permalink to “${item.title}” patron view`" class="action"></a>
-          </td>
-          <td class="date">{{ item.updated_at }}</td>
-          <td v-if="item.complete" class="control">Yes</td>
-          <td v-else :title="item.reason_inactive" class="control">No</td>
-          <td class="control">
-            <input
-              v-model.number.lazy="item.copies"
-              type="number"
-              @change="updateItem(item)"
-            >
-          </td>
-          <td>
-            <ul>
-              <li v-for="term in terms" :key="`${item.id}-term-${term.id}`">
-                <input :id="`${item.id}-term-${term.id}`" v-model.lazy="item.terms" type="checkbox" :value="term" @change="updateItem(item)">
-                <label :for="`${item.id}-term-${term.id}`">{{ term.name }}</label>
-              </li>
-            </ul>
-          </td>
-          <td class="control">
-            <input
-              v-model.lazy="item.active"
-              type="checkbox"
-              :disabled="!!item.reason_inactive"
-              :title="item.reason_inactive"
-              @change="updateItem(item)"
-            >
-          </td>
-          <td class="control">
-            <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="removeItem(item)">
-              <img class="action" src="/assets/icons/trash-alt.svg">
-            </button>
-          </td>
-        </tr>
+          :rowItem="item"
+          :terms="terms"
+          @updated="setItem"
+          @removed="removeItem"
+        />
       </tbody>
     </table>
 
@@ -221,20 +171,20 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Vue from 'vue'
-import items from '../api/items'
-import paging from '../api/paging'
+import itemsApi from '../api/items'
+import termsApi from '../api/terms'
+import ItemRow from './ItemRow'
 
 export default {
-  // TODO: use VueX
+  components: { ItemRow },
   data: function () {
     return {
       items: null,
       terms: null,
       paging: null,
       errors: null,
-      itemQuery: {
+      queryParams: {
         active: null,
         complete: null,
         keywords: null,
@@ -243,80 +193,24 @@ export default {
     }
   },
   mounted: function () {
-    this.reload()
+    this.loadItems()
   },
   methods: {
-    reload () {
-      const termsUrl = new URL('/terms.json', window.location)
-      this.loadTerms(termsUrl)
-
-      const itemApiUrl = new URL('/items.json', window.location)
-      this.loadItems(itemApiUrl)
-    },
-    loadTerms (termApiUrl) {
-      axios.get(termApiUrl.toString())
-        .then(response => {
-          this.terms = response.data
-        }).catch(error => console.log(error))
-    },
     loadItems (itemApiUrl) {
-      // TODO: clean this up -- if it's a next/prev URL with query parameters we don't need to append params at all
-      const searchParams = itemApiUrl.searchParams
-      if (searchParams) {
-        searchParams.delete('active')
-        searchParams.delete('inactive')
-        searchParams.delete('complete')
-        searchParams.delete('incomplete')
-        searchParams.delete('keywords')
-        searchParams.delete('terms')
-      }
-
-      axios.get(itemApiUrl.toString(), { headers: { Accept: 'application/json' }, params: this.itemQuery })
-        .then(response => {
-          this.items = items.byDirectory(response.data)
-          this.paging = paging.fromHeaders(response.headers)
-        }).catch(error => console.log(error))
+      termsApi.getTerms().then(terms => { this.terms = terms })
+      const request = itemApiUrl ? itemsApi.getItems(itemApiUrl) : itemsApi.findItems(this.queryParams)
+      request.then(this.update)
+    },
+    update ({ items, paging }) {
+      this.items = items
+      this.paging = paging
     },
     removeItem (item) {
-      items.destroy(item)
-        .then(() => {
-          console.log(`Deleted item ${item.directory} (${item.id})`)
-          Vue.delete(this.items, item.directory)
-        }).catch(error => {
-          console.log(error)
-          if (error.response) {
-            const errors = error.response.data
-            console.log(`Error deleting item ${item.directory}: ${errors.join('; ')}`)
-            this.setErrors(errors)
-          } else {
-            console.log(`Error deleting item ${item.directory}`)
-          }
-          this.refreshItem(item)
-        })
-    },
-    updateItem (item) {
-      this.setErrors(null)
-
-      items.update(item)
-        .then(item => {
-          console.log(`Item ${item.directory} saved`)
-          this.setItem(item)
-        })
-        .catch(error => {
-          if (error.response) {
-            const errors = error.response.data
-            console.log(`Error saving item ${item.directory}: ${errors.join('; ')}`)
-            this.setErrors(errors)
-          } else {
-            console.log(`Error saving item ${item.directory}`)
-          }
-          this.refreshItem(item)
-        })
-    },
-    refreshItem (item) {
-      items.get(item.url).then(item => this.setItem(item))
+      console.log(`Item ${item.directory} removed`)
+      Vue.delete(this.items, item.directory)
     },
     setItem (item) {
+      console.log(`Setting item ${item.directory}`)
       this.items[item.directory] = item
     },
     setErrors (errors) {
