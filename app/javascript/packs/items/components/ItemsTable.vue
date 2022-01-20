@@ -43,9 +43,9 @@
           type="search"
           placeholder="Search by title, author, publisher, or physical description"
           @keydown.enter.prevent
-          @keyup.enter="loadItems()"
+          @keyup.enter="submitQuery()"
         >
-        <button type="button" class="primary" @click="$event.target.blur(); loadItems()">Go</button>
+        <button type="button" class="primary" @click="$event.target.blur(); submitQuery()">Go</button>
       </div>
     </form>
 
@@ -54,7 +54,7 @@
         <legend>Term</legend>
 
         <template v-for="term in terms">
-          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="queryParams.terms" type="checkbox" :value="term.name" @change="loadItems()">
+          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="queryParams.terms" type="checkbox" :value="term.name" @change="submitQuery()">
           <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
@@ -62,20 +62,20 @@
       <fieldset>
         <legend>Status</legend>
 
-        <input id="itemQuery-active" v-model="queryParams.active" type="checkbox" true-value="true" :false-value="null" @change="loadItems()">
+        <input id="itemQuery-active" v-model="queryParams.active" type="checkbox" true-value="true" :false-value="null" @change="submitQuery()">
         <label for="itemQuery-active">Active only</label>
 
-        <input id="itemQuery-inactive" v-model="queryParams.active" type="checkbox" true-value="false" :false-value="null" @change="loadItems()">
+        <input id="itemQuery-inactive" v-model="queryParams.active" type="checkbox" true-value="false" :false-value="null" @change="submitQuery()">
         <label for="itemQuery-active">Inactive only</label>
       </fieldset>
 
       <fieldset>
         <legend>Complete?</legend>
 
-        <input id="itemQuery-complete" v-model="queryParams.complete" type="checkbox" true-value="true" :false-value="null" @change="loadItems()">
+        <input id="itemQuery-complete" v-model="queryParams.complete" type="checkbox" true-value="true" :false-value="null" @change="submitQuery()">
         <label for="itemQuery-complete">Complete only</label>
 
-        <input id="itemQuery-incomplete" v-model="queryParams.complete" type="checkbox" true-value="false" :false-value="null" @change="loadItems()">
+        <input id="itemQuery-incomplete" v-model="queryParams.complete" type="checkbox" true-value="false" :false-value="null" @change="submitQuery()">
         <label for="itemQuery-complete">Incomplete only</label>
       </fieldset>
     </form>
@@ -100,7 +100,7 @@
         <item-row
           v-for="item in items"
           :key="item.directory"
-          :rowItem="item"
+          :row-item="item"
           :terms="terms"
           @updated="setItem"
           @removed="removeItem"
@@ -120,7 +120,7 @@
             href="#"
             rel="first"
             title="First page"
-            @click="loadItems(paging.first)"
+            @click="navigateTo(paging.first)"
           >≪</a>
           <template v-else>
             ≪
@@ -132,7 +132,7 @@
             href="#"
             rel="prev"
             title="Previous page"
-            @click="loadItems(paging.prev)"
+            @click="navigateTo(paging.prev)"
           >&lt;</a>
           <template v-else>
             &lt;
@@ -147,7 +147,7 @@
             href="#"
             rel="next"
             title="Next page"
-            @click="loadItems(paging.next)"
+            @click="navigateTo(paging.next)"
           >&gt;</a>
           <template v-else>
             &gt;
@@ -159,7 +159,7 @@
             href="#"
             rel="last"
             title="Last page"
-            @click="loadItems(paging.last)"
+            @click="navigateTo(paging.last)"
           >≫</a>
           <template v-else>
             ≫
@@ -193,17 +193,21 @@ export default {
     }
   },
   mounted: function () {
-    this.loadItems()
+    this.reloadTerms()
+    this.reloadItems()
   },
   methods: {
-    loadItems (itemApiUrl) {
-      termsApi.getTerms().then(terms => { this.terms = terms })
-      const request = itemApiUrl ? itemsApi.getItems(itemApiUrl) : itemsApi.findItems(this.queryParams)
-      request.then(this.update)
+    reloadTerms () {
+      termsApi.getAll().then(terms => { this.terms = terms })
     },
-    update ({ items, paging }) {
-      this.items = items
-      this.paging = paging
+    reloadItems () {
+      itemsApi.getAll().then(this.update)
+    },
+    submitQuery () {
+      itemsApi.findItems(this.queryParams).then(this.update)
+    },
+    navigateTo (pageUrl) {
+      itemsApi.getPage(pageUrl).then(this.update)
     },
     removeItem (item) {
       console.log(`Item ${item.directory} removed`)
@@ -215,6 +219,11 @@ export default {
     },
     setErrors (errors) {
       this.errors = errors
+    },
+    // TODO: something cleaner
+    update ({ items, paging }) {
+      this.items = items
+      this.paging = paging
     }
   }
 }

@@ -7,24 +7,25 @@ import Link from 'http-link-header'
 // ------------------------------------------------------------
 // Exports
 
+function defaultItemsUrl () {
+  return new URL('/items.json', window.location).toString()
+}
+
 export default {
   get (itemUrl) {
     return axios.get(itemUrl).then(response => response.data)
   },
 
-  getItems: function (itemApiUrl, requestConfig = newRequestConfig()) {
-    return axios.get(itemApiUrl, requestConfig).then(response => {
-      return {
-        items: itemsFromResponse(response),
-        paging: pagingFromResponse(response)
-      }
-    })
+  getAll () {
+    return getItems()
+  },
+
+  getPage (itemApiUrl) {
+    return getItems({ url: itemApiUrl })
   },
 
   findItems (queryParams) {
-    const itemApiUrl = new URL('/items.json', window.location).toString()
-    const requestConfig = newRequestConfig(queryParams)
-    return this.getItems(itemApiUrl, requestConfig)
+    return getItems({ params: queryParams })
   },
 
   update (item) {
@@ -47,19 +48,23 @@ export default {
   delete (item) {
     console.log(`Deleting item ${item.directory} (${item.id})`)
     return axios.delete(item.url).then(response => response.data)
-  },
-
-  byDirectory (items) {
-    // TODO: should this be a Map?
-    return Object.fromEntries(items.map(it => [it.directory, it]))
   }
 }
 
 // ------------------------------------------------------------
 // Unexported functions
 
-function newRequestConfig (queryParams) {
-  return { headers: { Accept: 'application/json' }, params: queryParams }
+function getItems ({ url = defaultItemsUrl(), params } = {}) {
+  const requestConfig = { headers: { Accept: 'application/json' } }
+  if (params) {
+    requestConfig.params = params
+  }
+  return axios.get(url, requestConfig).then(response => {
+    return {
+      items: itemsFromResponse(response),
+      paging: pagingFromResponse(response)
+    }
+  })
 }
 
 function pagingFromResponse (response) {
