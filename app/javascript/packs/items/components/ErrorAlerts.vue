@@ -3,7 +3,7 @@
     v-if="Array.isArray(errors) && errors.length"
     class="flash"
   >
-    <template v-for="(error, index) in errors">
+    <div v-for="(error, index) in errors" :key="error" style="display: contents;">
       <input
         :id="`flash-dismiss-items-table-${index}`"
         :key="error"
@@ -11,25 +11,13 @@
         class="flash-dismiss"
         @change="dismiss(index)"
       >
-      <div :key="error" class="flash alert">
-        <label
-          :for="`flash-dismiss-items-table-${index}`"
-          class="flash-dismiss-label"
-        >
-          <img
-            src="/assets/icons/times-circle.svg"
-            class="flash-dismiss-icon"
-            alt="Hide alert"
-          >
+      <div class="flash alert">
+        <label :for="`flash-dismiss-items-table-${index}`" class="flash-dismiss-label">
+          <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon" alt="Hide alert">
         </label>
-        <p
-          class="flash"
-          role="alert"
-        >
-          {{ error }}
-        </p>
+        <p class="flash" role="alert">{{ error }}</p>
       </div>
-    </template>
+    </div>
   </aside>
 </template>
 

@@ -47,7 +47,7 @@ export default {
 
   delete (item) {
     console.log(`Deleting item ${item.directory} (${item.id})`)
-    return axios.delete(item.url).then(response => response.data)
+    return axios.delete(item.url).then(() => item)
   }
 }
 

@@ -2,7 +2,7 @@
   <section class="items-admin">
     <error-alerts :errors="errors" @dismissed="dismissError"/>
     <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
-    <items-table :items="items" :terms="terms" :paging="paging" @updated="setItem" @removed="removeItem"/>
+    <items-table :items="items" :terms="terms" :paging="paging" @updated="updateItem" @removed="deleteItem"/>
     <item-paging :paging="paging" @page-selected="navigateTo"/>
   </section>
 </template>
@@ -50,22 +50,24 @@ export default {
       itemsApi.getPage(pageUrl).then(this.update)
     },
     updateItem (item) {
-      itemsApi.update(item).then(this.setItem)
+      itemsApi.update(item).then(this.setItem).catch(this.handleError)
     },
     deleteItem (item) {
-      itemsApi.delete(item).then(this.removeItem)
+      itemsApi.delete(item).then(this.removeItem).catch(this.handleError)
     },
     removeItem (item) {
-      console.log(`Item ${item.directory} removed`)
       Vue.delete(this.items, item.directory)
     },
     setItem (item) {
       console.log(`Setting item ${item.directory}`)
       this.items[item.directory] = item
     },
-    // TODO: use this
-    setErrors (errors) {
-      this.errors = errors
+    handleError (error) {
+      console.log(error)
+      const errors = error?.response?.data
+      if (Array.isArray(errors)) {
+        this.errors = errors
+      }
     },
     dismissError (index) {
       this.errors.splice(index, 1)
@@ -77,4 +79,5 @@ export default {
     }
   }
 }
+
 </script>
