@@ -1,15 +1,12 @@
 <template>
-  <aside
-    v-if="Array.isArray(errors) && errors.length"
-    class="flash"
-  >
+  <aside v-if="errors && errors.size > 0" class="flash">
     <div v-for="(error, index) in errors" :key="error" style="display: contents;">
       <input
         :id="`flash-dismiss-items-table-${index}`"
         :key="error"
         type="checkbox"
         class="flash-dismiss"
-        @change="dismiss(index)"
+        @change="dismiss(error)"
       >
       <div class="flash alert">
         <label :for="`flash-dismiss-items-table-${index}`" class="flash-dismiss-label">
@@ -24,11 +21,11 @@
 <script>
 export default {
   props: {
-    errors: { type: Array, default: () => [] }
+    errors: { type: Set, default: () => new Set() }
   },
   methods: {
-    dismiss (index) {
-      this.$emit('dismissed', index)
+    dismiss (error) {
+      this.$emit('dismissed', error)
     }
   }
 }

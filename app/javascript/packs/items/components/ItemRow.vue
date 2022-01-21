@@ -54,7 +54,8 @@ export default {
     terms: { type: Array, default: () => [] }
   },
   data: function () {
-    return { item: this.rowItem }
+    // TODO: find a more elegant way to make a local copy
+    return { item: Object.assign({}, this.rowItem) }
   },
   methods: {
     updateItem () {

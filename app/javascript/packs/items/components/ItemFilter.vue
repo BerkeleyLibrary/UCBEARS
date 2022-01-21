@@ -56,7 +56,8 @@ export default {
     terms: { type: Array, default: () => [] }
   },
   data: function () {
-    return { queryParams: this.params }
+    // TODO: find a more elegant way to make a local copy
+    return { queryParams: Object.assign({}, this.params) }
   },
   methods: {
     apply () {
