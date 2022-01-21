@@ -36,7 +36,7 @@
       </ul>
     </td>
     <td class="control">
-      <input v-model.lazy="item.active" type="checkbox" :disabled="item.complete" :title="item.reason_incomplete" @change="updateItem()">
+      <input v-model.lazy="item.active" type="checkbox" :disabled="!item.complete" :title="item.reason_incomplete" @change="updateItem()">
     </td>
     <td class="control">
       <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="deleteItem()">
@@ -59,9 +59,14 @@ export default {
   },
   methods: {
     updateItem () {
+      console.log('updateItem')
+      console.log('terms = ')
+      console.log(this.terms)
+      // TODO: emit event, but let parent invoke API
       itemsApi.update(this.item).then(updatedItem => this.$emit('updated', updatedItem))
     },
     deleteItem () {
+      // TODO: emit event, but let parent invoke API
       itemsApi.delete(this.item).then(() => this.$emit('removed', this.item))
     }
   }

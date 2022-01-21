@@ -1,6 +1,6 @@
 /* eslint no-console: 0 */
 import Vue from 'vue'
-import ItemsTable from '../packs/items/components/ItemsTable.vue'
+import ItemsTable from './items/components/ItemsAdmin.vue'
 import axios from 'axios'
 
 document.addEventListener('DOMContentLoaded', () => {

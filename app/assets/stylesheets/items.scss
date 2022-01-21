@@ -1,6 +1,6 @@
 @import 'includes/globals';
 
-section.items-table {
+section.items-admin {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   column-gap: $margin;
