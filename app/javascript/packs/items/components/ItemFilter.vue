@@ -3,7 +3,6 @@
     <form class="item-search" @submit.prevent>
       <label for="itemQuery-keywords">Keyword search:</label>
       <div class="item-search-field">
-        <!-- TODO: trigger reload on clear -->
         <input
           id="itemQuery-keywords"
           v-model="queryParams.keywords"
@@ -11,6 +10,7 @@
           placeholder="Search by title, author, publisher, or physical description"
           @keydown.enter.prevent
           @keyup.enter="apply()"
+          @search="apply()"
         >
         <button type="button" class="primary" @click="$event.target.blur(); apply()">Go</button>
       </div>
