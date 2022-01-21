@@ -49,6 +49,12 @@ export default {
     navigateTo (pageUrl) {
       itemsApi.getPage(pageUrl).then(this.update)
     },
+    updateItem (item) {
+      itemsApi.update(item).then(this.setItem)
+    },
+    deleteItem (item) {
+      itemsApi.delete(item).then(this.removeItem)
+    },
     removeItem (item) {
       console.log(`Item ${item.directory} removed`)
       Vue.delete(this.items, item.directory)

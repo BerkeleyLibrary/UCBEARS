@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import itemsApi from '../api/items'
 
 export default {
   props: {
@@ -59,15 +58,10 @@ export default {
   },
   methods: {
     updateItem () {
-      console.log('updateItem')
-      console.log('terms = ')
-      console.log(this.terms)
-      // TODO: emit event, but let parent invoke API
-      itemsApi.update(this.item).then(updatedItem => this.$emit('updated', updatedItem))
+      this.$emit('updated', this.item)
     },
     deleteItem () {
-      // TODO: emit event, but let parent invoke API
-      itemsApi.delete(this.item).then(() => this.$emit('removed', this.item))
+      this.$emit('removed', this.item)
     }
   }
 }
