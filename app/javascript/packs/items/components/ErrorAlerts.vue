@@ -1,15 +1,17 @@
 <template>
-  <aside v-if="errors && errors.size > 0" class="flash">
-    <div v-for="(error, index) in errors" :key="error" style="display: contents;">
+  <aside class="flash">
+    <div v-for="(error, index) in _errors" :key="error" style="display: contents;">
       <input
-        :id="`flash-dismiss-items-table-${index}`"
+        :id="`flash-dismiss-${index}`"
         :key="error"
+        v-model="_errors"
         type="checkbox"
+        :value="error"
         class="flash-dismiss"
-        @change="dismiss(error)"
+        checked
       >
       <div class="flash alert">
-        <label :for="`flash-dismiss-items-table-${index}`" class="flash-dismiss-label">
+        <label :for="`flash-dismiss-${index}`" class="flash-dismiss-label">
           <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon" alt="Hide alert">
         </label>
         <p class="flash" role="alert">{{ error }}</p>
@@ -21,11 +23,12 @@
 <script>
 export default {
   props: {
-    errors: { type: Set, default: () => new Set() }
+    errors: { type: Array, default: () => [] }
   },
-  methods: {
-    dismiss (error) {
-      this.$emit('dismissed', error)
+  computed: {
+    _errors: {
+      get () { return this.errors },
+      set (errors) { this.$emit('updated', errors) }
     }
   }
 }

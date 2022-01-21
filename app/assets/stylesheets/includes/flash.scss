@@ -6,7 +6,7 @@ aside.flash {
   input.flash-dismiss {
     display: none;
 
-    &:checked + div.flash {
+    &:not(:checked) + div.flash {
       display: none;
     }
   }

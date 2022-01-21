@@ -26,19 +26,14 @@ export default new Vuex.Store({
     setTable (state, table) {
       state.table = table
     },
+    setErrors (state, errors) {
+      state.errors = errors
+    },
     setItem (state, item) {
       state.table.items[item.directory] = item
     },
     removeItem (state, item) {
       Vue.delete(state.table.items, item.directory)
-    },
-    setErrors (state, errors) {
-      state.errors = Array.isArray(errors) ? new Set(errors) : new Set()
-    },
-    removeError (state, error) {
-      if (state.errors) {
-        state.errors.delete(error)
-      }
     }
   }
 })
