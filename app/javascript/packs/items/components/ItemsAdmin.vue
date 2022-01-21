@@ -2,7 +2,7 @@
   <section class="items-admin">
     <error-alerts :errors="errors" @dismissed="removeError"/>
     <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
-    <items-table :table="table" :terms="terms" @updated="updateItem" @removed="deleteItem"/>
+    <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>
     <item-paging :paging="table.paging" @page-selected="navigateTo"/>
   </section>
 </template>
@@ -38,8 +38,8 @@ export default {
     navigateTo (pageUrl) {
       itemsApi.getPage(pageUrl).then(this.setTable)
     },
-    updateItem (item) {
-      itemsApi.update(item).then(this.setItem).catch(this.handleError)
+    patchItem ({ item, change }) {
+      itemsApi.update({ ...change, url: item.url }).then(this.setItem).catch(this.handleError)
     },
     deleteItem (item) {
       itemsApi.delete(item).then(this.removeItem).catch(this.handleError)

@@ -25,18 +25,18 @@
     <td v-if="item.complete" key="complete?" class="control">Yes</td>
     <td v-else key="complete?" :title="item.reason_incomplete" class="control">No</td>
     <td class="control">
-      <input v-model.number.lazy="item.copies" type="number" @change="updateItem()">
+      <input v-model.number.lazy="copies" type="number">
     </td>
     <td>
       <ul>
-        <li v-for="term in terms" :key="`term-${term.id}`">
-          <input :id="`term-${term.id}`" v-model.lazy="item.terms" type="checkbox" :value="term" @change="updateItem()">
+        <li v-for="term in allTerms" :key="`term-${term.id}`">
+          <input :id="`term-${term.id}`" v-model.lazy="terms" type="checkbox" :value="term">
           <label :for="`term-${term.id}`">{{ term.name }}</label>
         </li>
       </ul>
     </td>
     <td class="control">
-      <input v-model.lazy="item.active" type="checkbox" :disabled="!item.complete" :title="item.reason_incomplete" @change="updateItem()">
+      <input v-model.lazy="active" type="checkbox" :disabled="!item.complete" :title="item.reason_incomplete">
     </td>
     <td class="control">
       <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="deleteItem()">
@@ -50,20 +50,26 @@
 
 export default {
   props: {
-    rowItem: { type: Object, default: () => {} },
-    terms: { type: Array, default: () => [] }
+    item: { type: Object, default: () => {} },
+    allTerms: { type: Array, default: () => [] }
   },
-  data: function () {
-    // TODO: find a more elegant way to make a local copy
-    return { item: Object.assign({}, this.rowItem) }
+  computed: {
+    terms: {
+      get () { return this.item.terms },
+      set (terms) { this.edited({ term_ids: terms.map(t => t.id) }) }
+    },
+    copies: {
+      get () { return this.item.copies },
+      set (copies) { this.edited({ copies: copies }) }
+    },
+    active: {
+      get () { return this.item.active },
+      set (active) { this.edited({ active: active }) }
+    }
   },
   methods: {
-    updateItem () {
-      this.$emit('updated', this.item)
-    },
-    deleteItem () {
-      this.$emit('removed', this.item)
-    }
+    edited (edit) { this.$emit('edited', edit) },
+    deleteItem () { this.$emit('removed') }
   }
 }
 </script>

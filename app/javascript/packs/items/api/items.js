@@ -29,19 +29,7 @@ export default {
   },
 
   update (item) {
-    const terms = item.terms || []
-    return axios.patch(item.url, {
-      item: {
-        title: item.title,
-        author: item.author,
-        copies: item.copies,
-        active: item.active,
-        publisher: item.publisher,
-        physical_desc: item.physical_desc,
-        term_ids: terms.map(t => t.id)
-      }
-    })
-      .then(response => response.data)
+    return axios.patch(item.url, { item: item }).then(response => response.data)
   },
 
   delete (item) {

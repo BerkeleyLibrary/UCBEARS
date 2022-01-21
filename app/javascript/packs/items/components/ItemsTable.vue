@@ -19,10 +19,10 @@
       <item-row
         v-for="item in items"
         :key="item.directory"
-        :row-item="item"
-        :terms="terms"
-        @updated="update"
-        @removed="remove"
+        :item="item"
+        :all-terms="terms"
+        @edited="edit(item)($event)"
+        @removed="remove(item)"
       />
     </tbody>
   </table>
@@ -38,20 +38,14 @@ export default {
     terms: { type: Array, default: () => [] }
   },
   computed: {
-    items () {
-      return this.table.items || {}
-    },
-    paging () {
-      return this.table.paging || {}
-    }
+    items () { return this.table.items || {} },
+    paging () { return this.table.paging || {} }
   },
   methods: {
-    update (item) {
-      this.$emit('updated', item)
+    edit (item) {
+      return (change) => this.$emit('edited', { item: item, change: change })
     },
-    remove (item) {
-      this.$emit('removed', item)
-    }
+    remove (item) { this.$emit('removed', item) }
   }
 }
 </script>
