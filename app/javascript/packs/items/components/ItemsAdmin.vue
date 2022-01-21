@@ -2,8 +2,8 @@
   <section class="items-admin">
     <error-alerts :errors="errors" @dismissed="dismissError"/>
     <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
-    <items-table :items="items" :terms="terms" :paging="paging" @updated="updateItem" @removed="deleteItem"/>
-    <item-paging :paging="paging" @page-selected="navigateTo"/>
+    <items-table :table="table" :terms="terms" @updated="updateItem" @removed="deleteItem"/>
+    <item-paging :paging="table.paging" @page-selected="navigateTo"/>
   </section>
 </template>
 
@@ -20,6 +20,10 @@ export default {
   components: { ItemsTable, ErrorAlerts, ItemFilter, ItemPaging },
   data: function () {
     return {
+      table: {
+        items: null,
+        paging: null
+      },
       items: null,
       terms: null,
       paging: null,
@@ -41,13 +45,16 @@ export default {
       termsApi.getAll().then(terms => { this.terms = terms })
     },
     getAllItems () {
-      itemsApi.getAll().then(this.update)
+      itemsApi.getAll().then(this.setTable)
     },
     submitQuery () {
-      itemsApi.findItems(this.queryParams).then(this.update)
+      itemsApi.findItems(this.queryParams).then(this.setTable)
     },
     navigateTo (pageUrl) {
-      itemsApi.getPage(pageUrl).then(this.update)
+      itemsApi.getPage(pageUrl).then(this.setTable)
+    },
+    setTable (table) {
+      this.table = table
     },
     updateItem (item) {
       itemsApi.update(item).then(this.setItem).catch(this.handleError)
@@ -59,7 +66,6 @@ export default {
       Vue.delete(this.items, item.directory)
     },
     setItem (item) {
-      console.log(`Setting item ${item.directory}`)
       this.items[item.directory] = item
     },
     handleError (error) {
@@ -71,11 +77,6 @@ export default {
     },
     dismissError (index) {
       this.errors.splice(index, 1)
-    },
-    // TODO: something cleaner
-    update ({ items, paging }) {
-      this.items = items
-      this.paging = paging
     }
   }
 }

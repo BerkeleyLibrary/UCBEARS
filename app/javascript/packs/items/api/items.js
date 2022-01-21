@@ -29,7 +29,6 @@ export default {
   },
 
   update (item) {
-    console.log(`Saving item ${item.directory} (${item.id})`)
     const terms = item.terms || []
     return axios.patch(item.url, {
       item: {
@@ -46,7 +45,6 @@ export default {
   },
 
   delete (item) {
-    console.log(`Deleting item ${item.directory} (${item.id})`)
     return axios.delete(item.url).then(() => item)
   }
 }

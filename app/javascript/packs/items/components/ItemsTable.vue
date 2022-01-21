@@ -34,9 +34,16 @@ import ItemRow from './ItemRow'
 export default {
   components: { ItemRow },
   props: {
-    paging: { type: Object, default: () => {} },
-    items: { type: Object, default: () => {} },
+    table: { type: Object, default: () => {} },
     terms: { type: Array, default: () => [] }
+  },
+  computed: {
+    items () {
+      return this.table.items || {}
+    },
+    paging () {
+      return this.table.paging || {}
+    }
   },
   methods: {
     update (item) {

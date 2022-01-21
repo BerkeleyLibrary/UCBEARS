@@ -13,6 +13,4 @@ document.addEventListener('DOMContentLoaded', () => {
     render: h => h(ItemsTable)
   })
   itemsTable.$mount('#items-table')
-
-  console.log(itemsTable)
 })
