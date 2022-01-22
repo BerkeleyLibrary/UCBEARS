@@ -9,7 +9,7 @@
 
 <script>
 import itemsApi from '../api/items'
-import termsApi from '../api/terms'
+import termsApi from '../../terms/api/terms'
 import ErrorAlerts from './ErrorAlerts'
 import ItemFilter from './ItemFilter'
 import ItemPaging from './ItemPaging'
