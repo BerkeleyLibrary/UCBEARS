@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resources :items, only: :index # index supports both HTML and JSON
   resources :items, except: :index, defaults: { format: 'json' }, constraints: ->(req) { req.format == :json }
 
+  resources :terms, only: :index # index supports both HTML and JSON
   resources :terms, only: %i[index show create update destroy], defaults: { format: 'json' }, constraints: ->(req) { req.format == :json }
 
   # Shared constraints

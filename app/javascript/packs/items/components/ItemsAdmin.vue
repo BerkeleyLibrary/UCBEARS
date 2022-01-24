@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import itemsApi from '../api/items'
-import termsApi from '../../terms/api/terms'
-import ErrorAlerts from './ErrorAlerts'
+import ErrorAlerts from '../../shared/components/ErrorAlerts'
 import ItemFilter from './ItemFilter'
 import ItemPaging from './ItemPaging'
 import ItemsTable from './ItemsTable'
-import { mapMutations, mapState } from 'vuex'
+import itemsApi from '../api/items'
 import store from '../store'
+import termsApi from '../../terms/api/terms'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   store,
@@ -51,7 +51,7 @@ export default {
       this.setErrors(error?.response?.data)
     },
     ...mapMutations([
-      'setTerms', 'setTable', 'setItem', 'removeItem', 'setErrors', 'removeError'
+      'setTerms', 'setTable', 'setItem', 'removeItem', 'setErrors'
     ])
   }
 }

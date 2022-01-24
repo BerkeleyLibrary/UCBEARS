@@ -17,7 +17,10 @@
     <ul>
       <% if current_user.lending_admin? %>
         <li>
-          <%= link_to('Administration', admin_path) %>
+          <%= link_to('Manage Items', items_path) %>
+        </li>
+        <li>
+          <%= link_to('Manage Terms', terms_path) %>
         </li>
         <li>
           <%= link_to('Index (old)', index_path) %>

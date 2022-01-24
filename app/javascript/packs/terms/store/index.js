@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    terms: []
+    terms: [],
+    errors: null
   },
   mutations: {
     setTerms (state, terms) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
       if (termIndex >= 0) {
         terms.splice(termIndex, 1)
       }
+    },
+    setErrors (state, errors) {
+      state.errors = errors
     }
   }
 })

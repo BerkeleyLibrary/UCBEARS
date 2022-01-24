@@ -1,6 +1,6 @@
 /* eslint no-console: 0 */
 import Vue from 'vue'
-import ItemsAdmin from './items/components/ItemsAdmin.vue'
+import TermsAdmin from './terms/components/TermsAdmin.vue'
 import axios from 'axios'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,5 +9,5 @@ document.addEventListener('DOMContentLoaded', () => {
     axios.defaults.headers.common['X-CSRF-Token'] = csrfToken.getAttribute('content')
   }
 
-  new Vue({ render: h => h(ItemsAdmin) }).$mount('#items-table')
+  new Vue({ render: h => h(TermsAdmin) }).$mount('#terms-table')
 })
