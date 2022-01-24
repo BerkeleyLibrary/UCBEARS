@@ -5,3 +5,4 @@ json.extract!(
   :start_date,
   :end_date
 )
+json.item_count term.items.count

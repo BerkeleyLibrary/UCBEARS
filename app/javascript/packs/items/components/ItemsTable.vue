@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table v-if="items">
     <caption v-if="paging">Viewing results {{ paging.fromItem }} to {{ paging.toItem }} of {{ paging.totalItems }}</caption>
     <thead>
       <tr>
@@ -38,8 +38,8 @@ export default {
     terms: { type: Array, default: () => [] }
   },
   computed: {
-    items () { return this.table.items || {} },
-    paging () { return this.table.paging || {} }
+    items () { return this.table.items },
+    paging () { return this.table.paging }
   },
   methods: {
     edit (item) {

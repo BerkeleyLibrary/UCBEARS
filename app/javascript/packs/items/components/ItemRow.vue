@@ -39,15 +39,14 @@
       <input v-model.lazy="active" type="checkbox" :disabled="!item.complete" :title="item.reason_incomplete">
     </td>
     <td class="control">
-      <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="deleteItem()">
-        <img class="action" src="/assets/icons/trash-alt.svg">
+      <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="deleteItem">
+        <img class="action" :alt="`Delete “${item.title}”`" src="/assets/icons/trash-alt.svg">
       </button>
     </td>
   </tr>
 </template>
 
 <script>
-
 export default {
   props: {
     item: { type: Object, default: () => {} },
