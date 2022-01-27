@@ -7,10 +7,10 @@ json.extract!(
   :copies,
   :active,
   :publisher,
-  :physical_desc
+  :physical_desc,
+  :created_at,
+  :updated_at
 )
-json.created_at(I18n.l(item.created_at, format: :xxshort))
-json.updated_at(I18n.l(item.updated_at, format: :xxshort))
 json.complete(item.complete?)
 json.reason_incomplete(item.reason_incomplete || (Item::MSG_ZERO_COPIES if item.copies < 1))
 json.url item_url(item, format: :json)

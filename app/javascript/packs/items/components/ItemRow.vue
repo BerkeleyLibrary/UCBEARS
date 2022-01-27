@@ -21,10 +21,11 @@
     <td class="control">
       <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to “${item.title}” patron view`"><img src="/assets/icons/link.svg" :alt="`Permalink to “${item.title}” patron view`" class="action"></a>
     </td>
-    <td class="date">{{ item.updated_at }}</td>
+    <td class="date">{{ formatDateTime(item.updated_at) }}</td>
     <td v-if="item.complete" key="complete?" class="control">Yes</td>
     <td v-else key="complete?" :title="item.reason_incomplete" class="control">No</td>
     <td class="control">
+      <!-- TODO: client-side validation -->
       <input v-model.number.lazy="copies" type="number">
     </td>
     <td>
@@ -47,7 +48,10 @@
 </template>
 
 <script>
+import i18n from '../../shared/mixins/i18n.js'
+
 export default {
+  mixins: [i18n],
   props: {
     item: { type: Object, default: () => {} },
     allTerms: { type: Array, default: () => [] }
