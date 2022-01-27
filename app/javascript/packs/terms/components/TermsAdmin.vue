@@ -1,5 +1,5 @@
 <template>
-  <section class="terms-admin">
+  <section id="terms-admin" class="admin">
     <error-alerts v-if="hasErrors" :errors="errors" @updated="setErrors"/>
     <table v-if="terms">
       <thead>

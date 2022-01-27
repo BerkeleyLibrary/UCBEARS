@@ -1,5 +1,5 @@
 <template>
-  <section class="items-admin">
+  <section id="items-admin" class="admin">
     <error-alerts v-if="hasErrors" :errors="errors" @updated="setErrors"/>
     <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
     <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>

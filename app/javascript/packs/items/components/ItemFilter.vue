@@ -1,8 +1,8 @@
 <template>
   <div style="display: contents">
-    <form class="item-search" @submit.prevent>
+    <form class="search" @submit.prevent>
       <label for="itemQuery-keywords">Keyword search:</label>
-      <div class="item-search-field">
+      <div class="search-field">
         <input
           id="itemQuery-keywords"
           v-model="queryParams.keywords"
@@ -16,7 +16,7 @@
       </div>
     </form>
 
-    <form class="item-facets">
+    <form class="facets">
       <fieldset>
         <legend>Term</legend>
 
