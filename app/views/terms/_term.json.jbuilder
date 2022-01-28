@@ -2,6 +2,8 @@ json.extract!(
   term,
   :id,
   :name,
+  :created_at,
+  :updated_at
 )
 # TODO: just store term start/end date as local midnight timestamp
 json.start_date term.start_date.to_time

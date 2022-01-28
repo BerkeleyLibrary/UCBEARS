@@ -1,14 +1,14 @@
 <template>
+  <!-- TODO: client-side validation -->
   <tr class="term">
-    <td>{{ term.name }}</td>
+    <td><input v-model.lazy="name" type="text"></td>
     <td>
-      <!-- TODO: client-side validation -->
       <input v-model.lazy="startDate" type="date">
     </td>
     <td>
-      <!-- TODO: client-side validation -->
       <input v-model.lazy="endDate" type="date">
     </td>
+    <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
       <button class="delete" @click="deleteTerm">
@@ -27,6 +27,10 @@ export default {
     term: { type: Object, default: () => {} }
   },
   computed: {
+    name: {
+      get () { return this.term.name },
+      set (name) { this.edited({ name: name }) }
+    },
     startDate: {
       get () {
         const startDate = this.term.start_date

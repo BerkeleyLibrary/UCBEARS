@@ -22,3 +22,8 @@ en:
     errors:
       messages:
         taken: "already exists"
+      models:
+        term:
+          attributes:
+            name:
+              taken: "A term with that name already exists."

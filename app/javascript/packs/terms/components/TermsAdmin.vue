@@ -7,6 +7,7 @@
           <th>Name</th>
           <th>Start date</th>
           <th>End date</th>
+          <th>Updated</th>
           <th>Items</th>
           <th>Delete</th>
         </tr>

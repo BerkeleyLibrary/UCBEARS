@@ -125,21 +125,20 @@ section.admin {
     }
   }
 
-  input[type="number"] {
+  input {
     font-size: $font-size-xsmall;
     line-height: $line-height;
-    width: $font-size-xxlarge;
-    text-align: center;
     font-variant-numeric: tabular-nums lining-nums;
     font-family: sans-serif;
   }
 
-  input[type="date"] {
+  input[type="number"] {
+    width: $font-size-xxlarge;
+    text-align: center;
+  }
+
+  input[type="date"],input[type="text"] {
     width: auto;
-    font-size: $font-size-xsmall;
-    line-height: $line-height;
-    font-variant-numeric: tabular-nums lining-nums;
-    font-family: sans-serif;
   }
 
   a.icon-link {
