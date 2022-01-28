@@ -11,16 +11,31 @@ const dateTimeFmt = 'yyyy-MM-dd h:mm aa'
 export default {
   methods: {
     dateToDateInput (date) {
-      const d = ensureDate(date)
-      return formatDate(d, rawDateFmtISO)
+      try {
+        const d = ensureDate(date)
+        return formatDate(d, rawDateFmtISO)
+      } catch (e) {
+        console.log(e)
+        return null
+      }
     },
     dateToISO8601 (dateVal) {
-      const d = ensureDate(dateVal)
-      return formatISO(d)
+      try {
+        const d = ensureDate(dateVal)
+        return formatISO(d)
+      } catch (e) {
+        console.log(e)
+        return null
+      }
     },
     formatDateTime: function (date) {
-      const d = ensureDate(date)
-      return formatDate(d, dateTimeFmt)
+      try {
+        const d = ensureDate(date)
+        return formatDate(d, dateTimeFmt)
+      } catch (e) {
+        console.log(e)
+        return null
+      }
     }
   }
 }

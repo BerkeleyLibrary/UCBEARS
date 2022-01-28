@@ -14,9 +14,12 @@ class Term < ActiveRecord::Base
   # Validations
 
   validates :name, presence: true, uniqueness: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
   validate :start_date_before_end_date
 
   def start_date_before_end_date
+    return unless start_date && end_date
     return if start_date < end_date
 
     errors.add(:start_date, MSG_START_MUST_PRECEDE_END)
