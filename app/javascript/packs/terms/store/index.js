@@ -30,6 +30,7 @@ export default new Vuex.Store({
       }
     },
     setErrors (state, errors) {
+      console.log(`setErrors(${JSON.stringify(errors)})`)
       state.errors = errors
     }
   }

@@ -7,7 +7,7 @@
     </td>
     <td>
       <!-- TODO: client-side validation -->
-      <input type="date" :value="endDate">
+      <input v-model.lazy="endDate" type="date">
     </td>
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
@@ -34,6 +34,7 @@ export default {
       },
       set (dateVal) {
         const date = this.fromDateInputValue(dateVal)
+        console.log(`startDate.set(${date})`)
         this.edited({ start_date: date })
       }
     },
@@ -44,12 +45,16 @@ export default {
       },
       set (dateVal) {
         const date = this.fromDateInputValue(dateVal)
+        console.log(`endDate.set(${date})`)
         this.edited({ end_date: date })
       }
     }
   },
   methods: {
-    edited (edit) { this.$emit('edited', edit) },
+    edited (edit) {
+      console.log(`TermRow.edited(${JSON.stringify(edit)})`)
+      this.$emit('edited', edit)
+    },
     deleteTerm () { this.$emit('removed') }
   }
 }

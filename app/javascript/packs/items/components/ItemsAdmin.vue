@@ -1,6 +1,6 @@
 <template>
   <section id="items-admin" class="admin">
-    <error-alerts v-if="hasErrors" :errors="errors" @updated="setErrors"/>
+    <error-alerts :errors="errors" @updated="setErrors"/>
     <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
     <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>
     <item-paging :paging="table.paging" @page-selected="navigateTo"/>
@@ -21,7 +21,6 @@ export default {
   store,
   components: { ItemsTable, ErrorAlerts, ItemFilter, ItemPaging },
   computed: {
-    hasErrors () { return !!this.errors && this.errors.length > 0 },
     ...mapState(['table', 'terms', 'errors', 'queryParams'])
   },
   mounted: function () {

@@ -70,6 +70,6 @@ class ItemsController < ApplicationController
 
   def render_item_errors
     logger.warn(@item.errors.full_messages)
-    render json: @item.errors.full_messages, status: :unprocessable_entity
+    render json: @item.errors, status: :unprocessable_entity
   end
 end

@@ -1,6 +1,6 @@
 <template>
   <section id="terms-admin" class="admin">
-    <error-alerts v-if="hasErrors" :errors="errors" @updated="setErrors"/>
+    <error-alerts :errors="errors" @updated="setErrors"/>
     <table v-if="terms">
       <thead>
         <tr>
@@ -36,7 +36,6 @@ export default {
   store,
   components: { TermRow, ErrorAlerts },
   computed: {
-    hasErrors () { return !!this.errors && this.errors.length > 0 },
     ...mapState(['terms', 'errors'])
   },
   mounted: function () {

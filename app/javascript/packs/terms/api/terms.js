@@ -9,6 +9,7 @@ export default {
     return axios.get(termsUrl, requestConfig).then(response => response.data)
   },
   update (term) {
+    console.log(`termsApi.update(${term.url}, { term: ${JSON.stringify(term)} })`)
     return axios.patch(term.url, { term: term }).then(response => response.data)
   },
   delete (term) {
