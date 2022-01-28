@@ -1,5 +1,5 @@
 import { format as formatDate } from 'date-fns-tz'
-import { parseISO } from 'date-fns'
+import { parseISO, formatISO } from 'date-fns'
 
 function ensureDate (isoDate) {
   return (isoDate instanceof Date) ? isoDate : parseISO(isoDate)
@@ -10,12 +10,13 @@ const dateTimeFmt = 'yyyy-MM-dd h:mm aa'
 
 export default {
   methods: {
-    toDateInputValue (date) {
+    dateToDateInput (date) {
       const d = ensureDate(date)
       return formatDate(d, rawDateFmtISO)
     },
-    fromDateInputValue (dateVal) {
-      return parseISO(dateVal)
+    dateToISO8601 (dateVal) {
+      const d = ensureDate(dateVal)
+      return formatISO(d)
     },
     formatDateTime: function (date) {
       const d = ensureDate(date)

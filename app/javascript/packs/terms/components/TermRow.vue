@@ -30,22 +30,20 @@ export default {
     startDate: {
       get () {
         const startDate = this.term.start_date
-        return this.toDateInputValue(startDate)
+        return this.dateToDateInput(startDate)
       },
       set (dateVal) {
-        const date = this.fromDateInputValue(dateVal)
-        console.log(`startDate.set(${date})`)
+        const date = this.dateToISO8601(dateVal)
         this.edited({ start_date: date })
       }
     },
     endDate: {
       get () {
         const endDate = this.term.end_date
-        return this.toDateInputValue(endDate)
+        return this.dateToDateInput(endDate)
       },
       set (dateVal) {
-        const date = this.fromDateInputValue(dateVal)
-        console.log(`endDate.set(${date})`)
+        const date = this.dateToISO8601(dateVal)
         this.edited({ end_date: date })
       }
     }
