@@ -3,7 +3,13 @@ class TermsController < ApplicationController
   before_action :require_lending_admin!, only: %i[create update destroy]
 
   def index
-    @terms = Term.all
+    respond_to do |format|
+      format.html
+
+      format.json do
+        @terms = terms
+      end
+    end
   end
 
   def show; end
@@ -38,6 +44,15 @@ class TermsController < ApplicationController
 
   private
 
+  def terms
+    logger.info("query_params: #{query_params}")
+    return Term.all unless query_params && !query_params.empty?
+
+    selected_scopes = Term::QUERY_SCOPES.select { |sc| query_params[sc] }
+    selected_scope_relations = selected_scopes.map { |sc| Term.send(sc) }
+    selected_scope_relations.inject { |r1, r2| r1.or(r2) }
+  end
+
   def set_term
     term_id = params.require(:id)
     @term = Term.find(term_id)
@@ -45,6 +60,10 @@ class TermsController < ApplicationController
 
   def term_params
     params.require(:term).permit(:name, :start_date, :end_date)
+  end
+
+  def query_params
+    params.permit(:past, :current, :future)
   end
 
   def render_term_errors

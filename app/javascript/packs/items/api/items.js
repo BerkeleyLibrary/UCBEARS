@@ -24,8 +24,8 @@ export default {
     return getItems({ url: itemApiUrl })
   },
 
-  findItems (queryParams) {
-    return getItems({ params: queryParams })
+  findItems (itemFilter) {
+    return getItems({ filter: itemFilter })
   },
 
   update (item) {
@@ -40,10 +40,10 @@ export default {
 // ------------------------------------------------------------
 // Unexported functions
 
-function getItems ({ url = defaultItemsUrl(), params } = {}) {
-  const requestConfig = { headers: { Accept: 'application/json' } }
-  if (params) {
-    requestConfig.params = params
+function getItems ({ url = defaultItemsUrl(), filter } = {}) {
+  const requestConfig = { headers: { Accept: 'application/json' } } // TODO: global Axios config?
+  if (filter) {
+    requestConfig.params = filter
   }
   return axios.get(url, requestConfig).then(response => {
     return {

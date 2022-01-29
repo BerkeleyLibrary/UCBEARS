@@ -1,7 +1,7 @@
 <template>
   <section id="items-admin" class="admin">
     <error-alerts :errors="errors" @updated="setErrors"/>
-    <item-filter :params="queryParams" :terms="terms" @applied="submitQuery"/>
+    <item-filter :terms="terms" @applied="filterItems"/>
     <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>
     <item-paging :paging="table.paging" @page-selected="navigateTo"/>
   </section>
@@ -21,7 +21,7 @@ export default {
   store,
   components: { ItemsTable, ErrorAlerts, ItemFilter, ItemPaging },
   computed: {
-    ...mapState(['table', 'terms', 'errors', 'queryParams'])
+    ...mapState(['table', 'terms', 'errors'])
   },
   mounted: function () {
     this.getAllTerms()
@@ -34,8 +34,8 @@ export default {
     getAllItems () {
       itemsApi.getAll().then(this.setTable)
     },
-    submitQuery (queryParams) {
-      itemsApi.findItems(queryParams).then(this.setTable)
+    filterItems (itemFilter) {
+      itemsApi.findItems(itemFilter).then(this.setTable)
     },
     navigateTo (pageUrl) {
       itemsApi.getPage(pageUrl).then(this.setTable)

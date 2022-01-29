@@ -1,11 +1,11 @@
 <template>
   <div style="display: contents">
     <form class="search" @submit.prevent>
-      <label for="itemQuery-keywords">Keyword search:</label>
+      <label for="itemFilter-keywords">Keyword search:</label>
       <div class="search-field">
         <input
-          id="itemQuery-keywords"
-          v-model="queryParams.keywords"
+          id="itemFilter-keywords"
+          v-model="itemFilter.keywords"
           type="search"
           placeholder="Search by title, author, publisher, or physical description"
           @keydown.enter.prevent
@@ -21,7 +21,7 @@
         <legend>Term</legend>
 
         <template v-for="term in terms">
-          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="queryParams.terms" type="checkbox" :value="term.name" @change="apply()">
+          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemFilter.terms" type="checkbox" :value="term.name" @change="apply()">
           <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
@@ -29,21 +29,21 @@
       <fieldset>
         <legend>Status</legend>
 
-        <input id="itemQuery-active" v-model="queryParams.active" type="checkbox" true-value="true" :false-value="null" @change="apply()">
-        <label for="itemQuery-active">Active only</label>
+        <input id="itemFilter-active" v-model="itemFilter.active" type="checkbox" true-value="true" :false-value="null" @change="apply()">
+        <label for="itemFilter-active">Active only</label>
 
-        <input id="itemQuery-inactive" v-model="queryParams.active" type="checkbox" true-value="false" :false-value="null" @change="apply()">
-        <label for="itemQuery-active">Inactive only</label>
+        <input id="itemFilter-inactive" v-model="itemFilter.active" type="checkbox" true-value="false" :false-value="null" @change="apply()">
+        <label for="itemFilter-active">Inactive only</label>
       </fieldset>
 
       <fieldset>
         <legend>Complete?</legend>
 
-        <input id="itemQuery-complete" v-model="queryParams.complete" type="checkbox" true-value="true" :false-value="null" @change="apply()">
-        <label for="itemQuery-complete">Complete only</label>
+        <input id="itemFilter-complete" v-model="itemFilter.complete" type="checkbox" true-value="true" :false-value="null" @change="apply()">
+        <label for="itemFilter-complete">Complete only</label>
 
-        <input id="itemQuery-incomplete" v-model="queryParams.complete" type="checkbox" true-value="false" :false-value="null" @change="apply()">
-        <label for="itemQuery-complete">Incomplete only</label>
+        <input id="itemFilter-incomplete" v-model="itemFilter.complete" type="checkbox" true-value="false" :false-value="null" @change="apply()">
+        <label for="itemFilter-complete">Incomplete only</label>
       </fieldset>
     </form>
   </div>
@@ -52,15 +52,14 @@
 <script>
 export default {
   props: {
-    params: { type: Object, default: () => {} },
     terms: { type: Array, default: () => [] }
   },
   data: function () {
-    return { queryParams: { ...this.params } }
+    return { itemFilter: { keywords: null, terms: [], active: null, complete: null } }
   },
   methods: {
     apply () {
-      this.$emit('applied', this.queryParams)
+      this.$emit('applied', this.itemFilter)
     }
   }
 }

@@ -6,18 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    table: {
-      items: null,
-      paging: null
-    },
-    terms: null,
     errors: null,
-    queryParams: {
-      active: null,
-      complete: null,
-      keywords: null,
-      terms: []
-    }
+    terms: [],
+    table: { items: null, paging: null }
   },
   mutations: {
     setTerms (state, terms) {

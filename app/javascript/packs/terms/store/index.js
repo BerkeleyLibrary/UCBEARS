@@ -6,8 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    terms: [],
-    errors: null
+    errors: null,
+    termFilter: { future: null, past: null, current: null },
+    terms: []
   },
   mutations: {
     setTerms (state, terms) {

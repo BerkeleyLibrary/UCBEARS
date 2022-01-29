@@ -2,19 +2,29 @@ import axios from 'axios'
 
 export default {
   getAll () {
-    const termsUrl = defaultTermsUrl()
-    const requestConfig = {
-      headers: { Accept: 'application/json' }
-    }
-    return axios.get(termsUrl, requestConfig).then(response => response.data)
+    return getTerms()
   },
+
+  findTerms (termFilter) {
+    return getTerms({ filter: termFilter })
+  },
+
   update (term) {
     console.log(`termsApi.update(${term.url}, { term: ${JSON.stringify(term)} })`)
     return axios.patch(term.url, { term: term }).then(response => response.data)
   },
+
   delete (term) {
     return axios.delete(term.url).then(() => term)
   }
+}
+
+function getTerms ({ url = defaultTermsUrl(), filter } = {}) {
+  const requestConfig = { headers: { Accept: 'application/json' } } // TODO: global Axios config?
+  if (filter) {
+    requestConfig.params = filter
+  }
+  return axios.get(url, requestConfig).then(response => response.data)
 }
 
 function defaultTermsUrl () {

@@ -4,6 +4,7 @@ class Term < ActiveRecord::Base
   # Constants
 
   MSG_START_MUST_PRECEDE_END = 'Term start date must precede end date'.freeze
+  QUERY_SCOPES = %i[past current future].freeze
 
   # ------------------------------------------------------------
   # Items
@@ -32,6 +33,8 @@ class Term < ActiveRecord::Base
 
   scope :current, -> { where("DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?)) BETWEEN start_date AND end_date", Time.zone.name) }
   scope :current_or_future, -> { where("end_date >= DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?))", Time.zone.name) }
+  scope :future, -> { where("start_date > DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?))", Time.zone.name) }
+  scope :past, -> { where("end_date < DATE(DATE_TRUNC('day', CURRENT_TIMESTAMP, ?))", Time.zone.name) }
 
   # ------------------------------------------------------------
   # Synthetic accessors
