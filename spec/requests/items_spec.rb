@@ -267,7 +267,8 @@ RSpec.describe '/items', type: :request do
         expect(response.content_type).to start_with('application/json')
 
         response_json = JSON.parse(response.body)
-        expect(response_json).to include(Item::MSG_CANNOT_DELETE_COMPLETE_ITEM)
+        response_values = response_json.values.flatten
+        expect(response_values).to include(Item::MSG_CANNOT_DELETE_COMPLETE_ITEM)
       end
 
       it 'succeeds if the item has already been deleted' do

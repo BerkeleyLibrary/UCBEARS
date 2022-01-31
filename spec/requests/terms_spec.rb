@@ -115,7 +115,8 @@ RSpec.describe '/terms', type: :request do
 
         parsed_response = JSON.parse(response.body)
         expected_msg = I18n.t('activerecord.errors.messages.taken')
-        expect(parsed_response['name']).to include(expected_msg)
+        expected_msg_re = /#{Regexp.escape(expected_msg)}/
+        expect(parsed_response['name']).to include(expected_msg_re)
       end
     end
 
@@ -174,7 +175,9 @@ RSpec.describe '/terms', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to start_with('application/json')
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response['start_date']).to include(Term::MSG_START_MUST_PRECEDE_END)
+        expected_msg = Term::MSG_START_MUST_PRECEDE_END
+        expected_msg_re = /#{Regexp.escape(expected_msg)}/
+        expect(parsed_response['start_date']).to include(expected_msg_re)
       end
 
       it 'does not accept duplicate names' do
