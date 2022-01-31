@@ -2,8 +2,8 @@
   <tbody>
     <tr v-if="newTerm" class="new-term">
       <td><input v-model.lazy="newTerm.name" type="text"></td>
-      <td><input v-model.lazy="newTerm.startDate" type="date"></td>
-      <td><input v-model.lazy="newTerm.endDate" type="date"></td>
+      <td><input v-model.lazy="newTerm.start_date" type="date"></td>
+      <td><input v-model.lazy="newTerm.end_date" type="date"></td>
       <td colspan="3">
         <div class="actions">
           <button type="button" class="primary" @click="saveNewTerm">Save</button>
@@ -31,6 +31,9 @@ export default {
     },
     cancelNewTerm () {
       this.newTerm = null
+    },
+    saveNewTerm () {
+      this.$emit('saved', this.newTerm)
     }
   }
 }
