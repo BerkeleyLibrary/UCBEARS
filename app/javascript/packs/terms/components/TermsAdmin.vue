@@ -48,7 +48,6 @@ function confirmDelete (term) {
   return window.confirm(msg)
 }
 
-// TODO: implement adding new term
 export default {
   store,
   components: { ErrorAlerts, TermFilter, TermRow, AddTermWidget },
