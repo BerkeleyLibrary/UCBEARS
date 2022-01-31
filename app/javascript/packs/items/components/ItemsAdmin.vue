@@ -41,6 +41,7 @@ export default {
       itemsApi.getPage(pageUrl).then(this.setTable)
     },
     patchItem ({ item, change }) {
+      console.log('patchItem(' + JSON.stringify(change) + ')')
       itemsApi.update({ ...change, url: item.url }).then(this.setItem).catch(this.handleError)
     },
     deleteItem (item) {
@@ -50,7 +51,7 @@ export default {
       this.setErrors(error?.response?.data)
     },
     ...mapMutations([
-      'setTerms', 'setTable', 'setItem', 'removeItem', 'setErrors'
+      'setTerms', 'setTable', 'setItem', 'removeItem', 'setErrors', 'clearErrors'
     ])
   }
 }

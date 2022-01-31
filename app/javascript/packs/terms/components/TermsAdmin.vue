@@ -22,7 +22,7 @@
           @removed="deleteTerm(term)"
         />
       </tbody>
-      <add-term-widget @saved="createTerm"/>
+      <add-term-widget/>
     </table>
   </section>
 </template>
@@ -58,9 +58,6 @@ export default {
     deleteTerm (term) {
       termsApi.delete(term).then(this.removeTerm).catch(this.handleError)
     },
-    createTerm (term) {
-      termsApi.create(term).then(this.setTerm).catch(this.handleError)
-    },
     submitQuery (termFilter) {
       termsApi.findTerms(termFilter).then(this.setTerms).catch(this.handleError)
     },
@@ -68,7 +65,7 @@ export default {
       this.setErrors(error?.response?.data)
     },
     ...mapMutations([
-      'setTerms', 'setTerm', 'removeTerm', 'setErrors'
+      'setTerms', 'setTerm', 'removeTerm', 'setErrors', 'clearErrors'
     ])
   }
 }

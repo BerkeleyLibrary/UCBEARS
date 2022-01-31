@@ -26,9 +26,8 @@ en:
         term:
           attributes:
             name:
-              blank: "Term must have a name."
-              taken: "A term with that name already exists."
+              blank: "must have a name"
             start_date:
-              blank: "Term must have a start date."
+              blank: "must have a start date"
             end_date:
-              blank: "Term must have an end date."
+              blank: "must have an end date"

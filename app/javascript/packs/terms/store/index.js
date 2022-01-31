@@ -15,6 +15,8 @@ export default new Vuex.Store({
       state.terms = terms
     },
     setTerm (state, term) {
+      state.errors = null
+
       const terms = state.terms
       const termIndex = terms.findIndex(t => t.id === term.id)
       if (termIndex >= 0) {
@@ -24,6 +26,8 @@ export default new Vuex.Store({
       }
     },
     removeTerm (state, term) {
+      state.errors = null
+
       const terms = state.terms
       const termIndex = terms.findIndex(t => t.id === term.id)
       if (termIndex >= 0) {
@@ -33,6 +37,9 @@ export default new Vuex.Store({
     setErrors (state, errors) {
       console.log(`setErrors(${JSON.stringify(errors)})`)
       state.errors = errors
+    },
+    clearErrors (state) {
+      state.errors = null
     }
   }
 })

@@ -21,6 +21,14 @@
 </template>
 
 <script>
+
+function normalizeErrorMessage (attr, msg) {
+  if (attr === 'base') {
+    return msg
+  }
+  return `${attr} ${msg}`
+}
+
 export default {
   props: {
     errors: { type: Object, default: () => {} }
@@ -35,7 +43,7 @@ export default {
         if (Array.isArray(errors)) {
           return errors
         }
-        return Object.entries(errors).flatMap(([_, v]) => v)
+        return Object.entries(errors).flatMap(([k, v]) => normalizeErrorMessage(k, v))
       },
       set (errors) { this.$emit('updated', errors) }
     },

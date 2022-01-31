@@ -1,40 +1,50 @@
 <template>
   <tbody>
-    <tr v-if="newTerm" class="new-term">
-      <td><input v-model.lazy="newTerm.name" type="text"></td>
-      <td><input v-model.lazy="newTerm.start_date" type="date"></td>
-      <td><input v-model.lazy="newTerm.end_date" type="date"></td>
+    <tr v-if="term" class="new-term">
+      <td><input v-model.lazy="term.name" type="text"></td>
+      <td><input v-model.lazy="term.start_date" type="date"></td>
+      <td><input v-model.lazy="term.end_date" type="date"></td>
       <td colspan="3">
         <div class="actions">
-          <button type="button" class="primary" @click="saveNewTerm">Save</button>
-          <button type="button" class="secondary" @click="cancelNewTerm">Cancel</button>
+          <button type="button" class="primary" @click="save">Save</button>
+          <button type="button" class="secondary" @click="clear">Cancel</button>
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="6">
-        <button v-if="newTerm" type="button" class="primary disabled">Add a term</button>
-        <button v-else type="button" class="primary" @click="addNewTerm">Add a term</button>
+        <button v-if="term" type="button" class="primary disabled">Add a term</button>
+        <button v-else type="button" class="primary" @click="add">Add a term</button>
       </td>
     </tr>
   </tbody>
 </template>
 
 <script>
+import store from '../store'
+import { mapMutations } from 'vuex'
+import termsApi from '../api/terms'
+
 export default {
+  store,
   data: function () {
-    return { newTerm: null }
+    return { term: null }
   },
   methods: {
-    addNewTerm () {
-      this.newTerm = {}
+    add () { this.term = {} },
+    clear () { this.term = null },
+    save () {
+      termsApi.create(this.term).then(this.created).catch(this.handleError)
     },
-    cancelNewTerm () {
-      this.newTerm = null
+    created (term) {
+      this.clear()
+      this.setTerm(term)
     },
-    saveNewTerm () {
-      this.$emit('saved', this.newTerm)
-    }
+    handleError (error) {
+      console.log(error)
+      this.setErrors(error?.response?.data)
+    },
+    ...mapMutations(['setTerm', 'setErrors'])
   }
 }
 </script>

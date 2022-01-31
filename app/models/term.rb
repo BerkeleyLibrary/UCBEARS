@@ -23,7 +23,7 @@ class Term < ActiveRecord::Base
     return unless start_date && end_date
     return if start_date < end_date
 
-    errors.add(:start_date, MSG_START_MUST_PRECEDE_END)
+    errors.add(:base, MSG_START_MUST_PRECEDE_END)
   end
 
   # ------------------------------------------------------------
