@@ -5,5 +5,22 @@ section.admin {
     table {
       width: fit-content;
     }
+
+    tr.new-term {
+      border-top: 1px solid $color-row-divider;
+
+      div.actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          font-size: $font-size-xsmall;
+          line-height: $line-height;
+          margin-left: $margin;
+          margin-right: $margin;
+        }
+      }
+    }
   }
 }

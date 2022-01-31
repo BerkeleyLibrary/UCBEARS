@@ -22,6 +22,7 @@
           @removed="deleteTerm(term)"
         />
       </tbody>
+      <add-term-widget/>
     </table>
   </section>
 </template>
@@ -30,6 +31,7 @@
 import ErrorAlerts from '../../shared/components/ErrorAlerts'
 import TermFilter from './TermFilter'
 import TermRow from './TermRow'
+import AddTermWidget from './AddTermWidget'
 import store from '../store'
 import termsApi from '../api/terms'
 import { mapMutations, mapState } from 'vuex'
@@ -37,7 +39,7 @@ import { mapMutations, mapState } from 'vuex'
 // TODO: implement adding new term
 export default {
   store,
-  components: { ErrorAlerts, TermFilter, TermRow },
+  components: { ErrorAlerts, TermFilter, TermRow, AddTermWidget },
   computed: {
     ...mapState(['terms', 'errors'])
   },

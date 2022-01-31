@@ -2,12 +2,8 @@
   <!-- TODO: client-side validation -->
   <tr class="term">
     <td><input v-model.lazy="name" type="text"></td>
-    <td>
-      <input v-model.lazy="startDate" type="date">
-    </td>
-    <td>
-      <input v-model.lazy="endDate" type="date">
-    </td>
+    <td><input v-model.lazy="startDate" type="date"></td>
+    <td><input v-model.lazy="endDate" type="date"></td>
     <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
