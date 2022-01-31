@@ -36,6 +36,18 @@ import store from '../store'
 import termsApi from '../api/terms'
 import { mapMutations, mapState } from 'vuex'
 
+function confirmDelete (term) {
+  if (term.item_count === 0) {
+    return true
+  }
+  let itemsStr = 'item'
+  if (term.item_count > 1) {
+    itemsStr = `${itemsStr}s`
+  }
+  const msg = `Term ${term.name} has ${term.item_count} ${itemsStr}. Really delete it?`
+  return window.confirm(msg)
+}
+
 // TODO: implement adding new term
 export default {
   store,
@@ -56,7 +68,9 @@ export default {
       }
     },
     deleteTerm (term) {
-      termsApi.delete(term).then(this.removeTerm).catch(this.handleError)
+      if (confirmDelete(term)) {
+        termsApi.delete(term).then(this.removeTerm).catch(this.handleError)
+      }
     },
     submitQuery (termFilter) {
       termsApi.findTerms(termFilter).then(this.setTerms).catch(this.handleError)
