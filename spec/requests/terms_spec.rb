@@ -92,9 +92,7 @@ RSpec.describe '/terms', type: :request do
         expect(response.content_type).to match(%r{^application/json})
 
         parsed_response = JSON.parse(response.body)
-        start_date_err = parsed_response['start_date']
-        expect(start_date_err).not_to be_nil
-        expect(start_date_err).to include(Term::MSG_START_MUST_PRECEDE_END)
+        expect(parsed_response['base']).to include(Term::MSG_START_MUST_PRECEDE_END)
       end
 
       it 'returns errors for a duplicate term name' do
@@ -177,7 +175,7 @@ RSpec.describe '/terms', type: :request do
         parsed_response = JSON.parse(response.body)
         expected_msg = Term::MSG_START_MUST_PRECEDE_END
         expected_msg_re = /#{Regexp.escape(expected_msg)}/
-        expect(parsed_response['start_date']).to include(expected_msg_re)
+        expect(parsed_response['base']).to include(expected_msg_re)
       end
 
       it 'does not accept duplicate names' do
