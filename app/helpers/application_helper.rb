@@ -23,10 +23,6 @@ module ApplicationHelper
   # ------------------------------------------------------------
   # Link helpers
 
-  def admin_path
-    items_path
-  end
-
   def root_link
     link_to(app_title_short, root_path)
   end
