@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 describe TermsController, type: :system do
-  # DateTime#strftime translation of the format we're using in JS
-  let(:datetime_fmt) { '%Y-%m-%d %-l:%M %p'.freeze }
-
   attr_reader :terms_by_time
 
   before(:each) do
@@ -19,6 +16,16 @@ describe TermsController, type: :system do
     end
   end
 
+  def updated_at_str(term)
+    tz_js = page.evaluate_script('Intl.DateTimeFormat().resolvedOptions().timeZone')
+    updated_at = term.updated_at
+    updated_at_tz = updated_at.in_time_zone(tz_js)
+
+    # DateTime#strftime translation of the format we're using in JS
+    datetime_fmt = '%Y-%m-%d %-l:%M %p'.freeze
+    updated_at_tz.strftime(datetime_fmt)
+  end
+
   def name_field_id(term)
     "term-#{term.id}-name"
   end
@@ -32,11 +39,11 @@ describe TermsController, type: :system do
   end
 
   def expect_updated_at(term)
-    expect(page).to have_content(term.updated_at.strftime(datetime_fmt))
+    expect(page).to have_content(updated_at_str(term))
   end
 
   def expect_no_updated_at(term)
-    expect(page).not_to have_content(term.updated_at.strftime(datetime_fmt))
+    expect(page).not_to have_content(updated_at_str(term))
   end
 
   context 'with lending admin credentials' do
