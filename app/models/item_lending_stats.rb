@@ -1,3 +1,5 @@
+require 'csv'
+
 # rubocop:disable Metrics/ClassLength
 class ItemLendingStats
   include Comparable

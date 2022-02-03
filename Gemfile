@@ -7,7 +7,7 @@ ruby '~> 3.0.0'
 gem 'awesome_print', '>=1.8.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.3'
 gem 'berkeley_library-marc', '~> 0.2'
-gem 'berkeley_library-tind', '~> 0.4' # TODO: extract BerkeleyLibrary::Util::URIs into separate gem
+gem 'berkeley_library-util', '~> 0.1.1'
 gem 'dotiw'
 gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'

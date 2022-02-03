@@ -49,7 +49,6 @@
     <orderEntry type="library" scope="PROVIDED" name="awesome_print (v1.9.2, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="berkeley_library-logging (v0.2.5, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="berkeley_library-marc (v0.2.1, RVM: ruby-3.0.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="berkeley_library-tind (v0.4.2, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="berkeley_library-util (v0.1.1, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bindex (v0.8.1, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="brakeman (v5.1.2, RVM: ruby-3.0.2) [gem]" level="application" />
@@ -90,7 +89,6 @@
     <orderEntry type="library" scope="PROVIDED" name="http-accept (v1.7.0, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="http-cookie (v1.0.4, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.8.11, RVM: ruby-3.0.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="ice_nine (v0.11.2, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="iiif-presentation (v1.0.0, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="jbuilder (v2.11.3, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="json (v2.6.1, RVM: ruby-3.0.2) [gem]" level="application" />
@@ -138,7 +136,6 @@
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.6, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rb-fsevent (v0.11.0, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rb-inotify (v0.10.1, RVM: ruby-3.0.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rchardet (v1.8.0, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="regexp_parser (v2.1.1, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="request_store (v1.5.0, RVM: ruby-3.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rest-client (v2.1.0, RVM: ruby-3.0.2) [gem]" level="application" />
@@ -507,6 +504,7 @@
                   <RakeTaskImpl description="Run specs in health_system_spec.rb" fullCommand="spec:system:health" id="health" />
                   <RakeTaskImpl description="Run specs in items_system_spec.rb" fullCommand="spec:system:items" id="items" />
                   <RakeTaskImpl description="Run specs in lending_system_spec.rb" fullCommand="spec:system:lending" id="lending" />
+                  <RakeTaskImpl description="Run specs in terms_system_spec.rb" fullCommand="spec:system:terms" id="terms" />
                 </subtasks>
               </RakeTaskImpl>
               <RakeTaskImpl description="" fullCommand="spec:prepare" id="prepare" />
