@@ -1,3 +1,8 @@
+# 1.5.3 (next)
+
+- adds a "Manage Terms" administration tab, allowing creating, editing, and deleting terms
+- renames "Administration" to "Manage Items"
+
 # 1.5.2 (2022-01-18)
 
 - fixes an issue where paging in the admin item list could be 
