@@ -30,6 +30,10 @@ describe TermsController, type: :system do
     "term-#{term.id}-name"
   end
 
+  def delete_button_id(term)
+    "term-#{term.id}-delete"
+  end
+
   def expect_name_field(term)
     expect(page).to have_field(name_field_id(term), type: 'text', with: term.name)
   end
@@ -100,6 +104,63 @@ describe TermsController, type: :system do
         term.reload
         expect(term.name).to eq(new_name)
         expect_updated_at(term)
+      end
+
+      describe 'delete' do
+        attr_reader :term
+
+        before(:each) do
+          @term = Term.take
+        end
+
+        it 'deletes a term' do
+          expect(term.items).to be_empty # just to be sure
+
+          button = page.find_button(delete_button_id(term))
+          button.click
+
+          expect_no_name_field(term)
+          expect(Term.exists?(term.id)).to eq(false)
+        end
+
+        describe 'with items' do
+          attr_reader :item
+
+          before(:each) do
+            expect(term.items).to be_empty # just to be sure
+
+            @item = Item.take
+            item.terms << term
+            expect(term.items).to include(item) # just to be sure
+
+            # Refresh page
+            visit terms_path
+          end
+
+          it 'requires confirmation' do
+            button = page.find_button(delete_button_id(term))
+            accept_confirm do
+              button.click
+            end
+            expect_no_name_field(term)
+            expect(Term.exists?(term.id)).to eq(false)
+            expect(item.terms).not_to exist
+          end
+
+          it 'can be cancelled' do
+            button = page.find_button(delete_button_id(term))
+
+            # TODO: why doesn't dismiss_confirm work?
+            page.dismiss_confirm do
+              button.click
+            end
+
+            expect_name_field(term)
+            expect(Term.exists?(term.id)).to eq(true)
+            expect(item.terms).to include(term)
+          end
+        end
+
       end
     end
   end
