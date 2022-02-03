@@ -13,9 +13,9 @@ class LendingItemShowPresenter < LendingItemPresenterBase
 
   def build_fields
     {
-      'Title' => item.title,
-      'Author' => item.author,
-      'Terms' => terms_value
+      t('activerecord.attributes.item.title') => item.title,
+      t('activerecord.attributes.item.author') => item.author,
+      t('activerecord.attributes.item.terms') => terms_value
     }.tap do |ff|
       ff.merge!(pub_metadata)
       ff.merge!(internal_metadata_fields)
@@ -25,7 +25,7 @@ class LendingItemShowPresenter < LendingItemPresenterBase
 
   def terms_value
     term_names = item.terms.pluck(:name)
-    return '(none)' unless term_names.any?
+    return t('item.values.terms_none') unless term_names.any?
 
     term_names.join(', ')
   end

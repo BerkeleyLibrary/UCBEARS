@@ -112,14 +112,6 @@ describe LendingController, type: :system do
 
   context 'as lending admin' do
 
-    describe :login do
-      it 'redirects to the index' do
-        mock_login(:lending_admin)
-        expect(page.title).to include('UC BEARS')
-        expect_no_alerts
-      end
-    end
-
     context 'with items' do
       before(:each) do
         expect(Item.count).to eq(0) # just to be sure

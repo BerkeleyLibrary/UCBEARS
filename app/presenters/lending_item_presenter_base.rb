@@ -37,8 +37,8 @@ class LendingItemPresenterBase
 
   def pub_metadata
     @pub_metadata ||= {
-      'Publisher' => item.publisher,
-      'Physical Description' => item.physical_desc
+      t('activerecord.attributes.item.publisher') => item.publisher,
+      t('activerecord.attributes.item.phys_desc') => item.physical_desc
     }.filter { |_, v| !v.blank? }
   end
 
@@ -48,16 +48,24 @@ class LendingItemPresenterBase
 
   protected
 
+  def t(key, **options)
+    I18n.t(key, **options)
+  end
+
   def action_edit
-    button_to('Edit item', lending_edit_path(directory: directory), class: 'btn secondary', method: :get)
+    button_to(t('item.actions.edit'), lending_edit_path(directory: directory), class: 'btn secondary', method: :get)
   end
 
   def internal_metadata_fields
     {
-      'Record ID' => item.record_id,
-      'Barcode' => item.barcode,
-      'Status' => item.status,
-      'Copies' => "#{item.copies_available} of #{item.copies} available"
+      t('activerecord.attributes.item.record_id') => item.record_id,
+      t('activerecord.attributes.item.barcode') => item.barcode,
+      t('activerecord.attributes.item.status') => item.status,
+      t('activerecord.attributes.item.copies') => t(
+        'item.values.copies_available',
+        available: item.copies_available,
+        total: item.copies
+      )
     }.tap { |ff| add_alma_fields(ff) }
   end
 
@@ -70,20 +78,20 @@ class LendingItemPresenterBase
   def add_due_dates(ff)
     return if (due_dates = item.due_dates.to_a).empty?
 
-    ff['Due'] = due_dates
+    ff[t('activerecord.attributes.loan.due_date')] = due_dates
   end
 
   def add_processing_metadata(ff)
     if item.complete?
-      ff['IIIF directory'] = item.iiif_directory.path
+      ff[t('activerecord.attributes.item.iiif_dir')] = item.iiif_directory.path
     else
-      ff['Directory'] = directory
+      ff[t('activerecord.attributes.item.directory')] = directory
     end
   end
 
   def add_direct_link(ff)
     view_url = lending_view_url(directory: directory)
-    ff['Patron view'] = link_to(view_url, view_url, target: '_blank')
+    ff[t('item.actions.patron_view')] = link_to(view_url, view_url, target: '_blank')
   end
 
   def add_alma_fields(ff)

@@ -16,10 +16,93 @@ en:
 
   omniauth_callbacks:
     calnet:
-      forbidden: <strong>Forbidden:</strong> You're not allowed to access the requested page.
+      forbidden: <strong>Forbidden:</strong> You are not allowed to access the requested page.
 
   activerecord:
+    attributes:
+      item:
+        author: 'Author'
+        available?: 'Available?'
+        barcode: 'Barcode'
+        copies: 'Copies'
+        directory: 'Directory'
+        iiif_dir: 'IIIF Directory'
+        next_due_date: 'To be returned'
+        phys_desc: 'Physical Description'
+        publisher: 'Publisher'
+        record_id: 'Record ID'
+        status: 'Status'
+        terms: 'Terms'
+        title: 'Title'
+      loan:
+        due_date: 'Due'
+        loan_date: 'Checked out'
+        return_date: 'Returned'
+        status: 'Loan Status'
+        view_url: 'Permanent link to this checkout'
+
     errors:
       messages:
-        taken: "already exists"
-        blank: "cannot be blank"
+        taken: 'already exists'
+      models:
+        term:
+          attributes:
+            name:
+              blank: 'must have a name'
+            start_date:
+              blank: 'must have a start date'
+            end_date:
+              blank: 'must have an end date'
+        image:
+          directory:
+            no_page_images: 'No page images found in %{dir}'
+
+  application:
+    profile:
+      generating:
+        html: 'Generating <a href=\"%{report_filename}\">profile</a>.'
+      failed: 'Error generating profile: %{msg}'
+
+  items:
+    update:
+      success: 'Item updated.'
+      failed: 'Updating %{dir} failed.'
+    activate:
+      success: 'Item now active.'
+      already_active: 'Item already active.'
+    deactivate:
+      success: 'Item now inactive.'
+      already_inactive: 'Item already inactive.'
+    destroy:
+      success: 'Item deleted.'
+      item_not_incomplete: 'Only incomplete items can be deleted.'
+    reload:
+      success: 'MARC metadata reloaded.'
+      no_changes: 'No changes found.'
+      failed: 'Error reloading MARC metadata: %{msg}'
+
+  loans:
+    check_out:
+      success: 'Checkout successful.'
+      failed: 'Checking out “%{title}” failed'
+    view:
+      expired: 'Your loan term has expired.'
+    return:
+      success: 'Item returned.'
+
+  item:
+    actions:
+      show: 'Admin View'
+      edit: 'Edit Item'
+      activate: 'Make Active'
+      deactivate: 'Make Inactive'
+      destroy: 'Delete'
+      patron_view: 'Patron view'
+    values:
+      copies_available: '%{available} of %{total} available'
+      terms_none: '(none)'
+
+  loan:
+    actions:
+      check_out: 'Check out'
+      return: 'Return now'

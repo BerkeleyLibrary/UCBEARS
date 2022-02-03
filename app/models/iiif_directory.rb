@@ -93,7 +93,7 @@ class IIIFDirectory
   end
 
   def first_image_url_path
-    raise(Errno::ENOENT, "No page images found in #{path}") unless (first_image_path = page_images.first)
+    raise(Errno::ENOENT, err_no_page_images) unless (first_image_path = page_images.first)
 
     first_image_path.relative_path_from(stage_root_path)
   end
@@ -126,6 +126,10 @@ class IIIFDirectory
 
   def stage_root(stage)
     Lending.stage_root_path(stage).expand_path
+  end
+
+  def err_no_page_images
+    t('activerecord.errors.models.image.directory.no_page_images', dir: path)
   end
 
 end

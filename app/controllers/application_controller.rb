@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
   SUPPORT_EMAIL_STAFF = 'helpbox@library.berkeley.edu'.freeze
   SUPPORT_EMAIL_PATRON = 'eref-library@berkeley.edu'.freeze
 
-  # Value of the "Questions?" mailto link in the footer
+  # Value of the 'Questions?' mailto link in the footer
   # @return [String]
   def support_email
     @support_email || SUPPORT_EMAIL_STAFF
@@ -120,13 +120,13 @@ class ApplicationController < ActionController::Base
   # Profiling
 
   def with_profile(report_filename, &block)
-    flash_now!(:info, "Generating <a href=\"/#{report_filename}\">profile</a>.".html_safe)
+    flash_now!(:info, t('application.profile.generating.html', report_filename: report_filename))
     do_profile(report_filename, &block)
   rescue StandardError => e
     logger.error(e)
     return if performed?
 
-    flash_now!(:danger, "Error generating profile: #{e.message}")
+    flash_now!(:danger, t('application.profile.failed', msg: e.message))
     render('application/standard_error', locals: { exception: e })
   end
 

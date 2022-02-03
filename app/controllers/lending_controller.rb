@@ -54,22 +54,22 @@ class LendingController < ApplicationController
 
   def update
     if @item.update(lending_item_params)
-      flash!(:success, 'Item updated.')
+      flash!(:success, t('items.update.success'))
       redirect_to lending_show_url(directory: directory)
     else
-      render_with_errors(:edit, @item.errors, "Updating #{@item.directory} failed")
+      render_with_errors(:edit, @item.errors, t('items.update.failed', dir: @item.directory))
     end
   end
 
   def check_out
     @loan = @item.check_out_to(patron_identifier)
     if @loan.persisted?
-      flash!(:success, 'Checkout successful.')
+      flash!(:success, t('loans.check_out.success'))
       # TODO: can we get Rails to just parameterize the token as a string?
       token_str = current_user.borrower_token.token_str
       redirect_to lending_view_url(directory: directory, token: token_str)
     else
-      render_with_errors(:view, @loan.errors, "Checking out #{@item.directory} failed")
+      render_with_errors(:view, @loan.errors, t('loans.check_out.failed', title: @item.title))
     end
   end
 
@@ -79,27 +79,27 @@ class LendingController < ApplicationController
       flash!(:danger, Item::MSG_NOT_CHECKED_OUT)
     else
       loan.return!
-      flash!(:success, 'Item returned.')
+      flash!(:success, t('loans.return.success'))
     end
     redirect_to lending_view_url(directory: directory)
   end
 
   def activate
     if @item.active?
-      flash!(:info, 'Item already active.')
+      flash!(:info, t('items.activate.already_active'))
     else
       @item.copies = 1 if @item.copies < 1
       @item.update!(active: true)
-      flash!(:success, 'Item now active.')
+      flash!(:success, t('items.activate.success'))
     end
     redirect_to(items_path)
   end
 
   def deactivate
     if @item.inactive?
-      flash!(:info, 'Item already inactive.')
+      flash!(:info, t('items.deactivate.already_inactive'))
     elsif @item.update(active: false)
-      flash!(:success, 'Item now inactive.')
+      flash!(:success, t('items.deactivate.success'))
     end
 
     redirect_to(items_path)
@@ -108,10 +108,10 @@ class LendingController < ApplicationController
   def destroy
     if @item.complete?
       logger.warn('Failed to delete non-incomplete item', @item.directory)
-      flash!(:danger, 'Only incomplete items can be deleted.')
+      flash!(:danger, t('items.destroy.item_not_incomplete'))
     else
       @item.destroy!
-      flash!(:success, 'Item deleted.')
+      flash!(:success, t('items.destroy.success'))
     end
 
     redirect_to(items_path)
@@ -121,7 +121,7 @@ class LendingController < ApplicationController
     begin
       refresh_and_notify
     rescue StandardError => e
-      msg = "Error reloading MARC metadata: #{e}"
+      msg = t('items.reload.failed', msg: e.message)
       logger.error(msg, e)
       flash!(:danger, msg)
     end
@@ -137,15 +137,15 @@ class LendingController < ApplicationController
   def refresh_and_notify
     changes = @item.refresh_marc_metadata!(raise_if_missing: true)
     if changes.empty?
-      flash!(:info, 'No changes found.')
+      flash!(:info, t('items.reload.no_changes'))
     else
       logger.info("MARC metadata for #{@item.id} reloaded", changes.transform_values { |(v2, v1)| { from_value: v1, to_value: v2 } })
-      flash!(:success, 'MARC metadata reloaded.')
+      flash!(:success, t('items.reload.success'))
     end
   end
 
   def populate_view_flash
-    flash_now!(:danger, 'Your loan term has expired.') if most_recent_loan&.expired? # TODO: something less awkward
+    flash_now!(:danger, t('loans.view.expired')) if most_recent_loan&.expired? # TODO: something less awkward
     return unless (reason_unavailable = @loan.reason_unavailable)
 
     flash_now!(:danger, reason_unavailable)
