@@ -92,6 +92,10 @@ p {
 
   font-size: $font-size-small;
   line-height: $line-height;
+
+  &.altmedia-note {
+    margin-bottom: $margin-large;
+  }
 }
 
 fieldset {
