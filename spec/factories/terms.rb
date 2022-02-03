@@ -10,5 +10,26 @@ FactoryBot.define do
       start_date { Date.new(2022, 1, 11) }
       end_date { Date.new(2022, 5, 13) }
     end
+
+    factory :term_past do
+      name { 'Past test term' }
+
+      start_date { Date.current - 3.months }
+      end_date { Date.current - 1.months }
+    end
+
+    factory :term_current do
+      name { 'Current test term' }
+
+      start_date { Date.current - 1.months }
+      end_date { Date.current + 1.months }
+    end
+
+    factory :term_future do
+      name { 'Future test term' }
+
+      start_date { Date.current + 1.months }
+      end_date { Date.current + 3.months }
+    end
   end
 end
