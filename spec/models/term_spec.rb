@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Term, type: :model do
-  describe :create_query do
+  describe :create do
     it 'requires a name' do
       term = Term.create(start_date: Date.current, end_date: Date.current + 1.days)
       expect(term).not_to be_valid

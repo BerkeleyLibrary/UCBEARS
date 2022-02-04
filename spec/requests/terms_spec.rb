@@ -71,7 +71,7 @@ RSpec.describe '/terms', type: :request do
       end
     end
 
-    describe :create_query do
+    describe :create do
       it 'creates a term' do
         expect do
           post terms_url, params: { term: valid_attributes }, as: :json
