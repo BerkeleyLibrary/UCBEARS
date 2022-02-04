@@ -50,7 +50,7 @@ class ItemsController < ApplicationController
 
     query_param_hash = query_params.to_h.symbolize_keys
     logger.info("query_param_hash: #{query_param_hash}")
-    ItemQuery.new(**query_param_hash)
+    ItemQueryFactory.create_query(**query_param_hash)
   end
 
   # Use callbacks to share common setup or constraints between actions.

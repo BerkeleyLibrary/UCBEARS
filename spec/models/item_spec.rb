@@ -611,7 +611,7 @@ describe Item, type: :model do
       Settings.default_term = @prev_default_term
     end
 
-    describe :create do
+    describe :create_query do
       it 'sets the default term' do
         items = Item.scan_for_new_items!
         expect(Item.exists?).to eq(true) # just to be sure
@@ -634,7 +634,7 @@ describe Item, type: :model do
       Settings.default_term = @prev_default_term
     end
 
-    describe :create do
+    describe :create_query do
       it "doesn't set a term" do
         items = Item.scan_for_new_items!
         expect(Item.exists?).to eq(true) # just to be sure
