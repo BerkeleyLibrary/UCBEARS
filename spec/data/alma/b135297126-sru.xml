@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>06916cam a22006614a 4500</leader>
+          <controlfield tag="001">991044006109706532</controlfield>
+          <controlfield tag="005">20210615020047.0</controlfield>
+          <controlfield tag="008">000414s2000    nyu      b    001 0 eng^^</controlfield>
+          <datafield ind1=" " ind2=" " tag="010">
+            <subfield code="a">00030887</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="015">
+            <subfield code="a">GBA0-X3344</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">0312237340</subfield>
+            <subfield code="q">(cloth)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9780312237349</subfield>
+            <subfield code="q">(cloth)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">0312237359</subfield>
+            <subfield code="q">(pbk.)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9780312237356</subfield>
+            <subfield code="q">(pbk.)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">0333606809</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9780333606803</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">0333606817</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9780333606810</subfield>
+          </datafield>
+          <datafield ind1="3" ind2=" " tag="024">
+            <subfield code="a">9780312237356</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(OCoLC)43903564</subfield>
+            <subfield code="z">(OCoLC)1022656033</subfield>
+            <subfield code="z">(OCoLC)1027337588</subfield>
+            <subfield code="z">(OCoLC)1225681275</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(CLU)4357330-ucladb-Voyager</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(EXLNZ-01UCS_NETWORK)9912591664906531</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">DLC</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="c">DLC</subfield>
+            <subfield code="d">BAKER</subfield>
+            <subfield code="d">BTCTA</subfield>
+            <subfield code="d">LVB</subfield>
+            <subfield code="d">YDXCP</subfield>
+            <subfield code="d">TAMCT</subfield>
+            <subfield code="d">HEBIS</subfield>
+            <subfield code="d">IG#</subfield>
+            <subfield code="d">OCLCQ</subfield>
+            <subfield code="d">ILU</subfield>
+            <subfield code="d">BDX</subfield>
+            <subfield code="d">OCLCF</subfield>
+            <subfield code="d">OCLCQ</subfield>
+            <subfield code="d">OCLCO</subfield>
+            <subfield code="d">GVA</subfield>
+            <subfield code="d">DEBSZ</subfield>
+            <subfield code="d">OCL</subfield>
+            <subfield code="d">TLE</subfield>
+            <subfield code="d">KIJ</subfield>
+            <subfield code="d">QE2</subfield>
+            <subfield code="d">OCLCO</subfield>
+            <subfield code="d">UWO</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="042">
+            <subfield code="a">pcc</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="043">
+            <subfield code="a">e------</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="050">
+            <subfield code="a">HC240</subfield>
+            <subfield code="b">.C518 2000</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="082">
+            <subfield code="a">338.5/42</subfield>
+            <subfield code="2">21</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="090">
+            <subfield code="a">HC240</subfield>
+            <subfield code="b">.C518 2000</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Clavin, Patricia.</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="4" tag="245">
+            <subfield code="a">The great depression in Europe, 1929-1939 /</subfield>
+            <subfield code="c">Patricia Clavin.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="260">
+            <subfield code="a">New York, N.Y. :</subfield>
+            <subfield code="b">St. Martin's Press,</subfield>
+            <subfield code="c">2000.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">viii, 244 pages ;</subfield>
+            <subfield code="c">23 cm</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="490">
+            <subfield code="a">European history in perspective</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="504">
+            <subfield code="a">Includes bibliographical references (pages 222-236) and index.</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="505">
+            <subfield code="a">Frustrated Expectations, 1919-24 -- The Price of Stability, 1924-29 -- A European Revival? 1925-28 -- Into the Whirlwind, 1927-31 -- In the Depths of Depression, 1931-32 -- Internationalism versus Nationalism, 1931-34 -- Nationalist Roads to Recovery, 1933-39 -- Conclusion: Two Postwar Eras in Comparison: The Lessons of History Applied?</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="505">
+            <subfield code="a">Frustrated Expectations, 1919-24. The visible costs of the war ; The 'invisible price': the financial costs of the war ; Who will be the world's banker? ; The peace settlements ; Reparations and war debts ; Inflation and hyperinflation ; The Dawes Plan, 1924 -- The Price of Stability, 1924-29. The ghost of gold standard past ; The gold standard reconstructed, 1920-28 ; The experience of inflation and deflation ; Shortcomings of the gold standard 'order' -- A European Revival? 1925-28. The United States in Europe, 1925-28 ; The recovery in industry ; Problems for farmers ; Rising protectionism ; The role of foreign investment -- Into the Whirlwind, 1927-31. The 'special case' of Germany ; The role of reparations ; Europe and the Wall Street crash ; Agriculture and the crash ; The policy response: fighting the 'last war' -- In the Depths of Depression, 1931-32. Society in Depression: history's playthings ; Germany and 'Hunger Chancellor' Brüning ; The banking crisis in the heart of Europe ; The German banking crisis ; The Hoover moratorium ; Consequences of the banking crisis ; The emergence of the sterling bloc ; 'Fortresses' within Europe ; Policy innovation ; Limits on recovery  -- Internationalism versus Nationalism, 1931-34. Conference diplomacy ; The Lausanne Conference, 1932 ; The Stresa Conference ; War debts: the end? Roosevelt floats the dollar ; The World Economic Conference convenes, June-July 1933 -- Nationalist Roads to Recovery, 1933-39. The context for recovery ; The National Socialist recovery ; Eastern Europe and Scandinavia ; Italy ; The end of the gold bloc: recovery in Belgium and France ; The international dimension, 1936-39 ; British recovery and the Anglo-American Tariff Agreement -- Conclusion: Two Postwar Eras in Comparison: The Lessons of History Applied? A new internationalism ; Domestic sources of recovery ; A new regionalism.</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="520">
+            <subfield code="a">"Written with the non-economist in mind, the book focuses on four central questions: What were the origins of the depression? Why was it so severe? How far, and in what ways, did the European economy recover? And what were the implications of that recovery for political relations in, and between, nations?"</subfield>
+          </datafield>
+          <datafield ind1="8" ind2=" " tag="520">
+            <subfield code="a">"The book examines recent research into the causes of the depression, notably the role of the gold standard 'system'. It gives equal weight to the political and historical context of economic policy - political attitudes, institutional opinions, strategic considerations, the 'legacies and lessons' of history - to explain the magnitude of the crisis. International cooperation offered the best chance for recovery. Using a wide range of archival sources, the book also contains a lively account of why this failed and its consequences for international relations in the 1930s."--Jacket.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="520">
+            <subfield code="a">"The Great Depression in Europe, 1929-1939 is a concise, analytical study of the worst economic crisis of the modern world. It is the only available study to focus exclusively on Europe, where its impact was enormous: unemployment was rampant as industrial production fell by 40 per cent, primary prices dropped by 30 per cent, and some of the most respected banks teetered on the brink of collapse. The economic depression also had profound consequences for domestic politics and international relations. It triggered mass support for fascist and communist parties, and divided the world into competing economic blocs that helped to pave the road to war in 1939. Written with the non-economist in mind, the book focuses on four central questions: What were the origins of the depression? Why was it so severe? How far, and in what ways, did the European economy recover? And what were the implications of that recovery for political relations in, and between, nations? The book examines recent research into the causes of the depression, notably the role of the gold standard 'system'. It gives equal weight to the political and historical context of economic policy - political attitudes, institutional opinions, strategic considerations, the 'legacies and lessons' of history - to explain the magnitude of the crisis. International cooperation offered the best chance for recovery. Using a wide range of archival sources, the book also contains a lively account of why this failed and its consequences for international relations in the 1930s."--Jacket.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="651">
+            <subfield code="a">Europe</subfield>
+            <subfield code="x">Economic conditions</subfield>
+            <subfield code="y">1918-1945.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="650">
+            <subfield code="a">Depressions</subfield>
+            <subfield code="y">1929</subfield>
+            <subfield code="z">Europe.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="4" tag="651">
+            <subfield code="a">Europe</subfield>
+            <subfield code="x">History</subfield>
+            <subfield code="y">1918-1945.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="4" tag="651">
+            <subfield code="a">Europe</subfield>
+            <subfield code="x">Economic conditions</subfield>
+            <subfield code="y">1918-1945.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="6" tag="650">
+            <subfield code="a">Crises économiques</subfield>
+            <subfield code="y">1929</subfield>
+            <subfield code="z">Europe.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="6" tag="651">
+            <subfield code="a">Europe</subfield>
+            <subfield code="x">Conditions économiques</subfield>
+            <subfield code="y">1918-1945.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Depressions.</subfield>
+            <subfield code="2">fast</subfield>
+            <subfield code="0">(OCoLC)fst00890969</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Economic history.</subfield>
+            <subfield code="2">fast</subfield>
+            <subfield code="0">(OCoLC)fst00901974</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="651">
+            <subfield code="a">Europe.</subfield>
+            <subfield code="2">fast</subfield>
+            <subfield code="0">(OCoLC)fst01245064</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="648">
+            <subfield code="a">1918-1945</subfield>
+            <subfield code="2">fast</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Wirtschaftskrise</subfield>
+            <subfield code="2">gnd</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="651">
+            <subfield code="a">Europa.</subfield>
+            <subfield code="2">swd</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="830">
+            <subfield code="a">European history in perspective.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="968">
+            <subfield code="a">Reclvl: f Addate: 010409 Addid: INN Moddate: 080609 Modid: XRF</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="996">
+            <subfield code="e">GLADN51045748</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="996">
+            <subfield code="a">b135297126</subfield>
+            <subfield code="b">Updated: 05-23-21</subfield>
+            <subfield code="c">Created: 03-26-09</subfield>
+            <subfield code="d">CatDate: 04-09-01</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="AVA">
+            <subfield code="0">991044006109706532</subfield>
+            <subfield code="8">22815007430006532</subfield>
+            <subfield code="a">01UCS_BER</subfield>
+            <subfield code="b">MAIN</subfield>
+            <subfield code="c">Main (Gardner) Stacks</subfield>
+            <subfield code="d">HC240 .C518 2000</subfield>
+            <subfield code="e">available</subfield>
+            <subfield code="f">1</subfield>
+            <subfield code="g">0</subfield>
+            <subfield code="i">UCB_Campus</subfield>
+            <subfield code="j">ma</subfield>
+            <subfield code="k">0</subfield>
+            <subfield code="p">1</subfield>
+            <subfield code="q">Doe Library</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="AVA">
+            <subfield code="0">991044006109706532</subfield>
+            <subfield code="8">22815007470006532</subfield>
+            <subfield code="a">01UCS_BER</subfield>
+            <subfield code="b">NRLF</subfield>
+            <subfield code="c">NRLF (UCSC)</subfield>
+            <subfield code="d">HC240 .C518 2000</subfield>
+            <subfield code="e">available</subfield>
+            <subfield code="f">1</subfield>
+            <subfield code="g">0</subfield>
+            <subfield code="i">UCB_Campus</subfield>
+            <subfield code="j">ncmh</subfield>
+            <subfield code="k">0</subfield>
+            <subfield code="p">2</subfield>
+            <subfield code="q">Northern Regional Library Facility</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991044006109706532</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2022-02-03T15:42:54-0800</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

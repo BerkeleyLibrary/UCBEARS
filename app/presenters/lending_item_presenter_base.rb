@@ -62,7 +62,7 @@ class LendingItemPresenterBase
       'Barcode' => item.barcode,
       'Status' => item.status,
       'Copies' => "#{item.copies_available} of #{item.copies} available"
-    }
+    }.tap { |ff| add_alma_fields(ff) }
   end
 
   def add_circ_metadata(ff)
@@ -88,5 +88,14 @@ class LendingItemPresenterBase
   def add_direct_link(ff)
     view_url = lending_view_url(directory: directory)
     ff['Patron view'] = link_to(view_url, view_url, target: '_blank')
+  end
+
+  def add_alma_fields(ff)
+    if (alma_permalink = item.alma_permalink)
+      ff['Alma MMS ID'] = item.alma_mms_id
+      ff['Catalog record'] = link_to('View catalog record', alma_permalink.to_s, target: '_blank')
+    else
+      ff['Alma MMS ID'] = 'Unknown'
+    end
   end
 end

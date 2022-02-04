@@ -36,5 +36,7 @@ module UCBEARS
     config.processing_time_limit = 1.hours
 
     # TODO: fail fast if ENV not configured?
+
+    BerkeleyLibrary::Alma::Config.default!
   end
 end

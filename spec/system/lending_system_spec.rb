@@ -400,6 +400,21 @@ describe LendingController, type: :system do
       end
 
       describe :show do
+
+        attr_reader :alma_items
+
+        before(:each) do
+          @alma_items = []
+
+          Item.find_each do |it|
+            sru_data_path = sru_data_path_for(it.record_id)
+            next unless File.exist?(sru_data_path)
+
+            stub_sru_request(it.record_id)
+            alma_items << it
+          end
+        end
+
         it 'displays all due dates' do
           item = active.find { |it| it.copies > 1 }
           loans = item.copies.times.with_object([]) do |i, ll|
@@ -413,6 +428,16 @@ describe LendingController, type: :system do
 
           loans.each do |loan|
             expect(page).to have_content(loan.due_date.to_s(:short))
+          end
+        end
+
+        it 'displays the MMS ID and permalink where available' do
+          alma_items.each do |item|
+            expect(item.alma_mms_id).not_to be_nil # just to be sure
+
+            visit lending_show_path(directory: item.directory)
+            expect(page).to have_content(item.alma_mms_id.to_s)
+            expect(page).to have_link(href: item.alma_permalink.to_s)
           end
         end
 

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01215cam a22003854a 4500</leader>
+          <controlfield tag="001">991044762619706532</controlfield>
+          <controlfield tag="005">20150122180639.0</controlfield>
+          <controlfield tag="008">991103t20002000nyuab    b    001 0 eng^^</controlfield>
+          <datafield ind1=" " ind2=" " tag="010">
+            <subfield code="a">99057588</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">0816040362</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(CU-S)b42221511-01ucs_sdi</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(OCoLC)42780471</subfield>
+            <subfield code="9">ExL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(EXLNZ-01UCS_NETWORK)9912462212306531</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">DLC</subfield>
+            <subfield code="c">DLC</subfield>
+            <subfield code="d">GSN</subfield>
+            <subfield code="d">C#P</subfield>
+            <subfield code="d">UtOrBLW</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="042">
+            <subfield code="a">pcc</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="043">
+            <subfield code="a">f-ua---</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="050">
+            <subfield code="a">DT60</subfield>
+            <subfield code="b">.B34 2000</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="082">
+            <subfield code="a">932</subfield>
+            <subfield code="2">21</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="090">
+            <subfield code="a">DT60</subfield>
+            <subfield code="b">.B34 2000</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Baines, John,</subfield>
+            <subfield code="d">1946-</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">Cultural atlas of Ancient Egypt /</subfield>
+            <subfield code="c">by John Baines and Jaromir Malek ; [editor, Graham Speake]</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="250">
+            <subfield code="a">Rev. ed</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="260">
+            <subfield code="a">New York :</subfield>
+            <subfield code="b">Checkmark Books,</subfield>
+            <subfield code="c">[2000], ©2000</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">240 pages :</subfield>
+            <subfield code="b">illustrations (some color), color maps ;</subfield>
+            <subfield code="c">31 cm</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="500">
+            <subfield code="a">"An andromeda book"--T.p. verso</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="504">
+            <subfield code="a">Includes bibliographical references (p. 231-233) and index</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="651">
+            <subfield code="a">Egypt</subfield>
+            <subfield code="x">Antiquities</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="651">
+            <subfield code="a">Egypt</subfield>
+            <subfield code="x">Civilization</subfield>
+            <subfield code="y">To 332 B.C</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="651">
+            <subfield code="a">Egypt</subfield>
+            <subfield code="x">Civilization</subfield>
+            <subfield code="y">332 B.C.-638 A.D</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Málek, Jaromír</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Speake, Graham,</subfield>
+            <subfield code="d">1946-</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="968">
+            <subfield code="a">Reclvl: f Addate: 010613 Addid: INN Moddate: 090116 Modid: MMF</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="996">
+            <subfield code="e">GLADN51096310</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="996">
+            <subfield code="a">b135491460</subfield>
+            <subfield code="b">Updated: 03-28-21</subfield>
+            <subfield code="c">Created: 03-26-09</subfield>
+            <subfield code="d">CatDate: 06-13-01</subfield>
+            <subfield code="9">LOCAL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="AVA">
+            <subfield code="0">991044762619706532</subfield>
+            <subfield code="a">01UCS_BER</subfield>
+            <subfield code="b">MAIN</subfield>
+            <subfield code="c">UC BEARS (UC Berkeley Electronic and Accessible Reserves System)</subfield>
+            <subfield code="d">DT60 .B34 2000</subfield>
+            <subfield code="e">unavailable</subfield>
+            <subfield code="f">3</subfield>
+            <subfield code="g">3</subfield>
+            <subfield code="i">UCB_Campus</subfield>
+            <subfield code="j">ucbears</subfield>
+            <subfield code="k">0</subfield>
+            <subfield code="p">1</subfield>
+            <subfield code="q">Doe Library</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991044762619706532</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2022-02-03T15:43:04-0800</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

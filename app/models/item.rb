@@ -2,6 +2,7 @@ require 'berkeley_library/util/uris'
 
 # rubocop:disable Metrics/ClassLength
 class Item < ActiveRecord::Base
+  include AlmaItem
   include PgSearch::Model
 
   # ------------------------------------------------------------

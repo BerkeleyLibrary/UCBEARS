@@ -30,8 +30,14 @@ end
 require 'support/factory_bot'
 
 # ------------------------------------------------------------
+# Alma
+
+require 'support/alma'
+
+# ------------------------------------------------------------
 # Jbuilder templates
 
+# TODO: move to spec/support
 def template_result(template_path, bind)
   json = JbuilderTemplate.new(JbuilderHandler)
   bind.local_variable_set(:json, json)
@@ -42,6 +48,7 @@ end
 # ------------------------------------------------------------
 # Calnet
 
+# TODO: move to spec/support
 module CalnetHelper
   IDS = {
     student: '5551212'.freeze,
