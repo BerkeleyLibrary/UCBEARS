@@ -21,7 +21,7 @@ export default {
   store,
   components: { ItemsTable, ErrorAlerts, ItemFilter, ItemPaging },
   computed: {
-    ...mapState(['table', 'terms', 'errors'])
+    ...mapState(['table', 'errors', 'terms'])
   },
   mounted: function () {
     this.getAllTerms()
@@ -47,11 +47,8 @@ export default {
     deleteItem (item) {
       itemsApi.delete(item).then(this.removeItem).catch(this.handleError)
     },
-    handleError (error) {
-      this.setErrors(error?.response?.data)
-    },
     ...mapMutations([
-      'setTerms', 'setTable', 'setItem', 'removeItem', 'setErrors', 'clearErrors'
+      'setTable', 'setItem', 'removeItem', 'setTerms', 'setErrors', 'clearErrors', 'handleError'
     ])
   }
 }

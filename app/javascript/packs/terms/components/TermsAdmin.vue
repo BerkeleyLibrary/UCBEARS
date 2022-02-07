@@ -74,11 +74,8 @@ export default {
     submitQuery (termFilter) {
       termsApi.findTerms(termFilter).then(this.setTerms).catch(this.handleError)
     },
-    handleError (error) {
-      this.setErrors(error?.response?.data)
-    },
     ...mapMutations([
-      'setTerms', 'setTerm', 'removeTerm', 'setErrors', 'clearErrors'
+      'setTerms', 'setTerm', 'removeTerm', 'setTerms', 'setErrors', 'clearErrors', 'handleError'
     ])
   }
 }

@@ -1,19 +1,25 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// NOTE: We implement these as mixins rather than as
+//       VueX modules so we can have modularity &
+//       reusability without making our client components
+//       care about the implementation details
+import terms from '../../shared/store/mixins/terms'
+import errors from '../../shared/store/mixins/errors'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
   state: {
-    errors: null,
-    termFilter: { future: null, past: null, current: null },
-    terms: []
+    ...terms.state(),
+    ...errors.state(),
+    termFilter: { future: null, past: null, current: null }
   },
   mutations: {
-    setTerms (state, terms) {
-      state.terms = terms
-    },
+    ...terms.mutations(),
+    ...errors.mutations(),
     setTerm (state, term) {
       state.errors = null
 
@@ -33,13 +39,6 @@ export default new Vuex.Store({
       if (termIndex >= 0) {
         terms.splice(termIndex, 1)
       }
-    },
-    setErrors (state, errors) {
-      console.log(`setErrors(${JSON.stringify(errors)})`)
-      state.errors = errors
-    },
-    clearErrors (state) {
-      state.errors = null
     }
   }
 })

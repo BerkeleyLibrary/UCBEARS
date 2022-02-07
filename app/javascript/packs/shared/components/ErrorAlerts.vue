@@ -1,10 +1,10 @@
 <template>
   <aside v-if="hasErrors" class="flash">
-    <div v-for="(message, index) in error_messages" :key="message" style="display: contents;">
+    <div v-for="(message, index) in messages" :key="message" style="display: contents;">
       <input
         :id="`flash-dismiss-${index}`"
         :key="message"
-        v-model="error_messages"
+        v-model="messages"
         type="checkbox"
         :value="message"
         class="flash-dismiss"
@@ -22,33 +22,17 @@
 
 <script>
 
-function normalizeErrorMessage (attr, msg) {
-  if (attr === 'base') {
-    return msg
-  }
-  return `${attr} ${msg}`
-}
-
 export default {
   props: {
-    errors: { type: Object, default: () => {} }
+    errors: { type: Array, default: () => [] }
   },
   computed: {
-    error_messages: {
-      get () {
-        const errors = this.errors
-        if (!errors) {
-          return []
-        }
-        if (Array.isArray(errors)) {
-          return errors
-        }
-        return Object.entries(errors).flatMap(([k, v]) => normalizeErrorMessage(k, v))
-      },
+    messages: {
+      get () { return this.errors },
       set (errors) { this.$emit('updated', errors) }
     },
     hasErrors () {
-      return !!this.error_messages && this.error_messages.length > 0
+      return !!this.messages && this.messages.length > 0
     }
   }
 }
