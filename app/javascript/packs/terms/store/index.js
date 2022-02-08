@@ -21,8 +21,6 @@ export default new Vuex.Store({
     ...terms.mutations(),
     ...flash.mutations(),
     setTerm (state, term) {
-      state.messages = null
-
       const terms = state.terms
       const termIndex = terms.findIndex(t => t.id === term.id)
       if (termIndex >= 0) {
@@ -32,8 +30,6 @@ export default new Vuex.Store({
       }
     },
     removeTerm (state, term) {
-      state.messages = null
-
       const terms = state.terms
       const termIndex = terms.findIndex(t => t.id === term.id)
       if (termIndex >= 0) {

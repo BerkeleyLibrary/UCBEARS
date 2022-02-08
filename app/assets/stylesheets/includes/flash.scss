@@ -3,6 +3,10 @@
 aside.flash {
   width: 100%;
 
+  div.flash-message {
+    display: contents;
+  }
+
   input.flash-dismiss {
     display: none;
 
@@ -28,6 +32,7 @@ aside.flash {
     //border: 1px solid transparent;
     border-radius: $margin-small;
 
+    // TODO: make these consistent
     &.success, &.notice {
       border-color: $color-success-border;
       background-color: $color-success;
@@ -38,7 +43,8 @@ aside.flash {
       background-color: $color-warning;
     }
 
-    &.alert, &.danger {
+    // TODO: make these consistent
+    &.alert, &.danger, &.error {
       border-color: $color-danger-border;
       background-color: $color-danger;
     }

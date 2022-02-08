@@ -22,8 +22,9 @@
 
 <script>
 import store from '../store'
-import { mapMutations } from 'vuex'
 import termsApi from '../api/terms'
+import { mapMutations } from 'vuex'
+import { msgSuccess } from '../../shared/store/mixins/flash'
 
 export default {
   store,
@@ -39,8 +40,9 @@ export default {
     created (term) {
       this.clear()
       this.setTerm(term)
+      this.setMessage(msgSuccess('Term added.'))
     },
-    ...mapMutations(['setTerm', 'setMessages', 'handleError'])
+    ...mapMutations(['setTerm', 'setMessage', 'handleError'])
   }
 }
 </script>

@@ -31,6 +31,12 @@ module ExceptionHandling
       redirect_to login_path(url: request.fullpath)
     end
 
+    rescue_from ActionController::ParameterMissing do |error|
+      logger.warn(error.to_s)
+
+      render :standard_error, status: :bad_request, locals: { exception: error }
+    end
+
     def handle_not_found(error)
       logger.error(error)
 

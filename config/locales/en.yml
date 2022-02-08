@@ -22,12 +22,4 @@ en:
     errors:
       messages:
         taken: "already exists"
-      models:
-        term:
-          attributes:
-            name:
-              blank: "must have a name"
-            start_date:
-              blank: "must have a start date"
-            end_date:
-              blank: "must have an end date"
+        blank: "cannot be blank"

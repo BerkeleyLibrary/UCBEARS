@@ -24,7 +24,6 @@ export default new Vuex.Store({
       state.table = table
     },
     setItem (state, item) {
-      state.messages = null
       state.table.items[item.directory] = item
     },
     removeItem (state, item) {

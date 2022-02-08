@@ -1,0 +1,8 @@
+<%# TODO: stop hacking this to look like a Rails validation error %>
+<%
+has_exception = (defined?(exception) && exception)
+msg = has_exception ? exception.class : 'An unexpected error occurred.'
+%>
+{
+  "base": ["<%= msg %>"]
+}

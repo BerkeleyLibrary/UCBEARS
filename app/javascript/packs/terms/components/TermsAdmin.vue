@@ -34,6 +34,7 @@ import TermRow from './TermRow'
 import AddTermWidget from './AddTermWidget'
 import store from '../store'
 import termsApi from '../api/terms'
+import { msgSuccess } from '../../shared/store/mixins/flash'
 import { mapMutations, mapState } from 'vuex'
 
 function confirmDelete (term) {
@@ -63,19 +64,27 @@ export default {
     },
     edit (term) {
       return (change) => {
-        termsApi.update({ ...change, url: term.url }).then(this.setTerm).catch(this.handleError)
+        termsApi.update({ ...change, url: term.url }).then(this.termPatched).catch(this.handleError)
       }
     },
     deleteTerm (term) {
       if (confirmDelete(term)) {
-        termsApi.delete(term).then(this.removeTerm).catch(this.handleError)
+        termsApi.delete(term).then(this.termDeleted).catch(this.handleError)
       }
     },
     submitQuery (termFilter) {
       termsApi.findTerms(termFilter).then(this.setTerms).catch(this.handleError)
     },
+    termPatched (term) {
+      this.clearMessages()
+      this.setTerm(term)
+    },
+    termDeleted (term) {
+      this.removeTerm(term)
+      this.setMessage(msgSuccess('Term deleted.'))
+    },
     ...mapMutations([
-      'setTerms', 'setTerm', 'removeTerm', 'setTerms', 'setMessages', 'clearMessages', 'handleError'
+      'setTerms', 'setTerm', 'removeTerm', 'setMessages', 'clearMessages', 'setMessage', 'handleError'
     ])
   }
 }

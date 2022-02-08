@@ -1,6 +1,10 @@
-// NOTE: we implement this as a mixin rather than a
-//       VueX module because we don't want components
-//       to have to deal with the implementation details
+/**
+ * Store mixin for terms.
+ *
+ * NOTE: we implement this as a mixin rather than a
+ * VueX module because we don't want components
+ * to have to deal with the implementation details.
+ */
 export default {
   state: () => ({ terms: [] }),
   mutations: () => ({

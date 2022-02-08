@@ -15,6 +15,7 @@ import ItemsTable from './ItemsTable'
 import itemsApi from '../api/items'
 import store from '../store'
 import termsApi from '../../terms/api/terms'
+import { msgSuccess } from '../../shared/store/mixins/flash'
 import { mapMutations, mapState } from 'vuex'
 
 export default {
@@ -42,13 +43,21 @@ export default {
     },
     patchItem ({ item, change }) {
       console.log('patchItem(' + JSON.stringify(change) + ')')
-      itemsApi.update({ ...change, url: item.url }).then(this.setItem).catch(this.handleError)
+      itemsApi.update({ ...change, url: item.url }).then(this.itemPatched).catch(this.handleError)
     },
     deleteItem (item) {
-      itemsApi.delete(item).then(this.removeItem).catch(this.handleError)
+      itemsApi.delete(item).then(this.itemDeleted).catch(this.handleError)
+    },
+    itemPatched (item) {
+      this.clearMessages()
+      this.setItem(item)
+    },
+    itemDeleted (item) {
+      this.removeItem(item)
+      this.setMessage(msgSuccess('Item deleted.'))
     },
     ...mapMutations([
-      'setTable', 'setItem', 'removeItem', 'setTerms', 'setMessages', 'clearMessages', 'handleError'
+      'setTable', 'setItem', 'removeItem', 'setTerms', 'setMessages', 'clearMessages', 'setMessage', 'handleError'
     ])
   }
 }

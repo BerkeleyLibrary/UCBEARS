@@ -10,14 +10,16 @@
   <aside id="flash" class="flash">
     <% flash_messages.each do |lvl, messages| %>
       <% messages.each_with_index do |msg, i| %>
-        <% dismiss_checkbox_id = "flash-dismiss-global-#{lvl}-#{i}" %>
-        <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
-        <div class="flash <%= lvl %>">
-          <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
-            <%# TODO: figure out why Capybara doesn't respect CSS height/width here %>
-            <%= image_tag('icons/times-circle.svg', height: '19', width: '19', class: 'flash-dismiss-icon', alt: 'Hide alert') %>
-          </label>
-          <p class="flash" role="alert"><%= CGI.escapeHTML(msg) %></p>
+        <div class="flash-message">
+          <% dismiss_checkbox_id = "flash-dismiss-global-#{lvl}-#{i}" %>
+          <input type="checkbox" class="flash-dismiss" id="<%= dismiss_checkbox_id %>" checked>
+          <div class="flash <%= lvl %>">
+            <label class="flash-dismiss-label" for="<%= dismiss_checkbox_id %>">
+              <%# TODO: figure out why Capybara doesn't respect CSS height/width here %>
+              <%= image_tag('icons/times-circle.svg', height: '19', width: '19', class: 'flash-dismiss-icon', alt: 'Hide alert') %>
+            </label>
+            <p class="flash" role="alert"><%= CGI.escapeHTML(msg) %></p>
+          </div>
         </div>
       <% end %>
     <% end %>
