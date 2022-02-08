@@ -1,6 +1,6 @@
 <template>
   <section id="terms-admin" class="admin">
-    <error-alerts :errors="errors" @updated="setErrors"/>
+    <flash-alerts :messages="messages" @updated="setMessages"/>
     <term-filter @applied="submitQuery"/>
     <table v-if="terms">
       <thead>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import ErrorAlerts from '../../shared/components/ErrorAlerts'
+import FlashAlerts from '../../shared/components/FlashAlerts'
 import TermFilter from './TermFilter'
 import TermRow from './TermRow'
 import AddTermWidget from './AddTermWidget'
@@ -50,9 +50,9 @@ function confirmDelete (term) {
 
 export default {
   store,
-  components: { ErrorAlerts, TermFilter, TermRow, AddTermWidget },
+  components: { FlashAlerts, TermFilter, TermRow, AddTermWidget },
   computed: {
-    ...mapState(['terms', 'errors'])
+    ...mapState(['terms', 'messages'])
   },
   mounted: function () {
     this.getAllTerms()
@@ -75,7 +75,7 @@ export default {
       termsApi.findTerms(termFilter).then(this.setTerms).catch(this.handleError)
     },
     ...mapMutations([
-      'setTerms', 'setTerm', 'removeTerm', 'setTerms', 'setErrors', 'clearErrors', 'handleError'
+      'setTerms', 'setTerm', 'removeTerm', 'setTerms', 'setMessages', 'clearMessages', 'handleError'
     ])
   }
 }

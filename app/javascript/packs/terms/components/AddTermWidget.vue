@@ -40,7 +40,7 @@ export default {
       this.clear()
       this.setTerm(term)
     },
-    ...mapMutations(['setTerm', 'setErrors', 'handleError'])
+    ...mapMutations(['setTerm', 'setMessages', 'handleError'])
   }
 }
 </script>

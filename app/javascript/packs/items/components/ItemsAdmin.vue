@@ -1,6 +1,6 @@
 <template>
   <section id="items-admin" class="admin">
-    <error-alerts :errors="errors" @updated="setErrors"/>
+    <flash-alerts :messages="messages" @updated="setMessages"/>
     <item-filter :terms="terms" @applied="filterItems"/>
     <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>
     <item-paging :paging="table.paging" @page-selected="navigateTo"/>
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ErrorAlerts from '../../shared/components/ErrorAlerts'
+import FlashAlerts from '../../shared/components/FlashAlerts'
 import ItemFilter from './ItemFilter'
 import ItemPaging from './ItemPaging'
 import ItemsTable from './ItemsTable'
@@ -19,9 +19,9 @@ import { mapMutations, mapState } from 'vuex'
 
 export default {
   store,
-  components: { ItemsTable, ErrorAlerts, ItemFilter, ItemPaging },
+  components: { ItemsTable, FlashAlerts, ItemFilter, ItemPaging },
   computed: {
-    ...mapState(['table', 'errors', 'terms'])
+    ...mapState(['table', 'messages', 'terms'])
   },
   mounted: function () {
     this.getAllTerms()
@@ -48,7 +48,7 @@ export default {
       itemsApi.delete(item).then(this.removeItem).catch(this.handleError)
     },
     ...mapMutations([
-      'setTable', 'setItem', 'removeItem', 'setTerms', 'setErrors', 'clearErrors', 'handleError'
+      'setTable', 'setItem', 'removeItem', 'setTerms', 'setMessages', 'clearMessages', 'handleError'
     ])
   }
 }

@@ -1,10 +1,10 @@
 <template>
-  <aside v-if="hasErrors" class="flash">
-    <div v-for="(message, index) in messages" :key="message" style="display: contents;">
+  <aside v-if="hasMessages" class="flash">
+    <div v-for="(message, index) in _messages" :key="message" style="display: contents;">
       <input
         :id="`flash-dismiss-${index}`"
         :key="message"
-        v-model="messages"
+        v-model="_messages"
         type="checkbox"
         :value="message"
         class="flash-dismiss"
@@ -24,14 +24,14 @@
 
 export default {
   props: {
-    errors: { type: Array, default: () => [] }
+    messages: { type: Array, default: () => [] }
   },
   computed: {
-    messages: {
-      get () { return this.errors },
-      set (errors) { this.$emit('updated', errors) }
+    _messages: {
+      get () { return this.messages },
+      set (messages) { this.$emit('updated', messages) }
     },
-    hasErrors () {
+    hasMessages () {
       return !!this.messages && this.messages.length > 0
     }
   }
