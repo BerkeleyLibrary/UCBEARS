@@ -6,7 +6,8 @@
       <td><input v-model.lazy="term.end_date" type="date"></td>
       <td colspan="3">
         <div class="actions">
-          <button type="button" class="primary" @click="save">Save</button>
+          <button v-if="complete" type="button" class="primary" @click="save">Save</button>
+          <button v-else type="button" disabled class="primary disabled" @click="save">Save</button>
           <button type="button" class="secondary" @click="clear">Cancel</button>
         </div>
       </td>
@@ -29,11 +30,17 @@ import { msgSuccess } from '../../shared/store/mixins/flash'
 export default {
   store,
   data: function () {
-    return { term: null }
+    return { term: {} }
+  },
+  computed: {
+    complete () {
+      const term = this.term
+      return term.name && term.start_date && term.end_date
+    }
   },
   methods: {
     add () { this.term = {} },
-    clear () { this.term = null },
+    clear () { this.term = {} },
     save () {
       termsApi.create(this.term).then(this.created).catch(this.handleError)
     },

@@ -81,6 +81,15 @@ RSpec.describe '/terms', type: :request do
         valid_attributes.each { |attr, value| expect(term.send(attr)).to eq(value) }
       end
 
+      it 'returns a JSON response for an empty term' do
+        expect do
+          post terms_url, params: { term: {} }, as: :json
+        end.not_to change(Term, :count)
+
+        expect(response.content_type).to match(%r{^application/json})
+        expect(response).to have_http_status(:bad_request)
+      end
+
       it 'returns errors for an invalid term' do
         expect do
           post terms_url, params: { term: invalid_attributes }, as: :json
