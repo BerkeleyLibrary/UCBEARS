@@ -16,6 +16,22 @@ describe TermsController, type: :system do
     end
   end
 
+  # TODO: share code w/other system specs
+  def find_alerts
+    page.find('aside#flash')
+  end
+
+  def find_alert(lvl)
+    alerts = find_alerts
+    alerts.find("div.#{lvl}")
+  end
+
+  # TODO: make this work with multiple alerts at same level
+  def expect_alert(lvl, msg)
+    alert = find_alert(lvl)
+    expect(alert).to have_text(msg)
+  end
+
   def updated_at_str(term)
     tz_js = page.evaluate_script('Intl.DateTimeFormat().resolvedOptions().timeZone')
     updated_at = term.updated_at
@@ -28,6 +44,14 @@ describe TermsController, type: :system do
 
   def name_field_id(term)
     "term-#{term.id}-name"
+  end
+
+  def start_date_field_id(term)
+    "term-#{term.id}-start-date"
+  end
+
+  def end_date_field_id(term)
+    "term-#{term.id}-end-date"
   end
 
   def delete_button_id(term)
@@ -92,18 +116,95 @@ describe TermsController, type: :system do
         end
       end
 
-      it 'allows editing a term name' do
-        term = Term.take
-        name_field = page.find_field(name_field_id(term), type: 'text')
+      describe 'editing' do
 
-        new_name = "New name for #{term.name}"
-        name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
-        page.find('body').click # trigger blur event
-        expect_no_updated_at(term) # wait for updated_at to change
+        it 'allows editing a term name' do
+          term = Term.take
+          name_field = page.find_field(name_field_id(term), type: 'text')
 
-        term.reload
-        expect(term.name).to eq(new_name)
-        expect_updated_at(term)
+          new_name = "New name for #{term.name}"
+          name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
+          page.find('body').click # trigger blur event
+          expect_no_updated_at(term) # wait for updated_at to change
+
+          term.reload
+          expect(term.name).to eq(new_name)
+          expect_updated_at(term)
+        end
+
+        it 'allows editing a term start date' do
+          term = Term.take
+
+          start_date = term.start_date - 1.weeks
+          start_date_str = start_date.strftime('%m/%d/%Y')
+          start_date_field = page.find_field(start_date_field_id(term), type: 'date')
+          start_date_field.fill_in(with: start_date_str)
+
+          page.find('body').click # trigger blur event
+          expect_no_updated_at(term) # wait for updated_at to change
+
+          term.reload
+          expect(term.start_date).to eq(start_date)
+          expect_updated_at(term)
+        end
+
+        it 'allows editing a term end date' do
+          term = Term.take
+
+          end_date = term.end_date + 1.weeks
+          end_date_str = end_date.strftime('%m/%d/%Y')
+          end_date_field = page.find_field(end_date_field_id(term), type: 'date')
+          end_date_field.fill_in(with: end_date_str)
+
+          page.find('body').click # trigger blur event
+          expect_no_updated_at(term) # wait for updated_at to change
+
+          term.reload
+          expect(term.end_date).to eq(end_date)
+          expect_updated_at(term)
+        end
+
+        it 'rejects an invalid start date' do
+          term = Term.take
+          start_date_orig = term.start_date
+          updated_at_orig = term.updated_at
+
+          start_date = term.end_date + 1.weeks
+          start_date_str = start_date.strftime('%m/%d/%Y')
+          start_date_field = page.find_field(start_date_field_id(term), type: 'date')
+          start_date_field.fill_in(with: start_date_str)
+
+          page.find('body').click # trigger blur event
+
+          expect_updated_at(term)
+
+          term.reload
+          expect(term.start_date).to eq(start_date_orig)
+          expect(term.updated_at).to eq(updated_at_orig)
+
+          expect_alert('error', 'start date must precede end date')
+        end
+
+        it 'rejects an invalid end date' do
+          term = Term.take
+          end_date_orig = term.end_date
+          updated_at_orig = term.updated_at
+
+          end_date = term.start_date - 1.weeks
+          end_date_str = end_date.strftime('%m/%d/%Y')
+          end_date_field = page.find_field(end_date_field_id(term), type: 'date')
+          end_date_field.fill_in(with: end_date_str)
+
+          page.find('body').click # trigger blur event
+
+          expect_alert('error', 'start date must precede end date')
+          expect_updated_at(term)
+
+          term.reload
+          expect(term.end_date).to eq(end_date_orig)
+          expect(term.updated_at).to eq(updated_at_orig)
+        end
+
       end
 
       describe 'delete' do
@@ -121,6 +222,8 @@ describe TermsController, type: :system do
 
           expect_no_name_field(term)
           expect(Term.exists?(term.id)).to eq(false)
+
+          expect_alert('success', 'Term deleted.')
         end
 
         describe 'with items' do
@@ -158,6 +261,112 @@ describe TermsController, type: :system do
             expect_name_field(term)
             expect(Term.exists?(term.id)).to eq(true)
             expect(item.terms).to include(term)
+          end
+        end
+      end
+
+      describe 'add' do
+        it 'is enabled by default' do
+          expect(page).to have_button('Add a term', disabled: false)
+        end
+
+        it 'is disabled after being clicked' do
+          page.click_button('add-term')
+          expect(page).to have_button('Add a term', disabled: true)
+        end
+
+        describe 'widget' do
+          it 'is not displayed by default' do
+            expect(page).not_to have_content('#add-term-widget')
+          end
+
+          it 'allows adding a term' do
+            page.click_button('add-term')
+            widget = page.find('#add-term-widget')
+            expect(widget).to have_button('Save', disabled: true)
+
+            new_name = 'New test term'
+            name_field = widget.find_field('new-term-name', type: 'text')
+            name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
+            expect(widget).to have_button('Save', disabled: true)
+
+            start_date = Date.current + 1.weeks
+            start_date_str = start_date.strftime('%m/%d/%Y')
+            start_date_field = widget.find_field('new-term-start-date', type: 'date')
+            start_date_field.fill_in(with: start_date_str)
+            expect(widget).to have_button('Save', disabled: true)
+
+            end_date = start_date + 2.weeks
+            end_date_str = end_date.strftime('%m/%d/%Y')
+            end_date_field = widget.find_field('new-term-end-date', type: 'date')
+            end_date_field.fill_in(with: end_date_str)
+            expect(widget).to have_button('Save', disabled: false)
+
+            save_button = widget.find_button('Save', disabled: false)
+
+            expect do
+              save_button.click
+              expect_alert('success', 'Term added.')
+            end.to change(Term, :count).by(1)
+
+            expect(page).not_to have_content('#add-term-widget')
+
+            new_term = Term.find_by(name: new_name)
+            expect(new_term.start_date).to eq(start_date)
+            expect(new_term.end_date).to eq(end_date)
+          end
+
+          it 'prevents adding a term with a duplicate name' do
+            page.click_button('add-term')
+            widget = page.find('#add-term-widget')
+
+            new_name = Term.take.name
+            name_field = widget.find_field('new-term-name', type: 'text')
+            name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
+
+            start_date = Date.current + 1.weeks
+            start_date_str = start_date.strftime('%m/%d/%Y')
+            start_date_field = widget.find_field('new-term-start-date', type: 'date')
+            start_date_field.fill_in(with: start_date_str)
+
+            end_date = start_date + 2.weeks
+            end_date_str = end_date.strftime('%m/%d/%Y')
+            end_date_field = widget.find_field('new-term-end-date', type: 'date')
+            end_date_field.fill_in(with: end_date_str)
+
+            save_button = widget.find_button('Save', disabled: false)
+
+            expect do
+              save_button.click
+              expect_alert('error', 'already exists')
+            end.not_to change(Term, :count)
+          end
+
+          it 'prevents adding a term with a bad date range' do
+            page.click_button('add-term')
+            widget = page.find('#add-term-widget')
+
+            new_name = 'New test term'
+            name_field = widget.find_field('new-term-name', type: 'text')
+            name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
+
+            start_date = Date.current + 1.weeks
+            start_date_str = start_date.strftime('%m/%d/%Y')
+            start_date_field = widget.find_field('new-term-start-date', type: 'date')
+            start_date_field.fill_in(with: start_date_str)
+
+            end_date = start_date - 3.weeks
+            end_date_str = end_date.strftime('%m/%d/%Y')
+            end_date_field = widget.find_field('new-term-end-date', type: 'date')
+            end_date_field.fill_in(with: end_date_str)
+            expect(widget).to have_button('Save', disabled: false)
+
+            save_button = widget.find_button('Save', disabled: false)
+
+            expect do
+              save_button.click
+              expect_alert('error', 'start date must precede end date')
+            end.not_to change(Term, :count)
           end
         end
 

@@ -1,21 +1,21 @@
 <template>
-  <tbody>
-    <tr v-if="term" class="new-term">
-      <td><input v-model.lazy="term.name" type="text"></td>
-      <td><input v-model.lazy="term.start_date" type="date"></td>
-      <td><input v-model.lazy="term.end_date" type="date"></td>
+  <tbody id="add-term-widget">
+    <tr v-if="term" class="add-term">
+      <td><input id="new-term-name" v-model.lazy="term.name" type="text"></td>
+      <td><input id="new-term-start-date" v-model.lazy="term.start_date" type="date"></td>
+      <td><input id="new-term-end-date" v-model.lazy="term.end_date" type="date"></td>
       <td colspan="3">
         <div class="actions">
-          <button v-if="complete" type="button" class="primary" @click="save">Save</button>
+          <button v-if="complete" id="save-term" type="button" class="primary" @click="save">Save</button>
           <button v-else type="button" disabled class="primary disabled" @click="save">Save</button>
-          <button type="button" class="secondary" @click="clear">Cancel</button>
+          <button id="cancel-add-term" type="button" class="secondary" @click="clear">Cancel</button>
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="6">
-        <button v-if="term" type="button" class="primary disabled">Add a term</button>
-        <button v-else type="button" class="primary" @click="add">Add a term</button>
+        <button v-if="term" type="button" disabled class="primary disabled">Add a term</button>
+        <button v-else id="add-term" type="button" class="primary" @click="add">Add a term</button>
       </td>
     </tr>
   </tbody>
@@ -30,7 +30,7 @@ import { msgSuccess } from '../../shared/store/mixins/flash'
 export default {
   store,
   data: function () {
-    return { term: {} }
+    return { term: null }
   },
   computed: {
     complete () {
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     add () { this.term = {} },
-    clear () { this.term = {} },
+    clear () { this.term = null },
     save () {
       termsApi.create(this.term).then(this.created).catch(this.handleError)
     },

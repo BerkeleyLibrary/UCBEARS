@@ -1,5 +1,5 @@
 <template>
-  <aside v-if="hasMessages" class="flash">
+  <aside v-if="hasMessages" id="flash" class="flash">
     <div v-for="(message, index) in _messages" :key="message.text" class="flash-message">
       <input
         :id="`flash-dismiss-${index}`"

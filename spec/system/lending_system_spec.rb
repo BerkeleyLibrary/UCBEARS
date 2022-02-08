@@ -66,6 +66,7 @@ describe LendingController, type: :system do
   # ------------------------------------------------------------
   # Helper methods
 
+  # TODO: share code w/other system specs
   def find_alerts
     page.find('aside#flash')
   end

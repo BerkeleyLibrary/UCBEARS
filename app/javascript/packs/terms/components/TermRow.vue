@@ -2,8 +2,8 @@
   <!-- TODO: client-side validation -->
   <tr class="term">
     <td><input :id="`term-${term.id}-name`" v-model.lazy="name" type="text"></td>
-    <td><input :id="`term-${term.id}-start-date`" v-model.lazy="startDate" type="date"></td>
-    <td><input :id="`term-${term.id}-end-date`" v-model.lazy="endDate" type="date"></td>
+    <td><input :id="`term-${term.id}-start-date`" v-model.lazy="startDate" type="date" @keyup.enter="commitStartDate" @blur="commitStartDate"></td>
+    <td><input :id="`term-${term.id}-end-date`" v-model.lazy="endDate" type="date" @keyup.enter="commitEndDate" @blur="commitEndDate"></td>
     <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
@@ -22,6 +22,12 @@ export default {
   props: {
     term: { type: Object, default: () => {} }
   },
+  data: function () {
+    return ({
+      shadowStartDate: this.term.start_date,
+      shadowEndDate: this.term.end_date
+    })
+  },
   computed: {
     name: {
       get () { return this.term.name },
@@ -33,8 +39,7 @@ export default {
         return this.dateToDateInput(startDate)
       },
       set (dateVal) {
-        const date = this.dateToISO8601(dateVal)
-        this.edited({ start_date: date })
+        this.shadowStartDate = this.dateToISO8601(dateVal)
       }
     },
     endDate: {
@@ -43,12 +48,21 @@ export default {
         return this.dateToDateInput(endDate)
       },
       set (dateVal) {
-        const date = this.dateToISO8601(dateVal)
-        this.edited({ end_date: date })
+        this.shadowEndDate = this.dateToISO8601(dateVal)
       }
     }
   },
   methods: {
+    commitStartDate () {
+      if (this.shadowStartDate !== this.term.start_date) {
+        this.edited({ start_date: this.shadowStartDate })
+      }
+    },
+    commitEndDate () {
+      if (this.shadowEndDate !== this.term.end_date) {
+        this.edited({ end_date: this.shadowEndDate })
+      }
+    },
     edited (edit) {
       console.log(`TermRow.edited(${JSON.stringify(edit)})`)
       this.$emit('edited', edit)
