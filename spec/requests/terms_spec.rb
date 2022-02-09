@@ -29,15 +29,62 @@ RSpec.describe '/terms', type: :request do
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
     end
+
+    %i[term_fall_2021 term_spring_2022].each { |t| create(t) }
+  end
+
+  context 'without credentials' do
+    describe 'GET /index' do
+      it 'redirects HTML requests to login' do
+        get terms_url, as: :html
+        expected_location = "#{login_path}?#{URI.encode_www_form(url: terms_path)}"
+        expect(response).to redirect_to(expected_location)
+      end
+
+      it 'returns 401 Unauthorized for JSON requests' do
+        expected_status = 401
+        expected_message = 'Endpoint terms/index requires authentication'
+
+        get terms_url, as: :json
+        expect_json_error(expected_status, expected_message)
+      end
+    end
+  end
+
+  context 'with patron credentials' do
+    before(:each) { mock_login(:student) }
+    after(:each) { logout! }
+
+    describe 'GET /index' do
+      it 'returns 403 Forbidden for HTML requests' do
+        get terms_url, as: :html
+        expect(response.status).to eq(403)
+        expect(response.content_type).to start_with('text/html')
+        expect(response.body).to include('restricted to UC BEARS administrators')
+      end
+
+      it 'returns the terms for JSON requests' do
+        get terms_url, as: :json
+
+        expect(response).to be_successful
+        expect(response.content_type).to start_with('application/json')
+
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_an(Array)
+
+        expected_terms = Term.all
+        expect(parsed_response.size).to eq(expected_terms.size)
+
+        expected_terms.each_with_index do |term, i|
+          expect(parsed_response[i]).to eq(expected_json(term))
+        end
+      end
+    end
   end
 
   context 'with lending admin credentials' do
     before(:each) { mock_login(:lending_admin) }
     after(:each) { logout! }
-
-    before(:each) do
-      %i[term_fall_2021 term_spring_2022].each { |t| create(t) }
-    end
 
     describe :index do
       it 'returns all terms' do

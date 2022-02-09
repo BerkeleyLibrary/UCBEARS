@@ -22,6 +22,10 @@ RSpec.describe '/items', type: :request do
   end
 
   context 'without credentials' do
+    before(:each) do
+      %i[complete_item active_item].each { |it| create(it) }
+    end
+
     describe 'GET /index' do
       it 'redirects HTML requests to login' do
         get items_url, as: :html
@@ -40,7 +44,11 @@ RSpec.describe '/items', type: :request do
   end
 
   context 'with patron credentials' do
-    before(:each) { mock_login(:student) }
+    before(:each) do
+      %i[complete_item active_item].each { |it| create(it) }
+      mock_login(:student)
+    end
+
     after(:each) { logout! }
 
     describe 'GET /index' do
@@ -51,9 +59,21 @@ RSpec.describe '/items', type: :request do
         expect(response.body).to include('restricted to UC BEARS administrators')
       end
 
-      it 'returns 403 Forbidden for JSON requests' do
+      it 'returns the items for JSON requests' do
         get items_url, as: :json
-        expect_json_error(403, 'Forbidden')
+
+        expect(response).to be_successful
+        expect(response.content_type).to start_with('application/json')
+
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_an(Array)
+
+        expected_items = Item.order(:title)
+        expect(parsed_response.size).to eq(expected_items.size)
+
+        expected_items.each_with_index do |item, i|
+          expect(parsed_response[i]).to eq(expected_json(item))
+        end
       end
     end
   end

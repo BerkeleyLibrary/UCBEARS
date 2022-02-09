@@ -4,9 +4,9 @@ class TermsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html
-
+      format.html { require_lending_admin! }
       format.json do
+        authenticate!
         @terms = terms
       end
     end

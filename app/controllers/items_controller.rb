@@ -1,14 +1,15 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show update]
-  before_action :require_lending_admin!, only: %i[index update destroy]
+  before_action :require_lending_admin!, only: %i[update destroy]
 
   # GET /items
   # GET /items.json
   def index
     respond_to do |format|
-      format.html
+      format.html { require_lending_admin! }
 
       format.json do
+        authenticate!
         Item.scan_for_new_items!
         @pagy, @items = pagy(items)
         response.headers['Current-Page-Items'] = @items.count
