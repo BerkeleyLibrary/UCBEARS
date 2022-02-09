@@ -10,7 +10,7 @@ RSpec.describe '/items', type: :request do
 
   let(:valid_attributes) { attributes_for(:inactive_item) }
   let(:invalid_attributes) do
-    valid_attributes.merge({ directory: 'Not a valid item directory' })
+    valid_attributes.merge({ directory: 'Not a valid item directory', copies: -1 })
   end
 
   before(:each) do
@@ -18,6 +18,43 @@ RSpec.describe '/items', type: :request do
       lending_root_path: Pathname.new('spec/data/lending'), iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
     }.each do |getter, val|
       allow(Lending::Config).to receive(getter).and_return(val)
+    end
+  end
+
+  context 'without credentials' do
+    describe 'GET /index' do
+      it 'redirects HTML requests to login' do
+        get items_url, as: :html
+        expected_location = "#{login_path}?#{URI.encode_www_form(url: items_path)}"
+        expect(response).to redirect_to(expected_location)
+      end
+
+      it 'returns 401 Unauthorized for JSON requests' do
+        expected_status = 401
+        expected_message = 'Endpoint items/index requires authentication'
+
+        get items_url, as: :json
+        expect_json_error(expected_status, expected_message)
+      end
+    end
+  end
+
+  context 'with patron credentials' do
+    before(:each) { mock_login(:student) }
+    after(:each) { logout! }
+
+    describe 'GET /index' do
+      it 'returns 403 Forbidden for HTML requests' do
+        get items_url, as: :html
+        expect(response.status).to eq(403)
+        expect(response.content_type).to start_with('text/html')
+        expect(response.body).to include('restricted to UC BEARS administrators')
+      end
+
+      it 'returns 403 Forbidden for JSON requests' do
+        get items_url, as: :json
+        expect_json_error(403, 'Forbidden')
+      end
     end
   end
 
@@ -184,6 +221,19 @@ RSpec.describe '/items', type: :request do
           expect(parsed_response[i]).to eq(expected_json(item))
         end
       end
+
+      describe 'exception handling' do
+        it 'returns a JSON response for an arbitrary error' do
+          exception_class = StandardError
+
+          expected_status = 500
+          expected_message = 'Help I am trapped in an integration test'
+          allow(Item).to receive(:all).and_raise(exception_class, expected_message)
+
+          get items_url, as: :json
+          expect_json_error(expected_status, expected_message)
+        end
+      end
     end
 
     describe 'GET /show' do
@@ -238,8 +288,24 @@ RSpec.describe '/items', type: :request do
         it 'renders a JSON response with errors for the item' do
           item = Item.create! valid_attributes
           patch item_url(item), params: { item: invalid_attributes }, as: :json
+
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to start_with('application/json')
+
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response).to be_a(Hash)
+
+          expect(parsed_response['success']).to eq(false)
+
+          parsed_error = parsed_response['error']
+          expect(parsed_error).to be_a(Hash)
+          expect(parsed_error['code']).to eq(422)
+
+          errors = parsed_error['errors']
+          messages = errors.map { |err| err['message'] }
+          expect(messages.size).to eq(2)
+          expect(messages).to include(Item::MSG_INVALID_DIRECTORY)
+          expect(messages).to include('Copies must be greater than or equal to 0')
         end
       end
     end
@@ -263,12 +329,22 @@ RSpec.describe '/items', type: :request do
           delete item_url(item), as: :json
         end.not_to change(Item, :count)
 
-        expect(response).not_to be_successful
+        expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to start_with('application/json')
 
-        response_json = JSON.parse(response.body)
-        response_values = response_json.values.flatten
-        expect(response_values).to include(Item::MSG_CANNOT_DELETE_COMPLETE_ITEM)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_a(Hash)
+
+        expect(parsed_response['success']).to eq(false)
+
+        parsed_error = parsed_response['error']
+        expect(parsed_error).to be_a(Hash)
+        expect(parsed_error['code']).to eq(403)
+
+        errors = parsed_error['errors']
+        messages = errors.map { |err| err['message'] }
+        expect(messages.size).to eq(1)
+        expect(messages.first).to eq(Item::MSG_CANNOT_DELETE_COMPLETE_ITEM)
       end
 
       it 'succeeds if the item has already been deleted' do

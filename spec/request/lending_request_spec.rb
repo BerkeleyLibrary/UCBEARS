@@ -838,10 +838,11 @@ describe LendingController, type: :request do
       @item = create(:item)
     end
 
-    it 'GET lending_manifest_path redirects to login' do
-      get(path = lending_manifest_path(directory: item.directory))
-      login_with_callback_url = "#{login_path}?#{URI.encode_www_form(url: path)}"
-      expect(response).to redirect_to(login_with_callback_url)
+    it 'GET lending_manifest_path returns 401 Unauthorized' do
+      expected_status = 401
+      expected_message = 'Endpoint lending/manifest requires authentication'
+      get lending_manifest_path(directory: item.directory)
+      expect_json_error(expected_status, expected_message)
     end
 
     it 'GET lending_edit_path redirects to login' do

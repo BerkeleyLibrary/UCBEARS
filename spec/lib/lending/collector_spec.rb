@@ -22,7 +22,6 @@ module Lending
       let(:stop_file) { "#{stem}.stop" }
       attr_reader :collector
 
-      # rubocop:disable Metrics/AbcSize
       def expect_to_process(item_dirname)
         ready_dir = lending_root.join('ready').join(item_dirname)
         ready_dir.mkdir
@@ -46,7 +45,6 @@ module Lending
 
         [processing_dir, final_dir]
       end
-      # rubocop:enable Metrics/AbcSize
 
       def async_collect!
         Concurrent::CountDownLatch.new(1).tap do |latch|

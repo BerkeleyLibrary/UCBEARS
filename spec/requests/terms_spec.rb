@@ -98,10 +98,21 @@ RSpec.describe '/terms', type: :request do
         expect(Term.where(name: invalid_attributes[:name])).not_to exist
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(%r{^application/json})
+        expect(response.content_type).to start_with('application/json')
 
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response['base']).to include(Term::MSG_START_MUST_PRECEDE_END)
+        expect(parsed_response).to be_a(Hash)
+
+        expect(parsed_response['success']).to eq(false)
+
+        parsed_error = parsed_response['error']
+        expect(parsed_error).to be_a(Hash)
+        expect(parsed_error['code']).to eq(422)
+
+        errors = parsed_error['errors']
+        messages = errors.map { |err| err['message'] }
+        expect(messages.size).to eq(1)
+        expect(messages.first).to eq(Term::MSG_START_MUST_PRECEDE_END)
       end
 
       it 'returns errors for a duplicate term name' do
@@ -120,10 +131,22 @@ RSpec.describe '/terms', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(%r{^application/json})
 
-        parsed_response = JSON.parse(response.body)
         expected_msg = I18n.t('activerecord.errors.messages.taken')
         expected_msg_re = /#{Regexp.escape(expected_msg)}/
-        expect(parsed_response['name']).to include(expected_msg_re)
+
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_a(Hash)
+
+        expect(parsed_response['success']).to eq(false)
+
+        parsed_error = parsed_response['error']
+        expect(parsed_error).to be_a(Hash)
+        expect(parsed_error['code']).to eq(422)
+
+        errors = parsed_error['errors']
+        messages = errors.map { |err| err['message'] }
+        expect(messages.size).to eq(1)
+        expect(messages.first).to match(expected_msg_re)
       end
     end
 
@@ -181,10 +204,20 @@ RSpec.describe '/terms', type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to start_with('application/json')
+
         parsed_response = JSON.parse(response.body)
-        expected_msg = Term::MSG_START_MUST_PRECEDE_END
-        expected_msg_re = /#{Regexp.escape(expected_msg)}/
-        expect(parsed_response['base']).to include(expected_msg_re)
+        expect(parsed_response).to be_a(Hash)
+
+        expect(parsed_response['success']).to eq(false)
+
+        parsed_error = parsed_response['error']
+        expect(parsed_error).to be_a(Hash)
+        expect(parsed_error['code']).to eq(422)
+
+        errors = parsed_error['errors']
+        messages = errors.map { |err| err['message'] }
+        expect(messages.size).to eq(1)
+        expect(messages.first).to eq(Term::MSG_START_MUST_PRECEDE_END)
       end
 
       it 'does not accept duplicate names' do
@@ -207,12 +240,22 @@ RSpec.describe '/terms', type: :request do
         other_term.reload
         expect(other_term.updated_at).to eq(prev_other_updated_at)
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to start_with('application/json')
+        expected_msg = I18n.t('activerecord.errors.messages.taken')
+        expected_msg_re = /#{Regexp.escape(expected_msg)}/
 
         parsed_response = JSON.parse(response.body)
-        expected_msg = I18n.t('activerecord.errors.messages.taken')
-        expect(parsed_response['name']).to include(expected_msg)
+        expect(parsed_response).to be_a(Hash)
+
+        expect(parsed_response['success']).to eq(false)
+
+        parsed_error = parsed_response['error']
+        expect(parsed_error).to be_a(Hash)
+        expect(parsed_error['code']).to eq(422)
+
+        errors = parsed_error['errors']
+        messages = errors.map { |err| err['message'] }
+        expect(messages.size).to eq(1)
+        expect(messages.first).to match(expected_msg_re)
       end
     end
 

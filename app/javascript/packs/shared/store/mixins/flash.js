@@ -54,47 +54,22 @@ function newMessage (level, text) {
   return { level: level, text: text }
 }
 
-function unpackErrorResponse (error) {
-  const railsMessages = error?.response?.data
-  return railsMessages ? flattenRailsMessages(railsMessages) : []
-}
+function unpackErrorResponse (axiosError) {
+  const error = axiosError?.response?.data?.error
+  if (!error) {
+    return []
+  }
 
-function flattenRailsMessages (railsMessages) {
-  return Object.entries(railsMessages)
-    .flatMap(([attr, errs]) => unpackAttributeMessages(attr, errs))
-}
-
-function unpackAttributeMessages (attr, errs) {
-  console.log(`unpackAttributeMessages(${attr}, ${errs})`)
-  console.log(attr)
-  console.log(errs)
-  return errs.map(msg => attributeErrorToMessage(attr, msg))
-}
-
-function attributeErrorToMessage (attr, err) {
-  const text = normalizeAttributeErrorText(attr, err)
-  return newMessage(lvlError, text)
-}
-
-function normalizeAttributeErrorText (attr, err) {
-  return attr === 'base' ? err : `${localize(attr)} ${err}`
-}
-
-// ------------------------------------------------------------
-// Localization
-
-// TODO: move this somewhere sensible and/or share w/Rails i18n
-const localizedAttrs = {
-  created_at: 'created',
-  updated_at: 'updated',
-  physical_desc: 'physical description',
-  loan_date: 'checked out',
-  due_date: 'due',
-  return_date: 'returned',
-  start_date: 'start date',
-  end_date: 'end date'
-}
-
-function localize (attr) {
-  return localizedAttrs[attr] || attr
+  const messages = []
+  if (error.message) {
+    messages.push(newMessage(lvlError, error.message))
+  }
+  if (error.errors) {
+    for (const err of error.errors) {
+      if (err.message) {
+        messages.push(newMessage(lvlError, err.message))
+      }
+    }
+  }
+  return messages
 }

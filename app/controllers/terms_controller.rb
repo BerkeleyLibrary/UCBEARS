@@ -36,7 +36,7 @@ class TermsController < ApplicationController
   def destroy
     term_id = params.require(:id)
     return unless (@term = Term.find_by(id: term_id))
-    return render_term_errors unless @term.destroy
+    return render_term_errors(status: :forbidden) unless @term.destroy
 
     logger.info("Deleted term #{@term.name} (#{@term.start_date}–#{@term.end_date})”, id: #{term_id})")
     render body: nil, status: :no_content
@@ -66,8 +66,8 @@ class TermsController < ApplicationController
     params.permit(:past, :current, :future)
   end
 
-  def render_term_errors
+  def render_term_errors(status: :unprocessable_entity)
     logger.warn(@term.errors.full_messages)
-    render json: @term.errors, status: :unprocessable_entity
+    render('validation_errors', status: status, locals: { status: status, errors: @term.errors })
   end
 end

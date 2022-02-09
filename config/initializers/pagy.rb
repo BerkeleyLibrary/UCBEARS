@@ -85,6 +85,7 @@ require 'pagy/extras/headers'
 #                            items: 'Page-Items',
 #                            count: 'Total-Count',
 #                            pages: 'Total-Pages' }     # default
+# TODO: put links in JSON response instead
 
 # Meilisearch extra: Paginate `Meilisearch` result objects
 # See https://ddnexus.github.io/pagy/extras/meilisearch

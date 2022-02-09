@@ -45,6 +45,28 @@ def template_result(template_path, bind)
   JSON.parse(json.target!)
 end
 
+def expect_json_error(expected_status, expected_message)
+  expect(response).not_to be_successful
+  expect(response.status).to eq(expected_status)
+  expect(response.content_type).to start_with('application/json')
+
+  parsed_response = JSON.parse(response.body)
+  expect(parsed_response).to be_a(Hash)
+  expect(parsed_response['success']).to eq(false)
+
+  parsed_error = parsed_response['error']
+  expect(parsed_error).to be_a(Hash)
+  expect(parsed_error['code']).to eq(expected_status)
+  expect(parsed_error['message']).to eq(expected_message)
+
+  err_array = parsed_error['errors']
+  expect(err_array).to be_an(Array)
+  expect(err_array.size).to eq(1)
+  err_0 = err_array[0]
+  expect(err_0).to be_a(Hash)
+  expect(err_0['location']).to eq(request.original_fullpath)
+end
+
 # ------------------------------------------------------------
 # Calnet
 

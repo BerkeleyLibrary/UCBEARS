@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
   def destroy
     item_id = params.require(:id)
     return unless (@item = Item.find_by(id: item_id))
-    return render_item_errors unless @item.destroy
+    return render_item_errors(status: :forbidden) unless @item.destroy
 
     logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
     render body: nil, status: :no_content
@@ -68,8 +68,8 @@ class ItemsController < ApplicationController
     params.permit(:active, :complete, :keywords, terms: [])
   end
 
-  def render_item_errors
+  def render_item_errors(status: :unprocessable_entity)
     logger.warn(@item.errors.full_messages)
-    render json: @item.errors, status: :unprocessable_entity
+    render('validation_errors', status: status, locals: { status: status, errors: @item.errors })
   end
 end

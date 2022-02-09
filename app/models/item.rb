@@ -42,7 +42,7 @@ class Item < ActiveRecord::Base
   MSG_NOT_CHECKED_OUT = 'This item is not checked out.'.freeze
   MSG_ZERO_COPIES = 'Active items must have at least one copy.'.freeze
   MSG_INACTIVE = 'This item is not in active circulation.'.freeze
-  MSG_INVALID_DIRECTORY = 'directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
+  MSG_INVALID_DIRECTORY = 'Directory should be in the format <bibliographic record id>_<item barcode>.'.freeze
   MSG_NOT_CURRENT_TERM = 'This item is not available for the current term.'.freeze
   MSG_CANNOT_DELETE_COMPLETE_ITEM = 'Only incomplete items can be deleted.'.freeze
 

@@ -72,10 +72,6 @@ aside.flash {
       font-size: $font-size-small;
       line-height: $line-height;
       font-weight: $font-weight-medium;
-
-      &::first-letter {
-        text-transform: capitalize;
-      }
     }
   }
 }

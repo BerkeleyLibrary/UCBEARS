@@ -6,46 +6,67 @@ module ExceptionHandling
   included do
     # Order exceptions from most generic to most specific.
 
-    # NOTE: Ordinarily this is never reached (and seems to be unreachable in tests),
-    # but it's needed when Mirador (1) fails to find a message localization JSON file,
-    # and then (2) fails to find its expected 404 template. TODO: Sort this out
-    rescue_from ActionController::RoutingError, with: :handle_not_found
-
-    rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+    rescue_from StandardError do |error|
+      logger.error(error)
+      render_error(error)
+    end
 
     rescue_from Error::ForbiddenError do |error|
       logger.error(error)
-
-      # TODO: is this the best that can be done?
-      #       see https://stackoverflow.com/a/31673280/27358
-      self.formats = request.formats.map(&:ref)
-
-      render :forbidden, status: :forbidden, locals: { exception: error }
+      ensure_formats!
+      render_error(error, status: :forbidden, template: :forbidden)
     end
 
     rescue_from Error::UnauthorizedError do |error|
       # this isn't really an error condition, it just means the user's
       # not logged in, so we don't need the full stack trace etc.
       logger.info(error.to_s)
-      # TODO: something clever for JSON requests
-      redirect_to login_path(url: request.fullpath)
+      respond_to do |format|
+        format.html { redirect_to login_path(url: request.fullpath) }
+        format.json { render_error(error, status: :unauthorized) }
+      end
     end
 
-    rescue_from ActionController::ParameterMissing do |error|
+    rescue_from(ActionController::ParameterMissing, ActionController::BadRequest) do |error|
       logger.warn(error.to_s)
-
-      render :standard_error, status: :bad_request, locals: { exception: error }
+      render_error(error, status: :bad_request)
     end
 
-    def handle_not_found(error)
-      logger.error(error)
+    # TODO: Figure out why Mirador triggers RoutingErrors
+    rescue_from(ActiveRecord::RecordNotFound, ActionController::RoutingError, with: :handle_not_found)
+  end
 
-      # TODO: is this the best that can be done?
-      #       see https://stackoverflow.com/a/31673280/27358
-      self.formats = request.formats.map(&:ref)
+  # ------------------------------------------------------------
+  # Private methods
 
-      render :not_found, status: :not_found, locals: { exception: error }
+  private
+
+  def handle_not_found(error)
+    logger.error(error)
+
+    ensure_formats!
+
+    respond_to do |format|
+      # TODO: detect missing JSON templates & fall back to :standard_error
+      format.html { render_error(error, status: :not_found, template: :not_found) }
+      format.json { render_error(error, status: :not_found) }
     end
   end
 
+  def render_error(error, status: :internal_server_error, message: error.message, template: :standard_error)
+    respond_to do |format|
+      format.csv { head status }
+      format.any do
+        locals = { status: status, exception: error, message: message }
+        render(template, status: status, locals: locals)
+      end
+    end
+  end
+
+  # Formats are set in `ActionController::Rendering#process_action`; when a request
+  # happens in e.g. a `before` hook, they aren't set properly yet, so we set them here.
+  # @see https://stackoverflow.com/a/31673280/27358
+  def ensure_formats!
+    self.formats = request.formats.map(&:ref)
+  end
 end
