@@ -13,10 +13,18 @@ module Lending
     end
 
     def each_final_dir(&block)
-      return to_enum(:each_final_dir) unless block_given?
+      each_stage_dir(:final, &block)
+    end
 
-      final_root = stage_root_path(:final)
-      PathUtils.each_item_dir(final_root, &block)
+    def each_processing_dir(&block)
+      each_stage_dir(:processing, &block)
+    end
+
+    def each_stage_dir(stage, &block)
+      return to_enum(:each_stage_dir, stage) unless block_given?
+
+      stage_root = stage_root_path(stage)
+      PathUtils.each_item_dir(stage_root, &block)
     end
   end
 end

@@ -12,15 +12,17 @@ class IIIFDirectory
   # ------------------------------------------------------------
   # Accessors
 
-  attr_reader :path
+  attr_reader :path, :stage_root_path, :directory
 
   # ------------------------------------------------------------
   # Initializer
 
-  def initialize(directory)
+  def initialize(directory, stage: :final)
     raise ArgumentError, 'Directory cannot be nil' unless directory
 
-    @path = lending_root_final.join(directory)
+    @directory = directory
+    @stage_root_path = stage_root(stage)
+    @path = stage_root_path.join(directory)
   end
 
   # ------------------------------------------------------------
@@ -89,7 +91,7 @@ class IIIFDirectory
   def first_image_url_path
     raise(Errno::ENOENT, "No page images found in #{path}") unless (first_image_path = page_images.first)
 
-    first_image_path.relative_path_from(lending_root_final)
+    first_image_path.relative_path_from(stage_root_path)
   end
 
   # ------------------------------------------------------------
@@ -118,8 +120,8 @@ class IIIFDirectory
 
   private
 
-  def lending_root_final
-    Lending.stage_root_path(:final).expand_path
+  def stage_root(stage)
+    Lending.stage_root_path(stage).expand_path
   end
 
 end

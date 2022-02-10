@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show update]
-  before_action :require_lending_admin!, only: %i[update destroy]
+  before_action :require_lending_admin!, only: %i[update destroy processing]
 
   # GET /items
   # GET /items.json
@@ -41,6 +41,15 @@ class ItemsController < ApplicationController
 
     logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
     render body: nil, status: :no_content
+  end
+
+  # GET /processing.json
+  def processing
+    processing_dirs = Lending.each_processing_dir.sort
+    @iiif_directories = processing_dirs.map do |dir|
+      IIIFDirectory.new(dir.basename, stage: :processing)
+    end
+    render(:'items/iiif_directories')
   end
 
   private
