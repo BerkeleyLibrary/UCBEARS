@@ -36,6 +36,15 @@ class SessionsController < ApplicationController
     redirect_to "https://auth#{'-test' unless Rails.env.production?}.berkeley.edu/cas/logout"
   end
 
+  # Require login, then:
+  # - redirect administrators to "Manage Items"
+  # - return 403 Forbidden for other users
+  def index
+    require_lending_admin!
+
+    redirect_to(items_path)
+  end
+
   private
 
   def auth_params

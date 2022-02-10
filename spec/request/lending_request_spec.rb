@@ -176,7 +176,7 @@ describe LendingController, type: :request do
           item.update!(active: false)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -187,7 +187,7 @@ describe LendingController, type: :request do
 
         it 'is successful for an already active item' do
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item already active.')
@@ -200,7 +200,7 @@ describe LendingController, type: :request do
           item.update!(active: false, copies: 0)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -221,7 +221,7 @@ describe LendingController, type: :request do
       describe :deactivate do
         it 'deactivates an active item' do
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item now inactive.')
@@ -235,7 +235,7 @@ describe LendingController, type: :request do
 
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
 
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item already inactive.')
@@ -270,7 +270,7 @@ describe LendingController, type: :request do
 
           delete lending_destroy_path(directory: item.directory)
 
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item deleted.')
@@ -285,7 +285,7 @@ describe LendingController, type: :request do
           expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.directory)
 
           delete lending_destroy_path(directory: item.directory)
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Only incomplete items can be deleted.')
@@ -310,7 +310,7 @@ describe LendingController, type: :request do
 
           delete delete_path
 
-          expect(response).to redirect_to root_path
+          expect(response).to redirect_to items_path
 
           follow_redirect!
           expect(response.body).to include('Item deleted.')

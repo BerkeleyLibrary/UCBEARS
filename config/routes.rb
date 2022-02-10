@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'items#index'
+  root 'sessions#index'
 
   defaults format: 'json' do
     get 'health', to: 'health#index'
@@ -14,7 +14,6 @@ Rails.application.routes.draw do
 
   defaults format: 'csv' do
     get '/stats/lending(/:date)', to: 'stats#download', as: :stats_download
-    # TODO: don't include this in production
     get '/stats/all_loan_dates', to: 'stats#all_loan_dates', as: :stats_all_loan_dates
   end
 
@@ -28,7 +27,6 @@ Rails.application.routes.draw do
   valid_dirname = { directory: Lending::PathUtils::DIRNAME_RAW_RE }
 
   defaults format: 'html' do
-    # TODO: don't include this in production
     get '/stats', to: 'stats#index', as: :stats
     get '/profile_stats', to: 'stats#profile_index', as: :stats_profile
 
