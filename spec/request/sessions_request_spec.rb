@@ -6,7 +6,7 @@ describe SessionsController, type: :request do
     logger = BerkeleyLibrary::Logging::Loggers.new_json_logger(logdev)
     allow_any_instance_of(SessionsController).to receive(:logger).and_return(logger)
 
-    user = mock_login(:staff) { get index_path }
+    user = mock_login(:staff) { get root_path }
     lines = logdev.string.lines
 
     expected_msg = 'Received omniauth callback'
@@ -44,7 +44,7 @@ describe SessionsController, type: :request do
       request.reset_session
       expect(session[:user]).to be_nil # just to be sure
 
-      get(index_path)
+      get(root_path)
 
       user_from_cookie = User.from_session(session)
       %i[uid borrower_id affiliations cal_groups].each do |attr|

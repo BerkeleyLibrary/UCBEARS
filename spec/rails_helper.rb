@@ -38,13 +38,6 @@ require 'support/alma'
 # Jbuilder templates
 
 # TODO: move to spec/support
-def template_result(template_path, bind)
-  json = JbuilderTemplate.new(JbuilderHandler)
-  bind.local_variable_set(:json, json)
-  bind.eval(File.read(template_path), File.basename(template_path))
-  JSON.parse(json.target!)
-end
-
 def expect_json_error(expected_status, expected_message)
   expect(response).not_to be_successful
   expect(response.status).to eq(expected_status)
@@ -124,10 +117,11 @@ module CalnetHelper
 
   # Logs out. Suitable for calling in an after() block.
   def logout!
+    # Selenium doesn't know anything about webmock and will just hit the real logout path,
+    # so we only hit it in request specs
     unless respond_to?(:page)
-      # Selenium doesn't know anything about webmock and will just hit the real logout path
       stub_request(:get, 'https://auth-test.berkeley.edu/cas/logout').to_return(status: 200)
-      without_redirects { do_get logout_path }
+      do_get logout_path
     end
 
     # ActionDispatch::TestProcess#session delegates to request.session,
@@ -144,19 +138,6 @@ module CalnetHelper
     return visit(path) if respond_to?(:visit)
 
     get(path)
-  end
-
-  # Capybara Rack::Test mock browser is notoriously stupid about external redirects
-  # https://github.com/teamcapybara/capybara/issues/1388
-  def without_redirects
-    return yield unless can_disable_redirects?
-
-    page.driver.follow_redirects?.tap do |was_enabled|
-      page.driver.options[:follow_redirects] = false
-      yield
-    ensure
-      page.driver.options[:follow_redirects] = was_enabled
-    end
   end
 
   private

@@ -645,4 +645,30 @@ describe Item, type: :model do
       end
     end
   end
+
+  describe 'hooks' do
+    describe(:after_find) do
+      it 'marks complete items as complete' do
+        item = create(:complete_item)
+        item.update_columns(complete: false)
+        expect(item).not_to be_complete
+
+        expect(Item.find(item.id)).to be_complete
+
+        item.reload
+        expect(item).to be_complete
+      end
+
+      it 'marks incomplete items as incomplete' do
+        item = create(:incomplete_no_directory)
+        item.update_columns(complete: true)
+        expect(item).to be_complete
+
+        expect(Item.find(item.id)).not_to be_complete
+
+        item.reload
+        expect(item).not_to be_complete
+      end
+    end
+  end
 end

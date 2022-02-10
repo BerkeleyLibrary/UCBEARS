@@ -61,15 +61,6 @@ describe LendingController, type: :request do
   context 'with lending admin credentials' do
     before(:each) { mock_login(:lending_admin) }
 
-    context 'without any items' do
-      describe :index do
-        it 'shows an empty list' do
-          get index_path
-          expect(response).to be_successful
-        end
-      end
-    end
-
     context 'with items' do
       before(:each) do
         expect(Item.count).to eq(0) # just to be sure
@@ -78,79 +69,6 @@ describe LendingController, type: :request do
           items[fn] = build(fn).tap { |it| it.save!(validate: false) }
         end
         @item = active.first
-      end
-
-      describe :index do
-        it 'lists the items' do
-          get index_path
-          expect(response).to be_successful
-
-          body = response.body
-          items.each_value do |item|
-            expect(body).to include(CGI.escapeHTML(item.title))
-            expect(body).to include(item.author)
-            expect(body).to include(item.directory)
-          end
-        end
-
-        it 'shows due dates' do
-          loans = active.each_with_object([]) do |item, ll|
-            item.copies.times do |_copy|
-              loan = item.check_out_to!("patron-#{ll.size}")
-              ll << loan
-            end
-          end
-
-          get index_path
-          body = response.body
-          loans.each do |loan|
-            date = loan.due_date
-            expect(body).to include(date.to_s(:short))
-          end
-        end
-
-        it 'treats expired loans as complete' do
-          active.each do |items|
-            expect(items.loans).to be_empty
-          end
-          loans = active.each_with_object([]) do |item, ll|
-            item.copies.times do |copy|
-              loan = item.check_out_to!("patron-#{item.directory}-#{copy}")
-              loan.due_date = Time.current.utc - 1.days if copy.odd?
-              loan.save!
-              ll << loan
-            end
-          end
-
-          get index_path
-          body = response.body
-
-          loans.each do |loan|
-            loan.reload
-            date = loan.due_date
-            if loan.expired?
-              expect(loan).to be_complete
-              expect(body).not_to include(date.to_s(:short))
-            else
-              expect(body).to include(date.to_s(:short))
-            end
-          end
-        end
-      end
-
-      describe :profile_index do
-        let(:profile_file) { File.join('public', LendingController::PROFILE_INDEX_HTML) }
-
-        it 'generates a profile' do
-          get lending_profile_index_path
-
-          expect(File.exist?(profile_file)).to eq(true)
-
-          get "/#{LendingController::PROFILE_INDEX_HTML}"
-          expect(response).to be_successful
-        ensure
-          FileUtils.rm_f(profile_file)
-        end
       end
 
       describe :show do
@@ -258,7 +176,7 @@ describe LendingController, type: :request do
           item.update!(active: false)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -269,7 +187,7 @@ describe LendingController, type: :request do
 
         it 'is successful for an already active item' do
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item already active.')
@@ -282,7 +200,7 @@ describe LendingController, type: :request do
           item.update!(active: false, copies: 0)
 
           get lending_activate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item now active.')
@@ -303,7 +221,7 @@ describe LendingController, type: :request do
       describe :deactivate do
         it 'deactivates an active item' do
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item now inactive.')
@@ -317,7 +235,7 @@ describe LendingController, type: :request do
 
           get lending_deactivate_path(directory: item.directory) # TODO: use PATCH
 
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item already inactive.')
@@ -352,7 +270,7 @@ describe LendingController, type: :request do
 
           delete lending_destroy_path(directory: item.directory)
 
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item deleted.')
@@ -367,7 +285,7 @@ describe LendingController, type: :request do
           expect(Rails.logger).to receive(:warn).with('Failed to delete non-incomplete item', item.directory)
 
           delete lending_destroy_path(directory: item.directory)
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Only incomplete items can be deleted.')
@@ -392,7 +310,7 @@ describe LendingController, type: :request do
 
           delete delete_path
 
-          expect(response).to redirect_to index_path
+          expect(response).to redirect_to root_path
 
           follow_redirect!
           expect(response.body).to include('Item deleted.')

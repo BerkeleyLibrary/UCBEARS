@@ -1,8 +1,4 @@
 module LendingHelper
-  def format_html_id(value)
-    value.downcase.gsub(/[^A-Za-z0-9_:.-]/, '-')
-  end
-
   def format_value(value)
     return format_duration(value) if value.is_a?(ActiveSupport::Duration)
     return format_values(value) if value.respond_to?(:map)

@@ -4,13 +4,11 @@ section {
   &.stats-subsection {
     margin-bottom: $margin-xxlarge;
 
-    // TODO: Share between index.scss, stats.scss
     h2 {
       width: 100%;
       box-sizing: border-box;
     }
 
-    // TODO: Share between index.scss, stats.scss
     h3 {
       width: 100%;
       box-sizing: border-box;

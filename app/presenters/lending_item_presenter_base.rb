@@ -19,10 +19,6 @@ class LendingItemPresenterBase
     item.title
   end
 
-  def author
-    item.author
-  end
-
   def show_viewer?
     @show_viewer
   end

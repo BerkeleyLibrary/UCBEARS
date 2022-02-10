@@ -32,11 +32,6 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
     get '/profile_stats', to: 'stats#profile_index', as: :stats_profile
 
-    # TODO: don't include this in production
-    get '/profile_index', to: 'lending#profile_index', as: :lending_profile_index
-
-    get '/index', to: 'lending#index', as: :index
-
     get '/:directory/edit', to: 'lending#edit', as: :lending_edit, constraints: valid_dirname
     get '/:directory', to: 'lending#show', as: :lending_show, constraints: valid_dirname
     get '/:directory/view(/:token)', to: 'lending#view', as: :lending_view, constraints: valid_dirname.merge({ token: %r{[^/]+} })

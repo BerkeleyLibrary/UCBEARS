@@ -46,24 +46,10 @@ module Lending
         [processing_dir, final_dir]
       end
 
-      def async_collect!
-        Concurrent::CountDownLatch.new(1).tap do |latch|
-          Thread.new do
-            collector.collect!
-          rescue SystemExit => e
-            expect(e.success?).to eq(true)
-          ensure
-            latch.count_down
-          end
-        end
-      end
-
       before(:each) do
         @collector = Collector.new(lending_root: lending_root, stop_file: stop_file)
 
-        allow(BerkeleyLibrary::Logging.logger).to receive(:debug) do |msg|
-          warn(msg)
-        end
+        allow(BerkeleyLibrary::Logging.logger).to(receive(:debug)) { |msg| warn(msg) }
       end
 
       it 'processes nothing if stopped' do

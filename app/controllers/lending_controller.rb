@@ -3,11 +3,6 @@
 class LendingController < ApplicationController
 
   # ------------------------------------------------------------
-  # Constants
-
-  PROFILE_INDEX_HTML = 'index-profile.html'.freeze
-
-  # ------------------------------------------------------------
   # Helpers
 
   helper_method :lending_admin?, :manifest_url
@@ -23,20 +18,6 @@ class LendingController < ApplicationController
 
   # ------------------------------------------------------------
   # Controller actions
-
-  def index
-    render('application/not_found') && return unless current_user.lending_admin?
-
-    ensure_lending_items!
-  end
-
-  # Index page, but generate a profile result
-  def profile_index
-    with_profile(PROFILE_INDEX_HTML) do
-      ensure_lending_items!
-      render(:index)
-    end
-  end
 
   # TODO: merge 'edit' and 'show'
   def edit; end
@@ -111,7 +92,7 @@ class LendingController < ApplicationController
       @item.update!(active: true)
       flash!(:success, 'Item now active.')
     end
-    redirect_to(:index)
+    redirect_to(:root)
   end
 
   def deactivate
@@ -121,7 +102,7 @@ class LendingController < ApplicationController
       flash!(:success, 'Item now inactive.')
     end
 
-    redirect_to(:index)
+    redirect_to(:root)
   end
 
   def destroy
@@ -133,7 +114,7 @@ class LendingController < ApplicationController
       flash!(:success, 'Item deleted.')
     end
 
-    redirect_to(:index)
+    redirect_to(:root)
   end
 
   def reload
@@ -233,10 +214,6 @@ class LendingController < ApplicationController
     require_eligible_patron!
 
     raise Error::ForbiddenError, Item::MSG_NOT_CHECKED_OUT unless active_loan
-  end
-
-  def ensure_lending_items!
-    Item.scan_for_new_items!
   end
 
   def ensure_lending_item!
