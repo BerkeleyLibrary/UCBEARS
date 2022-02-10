@@ -1,5 +1,6 @@
 path = iiif_directory.path
 json.directory(path.basename)
+json.mtime(iiif_directory.mtime)
 json.path(path)
 json.exists(iiif_directory.exists?)
 json.complete(iiif_directory.complete?)

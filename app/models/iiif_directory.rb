@@ -67,6 +67,10 @@ class IIIFDirectory
   # ------------------------------------------------------------
   # Accessors
 
+  def mtime
+    path&.mtime
+  end
+
   def marc_path
     @marc_path ||= path.join(Lending::Processor::MARC_XML_NAME)
   end

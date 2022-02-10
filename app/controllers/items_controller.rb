@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
 
   # GET /processing.json
   def processing
-    processing_dirs = Lending.each_processing_dir.sort
+    processing_dirs = Lending.each_processing_dir.sort_by(&:mtime).reverse
     @iiif_directories = processing_dirs.map do |dir|
       IIIFDirectory.new(dir.basename, stage: :processing)
     end

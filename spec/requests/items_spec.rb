@@ -409,14 +409,17 @@ RSpec.describe '/items', type: :request do
           expect(parsed_response).to be_a(Array)
           expect(parsed_response.size).to eq(symlinks.size)
 
-          symlinks.sort!
-          symlinks.each_with_index do |l, i|
+          symlinks.each do |l|
             directory = l.basename.to_s
 
-            result = parsed_response[i]
+            result = parsed_response.find { |r| r['path'] == l.to_s }
+            expect(result).not_to be_nil
+
             expect(result['path']).to eq(l.to_s)
             expect(result['directory']).to eq(directory)
             expect(result['exists']).to eq(true)
+            actual_mtime = Time.parse(result['mtime'])
+            expect(actual_mtime).to be_within(1.second).of(l.mtime)
 
             iiif_dir = IIIFDirectory.new(directory, stage: :processing)
             %w[page_images marc_record manifest_template].each do |attr|
