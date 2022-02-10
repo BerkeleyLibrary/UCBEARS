@@ -1,5 +1,6 @@
-# 1.5.3 (next)
+# 1.6.0 (next)
 
+- removes legacy "Index (old)" item administration interface
 - adds a "Manage Terms" administration tab, allowing creating, editing, and deleting terms
 - renames "Administration" to "Manage Items"
 
