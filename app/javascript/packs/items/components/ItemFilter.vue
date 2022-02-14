@@ -2,7 +2,7 @@
   <div style="display: contents">
     <form class="search" @submit.prevent>
       <label for="itemFilter-keywords">Keyword search:</label>
-      <div class="search-field">
+      <div class="item-search-field">
         <input
           id="itemFilter-keywords"
           v-model="itemFilter.keywords"
