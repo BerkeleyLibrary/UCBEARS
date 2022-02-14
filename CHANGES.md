@@ -1,8 +1,93 @@
-# 1.6.0 (next)
+# 1.6.0 (2022-02-14)
 
-- removes legacy "Index (old)" item administration interface
-- adds a "Manage Terms" administration tab, allowing creating, editing, and deleting terms
+New features:
+
 - renames "Administration" to "Manage Items"
+- adds a "Manage Terms" administration tab, allowing creating, editing, and deleting terms
+- removes legacy "Index (old)" item administration interface
+
+Technical updates:
+
+- adds a `/processing` API endpoint returning information on processing
+  directories in JSON format, e.g.
+
+  ```json
+  [
+    { 
+      "directory":"991085919326206532_C122741395",
+      "mtime":"2022-02-11T03:49:10.266+00:00",
+      "path":"/ucbears/processing/991085919326206532_C122741395",
+      "exists":true,
+      "complete":false,
+      "has_page_images":false,
+      "has_marc_record":false,
+      "has_manifest_template":false
+    },
+    {
+      "directory":"991085915425906532_C117801326",
+      "mtime":"2022-02-11T03:12:12.846+00:00",
+      "path":"/ucbears/processing/991085915425906532_C117801326",
+      "exists":true,
+      "complete":false,
+      "has_page_images":true,
+      "has_marc_record":false,
+      "has_manifest_template":false
+    }
+  ]
+  ```
+
+- failed JSON requests now return errors in a consistent format, e.g.:
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "code": 403,
+      "message": "Forbidden",
+      "errors": [
+        { "location":  "/terms.json" }
+      ]
+    }
+  }
+  ```
+
+  or
+
+  ```json
+  {
+    "success":false,
+    "error":{
+      "code":422,
+      "errors":[
+        {
+          "type":"greater_than_or_equal_to",
+          "attribute":"copies",
+          "message":"Copies must be greater than or equal to 0",
+          "details":{
+            "error":"greater_than_or_equal_to",
+            "value":-1,
+            "count":0
+          }
+        },
+        {
+          "type":"Active items must have at least one copy.",
+          "attribute":"base",
+          "message":"Active items must have at least one copy.",
+          "details":{
+            "error":"Active items must have at least one copy."
+          }
+        }
+      ]
+    }
+  }
+  ```
+- unauthenticated requests to API endpoints now return an error
+  response instead of a 302 redirect to the login page
+- fixes an issue where administrative UI components could be 
+  constructed (though not rendered) even on error pages
+- default (root) route is now to `session#index`, which requires
+  a login, redirects administrators to "Manage Items", and displays
+  403 Forbidden to non-administrators
 
 # 1.5.2 (2022-01-18)
 
