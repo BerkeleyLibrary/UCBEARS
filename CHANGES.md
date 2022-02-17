@@ -1,3 +1,12 @@
+# 1.6.1 (next)
+
+- Adds an alt-media notice to the checkout page, directing students with print disabilities
+  to the previously existing PDF service.
+
+Technical:
+
+- Most text strings are now in `locales/en.yml` for ease of customization / editing.
+
 # 1.6.0 (2022-02-14)
 
 New features:
