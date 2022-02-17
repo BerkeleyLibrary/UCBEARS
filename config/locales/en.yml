@@ -1,6 +1,7 @@
 en:
   app_title: 'UC Berkeley Electronic and Accessible Reserves System'
   app_title_short: 'UC BEARS'
+  app_title_full: 'UC BEARS (UC Berkeley Electronic and Accessible Reserves System)'
 
   date:
     formats:
@@ -64,6 +65,26 @@ en:
       failed: 'Error generating profile: %{msg}'
 
   items:
+    view:
+      altmedia_note_html: >-
+        UC Berkeley students with print disabilities that necessitate use of alternative media:
+        the Library will provide digital files to the user. These files work well with screen
+        readers and are an alternate option to using this site. You qualify if you are registered
+        with the <a href="https://dsp.berkeley.edu/">Disabled Students Office</a>;
+        please email <a href="mailto:prntscan@lists.berkeley.edu">prntscan@lists.berkeley.edu</a>.
+      copyright:
+        header: '⚠️ Warning of Copyright'
+        text: >-
+          The copyright law of the United States (Title 17, United States Code) governs the making of photocopies
+          or other reproductions of copyrighted material. Under certain conditions specified in the law, libraries
+          and archives are authorized to furnish a photocopy or other reproduction. One of these specific conditions
+          is that the photocopy or reproduction is not to be “used for any purpose other than private study,
+          scholarship, or research.” The library has utilized technical measures to prevent any further copying,
+          downloading, or distribution of this work. Use of this reproduction in violation of these terms could
+          subject users to potential liability for copyright infringement.
+      not_available:
+        header: '⚠️ Item not available'
+        current_checkouts: 'Items currently checked out:'
     update:
       success: 'Item updated.'
       failed: 'Updating %{dir} failed.'

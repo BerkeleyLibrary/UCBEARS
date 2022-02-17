@@ -1,0 +1,26 @@
+<tr>
+  <td class="warning">
+    <h2><%= t('items.view.not_available.header') %></h2>
+    <p><%= presenter.loan.reason_unavailable %></p>
+    <% other_checkouts = presenter.loan.other_checkouts.to_a %>
+    <% unless other_checkouts.empty? %>
+      <p><%= t('items.view.not_available.current_checkouts') %>></p>
+      <ul class="current-checkouts">
+        <% other_checkouts.each do |other_loan| %>
+          <%
+            other_item = other_loan.item
+            view_url = lending_view_url(directory: other_item.directory, token: presenter.borrower_token_str)
+          %>
+          <li>
+            <%= link_to(other_item.title, view_url, target: '_blank') %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </td>
+</tr>
+<tr>
+  <td class="action wide">
+    <%= presenter.action %>
+  </td>
+</tr>
