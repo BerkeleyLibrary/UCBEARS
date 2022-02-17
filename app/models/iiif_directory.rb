@@ -83,7 +83,7 @@ class IIIFDirectory
   def page_images
     return [] unless exists?
 
-    path.children.lazy.select { |e| Lending::Page.page_image?(e) }
+    Lending::PathUtils.images_in(path)
   end
 
   def marc_metadata
@@ -95,7 +95,7 @@ class IIIFDirectory
   def first_image_url_path
     raise(Errno::ENOENT, err_no_page_images) unless (first_image_path = page_images.first)
 
-    first_image_path.relative_path_from(stage_root_path)
+    first_image_path.relative_path_from(stage_root_path).to_s
   end
 
   # ------------------------------------------------------------
@@ -129,7 +129,7 @@ class IIIFDirectory
   end
 
   def err_no_page_images
-    t('activerecord.errors.models.image.directory.no_page_images', dir: path)
+    I18n.t('activerecord.errors.models.image.directory.no_page_images', dir: path)
   end
 
 end

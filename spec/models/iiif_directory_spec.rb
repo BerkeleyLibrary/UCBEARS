@@ -32,4 +32,26 @@ describe IIIFDirectory do
       end
     end
   end
+
+  describe :first_image_url_path do
+    it 'returns the first image' do
+      directory = attributes_for(:complete_item)[:directory]
+      iiif_directory = IIIFDirectory.new(directory)
+      url_path = iiif_directory.first_image_url_path
+      expected_path = BerkeleyLibrary::Util::Paths.join(directory, '00000001.tif')
+      expect(url_path).to eq(expected_path)
+    end
+
+    it 'raises Errno::ENOENT if there are no page images' do
+      directory = attributes_for(:incomplete_no_images)[:directory]
+      iiif_directory = IIIFDirectory.new(directory)
+      expect { iiif_directory.first_image_url_path }.to raise_error(Errno::ENOENT)
+    end
+
+    it 'raises Errno::ENOENT if the directory does not exist' do
+      directory = attributes_for(:incomplete_no_directory)[:directory]
+      iiif_directory = IIIFDirectory.new(directory)
+      expect { iiif_directory.first_image_url_path }.to raise_error(Errno::ENOENT)
+    end
+  end
 end

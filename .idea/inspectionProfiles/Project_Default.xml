@@ -33,7 +33,7 @@
     <inspection_tool class="RubyMismatchedArgumentType" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="myCheckNilability" value="false" />
     </inspection_tool>
-    <inspection_tool class="RubyMismatchedReturnType" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="RubyMismatchedReturnType" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="myCheckNilability" value="false" />
     </inspection_tool>
     <inspection_tool class="RubyNilAnalysis" enabled="true" level="WEAK WARNING" enabled_by_default="true" />

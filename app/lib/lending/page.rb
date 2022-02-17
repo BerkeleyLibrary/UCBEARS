@@ -32,10 +32,6 @@ module Lending
         PathUtils.stem(path) =~ DIGITS_RE
       end
 
-      def page_image?(path)
-        PathUtils.image_ext?(path) && page_number?(path)
-      end
-
       def all_from_directory(dir)
         dirpath = PathUtils.ensure_dirpath(dir)
         dirpath.children.filter_map do |f|

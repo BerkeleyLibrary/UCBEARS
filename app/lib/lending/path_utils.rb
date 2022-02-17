@@ -65,6 +65,13 @@ module Lending
       tiff_ext?(p) || jpeg_ext?(p)
     end
 
+    def images_in(dir)
+      # TODO: unify this with the other extension-checking methods
+      path = ensure_dirpath(dir)
+      pattern = path.join('*.{tif,jpg,jpeg}').to_s
+      Pathname.glob(pattern)
+    end
+
     def xml_ext?(p)
       pathname = ensure_pathname(p)
       pathname.extname.downcase == '.xml'
