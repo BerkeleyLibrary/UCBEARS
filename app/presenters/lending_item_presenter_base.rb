@@ -56,6 +56,7 @@ class LendingItemPresenterBase
     button_to(t('item.actions.edit'), lending_edit_path(directory: directory), class: 'btn secondary', method: :get)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def internal_metadata_fields
     {
       t('activerecord.attributes.item.record_id') => item.record_id,
@@ -68,6 +69,7 @@ class LendingItemPresenterBase
       )
     }.tap { |ff| add_alma_fields(ff) }
   end
+  # rubocop:enable Metrics/AbcSize
 
   def add_circ_metadata(ff)
     add_due_dates(ff)
