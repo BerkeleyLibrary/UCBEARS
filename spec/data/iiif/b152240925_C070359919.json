@@ -1,6 +1,6 @@
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
-  "@id": "<%= manifest_uri %>",
+  "@id": "https://ucbears.invalid/manifest",
   "@type": "sc:Manifest",
   "label": "Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg",
   "metadata": [
@@ -18,26 +18,26 @@
       "@type": "sc:Sequence",
       "canvases": [
         {
-          "@id": "<%= manifest_uri %>/canvas/p384",
+          "@id": "https://ucbears.invalid/manifest/canvas/p384",
           "@type": "sc:Canvas",
           "label": "Image 384",
           "width": 1077,
           "height": 1570,
           "images": [
             {
-              "@id": "<%= image_dir_uri %>/00000384.tif/annotation/p384-image",
+              "@id": "https://ucbears.invalid/imgdir/00000384.tif/annotation/p384-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "<%= manifest_uri %>/canvas/p384",
+              "on": "https://ucbears.invalid/manifest/canvas/p384",
               "resource": {
-                "@id": "<%= image_dir_uri %>/00000384.tif/full/!1024,1024/0/default.jpg",
+                "@id": "https://ucbears.invalid/imgdir/00000384.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1077,
                 "height": 1570,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "<%= image_dir_uri %>/00000384.tif",
+                  "@id": "https://ucbears.invalid/imgdir/00000384.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -46,31 +46,31 @@
           "metadata": [
             {
               "label": "Transcript",
-              "value": "338 Band 6\n\n \n\n/103\n\n30. VIII 928 Prof. Libmann Amerikaner <% aus New York geführt; große amerikanische\nBerühmtheit. Schüler von <...» Leipzig. Hält viel von Lichtwitz. Conceited und\namusisch. Giebt gerne Kalomel wodurch er sich in das Herz von Frau Einstein ein-\nschlich. Zionist. - Den Kindern die „Rückkehr nach Nazareth“ gezeigt. Das Symbol als\npolarisierender Umschalter zwischen „Eignen“ und „Fernen“.\n\nGanz herrlicher Brief von Schuhmacher in der Wasserturm-Frage. Mein Vorschlag\nsöhnt ihn mit dem neuen Projekt aus.\n\n31 VIII 928 Pauli mit Sohn und Dr. Dierksen vom Hauptbahnhof sehr fidel fortgebracht\nmit Mieken. Photo des Carpaccio („junger Mann“ bei Otto Kahn) mitgegeben.\n\nFrln. Margarete Gutschow aus Rom im Glauben gestärkt (5 Bände der Sarkophage von\nRobert unter Rodenwaldts Leitung in Arbeit.) durch Nachweis, daß von solchem Cor-\npus die „Evidenz“ unserer Forschungen abhängt.\n\nFrau Reye, bzw. ihren Sohn: Berufe beraten: Göttingen\n\nBriefe an Saxl und Bing über den Brief von Schumacher.\n\n1. September 928 Zwischen Eignen und Fernen steht das Lenken (Steuern).\n\nSaxl bleibt noch in Genf.\n\nBei Reyes Vorlesungsverzeichnis für Göttingen abgegangen.\n\nVorläufige Aufstellung „definitiv“. Photographische Abbildungen in Brief Ordner ge-\nsammelt.\n\n/105\n\nCollege Bing will von Selva eventuell schon eher weg wegen Wetter. Hat den mich über-\nraschenden Plan zu Fuß über das Stilfser Joch zu gehen. » Bing Mißverständnis. Postauto\nwar gemeint. 4\n\nNur noch etwa 448 Mark monatlich zum Bücherankauf übrig.\n\nVolmer will vom 5-26 September in Urlaub.\n\n2. September 928 Nach Einsteins Adresse gefragt.\n\nCollege Bing nach Bozen telegraphiert. Krach mit der Telegramm Aufnahme. Brief an\ndie Direktion.\n\nNach Kösterberg, um Max die Struktur des Atlasses auseinanderzusetzen, was mir\nbesser gelingt, als ich dachte. Fritz beim Tanzen gefallen und den Arm gebrochen:\nDienstbeschädigung.\n\nMeine Zettelbestände nachgesehen. Für die Reise hätte ich am liebsten alles noch mal\ndurchgesehen.\n\nMeinem Bruder Max geschrieben, daß ich wünsche, daß Peter Braden in das Kura-\ntorıum der K.B.W. eintritt. » Bing Möchte hierüber sehr gern noch einmal sprechen.\nSeine Äußerungen anlässlich eines Cassirer-Nachfolgers erfüllen mich mit Sorge über\nseine Qualification, derartige Fragen sachgemäß zu entscheiden. 4\n\n \n\n \n''"
+              "value": "338 Band 6\n\n \n\n/103\n\n30. VIII 928 Prof. Libmann Amerikaner <%% aus New York geführt; große amerikanische\nBerühmtheit. Schüler von <...» Leipzig. Hält viel von Lichtwitz. Conceited und\namusisch. Giebt gerne Kalomel wodurch er sich in das Herz von Frau Einstein ein-\nschlich. Zionist. - Den Kindern die „Rückkehr nach Nazareth“ gezeigt. Das Symbol als\npolarisierender Umschalter zwischen „Eignen“ und „Fernen“.\n\nGanz herrlicher Brief von Schuhmacher in der Wasserturm-Frage. Mein Vorschlag\nsöhnt ihn mit dem neuen Projekt aus.\n\n31 VIII 928 Pauli mit Sohn und Dr. Dierksen vom Hauptbahnhof sehr fidel fortgebracht\nmit Mieken. Photo des Carpaccio („junger Mann“ bei Otto Kahn) mitgegeben.\n\nFrln. Margarete Gutschow aus Rom im Glauben gestärkt (5 Bände der Sarkophage von\nRobert unter Rodenwaldts Leitung in Arbeit.) durch Nachweis, daß von solchem Cor-\npus die „Evidenz“ unserer Forschungen abhängt.\n\nFrau Reye, bzw. ihren Sohn: Berufe beraten: Göttingen\n\nBriefe an Saxl und Bing über den Brief von Schumacher.\n\n1. September 928 Zwischen Eignen und Fernen steht das Lenken (Steuern).\n\nSaxl bleibt noch in Genf.\n\nBei Reyes Vorlesungsverzeichnis für Göttingen abgegangen.\n\nVorläufige Aufstellung „definitiv“. Photographische Abbildungen in Brief Ordner ge-\nsammelt.\n\n/105\n\nCollege Bing will von Selva eventuell schon eher weg wegen Wetter. Hat den mich über-\nraschenden Plan zu Fuß über das Stilfser Joch zu gehen. » Bing Mißverständnis. Postauto\nwar gemeint. 4\n\nNur noch etwa 448 Mark monatlich zum Bücherankauf übrig.\n\nVolmer will vom 5-26 September in Urlaub.\n\n2. September 928 Nach Einsteins Adresse gefragt.\n\nCollege Bing nach Bozen telegraphiert. Krach mit der Telegramm Aufnahme. Brief an\ndie Direktion.\n\nNach Kösterberg, um Max die Struktur des Atlasses auseinanderzusetzen, was mir\nbesser gelingt, als ich dachte. Fritz beim Tanzen gefallen und den Arm gebrochen:\nDienstbeschädigung.\n\nMeine Zettelbestände nachgesehen. Für die Reise hätte ich am liebsten alles noch mal\ndurchgesehen.\n\nMeinem Bruder Max geschrieben, daß ich wünsche, daß Peter Braden in das Kura-\ntorıum der K.B.W. eintritt. » Bing Möchte hierüber sehr gern noch einmal sprechen.\nSeine Äußerungen anlässlich eines Cassirer-Nachfolgers erfüllen mich mit Sorge über\nseine Qualification, derartige Fragen sachgemäß zu entscheiden. 4\n\n \n\n \n''"
             }
           ]
         },
         {
-          "@id": "<%= manifest_uri %>/canvas/p385",
+          "@id": "https://ucbears.invalid/manifest/canvas/p385",
           "@type": "sc:Canvas",
           "label": "Image 385",
           "width": 1057,
           "height": 1590,
           "images": [
             {
-              "@id": "<%= image_dir_uri %>/00000385.tif/annotation/p385-image",
+              "@id": "https://ucbears.invalid/imgdir/00000385.tif/annotation/p385-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "<%= manifest_uri %>/canvas/p385",
+              "on": "https://ucbears.invalid/manifest/canvas/p385",
               "resource": {
-                "@id": "<%= image_dir_uri %>/00000385.tif/full/!1024,1024/0/default.jpg",
+                "@id": "https://ucbears.invalid/imgdir/00000385.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1057,
                 "height": 1590,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "<%= image_dir_uri %>/00000385.tif",
+                  "@id": "https://ucbears.invalid/imgdir/00000385.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }

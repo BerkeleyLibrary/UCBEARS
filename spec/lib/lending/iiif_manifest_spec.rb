@@ -3,10 +3,16 @@ require 'rails_helper'
 module Lending
   describe IIIFManifest do
 
-    let(:manifest_url) { 'https://ucbears.example.edu/lending/b135297126_C068087930/manifest' }
-    let(:img_root_url) { 'https://ucbears.example.edu/iiif/' }
+    let(:manifest_url) { 'https://ucbears.test/lending/b135297126_C068087930/manifest' }
+    let(:img_root_url) { 'http://iipsrv.test/iiif/' }
 
-    let(:expected_manifest) { File.read('spec/data/lending/samples/final/b135297126_C068087930/manifest.json') }
+    let(:expected_manifest_raw) { File.read('spec/data/lending/final/b135297126_C068087930/manifest.json') }
+    let(:expected_manifest) do
+      img_dir_url = BerkeleyLibrary::Util::URIs.append(img_root_url, 'b135297126_C068087930')
+      expected_manifest_raw.strip
+        .gsub(IIIFManifest::MF_URL_PLACEHOLDER, manifest_url.to_s)
+        .gsub(IIIFManifest::IMGDIR_URL_PLACEHOLDER, img_dir_url.to_s)
+    end
 
     attr_reader :manifest
 
@@ -21,7 +27,7 @@ module Lending
     describe :to_json_manifest do
       it 'creates a manifest' do
         actual = manifest.to_json_manifest(manifest_url, img_root_url)
-        expect(actual.strip).to eq(expected_manifest.strip)
+        expect(actual.strip).to eq(expected_manifest)
       end
 
       it 'handles OCR text containing ERB delimiters' do
@@ -35,52 +41,13 @@ module Lending
             author: 'Warburg, Aby',
             dir_path: final_dir
           )
-          manifest.write_manifest_erb!
+          manifest.write_manifest!
+
+          expected = File.read('spec/data/iiif/b152240925_C070359919.json')
+          actual = manifest.manifest_path.read
+          expect(actual).to eq(expected)
+
           expect { manifest.to_json_manifest(manifest_url, img_root_url) }.not_to raise_error
-        end
-      end
-    end
-
-    describe :to_erb do
-      let(:expected_erb) { File.read('spec/data/lending/final/b135297126_C068087930/manifest.json.erb') }
-
-      it 'can create an ERB' do
-        expected = expected_erb
-        actual = manifest.to_erb
-        expect(actual.strip).to eq(expected.strip)
-      end
-
-      it 'generates an ERB that produces a valid manifest' do
-        # local, passed to template via binding
-        # noinspection RubyUnusedLocalVariable
-        manifest_uri = URI(manifest_url)
-
-        # local, passed to template via binding
-        # noinspection RubyUnusedLocalVariable
-        image_dir_uri = BerkeleyLibrary::Util::URIs.append(img_root_url, ERB::Util.url_encode(manifest.dir_basename))
-
-        actual = ERB.new(expected_erb).result(binding)
-        expect(actual.strip).to eq(expected_manifest.strip)
-      end
-
-      it 'handles OCR text containing ERB delimiters' do
-        Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmpdir|
-          ready_dir = 'spec/data/lending/problems/ready/b152240925_C070359919'
-          final_dir = File.join(tmpdir, File.basename(ready_dir))
-          FileUtils.cp_r(ready_dir, final_dir)
-
-          manifest = IIIFManifest.new(
-            title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',
-            author: 'Warburg, Aby',
-            dir_path: final_dir
-          )
-
-          expected = File.read('spec/data/lending/problems/final/b152240925_C070359919/manifest.json.erb')
-            .gsub('<% aus New York', '<%% aus New York')
-
-          actual = manifest.to_erb
-
-          expect(actual.strip).to eq(expected.strip)
         end
       end
     end

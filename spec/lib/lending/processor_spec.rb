@@ -69,24 +69,26 @@ module Lending
         end
       end
 
-      it 'generates the manifest template' do
-        expected_template = expected_dir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
-        actual_template = processor.outdir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
-        expect(actual_template.exist?).to eq(true)
+      it 'generates the manifest' do
+        expected_manifest = expected_dir.join(Lending::IIIFManifest::MANIFEST_NAME)
+        actual_manifest = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
+        expect(actual_manifest.exist?).to eq(true)
 
-        expect(actual_template.read.strip).to eq(expected_template.read.strip)
+        expect(actual_manifest.read.strip).to eq(expected_manifest.read.strip)
       end
     end
 
     describe :verify do
       it 'raises a ProcessingError for a malformed manifest' do
-        manifest = IIIFManifest.new(
-          title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',
-          author: 'Warburg, Aby',
-          dir_path: 'spec/data/lending/problems/final/b152240925_C070359919'
-        )
+        manifest_path = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
+
+        manifest = instance_double(IIIFManifest)
+        allow(manifest).to receive(:manifest_path).and_return(manifest_path)
+        allow(manifest).to receive(:has_manifest?).and_return(true)
+        allow(manifest).to receive(:to_json_manifest).and_return('{ something that is not valid JSON }')
+
         expect { processor.verify(manifest) }.to raise_error(ProcessingFailed) do |e|
-          expect(e.cause).to be_a(SyntaxError)
+          expect(e.cause).to be_a(JSON::ParserError)
         end
       end
     end
@@ -103,11 +105,11 @@ module Lending
         processor.process!
       end
 
-      expected_template = expected_dir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
-      actual_template = processor.outdir.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
-      expect(actual_template.exist?).to eq(true)
+      expected_manifest = expected_dir.join(Lending::IIIFManifest::MANIFEST_NAME)
+      actual_manifest = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
+      expect(actual_manifest.exist?).to eq(true)
 
-      expect(actual_template.read.strip).to eq(expected_template.read.strip)
+      expect(actual_manifest.read.strip).to eq(expected_manifest.read.strip)
     end
 
     describe :new do

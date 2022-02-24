@@ -1,6 +1,6 @@
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
-  "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest",
+  "@id": "https://ucbears.test/b135297126_C068087930/manifest.json",
   "@type": "sc:Manifest",
   "label": "The great depression in Europe, 1929-1939",
   "metadata": [
@@ -18,26 +18,26 @@
       "@type": "sc:Sequence",
       "canvases": [
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p1",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p1",
           "@type": "sc:Canvas",
-          "label": "Page 1",
+          "label": "Image 1",
           "width": 2000,
           "height": 3247,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000001.tif/annotation/p1-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000001.tif/annotation/p1-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p1",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p1",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000001.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000001.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 2000,
                 "height": 3247,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000001.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000001.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -51,26 +51,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p2",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p2",
           "@type": "sc:Canvas",
-          "label": "Page 2",
+          "label": "Image 2",
           "width": 1659,
           "height": 2704,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000002.tif/annotation/p2-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000002.tif/annotation/p2-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p2",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p2",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000002.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000002.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1659,
                 "height": 2704,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000002.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000002.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -84,26 +84,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p3",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p3",
           "@type": "sc:Canvas",
-          "label": "Page 3",
+          "label": "Image 3",
           "width": 1636,
           "height": 2767,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000003.tif/annotation/p3-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000003.tif/annotation/p3-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p3",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p3",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000003.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000003.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1636,
                 "height": 2767,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000003.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000003.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -117,26 +117,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p4",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p4",
           "@type": "sc:Canvas",
-          "label": "Page 4",
+          "label": "Image 4",
           "width": 1659,
           "height": 2704,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000004.tif/annotation/p4-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000004.tif/annotation/p4-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p4",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p4",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000004.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000004.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1659,
                 "height": 2704,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000004.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000004.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -150,26 +150,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p5",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p5",
           "@type": "sc:Canvas",
-          "label": "Page 5",
+          "label": "Image 5",
           "width": 1667,
           "height": 2767,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000005.tif/annotation/p5-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000005.tif/annotation/p5-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p5",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p5",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000005.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000005.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1667,
                 "height": 2767,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000005.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000005.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -183,26 +183,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p6",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p6",
           "@type": "sc:Canvas",
-          "label": "Page 6",
+          "label": "Image 6",
           "width": 1659,
           "height": 2704,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000006.tif/annotation/p6-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000006.tif/annotation/p6-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p6",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p6",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000006.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000006.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1659,
                 "height": 2704,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000006.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000006.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -216,26 +216,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p7",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p7",
           "@type": "sc:Canvas",
-          "label": "Page 7",
+          "label": "Image 7",
           "width": 1667,
           "height": 2767,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000007.tif/annotation/p7-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000007.tif/annotation/p7-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p7",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p7",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000007.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000007.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1667,
                 "height": 2767,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000007.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000007.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -249,26 +249,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p8",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p8",
           "@type": "sc:Canvas",
-          "label": "Page 8",
+          "label": "Image 8",
           "width": 1659,
           "height": 2704,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000008.tif/annotation/p8-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000008.tif/annotation/p8-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p8",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p8",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000008.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000008.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1659,
                 "height": 2704,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000008.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000008.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }
@@ -282,26 +282,26 @@
           ]
         },
         {
-          "@id": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p9",
+          "@id": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p9",
           "@type": "sc:Canvas",
-          "label": "Page 9",
+          "label": "Image 9",
           "width": 1667,
           "height": 2767,
           "images": [
             {
-              "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000009.tif/annotation/p9-image",
+              "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000009.tif/annotation/p9-image",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "https://ucbears.example.edu/lending/b135297126_C068087930/manifest/canvas/p9",
+              "on": "https://ucbears.test/b135297126_C068087930/manifest.json/canvas/p9",
               "resource": {
-                "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000009.tif/full/!1024,1024/0/default.jpg",
+                "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000009.tif/full/!1024,1024/0/default.jpg",
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "width": 1667,
                 "height": 2767,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "https://ucbears.example.edu/iiif/b135297126_C068087930/00000009.tif",
+                  "@id": "http://iipsrv.test/iiif/b135297126_C068087930/00000009.tif",
                   "profile": "http://iiif.io/api/image/2/level1.json"
                 }
               }

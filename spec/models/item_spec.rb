@@ -293,7 +293,7 @@ describe Item, type: :model do
           expect(iiif_directory.exists?).to eq(false)
           expect(iiif_directory.page_images?).to eq(false)
           expect(iiif_directory.marc_record?).to eq(false)
-          expect(iiif_directory.manifest_template?).to eq(false)
+          expect(iiif_directory.manifest?).to eq(false)
           expect(item).not_to be_complete
         end
 
@@ -303,7 +303,7 @@ describe Item, type: :model do
           expect(iiif_directory.exists?).to eq(true)
           expect(iiif_directory.page_images?).to eq(false)
           expect(iiif_directory.marc_record?).to eq(true)
-          expect(iiif_directory.manifest_template?).to eq(true)
+          expect(iiif_directory.manifest?).to eq(true)
           expect(item).not_to be_complete
         end
 
@@ -313,26 +313,26 @@ describe Item, type: :model do
           expect(iiif_directory.exists?).to eq(true)
           expect(iiif_directory.page_images?).to eq(true)
           expect(iiif_directory.marc_record?).to eq(false)
-          expect(iiif_directory.manifest_template?).to eq(true)
+          expect(iiif_directory.manifest?).to eq(true)
           expect(item).not_to be_complete
         end
 
-        it 'returns false for items without manifest templates' do
+        it 'returns false for items without manifests' do
           item = items[:incomplete_no_manifest]
           iiif_directory = item.iiif_directory
           expect(iiif_directory.exists?).to eq(true)
           expect(iiif_directory.page_images?).to eq(true)
           expect(iiif_directory.marc_record?).to eq(true)
-          expect(iiif_directory.manifest_template?).to eq(false)
+          expect(iiif_directory.manifest?).to eq(false)
           expect(item).not_to be_complete
         end
 
-        it 'returns false for items without manifest templates or page images' do
+        it 'returns false for items without manifests or page images' do
           item = items[:incomplete_marc_only]
           expect(item.iiif_directory.exists?).to eq(true)
           expect(item.iiif_directory.page_images?).to eq(false)
           expect(item.iiif_directory.marc_record?).to eq(true)
-          expect(item.iiif_directory.manifest_template?).to eq(false)
+          expect(item.iiif_directory.manifest?).to eq(false)
           expect(item).not_to be_complete
         end
 
@@ -343,7 +343,7 @@ describe Item, type: :model do
             expect(item.iiif_directory.exists?).to eq(true)
             expect(item.iiif_directory.page_images?).to eq(true)
             expect(item.iiif_directory.marc_record?).to eq(true)
-            expect(item.iiif_directory.manifest_template?).to eq(true)
+            expect(item.iiif_directory.manifest?).to eq(true)
             expect(item).to be_complete
           end
         end
@@ -424,14 +424,14 @@ describe Item, type: :model do
         end
       end
 
-      describe :has_manifest_template? do
+      describe :manifest? do
         let(:with_manifest) { %i[inactive_item active_item incomplete_no_images incomplete_no_marc] }
 
         it 'returns false if the item has no IIIF directory or no manifest' do
           items.each do |fn, item|
             next if with_manifest.include?(fn)
 
-            expect(item.iiif_directory.manifest_template?).to eq(false)
+            expect(item.iiif_directory.manifest?).to eq(false)
           end
         end
       end
@@ -669,6 +669,43 @@ describe Item, type: :model do
         item.reload
         expect(item).not_to be_complete
       end
+    end
+  end
+
+  describe :to_json_manifest do
+    it 'reads an ERB manifest' do
+      item = create(:complete_item)
+      mf = item.iiif_manifest
+      expect(mf.manifest_path.file?).not_to eq(true), "#{mf.manifest_path} should not exist" # just to be sure
+      expect(mf.erb_path.file?).to eq(true) # just to be sure
+
+      expected_manifest_path = Pathname.new("spec/data/iiif/#{item.directory}.json")
+      expected_manifest = expected_manifest_path.read
+
+      manifest_uri = BerkeleyLibrary::Util::URIs.append('https://ucbears.test/', item.directory, Lending::IIIFManifest::MANIFEST_NAME)
+      actual_manifest = item.to_json_manifest(manifest_uri)
+
+      expect(actual_manifest).to eq(expected_manifest)
+
+      mf = JSON.parse(actual_manifest)
+      expect(mf['@id']).to eq(manifest_uri.to_s)
+    end
+
+    it 'reads a plain JSON manifest' do
+      item = create(:active_item)
+      mf = item.iiif_manifest
+      expect(mf.manifest_path.file?).to eq(true) # just to be sure
+
+      expected_manifest_path = Pathname.new("spec/data/iiif/#{item.directory}.json")
+      expected_manifest = expected_manifest_path.read
+
+      manifest_uri = BerkeleyLibrary::Util::URIs.append('https://ucbears.test/', item.directory, Lending::IIIFManifest::MANIFEST_NAME)
+      actual_manifest = item.to_json_manifest(manifest_uri)
+
+      mf = JSON.parse(actual_manifest)
+      expect(mf['@id']).to eq(manifest_uri.to_s)
+
+      expect(actual_manifest).to eq(expected_manifest.strip)
     end
   end
 end

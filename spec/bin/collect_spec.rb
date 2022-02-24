@@ -31,11 +31,11 @@ describe 'collect.rb' do
         author: 'Warburg, Aby',
         dir_path: item_dir_final
       )
+      manifest.write_manifest!
 
-      expected = File.read('spec/data/lending/problems/final/b152240925_C070359919/manifest.json.erb')
-        .gsub('<% aus New York', '<%% aus New York')
-      actual = manifest.to_erb
-      expect(actual.strip).to eq(expected.strip)
+      expected = File.read('spec/data/iiif/b152240925_C070359919.json')
+      actual = manifest.manifest_path.read
+      expect(actual).to eq(expected)
     end
   end
 end

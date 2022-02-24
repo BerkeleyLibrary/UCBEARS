@@ -6,6 +6,8 @@ module Lending
   class Page
     include Comparable
 
+    PAGE_CANVAS_LABEL = 'Image'.freeze
+
     # TODO: make this configurable
     VIEW_W = 1024
     # TODO: make this configurable
@@ -90,7 +92,7 @@ module Lending
       tiff_uri = tiff_uri_for(image_dir_uri)
       IIIF::Presentation::Canvas.new.tap do |canvas|
         canvas['@id'] = canvas_uri
-        canvas.label = "Page #{number}"
+        canvas.label = "#{PAGE_CANVAS_LABEL} #{number}"
         canvas.width = width
         canvas.height = height
         canvas.images << create_image_annotation(canvas_uri, tiff_uri)

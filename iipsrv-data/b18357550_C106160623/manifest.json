@@ -1,0 +1,21 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://ucbears.invalid/manifest",
+  "@type": "sc:Manifest",
+  "label": "Herakleides : a portrait mummy from Roman Egypt",
+  "metadata": [
+    {
+      "label": "Title",
+      "value": "Herakleides : a portrait mummy from Roman Egypt"
+    },
+    {
+      "label": "Author",
+      "value": "Corcoran, Lorelei Hilda, 1953-"
+    }
+  ],
+  "sequences": [
+    {
+      "@type": "sc:Sequence"
+    }
+  ]
+}

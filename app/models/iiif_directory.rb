@@ -6,7 +6,7 @@ class IIIFDirectory
   # TODO: Use Rails i18n
   MSG_NO_IIIF_DIR = 'The item directory does not exist, or is not a directory'.freeze
   MSG_NO_PAGE_IMAGES = 'The item directory has no page images'.freeze
-  MSG_NO_MANIFEST_TEMPLATE = 'The item directory does not have a IIIF manifest template'.freeze
+  MSG_NO_MANIFEST = 'The item directory does not have a IIIF manifest'.freeze
   MSG_NO_MARC_XML = "The item directory does not contain a #{Lending::Processor::MARC_XML_NAME} file".freeze
 
   # ------------------------------------------------------------
@@ -29,7 +29,7 @@ class IIIFDirectory
   # Flags
 
   def complete?
-    exists? && page_images? && marc_record? && manifest_template?
+    exists? && page_images? && marc_record? && manifest?
   end
 
   def reason_incomplete
@@ -37,7 +37,7 @@ class IIIFDirectory
     return "#{MSG_NO_IIIF_DIR}: #{path}" unless exists?
     return MSG_NO_PAGE_IMAGES unless page_images?
     return MSG_NO_MARC_XML unless marc_record?
-    return MSG_NO_MANIFEST_TEMPLATE unless manifest_template?
+    return MSG_NO_MANIFEST unless manifest?
   end
 
   def exists?
@@ -58,10 +58,10 @@ class IIIFDirectory
     @has_marc_record = marc_path.exist?
   end
 
-  def manifest_template?
-    return @has_manifest_template if instance_variable_defined?(:@has_manifest_template)
+  def manifest?
+    return @has_manifest if instance_variable_defined?(:@has_manifest)
 
-    @has_manifest_template = manifest_template_path.exist?
+    @has_manifest = manifest_path.exist? || manifest_template_path.exist?
   end
 
   # ------------------------------------------------------------
@@ -78,6 +78,10 @@ class IIIFDirectory
   # TODO: should this be on IIIFManifest instead?
   def manifest_template_path
     @manifest_template_path ||= path.join(Lending::IIIFManifest::MANIFEST_TEMPLATE_NAME)
+  end
+
+  def manifest_path
+    @manifest_path ||= path.join(Lending::IIIFManifest::MANIFEST_NAME)
   end
 
   def page_images

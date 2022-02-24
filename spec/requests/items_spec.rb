@@ -422,7 +422,7 @@ RSpec.describe '/items', type: :request do
             expect(actual_mtime).to be_within(1.second).of(l.mtime)
 
             iiif_dir = IIIFDirectory.new(directory, stage: :processing)
-            %w[page_images marc_record manifest_template].each do |attr|
+            %w[page_images marc_record manifest].each do |attr|
               expected = iiif_dir.send("#{attr}?")
               actual = result["has_#{attr}"]
               expect(actual).to eq(expected), "Wrong result for #{directory} #{attr}; expected #{expected}, was #{actual}"

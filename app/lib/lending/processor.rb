@@ -41,12 +41,13 @@ module Lending
 
     def verify(manifest)
       raise ArgumentError, 'Manifest never written' unless manifest
-      raise ArgumentError, "Manifest template not present in processing directory #{manifest.dir_path}" unless manifest.has_template?
+      raise ArgumentError, "Manifest not present in processing directory #{manifest.dir_path}" unless manifest.has_manifest?
 
       begin
-        manifest.to_json_manifest(IIIFManifest::MF_URL_PLACEHOLDER, IIIFManifest::IMGDIR_URL_PLACEHOLDER)
-      rescue SyntaxError => e
-        raise ProcessingFailed.new(indir, manifest.erb_path, cause: e)
+        manifest_json = manifest.to_json_manifest(IIIFManifest::MF_URL_PLACEHOLDER, IIIFManifest::IMGDIR_URL_PLACEHOLDER)
+        JSON.parse(manifest_json)
+      rescue StandardError => e
+        raise ProcessingFailed.new(indir, manifest.manifest_path, cause: e)
       end
     end
 
@@ -89,7 +90,7 @@ module Lending
 
     def write_manifest!
       logger.info("#{self}: writing manifest template to #{outdir}")
-      IIIFManifest.new(title: title, author: author, dir_path: outdir).tap(&:write_manifest_erb!)
+      IIIFManifest.new(title: title, author: author, dir_path: outdir).tap(&:write_manifest!)
     end
 
     def find_marc_path

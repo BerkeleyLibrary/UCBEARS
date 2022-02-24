@@ -1,0 +1,21 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://ucbears.invalid/manifest",
+  "@type": "sc:Manifest",
+  "label": "Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg",
+  "metadata": [
+    {
+      "label": "Title",
+      "value": "Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg"
+    },
+    {
+      "label": "Author",
+      "value": "Warburg, Aby"
+    }
+  ],
+  "sequences": [
+    {
+      "@type": "sc:Sequence"
+    }
+  ]
+}
