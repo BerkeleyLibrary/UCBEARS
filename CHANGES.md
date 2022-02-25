@@ -2,10 +2,16 @@
 
 - Adds an alt-media notice to the checkout page, directing students with print disabilities
   to the previously existing PDF service.
+- Page images are now identified as "Image <number>" rather than "Page <number>" to reduce
+  confusion between physical and logical pages.
 
 Technical:
 
 - Most text strings are now in `locales/en.yml` for ease of customization / editing.
+- IIIF manifests are now stored as plain JSON (with placeholder URLs) rather than
+  as an ERB template.
+  - Note that this slightly changes the format of the `/processing` API endpoing, insofar
+    as it now returns `has_manifest` rather than `has_manifest_template`
 
 # 1.6.0 (2022-02-14)
 
