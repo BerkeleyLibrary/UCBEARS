@@ -1,0 +1,56 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://ucbears.invalid/manifest",
+  "@type": "sc:Manifest",
+  "label": "Detecting accounting fraud : Analysis and ethics",
+  "metadata": [
+    {
+      "label": "Title",
+      "value": "Detecting accounting fraud : Analysis and ethics"
+    },
+    {
+      "label": "Author",
+      "value": "Jackson, Cecil Wilfrid."
+    }
+  ],
+  "sequences": [
+    {
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "https://ucbears.invalid/manifest/canvas/p2",
+          "@type": "sc:Canvas",
+          "label": "Image 2",
+          "width": 2164,
+          "height": 2964,
+          "images": [
+            {
+              "@id": "https://ucbears.invalid/imgdir/00000002.tif/annotation/p2-image",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://ucbears.invalid/manifest/canvas/p2",
+              "resource": {
+                "@id": "https://ucbears.invalid/imgdir/00000002.tif/full/!1024,1024/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "width": 2164,
+                "height": 2964,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://ucbears.invalid/imgdir/00000002.tif",
+                  "profile": "http://iiif.io/api/image/2/level1.json"
+                }
+              }
+            }
+          ],
+          "metadata": [
+            {
+              "label": "Transcript",
+              "value": " \n''"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

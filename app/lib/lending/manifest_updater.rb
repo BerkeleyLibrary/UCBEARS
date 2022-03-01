@@ -25,6 +25,9 @@ module Lending
     def convert_erb_to_json!
       json_src = render_erb_template(MF_URL_PLACEHOLDER, IMGDIR_URL_PLACEHOLDER)
       update_json(json_src)
+    rescue SyntaxError => e
+      logger.warn(e)
+      write_manifest!
     end
 
     def update_json(json_src)

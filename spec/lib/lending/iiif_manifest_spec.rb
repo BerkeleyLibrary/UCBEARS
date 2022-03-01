@@ -136,7 +136,7 @@ module Lending
       end
 
       it 'adds title and author if missing' do
-        bad_manifest_json = expected_manifest_raw.sub(/"metadata": \[[^]]+]/, '"metadata": []')
+        bad_manifest_json = expected_manifest_raw.sub(/"metadata": \[[^\]]+\]/, '"metadata": []')
 
         Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |dir|
           manifest_json_path = Pathname.new(dir).join('manifest.json')
@@ -181,6 +181,28 @@ module Lending
 
           expected = File.read('spec/data/iiif/b152240925_C070359919.json')
           manifest_json_path = Pathname.new(final_dir).join('manifest.json')
+          actual = manifest_json_path.read
+          expect(actual).to eq(expected)
+        end
+      end
+
+      it 'writes a new manifest for problem ERBs' do
+        ready_dir = 'spec/data/lending/problems/final/b259380611_C122678457'
+        Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |dir|
+          final_dir = File.join(dir, File.basename(ready_dir))
+          FileUtils.cp_r(ready_dir, final_dir)
+
+          manifest = IIIFManifest.new(
+            title: 'Detecting accounting fraud : Analysis and ethics',
+            author: 'Jackson, Cecil Wilfrid.',
+            dir_path: final_dir
+          )
+          manifest.update_manifest!
+
+          manifest_json_path = Pathname.new(final_dir).join('manifest.json')
+          FileUtils.cp(manifest_json_path.to_s, 'spec/data/iiif/b259380611_C122678457.json')
+
+          expected = File.read('spec/data/iiif/b259380611_C122678457.json')
           actual = manifest_json_path.read
           expect(actual).to eq(expected)
         end
