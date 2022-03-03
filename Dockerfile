@@ -137,6 +137,16 @@ COPY --chown=$APP_USER:$APP_USER . .
 # heavyweight build dependencies.
 FROM base AS production
 
+# ------------------------------------------------------------
+# Configure for production
+
+# Run the production stage in production mode.
+ENV RAILS_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=true
+
+# ------------------------------------------------------------
+# Copy code and installed gems
+
 # Copy the built codebase from the dev stage
 COPY --from=development --chown=$APP_USER /opt/app /opt/app
 COPY --from=development --chown=$APP_USER /usr/local/bundle /usr/local/bundle
@@ -145,12 +155,30 @@ COPY --from=development --chown=$APP_USER /usr/local/bundle /usr/local/bundle
 RUN bundle config set frozen 'true'
 RUN bundle install --local
 
-# Run the production stage in production mode.
-ENV RAILS_ENV=production
-ENV RAILS_SERVE_STATIC_FILES=true
+# ------------------------------------------------------------
+# Precompile production assets
 
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
 RUN SECRET_KEY_BASE=1 rails assets:precompile --trace \
     && rm -r .cache/yarn
+
+# ------------------------------------------------------------
+# Preserve build arguments
+
+# passed in by Jenkins
+ARG BUILD_TIMESTAMP
+ARG BUILD_URL
+ARG DOCKER_TAG
+ARG GIT_BRANCH
+ARG GIT_COMMIT
+ARG GIT_URL
+
+# build arguments aren't persisted in the image, but ENV values are
+ENV BUILD_TIMESTAMP="${BUILD_TIMESTAMP}"
+ENV BUILD_URL="${BUILD_URL}"
+ENV DOCKER_TAG="${DOCKER_TAG}"
+ENV GIT_BRANCH="${GIT_BRANCH}"
+ENV GIT_COMMIT="${GIT_COMMIT}"
+ENV GIT_URL="${GIT_URL}"
