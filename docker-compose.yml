@@ -3,8 +3,10 @@ services:
     build:
       context: .
       target: production
+#    platform: linux/amd64
     depends_on:
       - db
+      - iipsrv
       - selenium
       - selenium-chrome
     environment: &app-environment

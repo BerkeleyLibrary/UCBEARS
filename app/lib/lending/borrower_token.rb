@@ -64,7 +64,8 @@ module Lending
       end
 
       def encode(uid, borrower_id)
-        JWT.encode({ uid: uid, borrower_id: borrower_id }, hmac_secret, ALGORITHM)
+        args = { uid: uid, borrower_id: borrower_id }
+        JWT.encode(args, hmac_secret, ALGORITHM)
       end
 
       def _load(token_str)
@@ -76,7 +77,7 @@ module Lending
       private
 
       def hmac_secret
-        @hmac_secret ||= Rails.application.secrets.fetch(:secret_key_base) { raise ArgumentError, 'Rails secret_key_base not set' }
+        @hmac_secret ||= Rails.application.secrets.fetch(:secret_key_base) { raise ArgumentError, 'Rails secret_key_base not set' }.to_s
       end
 
       def decode(token_str)

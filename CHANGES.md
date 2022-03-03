@@ -12,6 +12,19 @@ Technical:
   as an ERB template.
   - Note that this slightly changes the format of the `/processing` API endpoing, insofar
     as it now returns `has_manifest` rather than `has_manifest_template`
+- Updated from Ruby 3.0.2 to Ruby 3.0.3.
+- Dockerfile is now based on Debian Slim rather than Alpine.
+- Webpacker/JavaScript changes:
+  - Tests now use the JavaScript packs from `public/packs` instead of a separate
+    `packs/test`.
+  - `rails check` no longer calls `assets:precompile`; running tests requires compiling
+    assets separately. (This was already the case in practice due to Webpacker usually
+    failing to properly detect changes.)
+  - `rails js:eslint` no longer calls `yarn:install`; checking JavaScript style requires
+    separately running `yarn:install`, `webpacker:compile`, or `assets:precompile`.
+  - ESLint is now included in "production" JS dependencies to facilitate running style
+    checks against a production image in CI.
+  
 
 # 1.6.0 (2022-02-14)
 

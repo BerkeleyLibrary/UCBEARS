@@ -7,8 +7,8 @@ Rails.application.load_tasks
 # ------------------------------------------------------------
 # Setup
 
-desc 'Set up DB, precompile assets'
-task setup: %w[db:await db:setup assets:precompile]
+desc 'Set up DB'
+task setup: %w[db:await db:setup]
 
 # ------------------------------------------------------------
 # Check (setup + coverage)
