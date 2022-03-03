@@ -1,5 +1,6 @@
-class BuildInfo
+require 'berkeley_library/logging'
 
+class BuildInfo
   MULTIPLE_HYPHEN_ESCAPE_RE = /((?<=-)-)|(-(?=-))/
   HYPHEN_ENTITY_ESCAPE = '&#45;'.freeze
 
@@ -33,7 +34,8 @@ class BuildInfo
   def build_html_comment
     comment_lines = [].tap do |lines|
       lines << '<!--'
-      info.each { |k, v| lines << "  #{k}: #{escape_comment(v)}" }
+      lines << '  Build information:'
+      info.each { |k, v| lines << "    #{k}: #{escape_comment(v)}" }
       lines << '-->'
     end
     comment_lines.join("\n").html_safe
@@ -44,11 +46,13 @@ class BuildInfo
   end
 
   class << self
+    include BerkeleyLibrary::Logging
+
     def build_info
       @build_info ||= BuildInfo.new
     end
 
-    def log_to(logger)
+    def log!
       logger.info('Build', data: build_info)
     end
 

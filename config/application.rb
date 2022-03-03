@@ -38,5 +38,9 @@ module UCBEARS
     # TODO: fail fast if ENV not configured?
 
     BerkeleyLibrary::Alma::Config.default!
+
+    config.after_initialize do
+      BuildInfo.log!
+    end
   end
 end
