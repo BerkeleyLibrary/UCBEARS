@@ -61,7 +61,7 @@ en:
   application:
     profile:
       generating:
-        html: 'Generating <a href=\"%{report_filename}\">profile</a>.'
+        html: 'Generating <a href=\"/%{report_filename}\">profile</a>.'
       failed: 'Error generating profile: %{msg}'
 
   items:

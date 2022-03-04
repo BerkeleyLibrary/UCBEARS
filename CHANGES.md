@@ -7,13 +7,13 @@
 
 Technical:
 
+- Dockerfile is now based on Debian Slim rather than Alpine.
+- Updated from Ruby 3.0.2 to Ruby 3.0.3.
 - Most text strings are now in `locales/en.yml` for ease of customization / editing.
 - IIIF manifests are now stored as plain JSON (with placeholder URLs) rather than
   as an ERB template.
   - Note that this slightly changes the format of the `/processing` API endpoing, insofar
     as it now returns `has_manifest` rather than `has_manifest_template`
-- Updated from Ruby 3.0.2 to Ruby 3.0.3.
-- Dockerfile is now based on Debian Slim rather than Alpine.
 - Webpacker/JavaScript changes:
   - Tests now use the JavaScript packs from `public/packs` instead of a separate
     `packs/test`.

@@ -75,6 +75,30 @@ RSpec.describe '/items', type: :request do
           expect(parsed_response[i]).to eq(expected_json(item))
         end
       end
+
+      describe 'with profile' do
+        it 'returns the items for JSON requests' do
+          get items_url, params: { profile: true }, as: :json
+
+          expect(response).to be_successful
+          expect(response.content_type).to start_with('application/json')
+
+          link_header = response.headers['Link']
+          expect(link_header).to include('profile')
+          links = link_header.split(', ')
+          expect(links).to include('<http://www.example.com/items-profile.html>; rel="profile"')
+
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response).to be_an(Array)
+
+          expected_items = Item.order(:title)
+          expect(parsed_response.size).to eq(expected_items.size)
+
+          expected_items.each_with_index do |item, i|
+            expect(parsed_response[i]).to eq(expected_json(item))
+          end
+        end
+      end
     end
   end
 

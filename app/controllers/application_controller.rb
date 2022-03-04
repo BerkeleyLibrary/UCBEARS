@@ -14,7 +14,10 @@ class ApplicationController < ActionController::Base
   # ------------------------------------------------------------
   # Global hooks
 
-  after_action { pagy_headers_merge(@pagy) if @pagy }
+  after_action do
+    pagy_headers_merge(@pagy) if @pagy
+    merge_link_header
+  end
 
   # ------------------------------------------------------------
   # Public methods
@@ -116,12 +119,23 @@ class ApplicationController < ActionController::Base
     File.expand_path('../../public', __dir__)
   end
 
+  def merge_link_header
+    return unless @links
+
+    existing_link_header = response.headers['Link']
+    link_rels = @links.map { |rel, link| %(<#{link}>; rel="#{rel}") }
+    link_rels << existing_link_header if existing_link_header
+
+    response.headers['Link'] = link_rels.join(', ')
+  end
+
   # ------------------------------
   # Profiling
 
   def with_profile(report_filename, &block)
     flash_now!(:info, t('application.profile.generating.html', report_filename: report_filename))
     do_profile(report_filename, &block)
+    self.profile_link = report_filename
   rescue StandardError => e
     logger.error(e)
     return if performed?
@@ -158,6 +172,11 @@ class ApplicationController < ActionController::Base
   # Private methods
 
   private
+
+  def profile_link=(report_filename)
+    profile_url = BerkeleyLibrary::Util::URIs.append(request.base_url, report_filename)
+    (@links ||= {})['profile'] = profile_url.to_s
+  end
 
   def add_flash(flash_obj, lvl, msg)
     flash_array = ensure_flash_array(flash_obj, lvl)

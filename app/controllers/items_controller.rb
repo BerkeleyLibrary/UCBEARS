@@ -10,9 +10,7 @@ class ItemsController < ApplicationController
 
       format.json do
         authenticate!
-        Item.scan_for_new_items!
-        @pagy, @items = pagy(items)
-        response.headers['Current-Page-Items'] = @items.count
+        profile? ? paginate_items_with_profile : paginate_items
       end
     end
   end
@@ -54,6 +52,17 @@ class ItemsController < ApplicationController
 
   private
 
+  def paginate_items
+    Item.scan_for_new_items!
+
+    @pagy, @items = pagy(items)
+    response.headers['Current-Page-Items'] = @items.count
+  end
+
+  def paginate_items_with_profile
+    with_profile('items-profile.html') { paginate_items }
+  end
+
   def items
     logger.info("query_params: #{query_params}")
     return Item.all unless query_params && !query_params.empty?
@@ -76,6 +85,10 @@ class ItemsController < ApplicationController
 
   def query_params
     params.permit(:active, :complete, :keywords, terms: [])
+  end
+
+  def profile?
+    params.to_unsafe_h.key?(:profile)
   end
 
   def render_item_errors(status: :unprocessable_entity)
