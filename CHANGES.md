@@ -1,9 +1,13 @@
 # 1.6.1 (next)
 
+Usability / accessibility improvements:
+
 - Adds an alt-media notice to the checkout page, directing students with print disabilities
   to the previously existing PDF service.
 - Page images are now identified as "Image <number>" rather than "Page <number>" to reduce
   confusion between physical and logical pages.
+- "Index" sidebar is removed to reduce confusion.
+- "Information" sidebar is now labeled "Transcript".
 
 Technical:
 
