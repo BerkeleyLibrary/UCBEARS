@@ -78,7 +78,8 @@ function miradorConfig (elementId, manifestId) {
     translations: {
       en: {
         nextCanvas: 'Next page',
-        previousCanvas: 'Previous page'
+        previousCanvas: 'Previous page',
+        openCompanionWindow_info: 'Transcript'
       }
     },
     window: {
