@@ -86,9 +86,12 @@ function miradorConfig (elementId, manifestId) {
       allowMaximize: false,
       defaultView: 'single',
       panels: {
-        attribution: false,
         info: true,
-        search: true // TODO: implement search
+        attribution: false,
+        canvas: false,
+        annotations: false,
+        search: false, // TODO: implement search
+        layers: false
       },
       sideBarOpen: true,
       views: [
