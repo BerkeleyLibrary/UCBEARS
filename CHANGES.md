@@ -1,4 +1,4 @@
-# 1.6.1 (next)
+# 1.7.0 (2022-03-07)
 
 Usability / accessibility improvements:
 
