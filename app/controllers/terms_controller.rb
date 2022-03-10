@@ -25,8 +25,7 @@ class TermsController < ApplicationController
   end
 
   def update
-    pp = term_params
-    if @term.update(pp)
+    if @term.update(term_params)
       render :show, status: :ok, location: @term
     else
       render_term_errors
@@ -45,7 +44,6 @@ class TermsController < ApplicationController
   private
 
   def terms
-    logger.info("query_params: #{query_params}")
     return Term.all unless query_params && !query_params.empty?
 
     selected_scopes = Term::QUERY_SCOPES.select { |sc| query_params[sc] }
@@ -59,11 +57,15 @@ class TermsController < ApplicationController
   end
 
   def term_params
-    params.require(:term).permit(:name, :start_date, :end_date)
+    params.require(:term).permit(:name, :start_date, :end_date).tap do |pp|
+      logger.info("#{self.class}.term_params", pp)
+    end
   end
 
   def query_params
-    params.permit(:past, :current, :future)
+    params.permit(:past, :current, :future).tap do |pp|
+      logger.info("#{self.class}.query_params", pp)
+    end
   end
 
   def render_term_errors(status: :unprocessable_entity)
