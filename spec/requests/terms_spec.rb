@@ -128,6 +128,28 @@ RSpec.describe '/terms', type: :request do
         valid_attributes.each { |attr, value| expect(term.send(attr)).to eq(value) }
       end
 
+      it 'returns the term as JSON' do
+        post terms_url, params: { term: valid_attributes }, as: :json
+        expect(response).to be_successful
+        expect(response.content_type).to match(%r{^application/json})
+
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_a(Hash)
+
+        expected = {
+          'name' => valid_attributes[:name],
+          'start_date' => valid_attributes[:start_date].in_time_zone.iso8601,
+          'end_date' => valid_attributes[:end_date].in_time_zone.iso8601
+        }
+
+        aggregate_failures do
+          expected.each do |k, v_expected|
+            expect(parsed_response).to have_key(k)
+            expect(parsed_response[k]).to eq(v_expected)
+          end
+        end
+      end
+
       it 'returns a JSON response for an empty term' do
         expect do
           post terms_url, params: { term: {} }, as: :json
