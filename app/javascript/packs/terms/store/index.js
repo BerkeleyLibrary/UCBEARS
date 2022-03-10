@@ -28,6 +28,7 @@ export default new Vuex.Store({
       } else {
         terms.push(term)
       }
+      console.log(`terms store: setTerm(${JSON.stringify(term)})`)
     },
     removeTerm (state, term) {
       const terms = state.terms

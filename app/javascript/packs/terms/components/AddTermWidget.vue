@@ -26,8 +26,10 @@ import store from '../store'
 import termsApi from '../api/terms'
 import { mapMutations } from 'vuex'
 import { msgSuccess } from '../../shared/store/mixins/flash'
+import i18n from '../../shared/mixins/i18n'
 
 export default {
+  mixins: [i18n],
   store,
   data: function () {
     return { term: null }
@@ -42,7 +44,11 @@ export default {
     add () { this.term = {} },
     clear () { this.term = null },
     save () {
-      termsApi.create(this.term).then(this.created).catch(this.handleError)
+      const termPayload = { ...this.term }
+      for (const attr of ['start_date', 'end_date']) {
+        termPayload[attr] = this.dateToISO8601(termPayload[attr])
+      }
+      termsApi.create(termPayload).then(this.created).catch(this.handleError)
     },
     created (term) {
       this.clear()
