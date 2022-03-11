@@ -14,3 +14,14 @@ Metrics/ModuleLength:
 
 Metrics/MethodLength:
   Enabled: false
+
+############################################################
+# rubocop-rails
+
+# we meant to do that
+Rails/SkipsModelValidations:
+  Enabled: false
+
+# we meant to do that
+Rails/TimeZone:
+  Enabled: false
