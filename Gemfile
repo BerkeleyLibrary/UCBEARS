@@ -44,8 +44,8 @@ end
 
 group :development do
   gem 'dotenv', '~> 2.7', require: false
-  gem 'rubocop', '~> 1.18.0'
-  gem 'rubocop-rails', '~> 2.9'
+  gem 'rubocop', '~> 1.26.0'
+  gem 'rubocop-rails', '~> 2.13'
   gem 'rubocop-rspec', '~> 2.2'
   gem 'web-console', '>= 4.1.0'
 end

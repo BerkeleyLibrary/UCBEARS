@@ -24,7 +24,7 @@ describe Docker::Secret do
         secret_name = "secret_#{prefix}_#{i}"
         secret = Base64.strict_encode64(random.bytes(128))
         expected_secrets[secret_name] = secret
-        File.open(tmpdir_path.join(secret_name), 'wb') { |f| f.write(secret) }
+        File.binwrite(tmpdir_path.join(secret_name), secret)
       end
     end
 

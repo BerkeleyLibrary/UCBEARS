@@ -11,10 +11,10 @@ describe AlmaItem do
   attr_reader :items_by_mms_id
 
   before(:each) do
-    @items_by_mms_id = mms_ids_by_factory.map do |factory, id|
+    @items_by_mms_id = mms_ids_by_factory.to_h do |factory, id|
       mms_id = BerkeleyLibrary::Alma::RecordId.parse(id)
       [mms_id, create(factory)]
-    end.to_h
+    end
 
     items_by_mms_id.each_value do |item|
       stub_sru_request(item.record_id)

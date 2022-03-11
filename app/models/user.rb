@@ -26,6 +26,8 @@ class User
     'STUDENT-TYPE-NOT-REGISTERED'
   ].freeze
 
+  SESSION_ATTRS = %i[uid borrower_token affiliations cal_groups].freeze
+
   # ------------------------------------------------------------
   # Initializer
 
@@ -54,13 +56,8 @@ class User
     end
 
     def from_session(session)
-      attrs = OpenStruct.new((session && session[:user]) || {})
-      new(
-        uid: attrs.uid,
-        borrower_token: attrs.borrower_token,
-        affiliations: attrs.affiliations,
-        cal_groups: attrs.cal_groups
-      )
+      attr_hash = (session && session[:user]) || {}
+      new(**attr_hash.symbolize_keys.slice(*SESSION_ATTRS))
     end
 
     private

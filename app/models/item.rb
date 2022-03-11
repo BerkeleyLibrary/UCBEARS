@@ -317,7 +317,7 @@ class Item < ActiveRecord::Base
   end
 
   def active_items_have_copies
-    return if inactive? || copies && copies > 0
+    return if inactive? || (copies && copies > 0)
 
     errors.add(:base, MSG_ZERO_COPIES)
   end

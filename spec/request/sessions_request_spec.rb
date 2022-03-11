@@ -20,7 +20,7 @@ describe SessionsController, type: :request do
 
   it "increments the user's session count" do
     uid = uid_for(:staff)
-    count_before = (counter = SessionCounter.find_by(uid: uid, staff: true)) && counter.count || 0
+    count_before = ((counter = SessionCounter.find_by(uid: uid, staff: true)) && counter.count) || 0
 
     mock_login(:staff)
     counter = SessionCounter.find_by(uid: uid)

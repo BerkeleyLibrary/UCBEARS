@@ -22,11 +22,9 @@ class BuildInfo
   private
 
   def info_from_env(env)
-    {}.tap do |info|
-      BUILD_VARS.each do |var|
-        next unless (val = env[var])
-
-        info[var.to_sym] = val.to_s
+    BUILD_VARS.each_with_object({}) do |var, info|
+      if (v = env[var])
+        info[var.to_sym] = v
       end
     end.freeze
   end

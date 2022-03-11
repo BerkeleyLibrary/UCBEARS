@@ -22,8 +22,8 @@ module ExceptionHandling
       # not logged in, so we don't need the full stack trace etc.
       logger.info(error.to_s)
       respond_to do |format|
-        format.html { redirect_to login_path(url: request.fullpath) }
         format.json { render_error(error, status: :unauthorized) }
+        format.any { redirect_to login_path(url: request.fullpath) }
       end
     end
 

@@ -38,7 +38,7 @@ describe Item, type: :model do
     describe :refresh_marc_metadata! do
       it 'refreshes the metadata' do
         original_item = create(:active_item)
-        original_values = %i[author title publisher physical_desc].map { |attr| [attr, original_item.send(attr)] }.to_h
+        original_values = %i[author title publisher physical_desc].to_h { |attr| [attr, original_item.send(attr)] }
 
         modified_values = original_values.transform_values { |v| "not #{v}" }
         original_item.update!(**modified_values)
@@ -54,14 +54,14 @@ describe Item, type: :model do
 
       it 'returns previous values when refreshing changes the metadata' do
         item = create(:active_item)
-        original_values = %i[author title publisher physical_desc].map { |attr| [attr, item.send(attr)] }.to_h
+        original_values = %i[author title publisher physical_desc].to_h { |attr| [attr, item.send(attr)] }
 
         modified_values = original_values.transform_values { |v| "not #{v}" }
         item.update!(**modified_values)
 
         item.reload
         refreshed = item.refresh_marc_metadata!
-        expected_changes = original_values.map { |attr, v| [attr, [modified_values[attr], v]] }.to_h
+        expected_changes = original_values.to_h { |attr, v| [attr, [modified_values[attr], v]] }
         expect(refreshed).to include(expected_changes)
       end
 

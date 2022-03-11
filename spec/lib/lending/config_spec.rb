@@ -8,8 +8,8 @@ module Lending
     attr_reader :attr_values_orig
 
     before(:each) do
-      @env_values_orig = [Config::ENV_IIIF_BASE, Config::ENV_ROOT].map { |var| [var, ENV[var]] }.to_h
-      @attr_values_orig = config_instance_vars.map { |var| [var, Config.instance_variable_get(var)] }.to_h
+      @env_values_orig = [Config::ENV_IIIF_BASE, Config::ENV_ROOT].to_h { |var| [var, ENV[var]] }
+      @attr_values_orig = config_instance_vars.to_h { |var| [var, Config.instance_variable_get(var)] }
     end
 
     after(:each) do
