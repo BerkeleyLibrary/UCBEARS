@@ -19,13 +19,9 @@ module Lending
       raise ArgumentError, "#{indir}: MARC record not found" unless (@marc_path = find_marc_path)
     end
 
-    def author
-      marc_metadata.author
-    end
+    delegate :author, to: :marc_metadata
 
-    def title
-      marc_metadata.title
-    end
+    delegate :title, to: :marc_metadata
 
     def process!
       tileize_images!

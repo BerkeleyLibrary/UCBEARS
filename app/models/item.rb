@@ -15,7 +15,7 @@ class Item < ActiveRecord::Base
   # Validations
 
   validates :directory, presence: true
-  validates_uniqueness_of :directory
+  validates :directory, uniqueness: true
   validates :title, presence: true
   validates :copies, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :correct_directory_format
@@ -25,10 +25,10 @@ class Item < ActiveRecord::Base
   # ------------------------------------------------------------
   # Hooks
 
-  after_create :set_default_term!
   before_save :set_complete_flag!
-  after_find :update_complete_flag!
+  after_create :set_default_term!
   before_destroy :verify_incomplete
+  after_find :update_complete_flag!
 
   # ------------------------------------------------------------
   # Constants
@@ -138,9 +138,11 @@ class Item < ActiveRecord::Base
     save(validate: false)
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def ensure_updated_at(*_args)
     touch if persisted?
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def verify_incomplete
     update_complete_flag!
@@ -216,7 +218,7 @@ class Item < ActiveRecord::Base
       title: marc_metadata.title,
       publisher: marc_metadata.publisher,
       physical_desc: marc_metadata.physical_desc
-    }.filter { |_, v| !v.blank? }
+    }.filter { |_, v| v.present? }
     assign_attributes(attrs)
   end
 
@@ -266,9 +268,7 @@ class Item < ActiveRecord::Base
     return Item::MSG_INCOMPLETE unless complete?
   end
 
-  def reason_incomplete
-    iiif_directory.reason_incomplete
-  end
+  delegate :reason_incomplete, to: :iiif_directory
 
   def copies_available
     total_copies = copies || 0 # TODO: make this non-nullable

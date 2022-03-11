@@ -60,7 +60,7 @@ module Health
         next Result.warn("HEAD #{iiif_test_uri} returned status #{response.status}") unless response.success?
 
         acao_header = response.headers['Access-Control-Allow-Origin']
-        next Result.warn("HEAD #{iiif_test_uri} did not return Access-Control-Allow-Origin header") unless acao_header.present?
+        next Result.warn("HEAD #{iiif_test_uri} did not return Access-Control-Allow-Origin header") if acao_header.blank?
 
         Result.pass
       end

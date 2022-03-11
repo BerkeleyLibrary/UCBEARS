@@ -44,7 +44,7 @@ class TermsController < ApplicationController
   private
 
   def terms
-    return Term.all unless query_params && !query_params.empty?
+    return Term.all if query_params.blank?
 
     selected_scopes = Term::QUERY_SCOPES.select { |sc| query_params[sc] }
     selected_scope_relations = selected_scopes.map { |sc| Term.send(sc) }

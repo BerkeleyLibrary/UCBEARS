@@ -15,9 +15,7 @@ class LendingItemPresenterBase
     @show_viewer = show_viewer
   end
 
-  def title
-    item.title
-  end
+  delegate :title, to: :item
 
   def show_viewer?
     @show_viewer
@@ -39,12 +37,10 @@ class LendingItemPresenterBase
     @pub_metadata ||= {
       t('activerecord.attributes.item.publisher') => item.publisher,
       t('activerecord.attributes.item.phys_desc') => item.physical_desc
-    }.filter { |_, v| !v.blank? }
+    }.filter { |_, v| v.present? }
   end
 
-  def directory
-    item.directory
-  end
+  delegate :directory, to: :item
 
   protected
 
@@ -93,13 +89,13 @@ class LendingItemPresenterBase
 
   def add_direct_link(ff)
     view_url = lending_view_url(directory: directory)
-    ff[t('item.actions.patron_view')] = link_to(view_url, view_url, target: '_blank')
+    ff[t('item.actions.patron_view')] = link_to(view_url, view_url, target: '_blank', rel: 'noopener')
   end
 
   def add_alma_fields(ff)
     if (alma_permalink = item.alma_permalink)
       ff['Alma MMS ID'] = item.alma_mms_id
-      ff['Catalog record'] = link_to('View catalog record', alma_permalink.to_s, target: '_blank')
+      ff['Catalog record'] = link_to('View catalog record', alma_permalink.to_s, target: '_blank', rel: 'noopener')
     else
       ff['Alma MMS ID'] = 'Unknown'
     end

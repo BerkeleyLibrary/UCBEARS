@@ -246,6 +246,14 @@ Rails/ApplicationRecord:
 Rails/DurationArithmetic: # new in 2.13
   Enabled: false
 
+# if we're going to enforce a style, let's enforce the safe one
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+# we meant to do that
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
 # for serious index_by fans only
 Rails/IndexWith:
   Enabled: false

@@ -18,7 +18,9 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     return action_return if loan.active?
     return action_check_out if loan.ok_to_check_out?
 
+    # rubocop:disable Rails/OutputSafety
     tag.a(class: 'btn primary disabled') { t('loan.actions.check_out') }.html_safe
+    # rubocop:enable Rails/OutputSafety
   end
 
   def build_fields
@@ -60,7 +62,7 @@ class LendingItemViewPresenter < LendingItemPresenterBase
 
   def add_permalink(ff)
     view_url = lending_view_url(directory: directory, token: borrower_token_str)
-    ff[t('activerecord.attributes.loan.view_url')] = link_to(view_url, view_url, target: '_blank')
+    ff[t('activerecord.attributes.loan.view_url')] = link_to(view_url, view_url, target: '_blank', rel: 'noopener')
   end
 
   def add_next_due_date(ff)

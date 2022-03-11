@@ -6,9 +6,7 @@ class Settings < ActiveRecord::Base
       Settings.take || Settings.create!
     end
 
-    def default_term
-      instance.default_term
-    end
+    delegate :default_term, to: :instance
 
     def default_term=(value)
       instance.update!(default_term: value)

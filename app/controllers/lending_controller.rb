@@ -12,7 +12,7 @@ class LendingController < ApplicationController
 
   before_action(:authenticate!)
   before_action(:require_lending_admin!, except: %i[view manifest check_out return])
-  before_action(:ensure_lending_item!, except: %i[index profile_index])
+  before_action(:ensure_lending_item!)
   before_action(:require_processed_item!, only: %i[view manifest])
   before_action(:use_patron_support_email!, only: %i[view manifest])
 

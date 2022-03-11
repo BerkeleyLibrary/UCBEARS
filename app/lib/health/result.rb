@@ -15,9 +15,7 @@ module Health
       json
     end
 
-    def http_status
-      status.http_status
-    end
+    delegate :http_status, to: :status
 
     class << self
       def pass(details = nil)

@@ -39,9 +39,7 @@ class ApplicationController < ActionController::Base
   # Return whether the current user is authenticated
   #
   # @return [Boolean]
-  def authenticated?
-    current_user.authenticated?
-  end
+  delegate :authenticated?, to: :current_user
   helper_method :authenticated?
 
   # Return the current user
@@ -71,9 +69,7 @@ class ApplicationController < ActionController::Base
     reset_session
   end
 
-  def lending_admin?
-    current_user.lending_admin?
-  end
+  delegate :lending_admin?, to: :current_user
 
   def require_lending_admin!
     authenticate!

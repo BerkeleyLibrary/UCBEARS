@@ -4,7 +4,7 @@ class SessionStats
   # ------------------------------------------------------------
   # Constants
 
-  SESSION_COUNTS_BY_TYPE_SQL = <<~SQL.freeze
+  SESSION_COUNTS_BY_TYPE_SQL = <<~SQL.squish.freeze
       SELECT student, staff, faculty, admin,
              SUM(count) AS total_sessions,
              count(DISTINCT uid) AS unique_users#{' '}

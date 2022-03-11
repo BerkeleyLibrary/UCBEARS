@@ -65,7 +65,11 @@ class ItemQueryFactory
   def boolean_or_nil(flag)
     return if flag.nil? || flag == ''
 
-    !FALSE_VALUES.include?(flag)
+    !false?(flag)
+  end
+
+  def false?(flag)
+    FALSE_VALUES.include?(flag)
   end
 
   def keywords_or_nil(opt)

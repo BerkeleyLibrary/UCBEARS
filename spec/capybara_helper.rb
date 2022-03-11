@@ -27,12 +27,16 @@ module CapybaraHelper
       out.write("#{msg}: #{formatted_javascript_log}\n")
     end
 
+    def rails_root
+      Rails.root
+    end
+
     def browser_project_root
-      Docker.running_in_container? ? '/build' : Rails.root
+      Docker.running_in_container? ? '/build' : rails_root
     end
 
     def local_save_path
-      File.join(Rails.root, SAVE_PATH)
+      File.join(rails_root, SAVE_PATH)
     end
 
     def browser_save_path
@@ -63,7 +67,7 @@ module CapybaraHelper
 
     def formatted_javascript_log(indent = '  ')
       logs = browser.manage.logs.get(:browser)
-      return 'No entries logged to JavaScript console' if logs.nil? || logs.empty?
+      return 'No entries logged to JavaScript console' if logs.blank?
 
       StringIO.new.tap do |out|
         out.write("#{logs.size} entries logged to JavaScript console:\n")

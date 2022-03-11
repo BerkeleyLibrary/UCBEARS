@@ -8,13 +8,13 @@ class ItemLendingStats
   # Constants
 
   SELECT_DISTINCT_LOAN_DATES_STMT = 'SELECT_DISTINCT_LOAN_DATES'.freeze
-  SELECT_DISTINCT_LOAN_DATES = <<~SQL.freeze
+  SELECT_DISTINCT_LOAN_DATES = <<~SQL.squish.freeze
       SELECT DISTINCT DATE(DATE_TRUNC('day', loan_date, :tz))
         FROM loans
     ORDER BY 1 DESC
   SQL
 
-  SELECT_ALL_LOAN_DURATIONS = <<~SQL.freeze
+  SELECT_ALL_LOAN_DURATIONS = <<~SQL.squish.freeze
     SELECT return_date - loan_date AS loan_duration
       FROM loans AS returned_loans
      WHERE return_date IS NOT NULL
@@ -29,13 +29,13 @@ class ItemLendingStats
   SQL
 
   SELECT_MEAN_LOAN_DURATION_STMT = 'SELECT_MEAN_LOAN_DURATION'.freeze
-  SELECT_MEAN_LOAN_DURATION = <<~SQL.freeze
+  SELECT_MEAN_LOAN_DURATION = <<~SQL.squish.freeze
     SELECT AVG(EXTRACT(EPOCH FROM loan_duration)) AS mean_loan_duration
       FROM (#{SELECT_ALL_LOAN_DURATIONS}) AS loan_durations
   SQL
 
   SELECT_MEDIAN_LOAN_DURATION_STMT = 'SELECT_MEDIAN_LOAN_DURATION'.freeze
-  SELECT_MEDIAN_LOAN_DURATION = <<~SQL.freeze
+  SELECT_MEDIAN_LOAN_DURATION = <<~SQL.squish.freeze
     SELECT EXTRACT(EPOCH
                     FROM (PERCENTILE_CONT(0.5)
                          WITHIN GROUP (ORDER BY loan_duration))

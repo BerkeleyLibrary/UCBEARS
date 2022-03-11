@@ -65,7 +65,7 @@ class ItemsController < ApplicationController
 
   def items
     logger.info("query_params: #{query_params}")
-    return Item.all unless query_params && !query_params.empty?
+    return Item.all if query_params.blank?
 
     query_param_hash = query_params.to_h.symbolize_keys
     logger.info("query_param_hash: #{query_param_hash}")

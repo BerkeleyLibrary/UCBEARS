@@ -15,7 +15,7 @@ class Loan < ActiveRecord::Base
     where('return_date IS NULL AND due_date > ? AND loan_date IS NOT NULL', Time.current.utc)
       .joins(:item).where(item: { active: true })
   }
-  scope :returned, -> { where('return_date IS NOT NULL') }
+  scope :returned, -> { where.not(return_date: nil) }
   scope :expired, -> { where('due_date <= ? AND return_date IS NULL', Time.current.utc) }
   scope :complete, -> { where('due_date <= ? OR return_date IS NOT NULL', Time.current.utc) }
 
@@ -33,7 +33,6 @@ class Loan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Validations
 
-  validates :item, presence: true
   validates :patron_identifier, presence: true
   validate :patron_can_check_out
   validate :item_available

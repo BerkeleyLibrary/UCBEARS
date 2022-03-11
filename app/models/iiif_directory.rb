@@ -118,9 +118,7 @@ class IIIFDirectory
   # ------------------------------------------------------------
   # Object overrides
 
-  def to_s
-    path.to_s
-  end
+  delegate :to_s, to: :path
 
   def inspect
     "#<IIIFDirectory:#{self}>"

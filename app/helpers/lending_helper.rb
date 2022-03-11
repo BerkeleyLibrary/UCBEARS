@@ -11,9 +11,11 @@ module LendingHelper
     I18n.l(date, format: format)
   end
 
+  # rubocop:disable Rails/OutputSafety
   def format_values(values)
     values.map { |v| tag.p(format_value(v)) }.join.html_safe
   end
+  # rubocop:enable Rails/OutputSafety
 
   class << self
     include LendingHelper

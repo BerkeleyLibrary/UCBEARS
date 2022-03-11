@@ -15,7 +15,5 @@ class HealthController < ApplicationController
     @check_result ||= Health::Check.new.result
   end
 
-  def http_status
-    check_result.http_status
-  end
+  delegate :http_status, to: :check_result
 end

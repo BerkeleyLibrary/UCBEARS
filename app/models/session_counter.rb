@@ -1,9 +1,11 @@
 class SessionCounter < ActiveRecord::Base
   class << self
+    # rubocop:disable Rails/SkipsModelValidations
     def increment_count_for(user)
       counter = SessionCounter.for_user(user)
       counter.increment!(:count)
     end
+    # rubocop:enable Rails/SkipsModelValidations
 
     def exists_for?(user)
       SessionCounter.exists?(
