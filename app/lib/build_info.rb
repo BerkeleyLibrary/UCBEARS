@@ -22,11 +22,7 @@ class BuildInfo
   private
 
   def info_from_env(env)
-    BUILD_VARS.each_with_object({}) do |var, info|
-      if (v = env[var])
-        info[var.to_sym] = v
-      end
-    end.freeze
+    BUILD_VARS.filter_map { |var| (v = env[var]) && [var.to_sym, v] }.to_h.freeze
   end
 
   # rubocop:disable Rails/OutputSafety
