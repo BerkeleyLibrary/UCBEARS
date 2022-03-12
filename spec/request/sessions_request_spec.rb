@@ -29,7 +29,7 @@ describe SessionsController, type: :request do
   end
 
   describe :sign_in do
-    before(:each) do
+    before do
       {
         lending_root_path: Pathname.new('spec/data/lending'),
         iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')

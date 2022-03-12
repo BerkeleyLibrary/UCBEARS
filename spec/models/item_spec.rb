@@ -13,7 +13,7 @@ describe Item, type: :model do
     ]
   end
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -25,13 +25,13 @@ describe Item, type: :model do
   describe 'with active default term' do
     attr_reader :current_term
 
-    before(:each) do
+    before do
       @prev_default_term = Settings.default_term
       @current_term = create(:term, name: 'Test Term', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
       Settings.default_term = current_term
     end
 
-    after(:each) do
+    after do
       Settings.default_term = @prev_default_term
     end
 
@@ -189,7 +189,7 @@ describe Item, type: :model do
     end
 
     context 'without existing items' do
-      before(:each) do
+      before do
         expect(Item.count).to eq(0) # just to be sure
       end
 
@@ -249,7 +249,7 @@ describe Item, type: :model do
     context 'with existing items' do
       attr_reader :items
 
-      before(:each) do
+      before do
         expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
@@ -477,7 +477,7 @@ describe Item, type: :model do
         attr_reader :items_with_marc
         attr_reader :items_without_marc
 
-        before(:each) do
+        before do
           @items_with_marc = []
           @items_without_marc = []
           items.each_value do |item|
@@ -602,12 +602,12 @@ describe Item, type: :model do
   describe 'with future default term' do
     attr_reader :future_term
 
-    before(:each) do
+    before do
       @future_term = Term.create(name: 'Future Term', start_date: Time.current + 1.week, end_date: Time.current + 1.month)
       Settings.default_term = future_term
     end
 
-    after(:each) do
+    after do
       Settings.default_term = @prev_default_term
     end
 
@@ -625,12 +625,12 @@ describe Item, type: :model do
   end
 
   describe 'without default term' do
-    before(:each) do
+    before do
       @prev_default_term = Settings.default_term
       Settings.default_term = nil
     end
 
-    after(:each) do
+    after do
       Settings.default_term = @prev_default_term
     end
 

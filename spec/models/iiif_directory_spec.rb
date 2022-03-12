@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe IIIFDirectory do
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -13,7 +13,7 @@ describe IIIFDirectory do
   describe 'string representations' do
     attr_reader :iiif_directory, :expected_path
 
-    before(:each) do
+    before do
       item = create(:active_item)
       @iiif_directory = item.iiif_directory
       final_dir = Lending::Config.lending_root_path.join('final')

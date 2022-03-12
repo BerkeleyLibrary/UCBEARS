@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TermsController, type: :system do
   attr_reader :terms_by_time
 
-  before(:each) do
+  before do
     @terms_by_time = %w[past current future].each_with_object({}) do |time, terms|
       term = create("term_#{time}")
 
@@ -75,11 +75,12 @@ describe TermsController, type: :system do
   end
 
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
-    after(:each) { logout! }
+    before { mock_login(:lending_admin) }
+
+    after { logout! }
 
     describe :index do
-      before(:each) do
+      before do
         visit terms_path
       end
 
@@ -210,7 +211,7 @@ describe TermsController, type: :system do
       describe 'delete' do
         attr_reader :term
 
-        before(:each) do
+        before do
           @term = Term.take
         end
 
@@ -229,7 +230,7 @@ describe TermsController, type: :system do
         describe 'with items' do
           attr_reader :item
 
-          before(:each) do
+          before do
             expect(term.items).to be_empty # just to be sure
 
             @item = Item.take

@@ -6,13 +6,13 @@ module Lending
 
     let(:stem) { File.basename(__FILE__, '.rb') }
 
-    before(:each) do
+    before do
       lending_root_str = Dir.mktmpdir(stem)
       @lending_root = Pathname.new(lending_root_str)
       Collector::STAGES.each { |stage| lending_root.join(stage.to_s).mkdir }
     end
 
-    after(:each) do
+    after do
       FileUtils.remove_dir(lending_root.to_s, true)
       Lending::Config.send(:reset!)
     end
@@ -20,6 +20,7 @@ module Lending
     describe :collect do
       let(:sleep_interval) { 0.01 }
       let(:stop_file) { "#{stem}.stop" }
+
       attr_reader :collector
 
       def expect_to_process(item_dirname)
@@ -46,7 +47,7 @@ module Lending
         [processing_dir, final_dir]
       end
 
-      before(:each) do
+      before do
         @collector = Collector.new(lending_root: lending_root, stop_file: stop_file)
 
         allow(BerkeleyLibrary::Logging.logger).to(receive(:debug)) { |msg| warn(msg) }
@@ -157,11 +158,11 @@ module Lending
     describe :from_environment do
       let(:env_vars) { [Lending::Config::ENV_ROOT, Collector::ENV_STOP_FILE] }
 
-      before(:each) do
+      before do
         @env_vals = env_vars.each_with_object({}) { |var, vals| vals[var] = ENV[var] }
       end
 
-      after(:each) do
+      after do
         @env_vals.each { |var, val| ENV[var] = val }
       end
 

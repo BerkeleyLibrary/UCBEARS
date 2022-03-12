@@ -1,13 +1,13 @@
 require 'berkeley_library/alma'
 
 RSpec.configure do |config|
-  config.before(:each) do
+  config.before do
     BerkeleyLibrary::Alma::Config.default!
     stub_request(:get, /#{BerkeleyLibrary::Alma::Config.alma_sru_base_uri}.*/)
       .to_return(status: 200, body: File.read('spec/data/alma/sru-empty-response.xml'))
   end
 
-  config.after(:each) do
+  config.after do
     BerkeleyLibrary::Alma::Config.send(:clear!)
   end
 end

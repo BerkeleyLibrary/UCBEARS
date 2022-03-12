@@ -23,7 +23,7 @@ RSpec.describe '/terms', type: :request do
     }
   end
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'), iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
     }.each do |getter, val|
@@ -52,8 +52,9 @@ RSpec.describe '/terms', type: :request do
   end
 
   context 'with patron credentials' do
-    before(:each) { mock_login(:student) }
-    after(:each) { logout! }
+    before { mock_login(:student) }
+
+    after { logout! }
 
     describe 'GET /index' do
       it 'returns 403 Forbidden for HTML requests' do
@@ -83,8 +84,9 @@ RSpec.describe '/terms', type: :request do
   end
 
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
-    after(:each) { logout! }
+    before { mock_login(:lending_admin) }
+
+    after { logout! }
 
     describe :index do
       it 'returns all terms' do

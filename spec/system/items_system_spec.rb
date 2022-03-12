@@ -15,7 +15,7 @@ describe ItemsController, type: :system do
 
   attr_reader :items
 
-  before(:each) do
+  before do
     # NOTE: we're deliberately not validating here, because we want some invalid items
     @items = factory_names.each_with_object([]) do |fn, items|
       items << build(fn).tap { |it| it.save!(validate: false) }
@@ -23,8 +23,9 @@ describe ItemsController, type: :system do
   end
 
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
-    after(:each) { logout! }
+    before { mock_login(:lending_admin) }
+
+    after { logout! }
 
     describe :index do
 

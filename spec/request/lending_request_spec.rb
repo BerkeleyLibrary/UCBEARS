@@ -15,7 +15,7 @@ describe LendingController, type: :request do
 
   attr_reader :current_term
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -28,8 +28,9 @@ describe LendingController, type: :request do
     Settings.default_term = current_term
   end
 
-  after(:each) do
+  after do
     Settings.default_term = @prev_default_term
+    logout!
   end
 
   attr_reader :items
@@ -56,13 +57,11 @@ describe LendingController, type: :request do
     items.values.select(&:available?)
   end
 
-  after(:each) { logout! }
-
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
+    before { mock_login(:lending_admin) }
 
     context 'with items' do
-      before(:each) do
+      before do
         expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
@@ -366,7 +365,7 @@ describe LendingController, type: :request do
   describe 'with patron credentials' do
     attr_reader :user, :item
 
-    before(:each) do
+    before do
       @user = mock_login(:student)
       expect(Item.count).to eq(0) # just to be sure
       # NOTE: we're deliberately not validating here, because we want some invalid items
@@ -376,7 +375,7 @@ describe LendingController, type: :request do
       @item = available.first
     end
 
-    after(:each) { logout! }
+    after { logout! }
 
     describe :show do
       it 'returns 403 Forbidden' do
@@ -518,7 +517,7 @@ describe LendingController, type: :request do
       end
 
       context 'checkout limits' do
-        before(:each) do
+        before do
           # make sure we actually have multiple possible checkouts
           inactive.each { |it| it.update!(copies: 2, active: true) }
         end
@@ -752,7 +751,7 @@ describe LendingController, type: :request do
   end
 
   describe 'without login' do
-    before(:each) do
+    before do
       @item = create(:item)
     end
 
@@ -805,12 +804,12 @@ describe LendingController, type: :request do
   end
 
   describe 'with ineligible patron' do
-    before(:each) do
+    before do
       @item = create(:item)
       mock_login(:retiree)
     end
 
-    after(:each) { logout! }
+    after { logout! }
 
     it 'GET lending_manifest_path returns 403 Forbidden' do
       get lending_manifest_path(directory: item.directory)

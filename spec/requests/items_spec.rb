@@ -13,7 +13,7 @@ RSpec.describe '/items', type: :request do
     valid_attributes.merge({ directory: 'Not a valid item directory', copies: -1 })
   end
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'), iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
     }.each do |getter, val|
@@ -22,7 +22,7 @@ RSpec.describe '/items', type: :request do
   end
 
   context 'without credentials' do
-    before(:each) do
+    before do
       %i[complete_item active_item].each { |it| create(it) }
     end
 
@@ -44,12 +44,12 @@ RSpec.describe '/items', type: :request do
   end
 
   context 'with patron credentials' do
-    before(:each) do
+    before do
       %i[complete_item active_item].each { |it| create(it) }
       mock_login(:student)
     end
 
-    after(:each) { logout! }
+    after { logout! }
 
     describe 'GET /index' do
       it 'returns 403 Forbidden for HTML requests' do
@@ -103,8 +103,9 @@ RSpec.describe '/items', type: :request do
   end
 
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
-    after(:each) { logout! }
+    before { mock_login(:lending_admin) }
+
+    after { logout! }
 
     describe 'GET /index' do
       let(:factory_names) do
@@ -124,7 +125,7 @@ RSpec.describe '/items', type: :request do
       attr_reader :term_fall_2021
       attr_reader :term_spring_2022
 
-      before(:each) do
+      before do
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object([]) do |fn, items|
           items << build(fn).tap { |it| it.save!(validate: false) }
@@ -295,7 +296,7 @@ RSpec.describe '/items', type: :request do
         item.destroy!
 
         get item_url(item), as: :json
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(:not_found)
         expect(response.content_type).to start_with('application/json')
       end
     end

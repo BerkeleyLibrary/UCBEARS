@@ -2,10 +2,11 @@ require 'rails_helper'
 
 describe ItemLendingStats do
   let(:select_loan_date) { 'select loan_date from loans where id = ?' }
+  let(:user_types) { %i[staff faculty student lending_admin] }
 
   attr_reader :current_term
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -18,13 +19,11 @@ describe ItemLendingStats do
     Settings.default_term = current_term
   end
 
-  after(:each) do
+  after do
     Settings.default_term = @prev_default_term
   end
 
   attr_reader :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans
-
-  let(:user_types) { %i[staff faculty student lending_admin] }
 
   context 'without loans' do
     describe :all do
@@ -44,7 +43,7 @@ describe ItemLendingStats do
   context 'with loans' do
     attr_reader :loans_by_date
 
-    before(:each) do
+    before do
       @users = user_types.map { |t| mock_user_without_login(t) }
 
       # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec

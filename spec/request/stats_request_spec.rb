@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe StatsController, type: :request do
-  attr_reader :current_term
+  attr_reader :current_term, :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans
 
-  before(:each) do
+  let(:user_types) { %i[staff faculty student lending_admin] }
+
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'),
       iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
@@ -14,17 +16,7 @@ RSpec.describe StatsController, type: :request do
     @prev_default_term = Settings.default_term
     @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
     Settings.default_term = current_term
-  end
 
-  after(:each) do
-    Settings.default_term = @prev_default_term
-  end
-
-  attr_reader :users, :items, :loans, :completed_loans, :expired_loans, :returned_loans
-
-  let(:user_types) { %i[staff faculty student lending_admin] }
-
-  before(:each) do
     @users = user_types.map { |t| mock_user_without_login(t) }
 
     # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec
@@ -55,8 +47,12 @@ RSpec.describe StatsController, type: :request do
     expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
   end
 
+  after do
+    Settings.default_term = @prev_default_term
+  end
+
   context 'with lending admin credentials' do
-    before(:each) { mock_login(:lending_admin) }
+    before { mock_login(:lending_admin) }
 
     describe :index do
       it 'displays the stats' do

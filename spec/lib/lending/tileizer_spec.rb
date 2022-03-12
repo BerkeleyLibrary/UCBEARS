@@ -5,7 +5,7 @@ module Lending
     RSpec.shared_examples :tileize_all_examples do |ready|
       let(:infiles) { Dir.entries(ready).select { |f| PathUtils.image_ext?(f) }.sort }
 
-      before(:each) do
+      before do
         expect(infiles).not_to be_empty # just to be sure
       end
 

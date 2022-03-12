@@ -39,7 +39,7 @@ describe User do
   describe :update_borrower_token do
     attr_reader :user
 
-    before(:each) do
+    before do
       @user = mock_user_without_login(:student)
     end
 

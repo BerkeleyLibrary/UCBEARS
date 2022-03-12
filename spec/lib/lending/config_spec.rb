@@ -7,18 +7,18 @@ module Lending
     attr_reader :env_values_orig
     attr_reader :attr_values_orig
 
-    before(:each) do
+    before do
       @env_values_orig = [Config::ENV_IIIF_BASE, Config::ENV_ROOT].to_h { |var| [var, ENV[var]] }
       @attr_values_orig = config_instance_vars.to_h { |var| [var, Config.instance_variable_get(var)] }
     end
 
-    after(:each) do
+    after do
       env_values_orig.each { |var, val| ENV[var] = val }
       attr_values_orig.each { |var, val| Config.instance_variable_set(var, val) }
     end
 
     describe :iiif_base_uri do
-      before(:each) do
+      before do
         Config.instance_variable_set(:@iiif_base_uri, nil)
       end
 
@@ -37,7 +37,7 @@ module Lending
     end
 
     describe :lending_root_path do
-      before(:each) do
+      before do
         Config.instance_variable_set(:@lending_root_path, nil)
       end
 

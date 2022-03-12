@@ -7,7 +7,7 @@ describe Loan do
 
   attr_reader :current_term
 
-  before(:each) do
+  before do
     @prev_default_term = Settings.default_term
     @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
     Settings.default_term = current_term
@@ -24,7 +24,7 @@ describe Loan do
     @item = create(:active_item)
   end
 
-  after(:each) do
+  after do
     Settings.default_term = @prev_default_term
   end
 
@@ -40,7 +40,7 @@ describe Loan do
   describe :return! do
     attr_reader :loan
 
-    before(:each) do
+    before do
       @loan = item.check_out_to(borrower_id)
       expect(item.copies_available).to eq(item.copies - 1) # just to be sure
     end
@@ -54,7 +54,7 @@ describe Loan do
   describe :duration do
     attr_reader :loan
 
-    before(:each) do
+    before do
       @loan = item.check_out_to(borrower_id).tap do |l|
         l.update!(loan_date: l.loan_date - 30.minutes)
       end
@@ -80,7 +80,7 @@ describe Loan do
     attr_reader :rails_tz_actual
     attr_reader :loans_by_date
 
-    before(:each) do
+    before do
       @env_tz_actual = ENV['TZ']
       @rails_tz_actual = Time.zone
 
@@ -97,7 +97,7 @@ describe Loan do
       end
     end
 
-    after(:each) do
+    after do
       ENV['TZ'] = env_tz_actual
       Time.zone = rails_tz_actual
     end

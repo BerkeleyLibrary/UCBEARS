@@ -11,7 +11,7 @@ describe StatsPresenter do
 
   attr_reader :current_term
 
-  before(:each) do
+  before do
     @prev_default_term = Settings.default_term
     @current_term = create(:term, name: 'Test 1', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
     Settings.default_term = current_term
@@ -20,14 +20,14 @@ describe StatsPresenter do
     @sp = StatsPresenter.new
   end
 
-  after(:each) do
+  after do
     Settings.default_term = @prev_default_term
   end
 
-  context 'session stats' do
+  describe 'session stats' do
     attr_reader :counts, :expected_counts_by_user, :expected_total
 
-    before(:each) do
+    before do
       @expected_counts_by_user = {}
       @expected_total = 0
       users.each do |user|
@@ -73,18 +73,16 @@ describe StatsPresenter do
   end
 
   describe 'loan and item stats' do
-    before(:each) do
+    attr_reader :items, :loans, :completed_loans, :expired_loans, :returned_loans
+
+    before do
       {
         lending_root_path: Pathname.new('spec/data/lending'),
         iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
       }.each do |getter, val|
         allow(Lending::Config).to receive(getter).and_return(val)
       end
-    end
 
-    attr_reader :items, :loans, :completed_loans, :expired_loans, :returned_loans
-
-    before(:each) do
       # TODO: share code among stats_presenter_spec, item_lending_stats_spec, stats_request_spec
       copies_per_item = 2 * users.size
 
@@ -113,7 +111,7 @@ describe StatsPresenter do
       expect(completed_loans).to match_array(returned_loans + expired_loans) # just to be sure
     end
 
-    context 'loan stats' do
+    describe 'loan stats' do
       describe :loan_count_total do
         it 'returns the total number of loans made' do
           expect(sp.loan_count_total).to eq(loans.size)
@@ -164,7 +162,7 @@ describe StatsPresenter do
       end
     end
 
-    context 'item stats' do
+    describe 'item stats' do
       describe :item_lending_stats_by_date do
         it 'returns the loans for the correct date' do
           sp.item_lending_stats_by_date.each do |date, stats_for_date|

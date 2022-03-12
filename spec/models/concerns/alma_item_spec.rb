@@ -10,7 +10,7 @@ describe AlmaItem do
 
   attr_reader :items_by_mms_id
 
-  before(:each) do
+  before do
     @items_by_mms_id = mms_ids_by_factory.to_h do |factory, id|
       mms_id = BerkeleyLibrary::Alma::RecordId.parse(id)
       [mms_id, create(factory)]

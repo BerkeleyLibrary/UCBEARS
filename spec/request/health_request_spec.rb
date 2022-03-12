@@ -122,7 +122,7 @@ context HealthController, type: :request do
     end
   end
 
-  before(:each) do
+  before do
     @env_orig = Lending::Config::ENV_VARS.each_with_object({}) do |var, env|
       env[var] = ENV[var]
     end
@@ -132,19 +132,19 @@ context HealthController, type: :request do
     end
   end
 
-  after(:each) do
+  after do
     @env_orig.each { |var, val| ENV[var] = val }
     @config_ivars_orig.each { |var, val| Lending::Config.instance_variable_set(var, val) }
   end
 
   describe :health do
-    before(:each) do
+    before do
       Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
       Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
     end
 
     describe 'success' do
-      before(:each) do
+      before do
 
         stub_iiif_success!
         create(:complete_item)
@@ -161,7 +161,7 @@ context HealthController, type: :request do
     end
 
     describe 'pending migrations' do
-      before(:each) do
+      before do
         stub_iiif_success!
         create(:complete_item)
 
@@ -178,7 +178,7 @@ context HealthController, type: :request do
     end
 
     context 'IIIF server not reachable' do
-      before(:each) do
+      before do
         stub_request(:any, /#{iiif_url}/).to_raise(Errno::ECONNREFUSED)
 
         create(:complete_item)
@@ -197,7 +197,7 @@ context HealthController, type: :request do
     context 'IIIF test image not found' do
       let(:expected_status) { 404 }
 
-      before(:each) do
+      before do
         stub_request(:any, /#{iiif_url}/).to_return(status: expected_status)
 
         create(:complete_item)
@@ -216,7 +216,7 @@ context HealthController, type: :request do
     context 'IIIF server bad hostname' do
       let(:expected_msg) { 'Failed to open TCP connection to test.test:80 (getaddrinfo: nodename nor servname provided, or not known)' }
 
-      before(:each) do
+      before do
         stub_request(:any, /#{iiif_url}/).to_raise(SocketError.new(expected_msg))
 
         create(:complete_item)
@@ -233,7 +233,7 @@ context HealthController, type: :request do
     end
 
     context 'IIIF base URL not configured' do
-      before(:each) do
+      before do
         ENV[Lending::Config::ENV_IIIF_BASE] = nil
         allow(Rails.application.config).to receive(Lending::Config::CONFIG_KEY_IIIF_BASE).and_return(nil)
         Lending::Config.instance_variable_set(:@iiif_base_uri, nil)
@@ -252,7 +252,7 @@ context HealthController, type: :request do
     end
 
     context 'Invalid IIIF base URL' do
-      before(:each) do
+      before do
         ENV[Lending::Config::ENV_IIIF_BASE] = 'I am not a URI'
         Lending::Config.instance_variable_set(:@iiif_base_uri, nil)
 
@@ -280,7 +280,7 @@ context HealthController, type: :request do
     end
 
     context 'Lending root not readable' do
-      before(:each) do
+      before do
         Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |dir|
           Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new(dir))
         end
@@ -299,7 +299,7 @@ context HealthController, type: :request do
     end
 
     context 'Lending root not configured' do
-      before(:each) do
+      before do
         ENV[Lending::Config::ENV_ROOT] = nil
         allow(Rails.application.config).to receive(Lending::Config::CONFIG_KEY_ROOT).and_return(nil)
         Lending::Config.instance_variable_set(:@lending_root_path, nil)
@@ -317,7 +317,7 @@ context HealthController, type: :request do
     end
 
     context 'Invalid lending root' do
-      before(:each) do
+      before do
         Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |dir|
           ENV[Lending::Config::ENV_ROOT] = dir
         end

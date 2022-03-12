@@ -4,7 +4,7 @@ module Lending
   describe BorrowerToken do
     attr_reader :uid
 
-    before(:each) do
+    before do
       @uid = uid_for(:student)
     end
 

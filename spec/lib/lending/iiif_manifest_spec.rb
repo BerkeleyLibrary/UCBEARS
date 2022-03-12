@@ -16,7 +16,7 @@ module Lending
 
     attr_reader :manifest
 
-    before(:each) do
+    before do
       @manifest = IIIFManifest.new(
         title: 'The great depression in Europe, 1929-1939',
         author: 'Clavin, Patricia.',
@@ -68,7 +68,7 @@ module Lending
       attr_reader :tmpdir_path
       attr_reader :dir_path_upcase
 
-      before(:each) do
+      before do
         tmpdir = Dir.mktmpdir(File.basename(__FILE__, '.rb'))
         @tmpdir_path = Pathname.new(tmpdir)
 
@@ -83,7 +83,7 @@ module Lending
         )
       end
 
-      after(:each) do
+      after do
         FileUtils.remove_dir(tmpdir_path, true)
       end
 

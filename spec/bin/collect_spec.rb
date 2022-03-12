@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# rubocop:disable RSpec/DescribeClass
 describe 'collect.rb' do
   it 'collects' do
     collect_rb_path = File.expand_path('../../bin/lending/collect.rb', __dir__)
@@ -39,3 +40,4 @@ describe 'collect.rb' do
     end
   end
 end
+# rubocop:enable RSpec/DescribeClass

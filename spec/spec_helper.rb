@@ -19,7 +19,7 @@ RSpec.configure do |config|
   config.tty = true
   config.formatter = :documentation
 
-  config.around(:each) do |example|
+  config.around do |example|
     # prevent running out of file handles-- see https://github.com/teamcapybara/capybara#gotchas
     # but only on system tests since it makes WebMock less useful
     # -- see https://github.com/bblimke/webmock/issues/955

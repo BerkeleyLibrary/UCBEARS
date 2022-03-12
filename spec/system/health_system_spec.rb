@@ -3,7 +3,7 @@ require 'capybara_helper'
 describe HealthController, type: :system do
   let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
 
-  before(:each) do
+  before do
     @config_ivars_orig = config_instance_vars.each_with_object({}) do |var, ivals|
       ivals[var] = Lending::Config.instance_variable_get(var)
     end
@@ -22,7 +22,7 @@ describe HealthController, type: :system do
     create(:complete_item)
   end
 
-  after(:each) do
+  after do
     @config_ivars_orig.each { |var, val| Lending::Config.instance_variable_set(var, val) }
 
     WebMock.disable_net_connect!(@webmock_config)

@@ -58,7 +58,7 @@ module Lending
           Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |dir|
             non_page_tiff = File.join(dir, 'non-page.tif')
             FileUtils.cp(tiff_path, non_page_tiff)
-            expect { Page.new(non_page_tiff).to raise_error(ArgumentError) }
+            expect { Page.new(non_page_tiff) }.to raise_error(ArgumentError)
           end
         end
       end

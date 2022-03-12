@@ -15,7 +15,7 @@ describe ItemQueryFactory do
 
   attr_reader :items
 
-  before(:each) do
+  before do
     {
       lending_root_path: Pathname.new('spec/data/lending'), iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
     }.each do |getter, val|
@@ -82,7 +82,7 @@ describe ItemQueryFactory do
     attr_reader :term_fall_2021
     attr_reader :term_spring_2022
 
-    before(:each) do
+    before do
       @term_fall_2021 = create(:term_fall_2021)
       @term_spring_2022 = create(:term_spring_2022)
 

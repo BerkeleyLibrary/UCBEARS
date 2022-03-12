@@ -4,19 +4,19 @@ require 'base64'
 describe Docker::Secret do
   attr_reader :tmpdir_path
 
-  before(:each) do
+  before do
     tmpdir = Dir.mktmpdir(File.basename(__FILE__, '.rb'))
     @tmpdir_path = Pathname.new(tmpdir)
   end
 
-  after(:each) do
+  after do
     FileUtils.remove_dir(tmpdir_path, true)
   end
 
   describe :setup_environment! do
     attr_reader :expected_secrets
 
-    before(:each) do
+    before do
       prefix = Time.now.to_i.to_s
       random = Random.new
       @expected_secrets = {}
@@ -28,7 +28,7 @@ describe Docker::Secret do
       end
     end
 
-    after(:each) do
+    after do
       expected_secrets.each_key { |k| ENV.delete(k) }
     end
 

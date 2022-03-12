@@ -16,7 +16,7 @@ describe BuildInfo do
       }.freeze
     end
 
-    before(:each) do
+    before do
       @info_orig = build_info.instance_variable_get(:@info)
       @comment_orig = build_info.instance_variable_get(:@html_comment)
 
@@ -24,7 +24,7 @@ describe BuildInfo do
       build_info.instance_variable_set(:@html_comment, nil)
     end
 
-    after(:each) do
+    after do
       build_info.instance_variable_set(:@info, @info_orig)
       build_info.instance_variable_set(:@html_comment, @comment_orig)
     end
