@@ -341,6 +341,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
       end
 
+      # TODO: Should this be a 404?
       it 'succeeds if the term has already been deleted' do
         term = Term.take
         term.destroy!
