@@ -1,13 +1,3 @@
-GIT
-  remote: https://github.com/dlindahl/omniauth-cas.git
-  revision: 7087bda829e14c0f7cab2aece5045ad7015669b1
-  ref: 7087bda829e14c0f7cab2aece5045ad7015669b1
-  specs:
-    omniauth-cas (1.1.1)
-      addressable (~> 2.3)
-      nokogiri (~> 1.5)
-      omniauth (~> 1.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -201,6 +191,10 @@ GEM
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
+    omniauth-cas (2.0.0)
+      addressable (~> 2.3)
+      nokogiri (~> 1.5)
+      omniauth (~> 1.2)
     ougai (1.9.1)
       oj (~> 3.10)
     pagy (5.10.1)
@@ -404,7 +398,7 @@ DEPENDENCIES
   lograge (>= 0.11.2)
   net-ssh
   non-stupid-digest-assets
-  omniauth-cas!
+  omniauth-cas (~> 2.0)
   ougai (>= 1.8.2)
   pagy (~> 5.6)
   pg (~> 1.2)
