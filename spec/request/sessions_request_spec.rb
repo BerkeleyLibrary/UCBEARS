@@ -1,6 +1,15 @@
 require 'rails_helper'
 
 describe SessionsController, type: :request do
+  before do
+    {
+      lending_root_path: Pathname.new('spec/data/lending'),
+      iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
+    }.each do |getter, val|
+      allow(Lending::Config).to receive(getter).and_return(val)
+    end
+  end
+
   it 'logs CalNet/Omniauth parameters as JSON' do
     logdev = StringIO.new
     logger = BerkeleyLibrary::Logging::Loggers.new_json_logger(logdev)
@@ -29,15 +38,6 @@ describe SessionsController, type: :request do
   end
 
   describe :sign_in do
-    before do
-      {
-        lending_root_path: Pathname.new('spec/data/lending'),
-        iiif_base_uri: URI.parse('http://iipsrv.test/iiif/')
-      }.each do |getter, val|
-        allow(Lending::Config).to receive(getter).and_return(val)
-      end
-    end
-
     it 'persists the expected attributes in the session cookie' do
       user_from_omniauth = mock_login(:lending_admin)
 
@@ -47,11 +47,26 @@ describe SessionsController, type: :request do
       get(root_path)
 
       user_from_cookie = User.from_session(session)
-      %i[uid borrower_id affiliations cal_groups].each do |attr|
+      User::SESSION_ATTRS.each do |attr|
         expected_value = user_from_omniauth.send(attr)
         actual_value = user_from_cookie.send(attr)
         expect(actual_value).to eq(expected_value), "Expected #{expected_value.inspect} for #{attr}, got #{actual_value.inspect}"
       end
+    end
+  end
+
+  describe :destroy do
+    it 'clears the user from the session' do
+      user_from_omniauth = mock_login(:lending_admin)
+      expect(user_from_omniauth).to be_authenticated # just to be sure
+      expect(user_from_omniauth).to be_lending_admin # just to be sure
+
+      get logout_path
+      expect(response).to redirect_to(cas_logout_url)
+
+      user_from_cookie = User.from_session(session)
+      expect(user_from_cookie).not_to be_authenticated
+      expect(user_from_cookie).not_to be_lending_admin
     end
   end
 end

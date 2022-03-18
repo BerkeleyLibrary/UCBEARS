@@ -1,3 +1,10 @@
+# 1.7.1 (next)
+
+Technical:
+
+- Host for CAS logout URL now uses `$CAS_HOST` environment variable if set, instead of
+  being hard-coded to `auth.berkeley.edu` or `auth-test.berkeley.edu`.
+
 # 1.7.0 (2022-03-07)
 
 Usability / accessibility improvements:

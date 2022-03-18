@@ -32,8 +32,8 @@ class SessionsController < ApplicationController
   def destroy
     sign_out
 
-    # TODO: configure this more elegantly and make it play better with Selenium tests
-    redirect_to "https://auth#{'-test' unless Rails.env.production?}.berkeley.edu/cas/logout"
+    # TODO: make this play better with Selenium tests
+    redirect_to cas_logout_url
   end
 
   # Require login, then:
@@ -49,6 +49,15 @@ class SessionsController < ApplicationController
 
   def auth_params
     request.env['omniauth.auth']
+  end
+
+  def cas_base_uri
+    cas_host = Rails.application.config.cas_host
+    URI.parse("https://#{cas_host}")
+  end
+
+  def cas_logout_url
+    BerkeleyLibrary::Util::URIs.append(cas_base_uri, '/cas/logout').to_s
   end
 
   def log_signin(user)

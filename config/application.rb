@@ -36,6 +36,10 @@ module UCBEARS
     # TODO: fail fast if ENV not configured?
     BerkeleyLibrary::Alma::Config.default!
 
+    # CAS configuration
+    # - NOTE: overridden in production.rb
+    config.cas_host = ENV.fetch('CAS_HOST') { 'auth-test.berkeley.edu' }
+
     config.after_initialize do
       BuildInfo.log!
     end

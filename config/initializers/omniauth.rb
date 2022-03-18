@@ -8,10 +8,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              uid_field: :uid
   end
 
-  cas_host = ENV.fetch('CAS_HOST') do
-    "auth#{'-test' unless Rails.env.production?}.berkeley.edu"
-  end
-
   fetch_raw_info = proc do |_strategy, _opts, _ticket, _user_info, rawxml|
     next {} if rawxml.empty?
 
@@ -23,7 +19,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :cas,
            name: :calnet,
-           host: cas_host,
+           host: Rails.application.config.cas_host,
            login_url: '/cas/login',
            service_validate_url: '/cas/p3/serviceValidate',
            fetch_raw_info: fetch_raw_info

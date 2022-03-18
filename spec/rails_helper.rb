@@ -73,6 +73,10 @@ module CalnetHelper
     retiree: '5551216'.freeze
   }.freeze
 
+  def cas_logout_url
+    "https://#{Rails.application.config.cas_host}/cas/logout"
+  end
+
   def mock_login(type)
     auth_hash = mock_auth_hash(type)
     mock_omniauth_login(auth_hash)
@@ -120,7 +124,7 @@ module CalnetHelper
     # Selenium doesn't know anything about webmock and will just hit the real logout path,
     # so we only hit it in request specs
     unless respond_to?(:page)
-      stub_request(:get, 'https://auth-test.berkeley.edu/cas/logout').to_return(status: 200)
+      stub_request(:get, cas_logout_url).to_return(status: 200)
       do_get logout_path
     end
 

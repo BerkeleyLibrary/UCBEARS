@@ -102,4 +102,8 @@ Rails.application.configure do
 
   # For production make use:
   # config.action_mailer.default_url_options = { host: 'framework.lib.berkeley.edu' }
+
+  # CAS configuration
+  # - NOTE: overrides application.rb
+  config.cas_host = ENV.fetch('CAS_HOST') { 'auth.berkeley.edu' }
 end
