@@ -9,6 +9,7 @@
 
 # Build/test artifacts
 /artifacts/
+/.cache
 
 # Profiling results
 public/*profile*.html
