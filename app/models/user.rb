@@ -49,7 +49,10 @@ class User
       ensure_valid_provider(auth['provider'])
 
       new(
-        uid: auth['extra']['uid'], # TODO: why not auth['uid']?
+        # NOTE: auth['uid'] (= <cas:user>) optionally returns either the UID, or
+        #       berkeleyEduKerberosPrincipalString, depending on how the app was
+        #       registered with CAS.
+        uid: auth['extra']['uid'],
         affiliations: auth['extra']['berkeleyEduAffiliations'],
         cal_groups: (auth['extra']['berkeleyEduIsMemberOf'] || []) & User::KNOWN_CAL_GROUPS
       )
