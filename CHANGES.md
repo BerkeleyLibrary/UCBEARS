@@ -1,9 +1,18 @@
-# 1.7.1 (next)
+# 1.7.1 (2022-04-22)
+
+Functional:
+
+- Adds `AFFILIATE-TYPE-VISITING STU RESEARCHER` to the list of student affiliations.
 
 Technical:
 
 - Host for CAS logout URL now uses `$CAS_HOST` environment variable if set, instead of
   being hard-coded to `auth.berkeley.edu` or `auth-test.berkeley.edu`.
+- `omniauth-cas` updated to released 2.0 version.
+
+Development:
+
+- Adds `rubocop-rails` and `rubocop-rspec` style checks, w/related code cleanup.
 
 # 1.7.0 (2022-03-07)
 
