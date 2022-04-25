@@ -31,7 +31,7 @@
     <td>
       <ul>
         <li v-for="term in allTerms" :key="`term-${term.id}`">
-          <input :id="`term-${term.id}`" v-model.lazy="terms" type="checkbox" :value="term">
+          <input :id="`term-${term.id}`" v-model.lazy="term_ids" type="checkbox" :value="term.id">
           <label :for="`term-${term.id}`">{{ term.name }}</label>
         </li>
       </ul>
@@ -57,9 +57,9 @@ export default {
     allTerms: { type: Array, default: () => [] }
   },
   computed: {
-    terms: {
-      get () { return this.item.terms },
-      set (terms) { this.edited({ term_ids: terms.map(t => t.id) }) }
+    term_ids: {
+      get () { return this.item.terms.map(t => t.id) },
+      set (ids) { this.edited({ term_ids: ids }) }
     },
     copies: {
       get () { return this.item.copies },

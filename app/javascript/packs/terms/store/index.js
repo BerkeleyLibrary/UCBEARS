@@ -28,6 +28,13 @@ export default new Vuex.Store({
       } else {
         terms.push(term)
       }
+      if (term.default_term) {
+        for (const t of terms) {
+          if (t.id !== term.id) {
+            t.default_term = false
+          }
+        }
+      }
       console.log(`terms store: setTerm(${JSON.stringify(term)})`)
     },
     removeTerm (state, term) {

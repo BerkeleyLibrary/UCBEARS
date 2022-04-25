@@ -81,6 +81,12 @@ section.admin {
         &.control {
           text-align: center;
           padding-left: 0;
+
+          button, a.icon-link {
+            img {
+              margin-top: 2px;
+            }
+          }
         }
 
         &.date {

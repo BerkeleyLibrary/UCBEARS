@@ -5,6 +5,7 @@
     <table v-if="terms">
       <thead>
         <tr>
+          <th>Default?</th>
           <th>Name</th>
           <th>Start date</th>
           <th>End date</th>
