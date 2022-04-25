@@ -55,14 +55,14 @@ class TermsController < ApplicationController
   def set_default_term!
     return if Settings.default_term == @term
 
-    @term.touch # adjust updated_at
+    @term.touch if @term.persisted? # adjust updated_at
     Settings.default_term = @term
   end
 
   def unset_default_term!
     return if Settings.default_term != @term
 
-    @term.touch # adjust updated_at
+    @term.touch if @term.persisted?  # adjust updated_at
     Settings.default_term = nil
   end
 

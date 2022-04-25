@@ -139,9 +139,12 @@ RSpec.describe '/terms', type: :request do
       it 'can set the default term' do
         attrs = valid_attributes.merge(default_term: true)
 
-        expect do
-          post terms_url, params: { term: attrs }, as: :json
-        end.to change(Term, :count).by(1)
+        aggregate_failures do
+          expect do
+            post terms_url, params: { term: attrs }, as: :json
+          end.to change(Term, :count).by(1)
+          expect(response).to be_successful
+        end
 
         term = Term.find_by(name: attrs[:name])
         expect(Settings.default_term).to eq(term)
