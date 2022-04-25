@@ -43,6 +43,10 @@ class Term < ActiveRecord::Base
     Date.current >= start_date && Date.current <= end_date
   end
 
+  def default?
+    self == Settings.default_term
+  end
+
   # ------------------------------------------------------------
   # Class methods
 
@@ -52,4 +56,19 @@ class Term < ActiveRecord::Base
     end
   end
 
+  # ------------------------------------------------------------
+  # Private methods
+
+  private
+
+  def unset_default_term
+    return yield unless Settings.default_term == self
+
+    Settings.default_term = nil
+    begin
+      yield
+    ensure
+      Settings.default_term = self unless destroyed?
+    end
+  end
 end

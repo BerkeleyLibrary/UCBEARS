@@ -266,6 +266,11 @@ Rails/PluralizationGrammar:
 Rails/RakeEnvironment:
   Enabled: false
 
+# we meant to do that
+Rails/SkipsModelValidations:
+  AllowedMethods:
+    - touch
+
 ############################################################
 # Enable newer rubocop-rails cops
 

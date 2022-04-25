@@ -31,6 +31,12 @@ RSpec.describe '/terms', type: :request do
     end
 
     %i[term_fall_2021 term_spring_2022].each { |t| create(t) }
+
+    @prev_default_term = Settings.default_term
+  end
+
+  after do
+    Settings.default_term = @prev_default_term
   end
 
   context 'without credentials' do
@@ -130,6 +136,32 @@ RSpec.describe '/terms', type: :request do
         valid_attributes.each { |attr, value| expect(term.send(attr)).to eq(value) }
       end
 
+      it 'can set the default term' do
+        attrs = valid_attributes.merge(default_term: true)
+
+        expect do
+          post terms_url, params: { term: attrs }, as: :json
+        end.to change(Term, :count).by(1)
+
+        term = Term.find_by(name: attrs[:name])
+        expect(Settings.default_term).to eq(term)
+        expect(term).to be_default
+      end
+
+      it "doesn't change the default term unless asked" do
+        default_term = Term.take
+        Settings.default_term = default_term
+
+        expect do
+          post terms_url, params: { term: valid_attributes }, as: :json
+        end.to change(Term, :count).by(1)
+
+        term = Term.find_by(name: valid_attributes[:name])
+        expect(term).not_to be_default
+
+        expect(Settings.default_term).to eq(default_term)
+      end
+
       it 'returns the term as JSON' do
         post terms_url, params: { term: valid_attributes }, as: :json
         expect(response).to be_successful
@@ -184,6 +216,16 @@ RSpec.describe '/terms', type: :request do
         messages = errors.map { |err| err['message'] }
         expect(messages.size).to eq(1)
         expect(messages.first).to eq(Term::MSG_START_MUST_PRECEDE_END)
+      end
+
+      it 'does not set an invalid term as defualt' do
+        attrs = invalid_attributes.merge(default_term: true)
+
+        expect do
+          post terms_url, params: { term: attrs }, as: :json
+        end.not_to change(Term, :count)
+
+        expect(Settings.default_term).to eq(@prev_default_term)
       end
 
       it 'returns errors for a duplicate term name' do
@@ -245,6 +287,43 @@ RSpec.describe '/terms', type: :request do
         expect(actual_json).to eq(expected_json(term))
       end
 
+      it 'can set a term as default' do
+        term = Term.create(valid_attributes)
+        new_attributes = { default_term: true }
+
+        patch term_url(term), params: { term: new_attributes }, as: :json
+        term.reload
+
+        expect(term).to be_default
+        expect(Settings.default_term).to eq(term)
+      end
+
+      it 'can unset the default term' do
+        term = Term.create(valid_attributes)
+        Settings.default_term = term
+
+        new_attributes = { default_term: false }
+
+        patch term_url(term), params: { term: new_attributes }, as: :json
+        term.reload
+
+        expect(term).not_to be_default
+        expect(Settings.default_term).to be_nil
+      end
+
+      it "doesn't change the default term unless asked" do
+        default_term = Term.take
+        Settings.default_term = default_term
+
+        term = Term.create(valid_attributes)
+        new_attributes = { name: "#{term.name} (new and improved!)" }
+        patch term_url(term), params: { term: new_attributes }, as: :json
+        term.reload
+
+        expect(term).not_to be_default
+        expect(Settings.default_term).to eq(default_term)
+      end
+
       it 'applies a partial update' do
         term = Term.create(valid_attributes)
 
@@ -289,6 +368,31 @@ RSpec.describe '/terms', type: :request do
         messages = errors.map { |err| err['message'] }
         expect(messages.size).to eq(1)
         expect(messages.first).to eq(Term::MSG_START_MUST_PRECEDE_END)
+      end
+
+      it 'does not set the default term on an invalid update' do
+        term = Term.create(valid_attributes)
+
+        attrs = invalid_attributes.merge(default_term: true)
+        patch term_url(term), params: { term: attrs }, as: :json
+
+        term.reload
+        expect(term).not_to be_default
+        expect(Settings.default_term).to eq(@prev_default_term)
+      end
+
+      it 'does not clear the default term on an invalid update' do
+        term = Term.create(valid_attributes)
+        Settings.default_term = term
+
+        prev_updated_at = term.updated_at
+
+        patch term_url(term), params: { term: invalid_attributes }, as: :json
+
+        term.reload
+        expect(term.updated_at).to eq(prev_updated_at)
+        expect(term).to be_default
+        expect(Settings.default_term).to eq(term)
       end
 
       it 'does not accept duplicate names' do
@@ -339,6 +443,19 @@ RSpec.describe '/terms', type: :request do
         end.to change(Term, :count).by(-1)
 
         expect(response).to be_successful
+      end
+
+      it 'does not allow deleting the default term' do
+        term = Term.take
+        Settings.default_term = term
+
+        expect do
+          delete term_url(term), as: :json
+        end.not_to change(Term, :count)
+
+        expect(response).not_to be_successful
+
+        expect(Settings.default_term).to eq(term)
       end
 
       # TODO: Should this be a 404?

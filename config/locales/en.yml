@@ -45,6 +45,7 @@ en:
     errors:
       messages:
         taken: 'already exists'
+        delete_default_forbidden: "Can't delete default term"
       models:
         term:
           attributes:

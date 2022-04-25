@@ -76,5 +76,52 @@ RSpec.describe Term, type: :model do
       expect(Term.current).not_to include(past_term)
       expect(Term.current).not_to include(future_term)
     end
+
+    describe :default? do
+      attr_reader :default_term
+
+      before do
+        FactoryBot.factories.select { |f| f.build_class == Term }.each { |f| create(f.name) }
+
+        @prev_default_term = Settings.default_term
+        @default_term = create(:term, name: 'Test Term', start_date: Date.current - 1.days, end_date: Date.current + 1.days)
+        Settings.default_term = default_term
+      end
+
+      after do
+        Settings.default_term = @prev_default_term
+      end
+
+      it 'returns true for the default term, false for others' do
+        expect(default_term).to be_default
+
+        Term.find_each do |t|
+          if t == default_term
+            expect(t).to be_default
+          else
+            expect(t).not_to be_default
+          end
+        end
+      end
+
+      describe :destroy do
+        it 'does not allow unsetting the default term' do
+          term = Term.take
+          Settings.default_term = term
+          expect { term.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)
+
+          expect(term).not_to be_destroyed
+          expect(Settings.default_term).to eq(term)
+        end
+
+        it 'does not unset the default term for non-default terms' do
+          term1, term2 = Term.limit(2).to_a
+          Settings.default_term = term1
+          term2.destroy!
+          expect(Settings.default_term).to eq(term1)
+        end
+      end
+    end
+
   end
 end

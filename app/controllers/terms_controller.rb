@@ -16,6 +16,7 @@ class TermsController < ApplicationController
 
   def create
     @term = Term.new(term_params)
+    ensure_default_term!
 
     if @term.save
       render :show, status: :created, location: @term
@@ -26,6 +27,8 @@ class TermsController < ApplicationController
 
   def update
     if @term.update(term_params)
+      ensure_default_term!
+
       render :show, status: :ok, location: @term
     else
       render_term_errors
@@ -35,6 +38,7 @@ class TermsController < ApplicationController
   def destroy
     term_id = params.require(:id)
     return unless (@term = Term.find_by(id: term_id))
+    return render_delete_default_term_forbidden(@term) if @term.default?
     return render_term_errors(status: :forbidden) unless @term.destroy
 
     logger.info("Deleted term #{@term.name} (#{@term.start_date}–#{@term.end_date})”, id: #{term_id})")
@@ -42,6 +46,25 @@ class TermsController < ApplicationController
   end
 
   private
+
+  # TODO: clean this up
+  def ensure_default_term!
+    term_default? ? set_default_term! : unset_default_term!
+  end
+
+  def set_default_term!
+    return if Settings.default_term == @term
+
+    @term.touch # adjust updated_at
+    Settings.default_term = @term
+  end
+
+  def unset_default_term!
+    return if Settings.default_term != @term
+
+    @term.touch # adjust updated_at
+    Settings.default_term = nil
+  end
 
   def terms
     return Term.all if query_params.blank?
@@ -62,6 +85,10 @@ class TermsController < ApplicationController
     end
   end
 
+  def term_default?
+    @term_default ||= params.require(:term).permit(:default_term)[:default_term]
+  end
+
   def query_params
     params.permit(:past, :current, :future).tap do |pp|
       logger.info("#{self.class}.query_params", pp)
@@ -71,5 +98,10 @@ class TermsController < ApplicationController
   def render_term_errors(status: :unprocessable_entity)
     logger.warn(@term.errors.full_messages)
     render('validation_errors', status: status, locals: { status: status, errors: @term.errors })
+  end
+
+  def render_delete_default_term_forbidden(term)
+    logger.warn("Can't delete default term", term)
+    render('forbidden', status: :forbidden, locals: { message: t('activerecord.errors.messages.delete_default_forbidden') })
   end
 end
