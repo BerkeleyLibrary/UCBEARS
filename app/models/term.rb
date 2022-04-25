@@ -56,19 +56,4 @@ class Term < ActiveRecord::Base
     end
   end
 
-  # ------------------------------------------------------------
-  # Private methods
-
-  private
-
-  def unset_default_term
-    return yield unless Settings.default_term == self
-
-    Settings.default_term = nil
-    begin
-      yield
-    ensure
-      Settings.default_term = self unless destroyed?
-    end
-  end
 end
