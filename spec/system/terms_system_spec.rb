@@ -81,7 +81,9 @@ describe TermsController, type: :system do
   end
 
   def row_for(term)
-    row_for!(term) if page.has_selector?(row_selector_for(term))
+    row_for!(term)
+  rescue Capybara::ElementNotFound
+    nil
   end
 
   def expect_no_row(term)
