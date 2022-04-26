@@ -1,3 +1,9 @@
+# 1.7.2 (2022-04-26)
+
+Functional:
+
+- Adds checkbox to set/unset the default term for new items.
+
 # 1.7.1 (2022-04-22)
 
 Functional:
