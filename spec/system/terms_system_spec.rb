@@ -95,10 +95,13 @@ describe TermsController, type: :system do
     expect(term_row).to have_field(name_field_id(term), type: 'text', with: term.name)
   end
 
+  # TODO: if we expect the whole row to be gone, assert that
   def expect_no_name_field(term)
     return unless (term_row = row_for(term))
 
     expect(term_row).not_to have_field(name_field_id(term), type: 'text', with: term.name)
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError
+    # ok
   end
 
   def expect_updated_at(term)
