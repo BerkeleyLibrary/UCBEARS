@@ -6,6 +6,8 @@ require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 
+require 'support/system_spec_helper'
+
 # ------------------------------------------------------------
 # RSpec configuration
 
@@ -22,6 +24,8 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  config.include(SystemSpecHelper, type: :system)
 end
 
 # ------------------------------------------------------------
@@ -40,7 +44,7 @@ require 'support/alma'
 # TODO: move to spec/support
 def expect_json_error(expected_status, expected_message)
   expect(response).not_to be_successful
-  expect(response.status).to eq(expected_status)
+  expect(response).to have_http_status(expected_status)
   expect(response.content_type).to start_with('application/json')
 
   parsed_response = JSON.parse(response.body)
@@ -49,7 +53,7 @@ def expect_json_error(expected_status, expected_message)
 
   parsed_error = parsed_response['error']
   expect(parsed_error).to be_a(Hash)
-  expect(parsed_error['code']).to eq(expected_status)
+  expect(parsed_error['code']).to eq(response.status)
   expect(parsed_error['message']).to eq(expected_message)
 
   err_array = parsed_error['errors']

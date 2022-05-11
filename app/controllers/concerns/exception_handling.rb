@@ -22,8 +22,11 @@ module ExceptionHandling
       # not logged in, so we don't need the full stack trace etc.
       logger.info(error.to_s)
       respond_to do |format|
+        format.any(:html, :csv) do
+          response.content_type = 'text/html' # TODO: shouldn't be needed in Rails 7
+          redirect_to login_path(url: request.fullpath)
+        end
         format.json { render_error(error, status: :unauthorized) }
-        format.any { redirect_to login_path(url: request.fullpath) }
       end
     end
 
@@ -54,13 +57,10 @@ module ExceptionHandling
   end
 
   def render_error(error, status: :internal_server_error, message: error.message, template: :standard_error)
-    respond_to do |format|
-      format.csv { head status }
-      format.any do
-        locals = { status: status, exception: error, message: message }
-        render(template, status: status, locals: locals)
-      end
-    end
+    return head(status) if formats.include?(:csv)
+
+    locals = { status: status, exception: error, message: message }
+    render(template, status: status, locals: locals)
   end
 
   # Formats are set in `ActionController::Rendering#process_action`; when a request

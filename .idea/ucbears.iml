@@ -33,25 +33,25 @@
     </content>
     <orderEntry type="jdk" jdkName="RVM: ruby-3.0.3" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="actioncable (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionmailbox (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionmailer (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionpack (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actiontext (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionview (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activejob (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activemodel (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activerecord (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activestorage (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activesupport (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actioncable (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actionmailbox (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actionmailer (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actionpack (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actiontext (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="actionview (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activejob (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activemodel (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activerecord (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activestorage (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activesupport (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="addressable (v2.8.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="amazing_print (v1.4.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ast (v2.4.2, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="awesome_print (v1.9.2, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="berkeley_library-alma (v0.0.4, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="berkeley_library-logging (v0.2.5, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="berkeley_library-logging (v0.2.6.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="berkeley_library-marc (v0.3.1, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="berkeley_library-util (v0.1.1, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="berkeley_library-util (v0.1.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bindex (v0.8.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="brakeman (v5.2.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.4, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -62,7 +62,7 @@
     <orderEntry type="library" scope="PROVIDED" name="capybara (v3.36.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="childprocess (v4.1.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="colorize (v0.8.1, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="concurrent-ruby (v1.1.9, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="concurrent-ruby (v1.1.10, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="crack (v0.4.5, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="crass (v1.0.6, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="database_cleaner-active_record (v2.0.1, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -89,8 +89,8 @@
     <orderEntry type="library" scope="PROVIDED" name="json (v2.6.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="jwt (v2.3.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="listen (v3.7.1, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="lograge (v0.11.2, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="loofah (v2.14.0, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="lograge (v0.12.0, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="loofah (v2.18.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.7.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="marc (v1.1.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="marcel (v1.0.2, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -103,7 +103,7 @@
     <orderEntry type="library" scope="PROVIDED" name="net-ssh (v6.1.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="netrc (v0.11.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nio4r (v2.5.8, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.13.3, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.13.6, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="non-stupid-digest-assets (v1.0.9, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="oj (v3.13.11, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="omniauth (v1.9.1, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -121,10 +121,10 @@
     <orderEntry type="library" scope="PROVIDED" name="rack (v2.2.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack-proxy (v0.7.2, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack-test (v1.1.0, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rails (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-dom-testing (v2.0.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-html-sanitizer (v1.4.2, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="railties (v6.1.4.6, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="railties (v6.1.5.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rainbow (v3.1.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.6, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rb-fsevent (v0.11.1, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -160,14 +160,14 @@
     <orderEntry type="library" scope="PROVIDED" name="simplecov-html (v0.12.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov-rcov (v0.2.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov_json_formatter (v0.1.4, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="sprockets (v4.0.2, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sprockets (v4.0.3, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sprockets-rails (v3.4.2, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.2.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tilt (v2.0.10, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="typesafe_enum (v0.3.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v2.0.4, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unf (v0.1.4, RVM: ruby-3.0.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="unf_ext (v0.0.8, RVM: ruby-3.0.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="unf_ext (v0.0.8.1, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unicode-display_width (v2.1.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="web-console (v4.2.0, RVM: ruby-3.0.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="webmock (v3.14.0, RVM: ruby-3.0.3) [gem]" level="application" />
@@ -493,6 +493,7 @@
               <RakeTaskImpl description="Run the code examples in spec/system" fullCommand="spec:system" id="system" />
               <RakeTaskImpl id="system">
                 <subtasks>
+                  <RakeTaskImpl description="Run specs in exception_handling_system_spec.rb" fullCommand="spec:system:exception_handling" id="exception_handling" />
                   <RakeTaskImpl description="Run specs in health_system_spec.rb" fullCommand="spec:system:health" id="health" />
                   <RakeTaskImpl description="Run specs in items_system_spec.rb" fullCommand="spec:system:items" id="items" />
                   <RakeTaskImpl description="Run specs in lending_system_spec.rb" fullCommand="spec:system:lending" id="lending" />
