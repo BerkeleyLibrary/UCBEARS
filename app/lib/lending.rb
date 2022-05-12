@@ -16,10 +16,6 @@ module Lending
       all_stage_dirs(:final)
     end
 
-    def each_final_dir(&block)
-      each_stage_dir(:final, &block)
-    end
-
     def each_processing_dir(&block)
       each_stage_dir(:processing, &block)
     end
