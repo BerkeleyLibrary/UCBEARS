@@ -1,6 +1,6 @@
 <template>
   <tbody id="add-term-widget">
-    <tr v-if="term" class="add-term">
+    <tr v-if="term" id="new-term-row" class="add-term">
       <td class="control"><input id="new-term-default_term" v-model.lazy="term.default_term" type="checkbox"></td>
       <td><input id="new-term-name" v-model.lazy="term.name" type="text"></td>
       <td><input id="new-term-start-date" v-model.lazy="term.start_date" type="date"></td>

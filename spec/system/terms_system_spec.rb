@@ -347,9 +347,14 @@ describe TermsController, type: :system do
           expect(page).to have_button('Add a term', disabled: true)
         end
 
-        describe 'widget' do
+        describe 'new term row' do
           it 'is not displayed by default' do
-            expect(page).not_to have_content('#add-term-widget')
+            expect(page).not_to have_selector('#new-term-row')
+          end
+
+          it 'is displayed after clicking "Add"' do
+            page.click_button('add-term')
+            expect(page).to have_selector('#new-term-row')
           end
 
           describe 'adding' do
@@ -361,22 +366,22 @@ describe TermsController, type: :system do
 
             it 'allows adding a term' do
               page.click_button('add-term')
-              widget = page.find('#add-term-widget')
-              expect(widget).to have_button('Save', disabled: true)
+              new_term_row = page.find('#new-term-row')
+              expect(new_term_row).to have_button('Save', disabled: true)
 
-              name_field = widget.find_field('new-term-name', type: 'text')
+              name_field = new_term_row.find_field('new-term-name', type: 'text')
               name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
-              expect(widget).to have_button('Save', disabled: true)
+              expect(new_term_row).to have_button('Save', disabled: true)
 
-              start_date_field = widget.find_field('new-term-start-date', type: 'date')
+              start_date_field = new_term_row.find_field('new-term-start-date', type: 'date')
               start_date_field.fill_in(with: start_date_str)
-              expect(widget).to have_button('Save', disabled: true)
+              expect(new_term_row).to have_button('Save', disabled: true)
 
-              end_date_field = widget.find_field('new-term-end-date', type: 'date')
+              end_date_field = new_term_row.find_field('new-term-end-date', type: 'date')
               end_date_field.fill_in(with: end_date_str)
-              expect(widget).to have_button('Save', disabled: false)
+              expect(new_term_row).to have_button('Save', disabled: false)
 
-              save_button = widget.find_button('Save', disabled: false)
+              save_button = new_term_row.find_button('Save', disabled: false)
 
               expect do
                 save_button.click
@@ -394,20 +399,20 @@ describe TermsController, type: :system do
               old_default_term = (Settings.default_term = Term.take)
 
               page.click_button('add-term')
-              widget = page.find('#add-term-widget')
+              new_term_row = page.find('#new-term-row')
 
-              widget.check('new-term-default_term')
+              new_term_row.check('new-term-default_term')
 
-              name_field = widget.find_field('new-term-name', type: 'text')
+              name_field = new_term_row.find_field('new-term-name', type: 'text')
               name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
 
-              start_date_field = widget.find_field('new-term-start-date', type: 'date')
+              start_date_field = new_term_row.find_field('new-term-start-date', type: 'date')
               start_date_field.fill_in(with: start_date_str)
 
-              end_date_field = widget.find_field('new-term-end-date', type: 'date')
+              end_date_field = new_term_row.find_field('new-term-end-date', type: 'date')
               end_date_field.fill_in(with: end_date_str)
 
-              save_button = widget.find_button('Save', disabled: false)
+              save_button = new_term_row.find_button('Save', disabled: false)
 
               expect do
                 save_button.click
@@ -423,21 +428,21 @@ describe TermsController, type: :system do
 
             it 'prevents adding a term with a duplicate name' do
               page.click_button('add-term')
-              widget = page.find('#add-term-widget')
+              new_term_row = page.find('#new-term-row')
 
               new_name = Term.take.name
-              name_field = widget.find_field('new-term-name', type: 'text')
+              name_field = new_term_row.find_field('new-term-name', type: 'text')
               name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
 
-              start_date_field = widget.find_field('new-term-start-date', type: 'date')
+              start_date_field = new_term_row.find_field('new-term-start-date', type: 'date')
               start_date_field.fill_in(with: start_date_str)
 
               end_date = start_date + 2.weeks
               end_date_str = end_date.strftime('%m/%d/%Y')
-              end_date_field = widget.find_field('new-term-end-date', type: 'date')
+              end_date_field = new_term_row.find_field('new-term-end-date', type: 'date')
               end_date_field.fill_in(with: end_date_str)
 
-              save_button = widget.find_button('Save', disabled: false)
+              save_button = new_term_row.find_button('Save', disabled: false)
 
               expect do
                 save_button.click
@@ -447,21 +452,21 @@ describe TermsController, type: :system do
 
             it 'prevents adding a term with a bad date range' do
               page.click_button('add-term')
-              widget = page.find('#add-term-widget')
+              new_term_row = page.find('#new-term-row')
 
-              name_field = widget.find_field('new-term-name', type: 'text')
+              name_field = new_term_row.find_field('new-term-name', type: 'text')
               name_field.fill_in(with: new_name, fill_options: { clear: :backspace })
 
-              start_date_field = widget.find_field('new-term-start-date', type: 'date')
+              start_date_field = new_term_row.find_field('new-term-start-date', type: 'date')
               start_date_field.fill_in(with: start_date_str)
 
               end_date = start_date - 3.weeks
               end_date_str = end_date.strftime('%m/%d/%Y')
-              end_date_field = widget.find_field('new-term-end-date', type: 'date')
+              end_date_field = new_term_row.find_field('new-term-end-date', type: 'date')
               end_date_field.fill_in(with: end_date_str)
-              expect(widget).to have_button('Save', disabled: false)
+              expect(new_term_row).to have_button('Save', disabled: false)
 
-              save_button = widget.find_button('Save', disabled: false)
+              save_button = new_term_row.find_button('Save', disabled: false)
 
               expect do
                 save_button.click
