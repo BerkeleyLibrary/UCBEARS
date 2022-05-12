@@ -54,4 +54,32 @@ describe IIIFDirectory do
       expect { iiif_directory.first_image_url_path }.to raise_error(Errno::ENOENT)
     end
   end
+
+  describe :fetch do
+    attr_reader :cache
+
+    before do
+      @cache = IIIFDirectory.send(:cache)
+      @cache.clear
+    end
+
+    it 'caches results' do
+      item = create(:active_item)
+      iiif_directory = IIIFDirectory.fetch(item.directory)
+      expect(item.iiif_directory).to be(iiif_directory)
+
+      iiif_directory_2 = IIIFDirectory.fetch(item.directory)
+      expect(iiif_directory_2).to be(iiif_directory)
+    end
+
+    it 'creates a new object if not found in cache' do
+      item = create(:active_item)
+      item_iiif_directory = item.iiif_directory
+
+      cache.clear
+
+      iiif_directory = IIIFDirectory.fetch(item.directory)
+      expect(iiif_directory).not_to be(item_iiif_directory)
+    end
+  end
 end

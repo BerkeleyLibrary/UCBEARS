@@ -10,6 +10,11 @@ class IIIFDirectory
   MSG_NO_MARC_XML = "The item directory does not contain a #{Lending::Processor::MARC_XML_NAME} file".freeze
 
   # ------------------------------------------------------------
+  # Constants
+
+  CACHE_EXPIRY = 5.minutes
+
+  # ------------------------------------------------------------
   # Accessors
 
   attr_reader :path, :stage_root_path, :directory
@@ -21,15 +26,38 @@ class IIIFDirectory
     raise ArgumentError, 'Directory cannot be nil' unless directory
 
     @directory = directory
-    @stage_root_path = stage_root(stage)
+    @stage_root_path = Lending.stage_root_path(stage).expand_path
     @path = stage_root_path.join(directory)
+  end
+
+  # ------------------------------------------------------------
+  # Class methods
+
+  class << self
+    def fetch(directory, stage: :final)
+      stage_root_path = Lending.stage_root_path(stage).expand_path
+      path = stage_root_path.join(directory)
+
+      cache.fetch(path.to_s) { new(directory, stage: stage) }
+    end
+
+    private
+
+    # @return [ActiveSupport::Cache::MemoryStore]
+    def cache
+      @cache ||= ActiveSupport::Cache::MemoryStore.new(
+        coder: ActiveSupport::Cache::NullCoder,
+        expires_in: CACHE_EXPIRY
+      )
+    end
+
   end
 
   # ------------------------------------------------------------
   # Flags
 
   def complete?
-    exists? && page_images? && marc_record? && manifest?
+    @complete ||= exists? && page_images? && marc_record? && manifest?
   end
 
   def reason_incomplete
@@ -125,10 +153,6 @@ class IIIFDirectory
   end
 
   private
-
-  def stage_root(stage)
-    Lending.stage_root_path(stage).expand_path
-  end
 
   def err_no_page_images
     I18n.t('activerecord.errors.models.image.directory.no_page_images', dir: path)

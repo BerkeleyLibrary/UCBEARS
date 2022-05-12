@@ -88,7 +88,7 @@ class Item < ActiveRecord::Base
     def create_from(directory)
       logger.info("Creating item for directory #{directory}")
 
-      iiif_directory = IIIFDirectory.new(directory)
+      iiif_directory = IIIFDirectory.fetch(directory)
       unless (marc_metadata = iiif_directory.marc_metadata)
         logger.error("Unable to read MARC record from #{iiif_directory.marc_path}")
         return
@@ -292,7 +292,7 @@ class Item < ActiveRecord::Base
   end
 
   def iiif_directory
-    @iiif_directory ||= IIIFDirectory.new(directory)
+    @iiif_directory ||= IIIFDirectory.fetch(directory)
   end
 
   def record_id
