@@ -74,12 +74,13 @@ class Item < ActiveRecord::Base
   class << self
     # TODO: something more efficient and concurrent
     def scan_for_new_items!
-      Lending.each_final_dir.map do |dir_path|
-        basename = dir_path.basename.to_s
-        next if exists?(directory: basename)
+      all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
+      old_directories = Item.pluck(&:directory)
+      new_directories = all_directories - old_directories
 
-        create_from(basename)
-      end.compact
+      new_directories.filter_map do |directory|
+        create_from(directory)
+      end
     end
 
     # TODO: something more efficient and concurrent

@@ -12,6 +12,10 @@ module Lending
       lending_root_path.join(stage.to_s)
     end
 
+    def all_final_dirs
+      all_stage_dirs(:final)
+    end
+
     def each_final_dir(&block)
       each_stage_dir(:final, &block)
     end
@@ -25,6 +29,11 @@ module Lending
 
       stage_root = stage_root_path(stage)
       PathUtils.each_item_dir(stage_root, &block)
+    end
+
+    def all_stage_dirs(stage)
+      stage_root = stage_root_path(stage)
+      PathUtils.all_item_dirs(stage_root)
     end
   end
 end

@@ -9,15 +9,15 @@ module Lending
     MSG_INVALID_BARCODE = "Item barcode '%s' contains invalid characters".freeze
     MSG_INVALID_RECORD_ID = "Item record ID '%s' contains invalid characters".freeze
 
-    def all_item_dirs(parent)
-      each_item_dir(parent).to_a
-    end
-
     def each_item_dir(parent)
       parent = ensure_dirpath(parent)
       return to_enum(:each_item_dir, parent) unless block_given?
 
       parent.children.each { |p| yield p if item_dir?(p) }
+    end
+
+    def all_item_dirs(parent)
+      ensure_dirpath(parent).children.select { |c| c.directory? && stem(c).to_s =~ DIRNAME_RE }
     end
 
     def item_dir?(p)
