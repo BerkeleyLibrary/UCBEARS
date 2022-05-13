@@ -76,13 +76,12 @@ class Item < ActiveRecord::Base
   class << self
     # TODO: something more efficient and concurrent
     def scan_for_new_items!
-      all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
-      old_directories = Item.pluck(&:directory)
-      new_directories = all_directories - old_directories
+      # another request already triggered a scan, skip it
+      return unless scan_lock.try_lock
 
-      new_directories.filter_map do |directory|
-        create_from(directory)
-      end
+      do_scan!
+    ensure
+      scan_lock.unlock
     end
 
     # TODO: something more efficient and concurrent
@@ -102,11 +101,32 @@ class Item < ActiveRecord::Base
         item.save(validate: false)
       end
     rescue ActiveRecord::RecordNotUnique => e
-      # Can happen when multiple requests trigger scan_for_new_items! concurrently
+      # Shouldn't happen now that we put a mutex lock around scan_for_new_items!, but just in case
       logger.warn(e)
       Item.find_by(directory: directory)
     end
     # rubocop:enable Metrics/MethodLength
+
+    private
+
+    def scan_lock
+      @scan_lock ||= Mutex.new
+    end
+
+    def do_scan!
+      # TODO: just assert it's owned, & make sure the locking is right
+      return unless scan_lock.owned?
+
+      all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
+      old_directories = Item.pluck(&:directory)
+      new_directories = all_directories - old_directories
+
+      logger.info("Creating #{new_directories.size} items: #{new_directories.join(', ')}")
+      new_directories.filter_map do |directory|
+        create_from(directory)
+      end
+    end
+
   end
 
   # ------------------------------------------------------------
