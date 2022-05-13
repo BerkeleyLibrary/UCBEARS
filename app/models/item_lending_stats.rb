@@ -189,7 +189,7 @@ class ItemLendingStats
 
   def loans_by_status
     @loans_by_status ||= {}.with_indifferent_access.tap do |lbs|
-      Loan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.send(scope) }
+      Loan::LOAN_STATUS_SCOPES.each { |scope| lbs[scope] = loans.select { |l| l.send("#{scope}?") } }
     end
   end
 
