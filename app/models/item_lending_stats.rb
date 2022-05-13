@@ -9,7 +9,7 @@ class ItemLendingStats
 
   SELECT_DISTINCT_LOAN_DATES_STMT = 'SELECT_DISTINCT_LOAN_DATES'.freeze
   SELECT_DISTINCT_LOAN_DATES = <<~SQL.squish.freeze
-      SELECT DISTINCT DATE(DATE_TRUNC('day', loan_date, :tz))
+      SELECT DISTINCT date(DATE_TRUNC('day', loan_date, :tz))
         FROM loans
     ORDER BY 1 DESC
   SQL
@@ -46,6 +46,8 @@ class ItemLendingStats
   CSV_LOAN_COLS = %i[loan_date due_date return_date duration loan_status].freeze
   CSV_ITEM_COLS = %i[record_id barcode title author publisher physical_desc].freeze
 
+  BUILD_ITEM_ATTRS = %i[id directory title author publisher physical_desc].freeze
+
   # TODO: use I18n
   CSV_HEADERS = (CSV_LOAN_COLS + CSV_ITEM_COLS).map do |attr|
     attr == :duration ? 'Duration (seconds)' : attr.to_s.titleize
@@ -80,20 +82,20 @@ class ItemLendingStats
       all_loan_dates.lazy.each { |date| yield [date, each_for_date(date)] }
     end
 
+    # rubocop:disable Metrics/AbcSize
     def each_for_date(date)
       raise ArgumentError, "#{date.inspect} is not a date object" unless date.respond_to?(:to_date) && (date.to_date == date)
       return to_enum(:each_for_date, date) unless block_given?
 
-      Item
-        .includes(:loans)
-        .joins(:loans) # INNER JOIN
-        .merge(Loan.loaned_on(date))
-        .find_each do |item|
-        # TODO: get scoped eager loading working properly so we don't have to pass the scope twice
-        # yield new(item, item.loans)
-        yield new(item, item.loans.loaned_on(date))
+      loans_by_item_id = Loan.loaned_on(date).each_with_object({}) do |loan, ll|
+        (ll[loan.item_id] ||= []) << loan
+      end
+
+      build_items(loans_by_item_id.keys).each do |item|
+        yield new(item, loans_by_item_id[item.id])
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def all_loan_dates
       stmt = ActiveRecord::Base.sanitize_sql([SELECT_DISTINCT_LOAN_DATES, { tz: Time.zone.name }])
@@ -116,6 +118,17 @@ class ItemLendingStats
       ActiveRecord::Base.connection
         .exec_query(stmt, SELECT_MEAN_LOAN_DURATION_STMT, prepare: true)
         .first['mean_loan_duration']
+    end
+
+    private
+
+    # TODO: stop jumping through hoops to bypass Item's after_find callbacks
+    def build_items(item_ids)
+      all_item_attrs = Item.where(id: item_ids).pluck(*BUILD_ITEM_ATTRS)
+      all_item_attrs.map do |vals|
+        attr_vals = BUILD_ITEM_ATTRS.zip(vals).to_h
+        Item.new(**attr_vals)
+      end
     end
 
   end

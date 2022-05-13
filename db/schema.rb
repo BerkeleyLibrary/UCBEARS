@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_24_214627) do
+ActiveRecord::Schema.define(version: 2021_12_29_223302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2022_02_24_214627) do
   end
 
   create_table "loans", force: :cascade do |t|
-    t.bigint "item_id", null: false
+    t.integer "item_id", null: false
     t.string "patron_identifier"
     t.datetime "loan_date"
     t.datetime "due_date"

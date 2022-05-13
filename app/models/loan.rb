@@ -8,6 +8,8 @@ class Loan < ActiveRecord::Base
   # ------------------------------------------------------------
   # Scopes
 
+  default_scope { order(:loan_date, :return_date, :due_date) }
+
   # TODO: rename date columns to datetimes
 
   scope :pending, -> { where(loan_date: nil) }

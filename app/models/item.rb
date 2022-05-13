@@ -28,6 +28,8 @@ class Item < ActiveRecord::Base
   before_save :set_complete_flag!
   after_create :set_default_term!
   before_destroy :verify_incomplete
+
+  # TODO: move this to a background job so we don't have to jump through so many hoops to avoid it
   after_find :update_complete_flag!
 
   # ------------------------------------------------------------
