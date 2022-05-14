@@ -74,14 +74,16 @@ class Item < ActiveRecord::Base
   # Class methods
 
   class << self
+    SCAN_LOCK = Mutex.new
+
     # TODO: something more efficient and concurrent
     def scan_for_new_items!
       # another request already triggered a scan, skip it
-      return unless scan_lock.try_lock
+      return unless SCAN_LOCK.try_lock
 
       do_scan!
     ensure
-      scan_lock.unlock
+      SCAN_LOCK.unlock
     end
 
     # TODO: something more efficient and concurrent
@@ -109,13 +111,9 @@ class Item < ActiveRecord::Base
 
     private
 
-    def scan_lock
-      @scan_lock ||= Mutex.new
-    end
-
     def do_scan!
       # TODO: just assert it's owned, & make sure the locking is right
-      return unless scan_lock.owned?
+      return unless SCAN_LOCK.owned?
 
       all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
       old_directories = Item.pluck(&:directory)
