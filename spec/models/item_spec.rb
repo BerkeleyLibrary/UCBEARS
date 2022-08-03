@@ -193,6 +193,18 @@ describe Item, type: :model do
         expect(Item.count).to eq(0) # just to be sure
       end
 
+      describe :find_new_directories do
+        it 'finds all directories' do
+          expected_dir_paths = Lending.stage_root_path(:final).children.select do |d|
+            Lending::PathUtils.item_dir?(d)
+          end
+          expected_dirs = expected_dir_paths.map(&:basename).map(&:to_s)
+
+          result = Item.send(:find_new_directories)
+          expect(result).to contain_exactly(*expected_dirs)
+        end
+      end
+
       describe :scan_for_new_items! do
         it 'creates new items' do
           expected_dirs = Lending
@@ -581,6 +593,21 @@ describe Item, type: :model do
 
           actual = Item.search_by_metadata(keyword)
           expect(actual).to contain_exactly(*expected)
+        end
+      end
+
+      describe :find_new_directories do
+        it 'finds only directories without existing items' do
+          all_dir_paths = Lending.stage_root_path(:final).children.select do |d|
+            Lending::PathUtils.item_dir?(d)
+          end
+          all_dirs = all_dir_paths.map(&:basename).map(&:to_s)
+
+          existing_dirs = items.values.map(&:directory)
+          expected_dirs = (all_dirs - existing_dirs)
+
+          result = Item.send(:find_new_directories)
+          expect(result).to contain_exactly(*expected_dirs)
         end
       end
 

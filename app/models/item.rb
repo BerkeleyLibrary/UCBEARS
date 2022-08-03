@@ -115,14 +115,18 @@ class Item < ActiveRecord::Base
       # TODO: just assert it's owned, & make sure the locking is right
       return unless SCAN_LOCK.owned?
 
-      all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
-      old_directories = Item.pluck(&:directory)
-      new_directories = all_directories - old_directories
+      new_directories = find_new_directories
 
       logger.info("Creating #{new_directories.size} items: #{new_directories.join(', ')}")
       new_directories.filter_map do |directory|
         create_from(directory)
       end
+    end
+
+    def find_new_directories
+      all_directories = Lending.all_final_dirs.map { |path| path.basename.to_s }
+      old_directories = Item.pluck(:directory)
+      all_directories - old_directories
     end
 
   end
