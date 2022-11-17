@@ -1,10 +1,4 @@
 # ------------------------------------------------------------
-# Read Docker secrets into the environment.
-
-require_relative '../lib/docker'
-Docker::Secret.setup_environment!
-
-# ------------------------------------------------------------
 # Standard Rails initialization
 
 require File.expand_path('boot', __dir__)
@@ -23,7 +17,8 @@ require 'berkeley_library/logging/railtie'
 Bundler.require(*Rails.groups)
 
 # Read .env file, but only in local (non-Docker) development
-require 'dotenv/load' if Rails.env.development? && !Docker.running_in_container?
+require 'dotenv/load' if Rails.env.development? &&
+  !BerkeleyLibrary::Docker.running_in_container?
 
 module UCBEARS
   class Application < Rails::Application

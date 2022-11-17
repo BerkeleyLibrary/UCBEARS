@@ -1,5 +1,5 @@
+require 'berkeley_library/docker'
 require 'rspec/core/rake_task'
-require 'docker'
 
 # TODO: convert all this to a Yarn task?
 #       see https://unused.github.io/blog/posts/eslint-rails/
@@ -39,7 +39,7 @@ module BerkeleyLibrary
       end
 
       def default_err_stream
-        Docker.running_in_container? ? $stdout : nil
+        BerkeleyLibrary::Docker.running_in_container? ? $stdout : nil
       end
     end
 

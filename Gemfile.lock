@@ -70,6 +70,7 @@ GEM
       berkeley_library-marc (~> 0.3.1)
       berkeley_library-util (~> 0.1, >= 0.1.1)
       nokogiri (~> 1.12)
+    berkeley_library-docker (0.2.0)
     berkeley_library-logging (0.2.6.1)
       activesupport (>= 6)
       amazing_print (~> 1.1)
@@ -378,6 +379,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print (>= 1.8.0)
   berkeley_library-alma (~> 0.0.1, >= 0.0.3)
+  berkeley_library-docker (~> 0.2.0)
   berkeley_library-logging (~> 0.2, >= 0.2.6.1)
   berkeley_library-marc (~> 0.2)
   berkeley_library-util (~> 0.1, >= 0.1.3)
