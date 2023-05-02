@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_223302) do
   end
 
   create_table "loans", force: :cascade do |t|
-    t.integer "item_id", null: false
+    t.bigint "item_id", null: false
     t.string "patron_identifier"
     t.datetime "loan_date"
     t.datetime "due_date"
