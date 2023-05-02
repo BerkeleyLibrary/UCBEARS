@@ -9,7 +9,7 @@ RSpec.describe Term, type: :model do
     end
 
     it 'requires start date to be before end date' do
-      term = Term.create(start_date: Date.current, end_date: Date.current - 1.days)
+      term = Term.create(name: 'Backwards', start_date: Date.current, end_date: Date.current - 1.days)
       expect(term).not_to be_valid
       expect(term).not_to be_persisted
     end
@@ -75,6 +75,24 @@ RSpec.describe Term, type: :model do
 
       expect(Term.current).not_to include(past_term)
       expect(Term.current).not_to include(future_term)
+    end
+
+    # Note that we can't test the Term.current scope this way, since it uses the
+    # database CURRENT_TIMESTAMP, which we can't mock, rather than Time.current
+    it 'starts at midnight' do
+      today = Date.current
+      tomorrow = today + 1.days
+
+      current_term = create(:term, name: 'Test 5', start_date: today, end_date: tomorrow)
+
+      travel_to(today.midnight) do
+        expect(current_term).to be_current
+      end
+
+      # Note end_date is inclusive (see above)
+      travel_to((tomorrow + 1.days).midnight) do
+        expect(current_term).not_to be_current
+      end
     end
 
     describe :default? do
