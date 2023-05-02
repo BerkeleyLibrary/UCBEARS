@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 
-Copyright © 2021 The Regents of the University of California
+Copyright © 2023 The Regents of the University of California
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the “Software”),
