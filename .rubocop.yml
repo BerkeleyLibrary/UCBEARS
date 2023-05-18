@@ -2,11 +2,14 @@ require:
   - rubocop-rails
 
 AllCops:
+  UseCache: false
   # Exclude generated files
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
     - 'out/**/*'
+    # Exclude vendor files in GitHub build
+    - 'vendor/**/*'
 
 # Allow one line around block body (Layout/EmptyLines will still disallow two or more)
 Layout/EmptyLinesAroundBlockBody:
@@ -243,12 +246,20 @@ Rails/ApplicationRecord:
   Enabled: false
 
 # explicit >>> implicit
+Rails/Delegate:
+  Enabled: false
+
+# explicit >>> implicit
 Rails/DurationArithmetic: # new in 2.13
   Enabled: false
 
-# if we're going to enforce a style, let's enforce the safe one
+# when we want cheap messages we'll ask for them
+Rails/EagerEvaluationLogMessage: # new in 2.11
+  Enabled: false
+
+# readable >>> consistent
 Rails/FilePath:
-  EnforcedStyle: arguments
+  Enabled: false
 
 # we meant to do that
 Rails/HasAndBelongsToMany:
@@ -265,11 +276,6 @@ Rails/PluralizationGrammar:
 # if we need it, we'll ask for it
 Rails/RakeEnvironment:
   Enabled: false
-
-# we meant to do that
-Rails/SkipsModelValidations:
-  AllowedMethods:
-    - touch
 
 ############################################################
 # Enable newer rubocop-rails cops
@@ -312,8 +318,6 @@ Rails/TimeZoneAssignment: # new in 2.10
   Enabled: true
 Rails/AddColumnIndex: # new in 2.11
   Enabled: true
-Rails/EagerEvaluationLogMessage: # new in 2.11
-  Enabled: true
 Rails/ExpandedDateRange: # new in 2.11
   Enabled: true
 Rails/I18nLocaleAssignment: # new in 2.11
@@ -328,4 +332,3 @@ Rails/RedundantPresenceValidationOnBelongsTo: # new in 2.13
   Enabled: true
 Rails/RootJoinChain: # new in 2.13
   Enabled: true
-

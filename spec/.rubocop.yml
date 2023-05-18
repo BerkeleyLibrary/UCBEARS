@@ -3,7 +3,8 @@ inherit_from: ../.rubocop.yml
 require:
   - rubocop-rspec
 
-Style/ClassAndModuleChildren:
+# Sometimes we're testing the operator
+Lint/BinaryOperatorWithIdenticalOperands:
   Enabled: false
 
 Metrics/AbcSize:
@@ -44,6 +45,10 @@ RSpec/BeforeAfterAll:
 RSpec/ContextWording:
   Enabled: false
 
+# not everything we test is a class
+RSpec/DescribeClass:
+  Enabled: false
+
 # explicit >>> implicit
 RSpec/DescribedClass:
   Enabled: false
@@ -52,9 +57,13 @@ RSpec/DescribedClass:
 RSpec/DescribeSymbol:
   Enabled: false
 
-# too late now
+# setup cost / time >>> failure granularity
 RSpec/ExampleLength:
-  Enabled: false
+  Max: 20
+  CountAsOne:
+    - array
+    - hash
+    - heredoc
 
 # we meant to do that
 RSpec/ExpectInHook:
@@ -72,12 +81,12 @@ RSpec/InstanceVariable:
 RSpec/IteratedExpectation:
   Enabled: false
 
-# too late now
-RSpec/MultipleMemoizedHelpers:
-  Enabled: false
-
 # we meant to do that
 RSpec/MessageSpies:
+  Enabled: false
+
+# too late now
+RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 # setup cost / time >>> failure granularity
