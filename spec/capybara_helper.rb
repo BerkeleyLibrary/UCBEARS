@@ -1,20 +1,14 @@
+require 'rails_helper'
+
 require 'active_support/inflector'
+require 'berkeley_library/docker'
 require 'capybara/rspec'
 require 'selenium-webdriver'
-require 'berkeley_library/docker'
 require 'berkeley_library/logging'
-
-require 'rails_helper'
 
 module CapybaraHelper
   # Capybara artifact path
   # (see https://www.rubydoc.info/github/jnicklas/capybara/Capybara.configure)
-  #
-  # NOTE: Rails' system test helpers insist on writing screenshots to
-  #       `tmp/screenshots` regardless of Capybara configuration:
-  #       see https://github.com/rails/rails/issues/41828.
-  #
-  #       In the Docker image we symlink that to `artifacts/screenshots`.
   SAVE_PATH = 'artifacts/capybara'.freeze
 
   class << self
@@ -27,16 +21,12 @@ module CapybaraHelper
       out.write("#{msg}: #{formatted_javascript_log}\n")
     end
 
-    def rails_root
-      Rails.root
-    end
-
     def browser_project_root
-      BerkeleyLibrary::Docker.running_in_container? ? '/build' : rails_root
+      BerkeleyLibrary::Docker.running_in_container? ? '/build' : Rails.root
     end
 
     def local_save_path
-      File.join(rails_root, SAVE_PATH)
+      File.join(Rails.root, SAVE_PATH)
     end
 
     def browser_save_path
@@ -66,7 +56,7 @@ module CapybaraHelper
     end
 
     def formatted_javascript_log(indent = '  ')
-      logs = browser.manage.logs.get(:browser)
+      logs = browser.logs.get(:browser)
       return 'No entries logged to JavaScript console' if logs.blank?
 
       StringIO.new.tap do |out|
@@ -79,13 +69,13 @@ module CapybaraHelper
   class Configurator
     include BerkeleyLibrary::Logging
 
-    DEFAULT_CHROME_ARGS = ['--window-size=2560,1344'].freeze
+    DEFAULT_CHROME_ARGS = %w[
+      --window-size=2560,1344
+      --disable-smooth-scrolling
+    ].freeze
 
-    DEFAULT_WEBMOCK_OPTIONS = {
-      allow_localhost: true,
-      # prevent running out of file handles -- see https://github.com/teamcapybara/capybara#gotchas
-      net_http_connect_on_start: true
-    }.freeze
+    DEFAULT_WEBMOCK_OPTIONS = { allow_localhost: true }.freeze
+    LOCALHOST_NAMES = %w[0.0.0.0 127.0.0.1 localhost].freeze
 
     attr_reader :driver_name
     attr_reader :chrome_args
@@ -123,14 +113,14 @@ module CapybaraHelper
 
       Capybara.register_driver(driver_name) do |app|
         capabilities = [
-          ::Selenium::WebDriver::Chrome::Options.new(args: chrome_args, prefs: chrome_prefs),
+          chrome_options,
           ::Selenium::WebDriver::Remote::Capabilities.chrome(
             'goog:loggingPrefs' => {
               browser: 'ALL', driver: 'ALL'
             }
           )
         ]
-        options = { capabilities: capabilities }.merge(driver_opts)
+        options = { capabilities: }.merge(driver_opts)
         Capybara::Selenium::Driver.new(app, **options)
       end
 
@@ -139,12 +129,37 @@ module CapybaraHelper
 
     private
 
+    def chrome_options
+      ::Selenium::WebDriver::Chrome::Options.new(args: chrome_args, prefs: chrome_prefs).tap do |options|
+        # NOTE: Different Selenium/Chrome versions set download directory differently -- see
+        #       https://github.com/teamcapybara/capybara/blob/3.38.0/spec/selenium_spec_chrome.rb#L15-L20
+        if (download_dir = chrome_prefs['download.default_directory'])
+          options.add_preference(:download, default_directory: download_dir)
+        end
+      end
+    end
+
     def merge_webmock_options(webmock_options)
       DEFAULT_WEBMOCK_OPTIONS.dup.tap do |opts|
         webmock_options.each do |opt, val|
           opts[opt] = val.is_a?(Array) ? ((opts[opt] || []) + val).uniq : val
         end
+
+        opts[:net_http_connect_on_start] = connect_on_start_list_from(opts) unless webmock_options.key?(:net_http_connect_on_start)
       end
+    end
+
+    def connect_on_start_list_from(webmock_opts)
+      connect_on_start_list = webmock_opts[:net_http_connect_on_start] || []
+
+      # prevent running out of file handles -- see https://github.com/teamcapybara/capybara#gotchas
+      connect_on_start_list.concat(LOCALHOST_NAMES) if webmock_opts[:allow_localhost]
+
+      if (allow_list = webmock_opts[:allow])
+        connect_on_start_list.concat(allow_list)
+      end
+
+      connect_on_start_list
     end
 
     def configure_rspec!
@@ -198,6 +213,7 @@ module CapybaraHelper
       Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'] if ENV['CAPYBARA_SERVER_PORT']
       Capybara.app_host = "http://#{CAPYBARA_APP_HOSTNAME}"
       Capybara.server_host = '0.0.0.0'
+      Capybara.always_include_port = true
     end
   end
 
