@@ -43,7 +43,7 @@ module Lending
           stem = infile_path.basename(infile_path.extname)
           outfile_path = outdir_path.join("#{stem}.tif")
 
-          tileize(infile_path, outfile_path, skip_existing: skip_existing, fail_fast: fail_fast)
+          tileize(infile_path, outfile_path, skip_existing:, fail_fast:)
         end
       end
 

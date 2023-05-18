@@ -48,7 +48,7 @@ module Lending
       end
 
       before do
-        @collector = Collector.new(lending_root: lending_root, stop_file: stop_file)
+        @collector = Collector.new(lending_root:, stop_file:)
 
         allow(BerkeleyLibrary::Logging.logger).to(receive(:debug)) { |msg| warn(msg) }
       end
@@ -104,6 +104,7 @@ module Lending
         expect(collector.stopped?).to eq(false)
       end
 
+      # rubocop:disable RSpec/ExampleLength
       it 'skips single-item processing failures' do
         bad_item_dir = 'b12345678_c12345678'
 
@@ -145,6 +146,7 @@ module Lending
 
         expect(collector.stopped?).to eq(false)
       end
+      # rubocop:enable RSpec/ExampleLength
 
       it 'exits cleanly in the event of some random error' do
         FileUtils.remove_dir(lending_root.to_s)

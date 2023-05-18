@@ -38,7 +38,7 @@ class IIIFDirectory
       stage_root_path = Lending.stage_root_path(stage).expand_path
       path = stage_root_path.join(directory)
 
-      cache.fetch(path.to_s) { new(directory, stage: stage) }
+      cache.fetch(path.to_s) { new(directory, stage:) }
     end
 
     private
@@ -134,7 +134,7 @@ class IIIFDirectory
   # Misc. instance methods
 
   def new_manifest(title:, author:)
-    Lending::IIIFManifest.new(title: title, author: author, dir_path: path)
+    Lending::IIIFManifest.new(title:, author:, dir_path: path)
   end
 
   def load_marc_metadata

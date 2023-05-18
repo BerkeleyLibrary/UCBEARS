@@ -92,7 +92,7 @@ describe Loan do
       year, month, day = %i[year month day].map { |attr| local_date.send(attr) }
       [2, 8, 14, 20].each do |hour|
         loan_date = Time.zone.local(year, month, day, hour)
-        loan = create(:expired_loan, loan_date: loan_date, item_id: item.id, patron_identifier: user.borrower_id)
+        loan = create(:expired_loan, loan_date:, item_id: item.id, patron_identifier: user.borrower_id)
         (loans_by_date[local_date] ||= []) << loan
       end
     end

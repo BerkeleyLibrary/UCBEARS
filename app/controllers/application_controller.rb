@@ -128,9 +128,9 @@ class ApplicationController < ActionController::Base
   # ------------------------------
   # Profiling
 
-  def with_profile(report_filename, &block)
-    flash_now!(:info, t('application.profile.generating.html', report_filename: report_filename))
-    do_profile(report_filename, &block)
+  def with_profile(report_filename, &)
+    flash_now!(:info, t('application.profile.generating.html', report_filename:))
+    do_profile(report_filename, &)
     self.profile_link = report_filename
   rescue StandardError => e
     logger.error(e)
@@ -150,7 +150,7 @@ class ApplicationController < ActionController::Base
 
   def render_422(view, errors, locals: {})
     flash_now!(:danger, errors.full_messages)
-    render(view, status: :unprocessable_entity, locals: locals)
+    render(view, status: :unprocessable_entity, locals:)
   end
 
   # ------------------------------

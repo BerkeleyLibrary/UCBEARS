@@ -86,7 +86,7 @@ module Lending
 
     def write_manifest!
       logger.info("#{self}: writing manifest template to #{outdir}")
-      IIIFManifest.new(title: title, author: author, dir_path: outdir).tap(&:write_manifest!)
+      IIIFManifest.new(title:, author:, dir_path: outdir).tap(&:write_manifest!)
     end
 
     def find_marc_path

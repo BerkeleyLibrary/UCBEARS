@@ -93,6 +93,6 @@ class ItemsController < ApplicationController
 
   def render_item_errors(status: :unprocessable_entity)
     logger.warn(@item.errors.full_messages)
-    render('validation_errors', status: status, locals: { status: status, errors: @item.errors })
+    render('validation_errors', status:, locals: { status:, errors: @item.errors })
   end
 end

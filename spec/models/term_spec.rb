@@ -19,7 +19,7 @@ RSpec.describe Term, type: :model do
       end_date = Date.new(2021, 12, 17)
       expected_start_date = Date.new(2021, 8, 18)
       expected_end_date = Date.new(2021, 12, 17)
-      term = Term.create(name: 'Fall 2021', start_date: start_date, end_date: end_date)
+      term = Term.create(name: 'Fall 2021', start_date:, end_date:)
       expect(term).to be_valid # just to be sure
       expect(term).to be_persisted # just to be sure
 
@@ -32,7 +32,7 @@ RSpec.describe Term, type: :model do
       end_date = Time.zone.local(2021, 12, 17, 23, 59, 59)
       expected_start_date = Date.new(2021, 8, 18)
       expected_end_date = Date.new(2021, 12, 17)
-      term = Term.create(name: 'Fall 2021', start_date: start_date, end_date: end_date)
+      term = Term.create(name: 'Fall 2021', start_date:, end_date:)
       expect(term).to be_valid # just to be sure
       expect(term).to be_persisted # just to be sure
 

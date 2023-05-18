@@ -34,7 +34,7 @@ class ItemQueryFactory
     #
     # @return [ActiveRecord::Relation] the query.
     def create_query(active: nil, complete: nil, terms: nil, keywords: nil)
-      new(active: active, complete: complete, terms: terms, keywords: keywords).create
+      new(active:, complete:, terms:, keywords:).create
     end
   end
 

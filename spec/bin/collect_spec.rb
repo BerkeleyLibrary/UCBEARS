@@ -1,7 +1,14 @@
 require 'rails_helper'
 
-# rubocop:disable RSpec/DescribeClass
 describe 'collect.rb' do
+  def stage_dirs_from(lending_root)
+    %i[processing final].each_with_object({}) do |stage, roots|
+      stage_root = File.join(lending_root, stage.to_s)
+      FileUtils.mkdir(stage_root)
+      roots[stage] = stage_root
+    end
+  end
+
   it 'collects' do
     collect_rb_path = File.expand_path('../../bin/lending/collect.rb', __dir__)
     expect(File.executable?(collect_rb_path)).to eq(true)
@@ -11,11 +18,7 @@ describe 'collect.rb' do
       FileUtils.mkdir(lending_root)
       FileUtils.cp_r('spec/data/lending/problems/ready', lending_root)
 
-      stage_dirs = %i[processing final].each_with_object({}) do |stage, roots|
-        stage_root = File.join(lending_root, stage.to_s)
-        FileUtils.mkdir(stage_root)
-        roots[stage] = stage_root
-      end
+      stage_dirs = stage_dirs_from(lending_root)
 
       collect_env = {
         Lending::Config::ENV_ROOT => lending_root,
@@ -40,4 +43,3 @@ describe 'collect.rb' do
     end
   end
 end
-# rubocop:enable RSpec/DescribeClass

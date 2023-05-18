@@ -38,8 +38,8 @@ class User
   # @param cal_groups CalNet LDAP groups (attribute `berkeleyEduIsMemberOf`). Note that
   #        in #from_omniauth we ignore any groups not in #KNOWN_CAL_GROUPS
   def initialize(uid: nil, borrower_token: nil, affiliations: nil, cal_groups: nil)
-    super(uid: uid, affiliations: affiliations, cal_groups: cal_groups)
-    @borrower_token = Lending::BorrowerToken.decode_or_create(borrower_token, uid: uid)
+    super(uid:, affiliations:, cal_groups:)
+    @borrower_token = Lending::BorrowerToken.decode_or_create(borrower_token, uid:)
   end
 
   # ------------------------------------------------------------
@@ -128,7 +128,7 @@ class User
   end
 
   def update_borrower_token(token_str)
-    if (new_token = Lending::BorrowerToken.from_string(token_str, uid: uid))
+    if (new_token = Lending::BorrowerToken.from_string(token_str, uid:))
       @borrower_token = new_token
     else
       logger.warn("Token #{token_str.inspect} not valid for user #{uid}")

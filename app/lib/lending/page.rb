@@ -132,8 +132,8 @@ module Lending
         resource_id: resource_id_for(tiff_uri),
         service_id: tiff_uri, # TODO: is this right?
         format: SCALED_IMAGE_FMT,
-        width: width,
-        height: height,
+        width:,
+        height:,
         profile: 'http://iiif.io/api/image/2/level1.json',
         sizes: tiles.map { |page| { width: page.width, height: page.height } },
         tiles: [

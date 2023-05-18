@@ -88,7 +88,7 @@ module Health
           dt[check] = check_result
         end
       end
-      Result.new(status: status, details: details)
+      Result.new(status:, details:)
     end
 
     def without_exceptions

@@ -44,7 +44,7 @@ module Lending
       ALGORITHM = 'HS256'.freeze
 
       def decode_or_create(token_str, uid:)
-        decoded = from_string(token_str, uid: uid)
+        decoded = from_string(token_str, uid:)
         decoded || new_token_for(uid)
       end
 
@@ -64,7 +64,7 @@ module Lending
       end
 
       def encode(uid, borrower_id)
-        args = { uid: uid, borrower_id: borrower_id }
+        args = { uid:, borrower_id: }
         JWT.encode(args, hmac_secret, ALGORITHM)
       end
 

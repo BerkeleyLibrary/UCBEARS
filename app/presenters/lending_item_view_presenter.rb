@@ -61,7 +61,7 @@ class LendingItemViewPresenter < LendingItemPresenterBase
   # rubocop:enable Metrics/AbcSize
 
   def add_permalink(ff)
-    view_url = lending_view_url(directory: directory, token: borrower_token_str)
+    view_url = lending_view_url(directory:, token: borrower_token_str)
     ff[t('activerecord.attributes.loan.view_url')] = link_to(view_url, view_url, target: '_blank', rel: 'noopener')
   end
 
@@ -70,10 +70,10 @@ class LendingItemViewPresenter < LendingItemPresenterBase
   end
 
   def action_return
-    button_to(t('loan.actions.return'), lending_return_path(directory: directory), class: 'btn danger', method: :get)
+    button_to(t('loan.actions.return'), lending_return_path(directory:), class: 'btn danger', method: :get)
   end
 
   def action_check_out
-    button_to(t('loan.actions.check_out'), lending_check_out_path(directory: directory), class: 'btn primary', method: :get)
+    button_to(t('loan.actions.check_out'), lending_check_out_path(directory:), class: 'btn primary', method: :get)
   end
 end

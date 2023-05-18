@@ -52,19 +52,23 @@ class TermsController < ApplicationController
     term_default? ? set_default_term! : unset_default_term!
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def set_default_term!
     return if Settings.default_term == @term
 
     @term.touch if @term.persisted? # adjust updated_at
     Settings.default_term = @term
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
+  # rubocop:disable Rails/SkipsModelValidations
   def unset_default_term!
     return if Settings.default_term != @term
 
-    @term.touch if @term.persisted?  # adjust updated_at
+    @term.touch if @term.persisted? # adjust updated_at
     Settings.default_term = nil
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def terms
     return Term.all if query_params.blank?
@@ -97,7 +101,7 @@ class TermsController < ApplicationController
 
   def render_term_errors(status: :unprocessable_entity)
     logger.warn(@term.errors.full_messages)
-    render('validation_errors', status: status, locals: { status: status, errors: @term.errors })
+    render('validation_errors', status:, locals: { status:, errors: @term.errors })
   end
 
   def render_delete_default_term_forbidden(term)

@@ -9,12 +9,10 @@ module Lending
     end
 
     describe :== do
-      # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
       it 'returns true for identical objects' do
         token = BorrowerToken.new_token_for(uid)
         expect(token == token).to eq(true)
       end
-      # rubocop:enable Lint/BinaryOperatorWithIdenticalOperands
 
       it 'returns true for equal objects' do
         token1 = BorrowerToken.new_token_for(uid)
@@ -93,16 +91,16 @@ module Lending
     describe :from_string do
       it 'returns the token' do
         token = BorrowerToken.new_token_for(uid)
-        result = BorrowerToken.from_string(token.token_str, uid: uid)
+        result = BorrowerToken.from_string(token.token_str, uid:)
         expect(result).to eq(token)
       end
 
       it 'returns nil for a garbage token' do
-        expect(BorrowerToken.from_string('a garbage token', uid: uid)).to be_nil
+        expect(BorrowerToken.from_string('a garbage token', uid:)).to be_nil
       end
 
       it 'returns nil for a nil token' do
-        expect(BorrowerToken.from_string(nil, uid: uid)).to be_nil
+        expect(BorrowerToken.from_string(nil, uid:)).to be_nil
       end
 
       it 'returns nil for a UID mismatch' do

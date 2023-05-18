@@ -128,10 +128,10 @@ describe LendingController, type: :request do
             directory = item.directory
 
             expect do
-              patch lending_update_path(directory: directory), params: { item: new_attributes }
+              patch lending_update_path(directory:), params: { item: new_attributes }
             end.not_to change(Item, :count)
 
-            expect(response).to redirect_to lending_show_path(directory: directory)
+            expect(response).to redirect_to lending_show_path(directory:)
 
             item.reload
             new_attributes.each { |attr, val| expect(item.send(attr)).to eq(val) }
@@ -434,8 +434,8 @@ describe LendingController, type: :request do
           loan = Loan.create(
             item_id: item.id,
             patron_identifier: user.borrower_id,
-            loan_date: loan_date,
-            due_date: due_date
+            loan_date:,
+            due_date:
           )
           loan.reload
           expect(loan.complete?).to eq(true)

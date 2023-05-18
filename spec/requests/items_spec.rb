@@ -4,7 +4,7 @@ RSpec.describe '/items', type: :request do
 
   def expected_json(item)
     renderer = ApplicationController.renderer.new(http_host: request.host)
-    expected_json = renderer.render(template: 'items/show', assigns: { item: item })
+    expected_json = renderer.render(template: 'items/show', assigns: { item: })
     JSON.parse(expected_json)
   end
 
@@ -406,55 +406,59 @@ RSpec.describe '/items', type: :request do
     end
 
     describe 'GET /processing' do
+      let(:symlinks) { [] }
+
+      before do
+        final_root = Lending.stage_root_path(:final).expand_path
+        processing_root = Lending.stage_root_path(:processing).expand_path
+
+        factory_names = %i[
+          complete_item active_item incomplete_no_images
+          incomplete_no_marc incomplete_no_manifest incomplete_marc_only
+        ]
+
+        factory_names.each do |f|
+          dir = attributes_for(f)[:directory]
+          final_dir = final_root.join(dir)
+          processing_dir = processing_root.join(dir)
+          expect(processing_dir).not_to exist # just to be sure
+          FileUtils.ln_s(final_dir, processing_dir, verbose: true)
+          symlinks << processing_dir
+        end
+      end
+
+      after do
+        FileUtils.rm(symlinks) if symlinks.any?
+      end
+
       it 'returns the list of in-process directories' do
-        symlinks = []
-        begin
-          final_root = Lending.stage_root_path(:final).expand_path
-          processing_root = Lending.stage_root_path(:processing).expand_path
+        expect(Lending.each_processing_dir.map(&:expand_path)).to contain_exactly(*symlinks) # just to be sure
 
-          factory_names = %i[
-            complete_item active_item incomplete_no_images
-            incomplete_no_marc incomplete_no_manifest incomplete_marc_only
-          ]
+        get processing_url, as: :json
+        expect(response).to be_successful
 
-          factory_names.each do |f|
-            dir = attributes_for(f)[:directory]
-            final_dir = final_root.join(dir)
-            processing_dir = processing_root.join(dir)
-            expect(processing_dir).not_to exist # just to be sure
-            FileUtils.ln_s(final_dir, processing_dir, verbose: true)
-            symlinks << processing_dir
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response).to be_a(Array)
+        expect(parsed_response.size).to eq(symlinks.size)
+
+        symlinks.each do |l|
+          directory = l.basename.to_s
+
+          result = parsed_response.find { |r| r['path'] == l.to_s }
+          expect(result).not_to be_nil
+
+          expect(result['path']).to eq(l.to_s)
+          expect(result['directory']).to eq(directory)
+          expect(result['exists']).to eq(true)
+          actual_mtime = Time.parse(result['mtime'])
+          expect(actual_mtime).to be_within(1.second).of(l.mtime)
+
+          iiif_dir = IIIFDirectory.new(directory, stage: :processing)
+          %w[page_images marc_record manifest].each do |attr|
+            expected = iiif_dir.send("#{attr}?")
+            actual = result["has_#{attr}"]
+            expect(actual).to eq(expected), "Wrong result for #{directory} #{attr}; expected #{expected}, was #{actual}"
           end
-          expect(Lending.each_processing_dir.map(&:expand_path)).to contain_exactly(*symlinks) # just to be sure
-
-          get processing_url, as: :json
-          expect(response).to be_successful
-
-          parsed_response = JSON.parse(response.body)
-          expect(parsed_response).to be_a(Array)
-          expect(parsed_response.size).to eq(symlinks.size)
-
-          symlinks.each do |l|
-            directory = l.basename.to_s
-
-            result = parsed_response.find { |r| r['path'] == l.to_s }
-            expect(result).not_to be_nil
-
-            expect(result['path']).to eq(l.to_s)
-            expect(result['directory']).to eq(directory)
-            expect(result['exists']).to eq(true)
-            actual_mtime = Time.parse(result['mtime'])
-            expect(actual_mtime).to be_within(1.second).of(l.mtime)
-
-            iiif_dir = IIIFDirectory.new(directory, stage: :processing)
-            %w[page_images marc_record manifest].each do |attr|
-              expected = iiif_dir.send("#{attr}?")
-              actual = result["has_#{attr}"]
-              expect(actual).to eq(expected), "Wrong result for #{directory} #{attr}; expected #{expected}, was #{actual}"
-            end
-          end
-        ensure
-          FileUtils.rm(symlinks)
         end
       end
     end

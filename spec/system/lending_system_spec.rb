@@ -178,6 +178,7 @@ describe LendingController, type: :system do
       end
 
       describe :edit do
+        # rubocop:disable RSpec/ExampleLength
         it 'allows the item to be edited' do
           visit lending_edit_path(directory: item.directory)
 
@@ -223,6 +224,7 @@ describe LendingController, type: :system do
             expect(metadata_table).to have_content(value)
           end
         end
+        # rubocop:enable RSpec/ExampleLength
 
         it 'allows reloading MARC metadata' do
           new_values = {
@@ -447,8 +449,8 @@ describe LendingController, type: :system do
           loan = Loan.create(
             item_id: item.id,
             patron_identifier: user.borrower_id,
-            loan_date: loan_date,
-            due_date: due_date
+            loan_date:,
+            due_date:
           )
           loan.reload
 

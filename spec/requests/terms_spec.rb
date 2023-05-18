@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe '/terms', type: :request do
   def expected_json(term)
     renderer = ApplicationController.renderer.new(http_host: request.host)
-    expected_json = renderer.render(template: 'terms/show', assigns: { term: term })
+    expected_json = renderer.render(template: 'terms/show', assigns: { term: })
     JSON.parse(expected_json)
   end
 
@@ -398,6 +398,7 @@ RSpec.describe '/terms', type: :request do
         expect(Settings.default_term).to eq(term)
       end
 
+      # rubocop:disable RSpec/ExampleLength
       it 'does not accept duplicate names' do
         terms = Term.all
         expect(terms.size).to be > 1 # just to be sure
@@ -436,6 +437,7 @@ RSpec.describe '/terms', type: :request do
         expect(messages.first).to match(expected_msg_re)
       end
     end
+    # rubocop:enable RSpec/ExampleLength
 
     describe :destroy do
       it 'deletes a term' do

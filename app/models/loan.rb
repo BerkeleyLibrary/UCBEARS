@@ -141,8 +141,8 @@ class Loan < ActiveRecord::Base
 
   def already_checked_out?
     Loan.active
-      .where(item_id: item_id, patron_identifier: patron_identifier)
-      .where.not(id: id)
+      .where(item_id:, patron_identifier:)
+      .where.not(id:)
       .exists?
   end
 end

@@ -19,11 +19,11 @@ module Health
 
     class << self
       def pass(details = nil)
-        new(status: Status::PASS, details: details)
+        new(status: Status::PASS, details:)
       end
 
       def warn(details)
-        new(status: Status::WARN, details: details)
+        new(status: Status::WARN, details:)
       end
     end
   end

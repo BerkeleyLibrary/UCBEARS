@@ -70,10 +70,10 @@ class ItemLendingStats
   # Class methods
 
   class << self
-    def all(&block)
+    def all(&)
       return to_enum(:all) unless block_given?
 
-      each_by_date.map { |_, stats_for_date| stats_for_date.each(&block) }
+      each_by_date.map { |_, stats_for_date| stats_for_date.each(&) }
     end
 
     def each_by_date

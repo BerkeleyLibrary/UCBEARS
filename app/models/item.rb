@@ -97,7 +97,7 @@ class Item < ActiveRecord::Base
         return
       end
 
-      Item.new(directory: directory, copies: 0).tap do |item|
+      Item.new(directory:, copies: 0).tap do |item|
         item.read_marc_attributes(marc_metadata)
         item.set_default_term!
         item.save(validate: false)
@@ -105,7 +105,7 @@ class Item < ActiveRecord::Base
     rescue ActiveRecord::RecordNotUnique => e
       # Shouldn't happen now that we put a mutex lock around scan_for_new_items!, but just in case
       logger.warn(e)
-      Item.find_by(directory: directory)
+      Item.find_by(directory:)
     end
     # rubocop:enable Metrics/MethodLength
 
@@ -164,9 +164,11 @@ class Item < ActiveRecord::Base
     save(validate: false)
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def ensure_updated_at(*_args)
     touch if persisted?
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def verify_incomplete
     update_complete_flag!
@@ -187,9 +189,9 @@ class Item < ActiveRecord::Base
 
     Loan.create(
       item_id: id,
-      patron_identifier: patron_identifier, # TODO: rename to borrower_id
-      loan_date: loan_date,
-      due_date: due_date
+      patron_identifier:, # TODO: rename to borrower_id
+      loan_date:,
+      due_date:
     )
   end
 
@@ -312,7 +314,7 @@ class Item < ActiveRecord::Base
   def iiif_manifest
     return unless iiif_directory.exists?
 
-    iiif_directory.new_manifest(title: title, author: author)
+    iiif_directory.new_manifest(title:, author:)
   end
 
   def iiif_directory

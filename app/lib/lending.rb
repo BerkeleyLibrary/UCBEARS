@@ -16,15 +16,15 @@ module Lending
       all_stage_dirs(:final)
     end
 
-    def each_processing_dir(&block)
-      each_stage_dir(:processing, &block)
+    def each_processing_dir(&)
+      each_stage_dir(:processing, &)
     end
 
-    def each_stage_dir(stage, &block)
+    def each_stage_dir(stage, &)
       return to_enum(:each_stage_dir, stage) unless block_given?
 
       stage_root = stage_root_path(stage)
-      PathUtils.each_item_dir(stage_root, &block)
+      PathUtils.each_item_dir(stage_root, &)
     end
 
     def all_stage_dirs(stage)

@@ -8,7 +8,7 @@ module LendingHelper
   end
 
   def format_date(date, format: :short)
-    I18n.l(date, format: format)
+    I18n.l(date, format:)
   end
 
   # rubocop:disable Rails/OutputSafety

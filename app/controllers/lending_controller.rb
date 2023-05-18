@@ -36,7 +36,7 @@ class LendingController < ApplicationController
 
     if token_str.nil? && @loan.active?
       token_str = current_user.borrower_token.token_str
-      redirect_to(lending_view_path(directory: directory, token: token_str))
+      redirect_to(lending_view_path(directory:, token: token_str))
     else
       populate_view_flash
     end
@@ -55,7 +55,7 @@ class LendingController < ApplicationController
   def update
     if @item.update(lending_item_params)
       flash!(:success, t('items.update.success'))
-      redirect_to lending_show_url(directory: directory)
+      redirect_to lending_show_url(directory:)
     else
       render_with_errors(:edit, @item.errors, t('items.update.failed', dir: @item.directory))
     end
@@ -67,7 +67,7 @@ class LendingController < ApplicationController
       flash!(:success, t('loans.check_out.success'))
       # TODO: can we get Rails to just parameterize the token as a string?
       token_str = current_user.borrower_token.token_str
-      redirect_to lending_view_url(directory: directory, token: token_str)
+      redirect_to lending_view_url(directory:, token: token_str)
     else
       render_with_errors(:view, @loan.errors, t('loans.check_out.failed', title: @item.title))
     end
@@ -81,7 +81,7 @@ class LendingController < ApplicationController
       loan.return!
       flash!(:success, t('loans.return.success'))
     end
-    redirect_to lending_view_url(directory: directory)
+    redirect_to lending_view_url(directory:)
   end
 
   def activate
@@ -171,7 +171,7 @@ class LendingController < ApplicationController
   end
 
   def manifest_url
-    lending_manifest_url(directory: directory)
+    lending_manifest_url(directory:)
   end
 
   # ------------------------------
@@ -191,7 +191,7 @@ class LendingController < ApplicationController
   def loan_args # TODO: better/more consistent name
     {
       item: ensure_lending_item!,
-      patron_identifier: patron_identifier
+      patron_identifier:
     }
   end
 
@@ -217,7 +217,7 @@ class LendingController < ApplicationController
   end
 
   def ensure_lending_item!
-    @item ||= Item.find_by!(directory: directory)
+    @item ||= Item.find_by!(directory:)
   end
 
   def ensure_lending_item_loan!

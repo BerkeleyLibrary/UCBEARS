@@ -49,7 +49,7 @@ class LendingItemPresenterBase
   end
 
   def action_edit
-    button_to(t('item.actions.edit'), lending_edit_path(directory: directory), class: 'btn secondary', method: :get)
+    button_to(t('item.actions.edit'), lending_edit_path(directory:), class: 'btn secondary', method: :get)
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -88,7 +88,7 @@ class LendingItemPresenterBase
   end
 
   def add_direct_link(ff)
-    view_url = lending_view_url(directory: directory)
+    view_url = lending_view_url(directory:)
     ff[t('item.actions.patron_view')] = link_to(view_url, view_url, target: '_blank', rel: 'noopener')
   end
 

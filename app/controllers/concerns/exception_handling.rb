@@ -59,8 +59,8 @@ module ExceptionHandling
   def render_error(error, status: :internal_server_error, message: error.message, template: :standard_error)
     return head(status) if formats.include?(:csv)
 
-    locals = { status: status, exception: error, message: message }
-    render(template, status: status, locals: locals)
+    locals = { status:, exception: error, message: }
+    render(template, status:, locals:)
   end
 
   # Formats are set in `ActionController::Rendering#process_action`; when a request

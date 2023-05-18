@@ -46,11 +46,11 @@ module BerkeleyLibrary
     # Writes a formatted report to {#report_path}.
     # @return [Integer] 0 for success, nonzero value for failure
     # @yieldparam exit_status [Integer] 0 for success, nonzero value for failure
-    def write_report(&block)
+    def write_report(&)
       ensure_report_path!
       begin
         cmd = eslint_cmd("--format=#{report_format}")
-        run_cmd(cmd, out: report_path, &block)
+        run_cmd(cmd, out: report_path, &)
       ensure
         warn("ESLint report written to #{report_path}") if File.file?(report_path)
       end
@@ -61,15 +61,15 @@ module BerkeleyLibrary
     # @return [Integer] 0 for success, nonzero value for failure
     # @yieldparam exit_status [Integer] 0 for success, nonzero value for failure
     def write_to_console(silence_errors: true, &block)
-      run_cmd(eslint_cmd, silence_errors: silence_errors, &block)
+      run_cmd(eslint_cmd, silence_errors:, &block)
     end
 
     # Fixes any detected problems that can be auto-fixed.
     # @return [Integer] 0 for success, nonzero value for failure
     # @yieldparam exit_status [Integer] 0 for success, nonzero value for failure
-    def fix(&block)
+    def fix(&)
       cmd = eslint_cmd('--fix')
-      run_cmd(cmd, &block)
+      run_cmd(cmd, &)
     end
 
     private
@@ -92,7 +92,7 @@ module BerkeleyLibrary
 
     # TODO: figure out how to silence "npm ERR!" but still get $stderr output
     def run_cmd(cmd, out: $stdout, err: err_stream, silence_errors: false)
-      sh(*cmd, out: out, err: err) do |ok, ps|
+      sh(*cmd, out:, err:) do |ok, ps|
         ps.exitstatus.tap do |exit_status|
           puts("`#{cmd.shelljoin}` returned exit status #{exit_status}") unless ok || silence_errors
           yield exit_status if block_given?

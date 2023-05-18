@@ -15,7 +15,7 @@ module SystemSpecHelper
   def raw_get(url, params: {}, headers: {}, as: nil)
     uri = ensure_uri(url)
     headers_actual = headers.merge(accept_header(as))
-    response = do_get_response(uri, params: params, headers: headers_actual)
+    response = do_get_response(uri, params:, headers: headers_actual)
     @request = to_ad_request(response.request)
     @response = to_ad_response(response)
   end
@@ -48,7 +48,7 @@ module SystemSpecHelper
     RestClient::Request.execute(
       method: :get,
       url: url_str,
-      headers: headers,
+      headers:,
       max_redirects: 0
     )
   rescue RestClient::ExceptionWithResponse => e
