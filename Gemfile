@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
 ruby '~> 3.2.2'
 
 gem 'awesome_print', '~> 1.9'
@@ -17,7 +15,8 @@ gem 'jwt', '~> 2.2'
 gem 'listen' # TODO: what actually uses this?
 gem 'lograge', '>= 0.11.2'
 gem 'net-ssh'
-gem 'non-stupid-digest-assets', '~> 1.0'
+# Workaround for https://github.com/alexspeller/non-stupid-digest-assets/issues/54
+gem 'non-stupid-digest-assets', git: 'https://github.com/BerkeleyLibrary/non-stupid-digest-assets.git', ref: '1de0c38'
 gem 'omniauth-cas', '~> 2.0'
 gem 'pagy', '~> 5.6'
 gem 'pg', '~> 1.2'
