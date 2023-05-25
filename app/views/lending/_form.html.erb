@@ -74,12 +74,17 @@
         <th></th>
         <td class="action">
           <% if item.iiif_directory.marc_record? %>
+            <%# TODO: something less clunky %>
+            <% content_for(:head_additional) do %>
+              <%= javascript_include_tag('marc-reload') %>
+            <% end %>
             <%=
               button_to(
                 'Reload MARC metadata',
                 lending_reload_path(directory: item.directory),
                 method: :get,
                 class: 'btn danger',
+                id: 'marc-reload',
                 data: {
                   confirm: 'Reloading MARC metadata will discard all changes made on this form.'
                 }
