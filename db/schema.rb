@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_223302) do
-
+ActiveRecord::Schema[7.0].define(version: 2021_12_29_223302) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,8 +19,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_223302) do
     t.string "title"
     t.string "author"
     t.integer "copies"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active", default: false, null: false
     t.string "publisher"
     t.string "physical_desc"
@@ -39,11 +38,11 @@ ActiveRecord::Schema.define(version: 2021_12_29_223302) do
   create_table "loans", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.string "patron_identifier"
-    t.datetime "loan_date"
-    t.datetime "due_date"
-    t.datetime "return_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "loan_date", precision: nil
+    t.datetime "due_date", precision: nil
+    t.datetime "return_date", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_loans_on_item_id"
     t.index ["patron_identifier"], name: "index_loans_on_patron_identifier"
   end
@@ -59,8 +58,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_223302) do
 
   create_table "settings", id: :integer, default: 1, force: :cascade do |t|
     t.bigint "default_term_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["default_term_id"], name: "index_settings_on_default_term_id"
     t.check_constraint "id = 1", name: "max_one_settings_row"
   end
@@ -69,8 +68,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_223302) do
     t.string "name", null: false
     t.date "start_date", null: false
     t.date "end_date", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_terms_on_name", unique: true
   end
 
