@@ -471,7 +471,7 @@ describe LendingController, type: :request do
           expect(body).not_to include('Return now')
           expect(body).to include(Item::MSG_UNAVAILABLE)
 
-          due_date_str = item.next_due_date.to_s(:long)
+          due_date_str = item.next_due_date.to_fs(:long)
           expect(body).to include(due_date_str)
         end
       end

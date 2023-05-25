@@ -374,7 +374,7 @@ class Item < ApplicationRecord
     msg = Item::MSG_UNAVAILABLE
     return msg unless (due_date = next_due_date)
 
-    "#{msg} It will be returned on #{due_date.to_s(:long)}"
+    "#{msg} It will be returned on #{due_date.to_fs(:long)}"
   end
 
   def ensure_record_id_and_barcode
