@@ -101,10 +101,12 @@ describe LendingController, type: :system do
 
   def expect_target(link_or_button, target)
     tag_name = link_or_button.tag_name
-    return expect(link_or_button['href']).to match(target) unless tag_name == 'input'
-
-    form = link_or_button.find(:xpath, './ancestor::form')
-    expect(form['action']).to match(target)
+    if %w[input button].include?(tag_name)
+      form = link_or_button.find(:xpath, './ancestor::form')
+      expect(form['action']).to match(target)
+    else
+      expect(link_or_button['href']).to match(target)
+    end
   end
 
   # ------------------------------------------------------------
