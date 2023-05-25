@@ -2,7 +2,7 @@
   <version>1.2</version>
   <numberOfRecords>0</numberOfRecords>
   <records/>
-  <extraResponseData xmlns:xb="http://www.exlibr«is.com/repository/search/xmlbeans/">
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
     <xb:exact>true</xb:exact>
     <xb:responseDate>2022-02-03T16:56:57-0800</xb:responseDate>
   </extraResponseData>
