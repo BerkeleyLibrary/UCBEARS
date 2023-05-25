@@ -1,4 +1,4 @@
-class Settings < ActiveRecord::Base
+class Settings < ApplicationRecord
   belongs_to :default_term, class_name: 'Term', optional: true
 
   class << self

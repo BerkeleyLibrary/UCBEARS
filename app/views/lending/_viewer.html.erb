@@ -3,6 +3,6 @@
     <div id="iiif_viewer" data-manifest-id="<%= manifest_url %>"></div>
     <a id="mirador-branding" rel="noopener" target="_blank" href="https://projectmirador.org/"><%= image_tag('icons/mirador.svg', alt: 'About Project Mirador') %></a>
   <% else %>
-    <p><%= Item::MSG_INCOMPLETE %></p>
+    <p class="warning-incomplete"><%= Item::MSG_INCOMPLETE %></p>
   <% end %>
 </section>

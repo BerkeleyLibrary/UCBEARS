@@ -1,4 +1,4 @@
-class SessionCounter < ActiveRecord::Base
+class SessionCounter < ApplicationRecord
   class << self
     # rubocop:disable Rails/SkipsModelValidations
     def increment_count_for(user)

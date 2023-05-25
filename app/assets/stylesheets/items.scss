@@ -1,5 +1,5 @@
-@import 'includes/admin';
-@import 'includes/globals';
+@import './includes/admin';
+@import './includes/globals';
 
 section.admin {
   &#items-admin {
@@ -41,8 +41,8 @@ section.admin {
     table {
       caption {
         // TODO: find less hacky way to align with facets
-        margin-top: -(7 * $line-height / 6);
-        margin-bottom: $line-height / 6;
+        margin-top: calc(-7 * $line-height / 6);
+        margin-bottom: calc($line-height / 6);
         margin-left: $margin-xxsmall;
       }
     }

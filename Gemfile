@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '~> 3.2.2'
 
@@ -8,28 +9,24 @@ gem 'berkeley_library-docker', '~> 0.2.0'
 gem 'berkeley_library-logging', '~> 0.2', '>= 0.2.7'
 gem 'berkeley_library-marc', '~> 0.3'
 gem 'berkeley_library-util', '~> 0.1', '>= 0.1.8'
+gem 'cssbundling-rails'
 gem 'dotiw', '~> 5.3'
 gem 'iiif-presentation', '~> 1.0'
 gem 'jbuilder', '~> 2.5'
+gem 'jsbundling-rails'
 gem 'jwt', '~> 2.2'
-gem 'listen' # TODO: what actually uses this?
-gem 'lograge', '>= 0.11.2'
-gem 'net-ssh'
 # Workaround for https://github.com/alexspeller/non-stupid-digest-assets/issues/54
 gem 'non-stupid-digest-assets', git: 'https://github.com/BerkeleyLibrary/non-stupid-digest-assets.git', ref: '1de0c38'
 gem 'omniauth-cas', '~> 2.0'
 gem 'pagy', '~> 5.6'
 gem 'pg', '~> 1.2'
 gem 'pg_search', '~> 2.3'
-gem 'puma', '~> 4.3', '>= 4.3.12'
-gem 'rails', '~> 7.0.4'
+gem 'puma', '~> 5.0'
+gem 'rails', '~> 7.0.4', '>= 7.0.4.3'
 gem 'ruby-prof', '~> 0.17.0' # TODO: move this back to dev/test
 gem 'ruby-vips', '~> 2.0'
-gem 'sass-rails', '~> 6.0'
-gem 'sprockets', '~> 4.0'
+gem 'sprockets-rails', '~> 3.4'
 gem 'typesafe_enum', '~> 0.3'
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'webpacker', '~> 5.4'
 
 group :development, :test do
   gem 'brakeman'

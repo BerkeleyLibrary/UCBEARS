@@ -60,7 +60,7 @@ footer {
         &.social-media-icon {
           padding-right: 2pt;
           width: $font-size-xxlarge;
-          height: (8 * $font-size-large / 7);
+          height: calc(8 * $font-size-large / 7);
         }
       }
     }

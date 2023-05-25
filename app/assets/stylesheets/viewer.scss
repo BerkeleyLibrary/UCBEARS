@@ -1,4 +1,4 @@
-@import 'includes/globals';
+@import './includes/globals';
 
 section.viewer {
   position: relative;
@@ -10,6 +10,10 @@ section.viewer {
   box-sizing: border-box;
 
   background: black;
+
+  p.warning-incomplete {
+    color: white;
+  }
 
   div#iiif_viewer {
 
@@ -221,7 +225,7 @@ section.viewer {
     img {
       display: block;
       width: $font-size-xxlarge;
-      height: (8 * $font-size-large / 7);
+      height: calc(8 * $font-size-large / 7);
     }
 
     &:not(:hover):not(:focus) {

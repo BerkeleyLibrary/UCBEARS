@@ -1,4 +1,4 @@
-@import 'includes/shared';
+@import './includes/shared';
 
 section {
   &.stats-subsection {
@@ -92,19 +92,22 @@ table.stats-table {
 // ////////////////////////////////////////////////////////////
 // Responsive layouts
 
-@media (min-width: 3 * $media-breakpoint-width / 2) {
+$media-breakpoint-width-3col: calc($media-breakpoint-width / 2);
+$media-breakpoint-width-4col: calc(3 * $media-breakpoint-width / 2);
+
+@media (min-width: ($media-breakpoint-width-4col)) {
   ul.stats-downloads {
     column-count: 4;
   }
 }
 
-@media (min-width: $media-breakpoint-width) and (max-width: 3 * $media-breakpoint-width / 2) {
+@media (min-width: $media-breakpoint-width) and (max-width: $media-breakpoint-width-4col) {
   ul.stats-downloads {
     column-count: 3;
   }
 }
 
-@media (min-width: $media-breakpoint-width / 2) and (max-width: $media-breakpoint-width) {
+@media (min-width: $media-breakpoint-width-3col) and (max-width: $media-breakpoint-width) {
   ul.stats-downloads {
     column-count: 2;
   }
