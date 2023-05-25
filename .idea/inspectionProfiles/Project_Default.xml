@@ -1,59 +1,23 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <inspection_tool class="ConvertOneChainedExprToSafeNavigation" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="CssUnknownTarget" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="useSeverityFromConfigFile" value="false" />
-    </inspection_tool>
+    <inspection_tool class="ConvertOneChainedExprToSafeNavigation" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GoNameStartsWithPackageName" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="GoSnakeCaseUsage" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="GoUnusedGlobalVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="GoUnusedVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="GrazieInspection" enabled="false" level="TYPO" enabled_by_default="false" />
-    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="myValues">
-        <value>
-          <list size="1">
-            <item index="0" class="java.lang.String" itemvalue="true-value" />
-          </list>
-        </value>
-      </option>
-      <option name="myCustomValuesEnabled" value="true" />
-    </inspection_tool>
-    <inspection_tool class="HtmlUnknownTarget" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="HttpUrlsUsage" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="LanguageDetectionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Rubocop" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RubyCaseWithoutElseBlockInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyClassMethodNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyClassModuleNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyClassVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyConstantNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyGlobalVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyInstanceMethodNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyInstanceVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyLocalVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyMismatchedArgumentType" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="RubyMismatchedArgumentType" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myCheckNilability" value="false" />
     </inspection_tool>
-    <inspection_tool class="RubyMismatchedReturnType" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="myCheckNilability" value="false" />
-    </inspection_tool>
-    <inspection_tool class="RubyNilAnalysis" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="RubyParameterNamingConvention" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RubyStringKeysInHashInspection" enabled="true" level="INFORMATION" enabled_by_default="true" />
-    <inspection_tool class="RubyTooManyInstanceVariablesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyTooManyMethodsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyUnnecessaryReturnStatement" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyYardParamTypeMatch" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="RubyYardReturnMatch" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
       <option name="processCode" value="true" />
       <option name="processLiterals" value="true" />
       <option name="processComments" value="true" />
     </inspection_tool>
-    <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="UnnecessaryLocalVariableJS" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="m_ignoreImmediatelyReturnedVariables" value="false" />
-      <option name="m_ignoreAnnotatedVariables" value="false" />
-    </inspection_tool>
-    <inspection_tool class="XmlDuplicatedId" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
   </profile>
 </component>
