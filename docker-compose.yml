@@ -69,6 +69,7 @@ services:
         target: /iipsrv-data
     ports:
       - 80:80
+    platform: linux/amd64
     networks:
       default:
         aliases:
