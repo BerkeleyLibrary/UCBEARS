@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   # Redirect the user to Calnet for authentication
   def new
     redirect_args = { origin: params[:url] || request.base_url }.to_query
-    redirect_to "/auth/calnet?#{redirect_args}"
+    redirect_to("/auth/calnet?#{redirect_args}", allow_other_host: true)
   end
 
   # Generate a new user session using data returned from a valid Calnet login
@@ -25,7 +25,8 @@ class SessionsController < ApplicationController
       log_signin(user)
     end
 
-    redirect_to request.env['omniauth.origin'] || root_path # TODO: better default redirect path
+    redirect_url = (request.env['omniauth.origin'] || root_path) # TODO: better default redirect path
+    redirect_to(redirect_url, allow_other_host: true)
   end
 
   # Logout the user by redirecting to CAS logout screen
@@ -33,7 +34,7 @@ class SessionsController < ApplicationController
     sign_out
 
     # TODO: make this play better with Selenium tests
-    redirect_to cas_logout_url
+    redirect_to(cas_logout_url, allow_other_host: true)
   end
 
   # Require login, then:
