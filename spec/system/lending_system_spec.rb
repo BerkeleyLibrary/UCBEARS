@@ -159,7 +159,7 @@ describe LendingController, type: :system do
           visit lending_show_path(directory: item.directory)
 
           loans.each do |loan|
-            expect(page).to have_content(loan.due_date.to_s(:short))
+            expect(page).to have_content(loan.due_date.to_fs(:short))
           end
         end
 

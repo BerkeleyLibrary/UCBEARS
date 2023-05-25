@@ -421,7 +421,7 @@ describe LendingController, type: :request do
 
           body = response.body
 
-          due_date_str = item.next_due_date.to_s(:short)
+          due_date_str = item.next_due_date.to_fs(:short)
           expect(body).to include(due_date_str)
 
           expect(body).not_to include('Check out')
