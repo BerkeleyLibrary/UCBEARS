@@ -38,7 +38,7 @@ export default {
     },
     name: {
       get () { return this.term.name },
-      set (name) { this.edited({ name: name }) }
+      set (name) { this.edited({ name }) }
     },
     startDate: {
       get () {

@@ -29,7 +29,7 @@ export default {
   },
 
   update (item) {
-    return axios.patch(item.url, { item: item }).then(response => response.data)
+    return axios.patch(item.url, { item }).then(response => response.data)
   },
 
   delete (item) {

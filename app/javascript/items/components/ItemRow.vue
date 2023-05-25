@@ -63,11 +63,11 @@ export default {
     },
     copies: {
       get () { return this.item.copies },
-      set (copies) { this.edited({ copies: copies }) }
+      set (copies) { this.edited({ copies }) }
     },
     active: {
       get () { return this.item.active },
-      set (active) { this.edited({ active: active }) }
+      set (active) { this.edited({ active }) }
     }
   },
   methods: {

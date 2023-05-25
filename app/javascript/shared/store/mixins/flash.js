@@ -51,7 +51,7 @@ const lvlError = 'error'
 const lvlSuccess = 'success'
 
 function newMessage (level, text) {
-  return { level: level, text: text }
+  return { level, text }
 }
 
 function unpackErrorResponse (axiosError) {

@@ -24,7 +24,7 @@ function createMiradorInstance (elementId, manifestId) {
 function miradorConfig (elementId, manifestId) {
   return {
     id: elementId,
-    windows: [{ manifestId: manifestId }],
+    windows: [{ manifestId }],
     selectedTheme: 'dark',
     themes: {
       dark: {

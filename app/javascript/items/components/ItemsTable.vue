@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     edit (item) {
-      return (change) => this.$emit('edited', { item: item, change: change })
+      return (change) => this.$emit('edited', { item, change })
     },
     remove (item) { this.$emit('removed', item) }
   }
