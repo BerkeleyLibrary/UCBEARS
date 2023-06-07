@@ -158,11 +158,16 @@ RUN bundle install --local
 # ------------------------------------------------------------
 # Precompile production assets
 
+# TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
+#       *before* Sprockets generates manifest.js
+RUN yarn install && yarn build
+
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
-RUN SECRET_KEY_BASE=1 rails assets:precompile --trace \
-    && rm -r .cache/yarn
+RUN SECRET_KEY_BASE=1 rails assets:precompile --trace
+
+RUN rm -r .yarn/cache
 
 # ------------------------------------------------------------
 # Preserve build arguments
