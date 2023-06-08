@@ -49,6 +49,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y --no-install-recommends nodejs
 
 # Add Yarn package repository, update package list, & install Yarn
+# TODO: why are we installing Yarn 1.22 instead of 3.x?
 RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
@@ -159,7 +160,7 @@ RUN bundle install --local
 # Precompile production assets
 
 # TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
-#       *before* Sprockets generates manifest.js
+#       *before* Sprockets reads app/assets/config/manifest.js
 RUN yarn install && yarn build
 
 # Pre-compile assets so we don't have to do it after deployment.
@@ -167,7 +168,9 @@ RUN yarn install && yarn build
 #       -- see https://github.com/rails/rails/issues/32947
 RUN SECRET_KEY_BASE=1 rails assets:precompile --trace
 
-RUN rm -r .yarn/cache
+# Remove cached YARN packages
+# TODO: change this to .yarn/cache once we're on Yarn 3.x
+RUN rm -r .cache/yarn
 
 # ------------------------------------------------------------
 # Preserve build arguments
