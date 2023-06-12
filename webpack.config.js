@@ -19,6 +19,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader'
       },
@@ -33,7 +38,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.vue', '...']
+    extensions: ['.ts', '.vue', '...']
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
