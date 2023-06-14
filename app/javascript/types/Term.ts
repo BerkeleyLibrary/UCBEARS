@@ -1,5 +1,7 @@
+export type TermId = number | string;
+
 export type Term = TermEdit & {
-  id: number | string,
+  id: TermId,
   url: string,
   created_at: string,
   updated_at: string
