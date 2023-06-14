@@ -16,9 +16,6 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    "types": [
-      "vitest/globals"
-    ]
   },
   "include": [
     "src/**/*.d.ts",
