@@ -2,7 +2,7 @@
 import { computed, Ref, ref } from "vue";
 import { Term } from "../types/Term";
 import { useTermsStore } from "../stores/terms";
-import i18n from '../shared/mixins/i18n.js'
+import i18n from '../helpers/i18n'
 
 const { saveTerm, deleteTerm } = useTermsStore()
 const { dateToDateInput, dateToISO8601, formatDateTime } = i18n

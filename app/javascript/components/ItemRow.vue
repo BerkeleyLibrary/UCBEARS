@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ComputedRef, Ref, ref } from "vue";
-import i18n from '../shared/mixins/i18n.js'
 import { Item } from "../types/Item";
 import { Term, TermId } from "../types/Term";
 import { useItemsStore } from "../stores/items";
 import { useTermsStore } from "../stores/terms";
 import { storeToRefs } from "pinia";
+import i18n from '../helpers/i18n'
 
 const { formatDateTime } = i18n
 
