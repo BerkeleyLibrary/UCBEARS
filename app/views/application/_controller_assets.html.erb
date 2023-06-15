@@ -1,2 +1,2 @@
 <%= stylesheet_link_tag(controller_name, media: 'all') if File.exist?("app/assets/stylesheets/#{controller_name}.scss") %>
-<%= javascript_include_tag(controller_name, media: 'all') if File.exist?("app/javascript/#{controller_name}.js") %>
+<%= javascript_include_tag(controller_name, media: 'all') if Dir.glob("app/javascript/#{controller_name}.[jt]s").any? %>
