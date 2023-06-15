@@ -4,10 +4,14 @@ import axios from "axios";
 
 export function onLoadMount(rootComponent: Component, selector: string) {
   document.addEventListener('DOMContentLoaded', () => {
-    initAxiosDefaults()
-    const app = createApp(rootComponent)
-    app.use(createPinia())
-    app.mount(selector)
+    if (document.querySelector(selector)) {
+      initAxiosDefaults()
+      const app = createApp(rootComponent)
+      app.use(createPinia())
+      app.mount(selector)
+    } else {
+      console.log(`Can't mount component; target selector ${selector} not found`)
+    }
   })
 }
 
