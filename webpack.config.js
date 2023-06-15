@@ -4,12 +4,18 @@ const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
+const extensionRe = /\.[jt]s$/
+
 module.exports = {
   mode: 'production',
   devtool: 'source-map',
   entry: Object.fromEntries(
-    glob.sync('./app/javascript/*.js')
-      .map((p) => [path.basename(p, '.js'), p])
+    glob.sync('./app/javascript/*.[jt]s')
+      .map((p) => {
+        const basename = path.basename(p)
+        const propertyName = basename.replace(extensionRe, '')
+        return [propertyName, p]
+      })
   ),
   output: {
     filename: '[name].js',
@@ -20,8 +26,8 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
+        loader: 'ts-loader',
+        options: { appendTsSuffixTo: [/\.vue$/] }
       },
       {
         test: /\.vue$/,
@@ -34,11 +40,15 @@ module.exports = {
           'css-loader',
           'sass-loader'
         ]
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
       }
     ]
   },
   resolve: {
-    extensions: ['.ts', '.vue', '...']
+    extensions: ['.js', '.ts', '...']
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ItemRow from './ItemRow'
+import ItemRow from './ItemRow.vue'
 import { storeToRefs } from "pinia";
 import { useItemsStore } from "../stores/items";
 

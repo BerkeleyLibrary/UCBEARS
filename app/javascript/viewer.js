@@ -150,6 +150,7 @@ function browserSupportsPassiveEventListeners () {
     const opts = Object.defineProperty({}, 'passive', {
       get: () => {
         supportsPassive = true
+        return true
       }
     })
     window.addEventListener('testPassive', null, opts)

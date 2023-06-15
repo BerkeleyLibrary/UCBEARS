@@ -9,30 +9,33 @@ const rawDateFmtISO = 'yyyy-MM-dd'
 const dateTimeFmt = 'yyyy-MM-dd h:mm aa'
 
 export default {
-  dateToDateInput: (date: string | Date): string | undefined => {
+  dateToDateInput: (date: string | Date): string => {
     try {
       const d = ensureDate(date)
       return formatDate(d, rawDateFmtISO)
     } catch (e) {
       console.log(e)
+      return ''
     }
   },
 
-  dateToISO8601: (date: string | Date): string | undefined => {
+  dateToISO8601: (date: string | Date): string => {
     try {
       const d = ensureDate(date)
       return formatISO(d)
     } catch (e) {
       console.log(e)
+      return ''
     }
   },
 
-  formatDateTime: (date: string | Date): string | undefined => {
+  formatDateTime: (date: string | Date): string => {
     try {
       const d = ensureDate(date)
       return formatDate(d, dateTimeFmt)
     } catch (e) {
       console.log(e)
+      return ''
     }
   }
 }

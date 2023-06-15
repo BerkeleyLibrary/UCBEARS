@@ -1,4 +1,4 @@
-type ItemFilter = {
+export type ItemFilter = {
   active?: boolean,
   complete?: boolean,
   terms?: string[],

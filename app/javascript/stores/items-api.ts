@@ -3,6 +3,7 @@ import Link from 'http-link-header'
 import { defineStore } from "pinia";
 import { ref, Ref } from 'vue'
 import { Item } from "../types/Item";
+import { ItemFilter } from "../types/ItemFilter";
 import { ItemsByDirectory, PagedItems } from "../types/PagedItems";
 import { Paging } from "../types/Paging";
 import { useFlashStore } from "./flash";

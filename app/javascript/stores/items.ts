@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
-import { Item } from "../types/Item";
 import { ref, Ref } from "vue";
-import { useItemsApi } from "./items-api";
+import { Item } from "../types/Item";
+import { ItemFilter } from "../types/ItemFilter"
 import { ItemsByDirectory } from "../types/PagedItems";
 import { Paging } from "../types/Paging";
+import { useItemsApi } from "./items-api";
 
 export const useItemsStore = defineStore('items', () => {
 
@@ -11,7 +12,7 @@ export const useItemsStore = defineStore('items', () => {
   // Exported fields and functions
 
   const items: Ref<ItemsByDirectory> = ref({})
-  const paging: Ref<Paging | undefined> = ref(undefined)
+  const paging: Ref<Paging> = ref(defaultPaging)
   const itemFilter: Ref<ItemFilter> = ref({})
 
   function saveItem(item: Item) {
@@ -24,9 +25,12 @@ export const useItemsStore = defineStore('items', () => {
     return itemsApi.delete(item).then(removeItem)
   }
 
-  function navigateTo(pageUrl: URL) {
-    const itemsApi = useItemsApi()
-    return itemsApi.getPage(pageUrl).then(setItems)
+  function navigateTo(pageUrl: URL | undefined) {
+    // TODO: Clean up ItemPaging.vue so the TypeScript compiler can be sure the URL is not undefined
+    if (pageUrl) {
+      const itemsApi = useItemsApi()
+      return itemsApi.getPage(pageUrl).then(setItems)
+    }
   }
 
   // TODO: just listen for changes to the filter
@@ -35,7 +39,7 @@ export const useItemsStore = defineStore('items', () => {
     return itemsApi.findItems(itemFilter.value).then(setItems)
   }
 
-  return { items, paging, itemFilter, saveItem, deleteItem, navigateTo, applyFilter}
+  return { items, paging, itemFilter, saveItem, deleteItem, navigateTo, applyFilter }
 
   // --------------------------------------------------
   // Internal implementation
@@ -57,3 +61,13 @@ export const useItemsStore = defineStore('items', () => {
     items.value = itemsByDirectory
   }
 })
+
+const defaultPaging: Paging = {
+  currentPage: 1,
+  totalPages: 1,
+  itemsPerPage: 0,
+  currentPageItems: 0,
+  totalItems: 0,
+  fromItem: 0,
+  toItem: 0
+}

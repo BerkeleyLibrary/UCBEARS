@@ -18,11 +18,11 @@
     "skipLibCheck": true,
   },
   "include": [
-    "src/**/*.d.ts",
-    "src/**/*.svg",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
+    "app/**/*.d.ts",
+    "app/**/*.svg",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/*.vue",
   ],
   "references": [
     {

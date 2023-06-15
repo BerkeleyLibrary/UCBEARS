@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, Ref, ref } from "vue";
+import { computed, Ref, ref, WritableComputedRef } from "vue";
 import { Term } from "../types/Term";
 import { useTermsStore } from "../stores/terms";
 import i18n from '../helpers/i18n'
@@ -27,14 +27,17 @@ function commitEndDate() {
   }
 }
 
-function dateInputModel(dateAttr: 'start_date' | 'end_date') {
+function dateInputModel(dateAttr: 'start_date' | 'end_date'): WritableComputedRef<string> {
   return computed({
     get() {
-      const date = termPatch[dateAttr]
+      const patch = termPatch.value;
+      const date = patch[dateAttr]
       return dateToDateInput(date)
     },
     set(v: string) {
-      termPatch[dateAttr] = dateToISO8601(v)
+      const patch = termPatch.value;
+      patch[dateAttr] = dateToISO8601(v)
+      termPatch.value = patch
     }
   })
 }

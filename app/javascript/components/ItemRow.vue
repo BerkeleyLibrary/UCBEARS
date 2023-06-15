@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { computed, Ref, ref, WritableComputedRef } from "vue";
 import { Item } from "../types/Item";
 import { Term, TermId } from "../types/Term";
 import { useItemsStore } from "../stores/items";
@@ -15,7 +15,7 @@ const { saveItem, deleteItem } = useItemsStore()
 const props = defineProps<{ item: Item }>()
 const itemPatch: Ref<Item> = ref({ ...props.item })
 
-const active: ComputedRef<boolean> = computed({
+const active: WritableComputedRef<boolean> = computed({
   get() {
     return itemPatch.value.active
   },
@@ -26,7 +26,7 @@ const active: ComputedRef<boolean> = computed({
   }
 })
 
-const termIds: ComputedRef<TermId[]> = computed({
+const termIds: WritableComputedRef<TermId[]> = computed({
   get() {
     return itemPatch.value.terms.map((t) => t.id)
   },
@@ -38,7 +38,7 @@ const termIds: ComputedRef<TermId[]> = computed({
   }
 })
 
-const copies: ComputedRef<number> = computed({
+const copies: WritableComputedRef<number> = computed({
   get() {
     return itemPatch.value.copies
   },
@@ -75,8 +75,8 @@ const copies: ComputedRef<number> = computed({
       <a :href="itemPatch.view_url" class="icon-link" target="_blank" :title="`Permalink to “${itemPatch.title}” patron view`"><img src="/assets/icons/link.svg" :alt="`Permalink to “${itemPatch.title}” patron view`" class="action"></a>
     </td>
     <td class="date">{{ formatDateTime(itemPatch.updated_at) }}</td>
-    <td v-if="itemPatch.complete" key="complete?" class="control">Yes</td>
-    <td v-else key="complete?" :title="itemPatch.reason_incomplete" class="control">No</td>
+    <td v-if="itemPatch.complete" key="complete-true" class="control">Yes</td>
+    <td v-else key="complete-false" :title="itemPatch.reason_incomplete" class="control">No</td>
     <td class="control">
       <!-- TODO: client-side validation -->
       <input v-model.number.lazy="copies" type="number">

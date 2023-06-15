@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import FlashAlerts from "./FlashAlerts.vue";
 import ItemsTable from "./ItemsTable.vue";
 import ItemFilter from "./ItemFilter.vue";
