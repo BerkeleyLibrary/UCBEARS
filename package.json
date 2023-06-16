@@ -22,6 +22,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@svgr/webpack": "^8.0.1",
+    "@types/http-link-header": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "@vue/compiler-sfc": "^3.2.45",

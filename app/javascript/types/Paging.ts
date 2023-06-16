@@ -1,4 +1,4 @@
-export type Paging = {
+export type Paging = PagingLinks & {
   currentPage: number,
   totalPages: number,
   itemsPerPage: number,
@@ -6,6 +6,9 @@ export type Paging = {
   totalItems: number,
   fromItem: number,
   toItem: number
+}
+
+export type PagingLinks = {
   first?: URL,
   prev?: URL,
   next?: URL,

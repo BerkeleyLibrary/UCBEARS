@@ -4,13 +4,13 @@ const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
-const extensionRe = /\.[jt]s$/
+const extensionRe = /\.(?:js|ts)$/
 
 module.exports = {
   mode: 'production',
   devtool: 'source-map',
   entry: Object.fromEntries(
-    glob.sync('./app/javascript/*.[jt]s')
+    glob.sync('./app/javascript/*.{js,ts}')
       .map((p) => {
         const basename = path.basename(p)
         const propertyName = basename.replace(extensionRe, '')
@@ -53,6 +53,12 @@ module.exports = {
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      test: /\.(.js|.ts|.vue)$/,
+      exclude: 'node_modules',
+      module: true,
+      append: false
     }),
     new VueLoaderPlugin(),
     new NodePolyfillPlugin()

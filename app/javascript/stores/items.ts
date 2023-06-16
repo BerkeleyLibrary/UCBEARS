@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, Ref } from "vue";
 import { Item } from "../types/Item";
 import { ItemFilter } from "../types/ItemFilter"
-import { ItemsByDirectory } from "../types/PagedItems";
+import { ItemsByDirectory, PagedItems } from "../types/PagedItems"
 import { Paging } from "../types/Paging";
 import { useItemsApi } from "./items-api";
 
@@ -44,7 +44,7 @@ export const useItemsStore = defineStore('items', () => {
   // --------------------------------------------------
   // Internal implementation
 
-  function setItems(pagedItems) {
+  function setItems(pagedItems: PagedItems) {
     paging.value = pagedItems.paging
     items.value = pagedItems.items
   }

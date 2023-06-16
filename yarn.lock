@@ -2183,6 +2183,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/http-link-header@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/http-link-header@npm:1.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 4fcaef6be196c301988db473a3b8fd3cd4622acb87935c6ec38fa772b98bbb24e78556ceab8061de786f3ebbe75c23052e3289646d624e506f07e29abbe63939
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.12
   resolution: "@types/json-schema@npm:7.0.12"
@@ -3049,6 +3058,7 @@ __metadata:
     "@blueprintjs/icons": ^4.16.0
     "@rushstack/eslint-patch": ^1.2.0
     "@svgr/webpack": ^8.0.1
+    "@types/http-link-header": ^1.0.3
     "@typescript-eslint/eslint-plugin": ^5.48.1
     "@typescript-eslint/parser": ^5.48.1
     "@vue/compiler-sfc": ^3.2.45

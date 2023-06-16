@@ -4,7 +4,7 @@ export type ItemId = string | number;
 
 export type Item = ItemEdit & {
   id: ItemId,
-  directory?: string,
+  directory: string,
   title?: string,
   author?: string,
   publisher?: string,
