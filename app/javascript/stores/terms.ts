@@ -20,12 +20,12 @@ export const useTermsStore = defineStore('terms', () => {
     return termsApi.delete(term).then(removeTerm)
   }
 
-  function applyFilter() {
+  function reloadTerms() {
     const termsApi = useTermsApi()
     return termsApi.findTerms(termFilter.value).then((tt) => terms.value = tt)
   }
 
-  return { terms, termFilter, saveTerm, deleteTerm, applyFilter }
+  return { terms, termFilter, saveTerm, deleteTerm, reloadTerms }
 
   // --------------------------------------------------
   // Internal implementation

@@ -48,6 +48,7 @@ export const useItemsApi = defineStore('items-api', () => {
   return { get, getAll, getPage, findItems, update, delete: _delete }
 
   function getItems(url: string = itemsUrl.value, filter: ItemFilter = {}): Promise<PagedItems> {
+    console.log('getItems(%o, %o)', url, filter)
     const requestConfig: AxiosRequestConfig = { headers: { Accept: 'application/json' } } // TODO: global Axios config?
     if (filter) {
       requestConfig.params = filter

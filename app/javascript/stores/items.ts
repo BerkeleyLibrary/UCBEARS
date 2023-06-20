@@ -33,13 +33,12 @@ export const useItemsStore = defineStore('items', () => {
     }
   }
 
-  // TODO: just listen for changes to the filter
-  function applyFilter() {
+  function reloadItems() {
     const itemsApi = useItemsApi()
     return itemsApi.findItems(itemFilter.value).then(setItems)
   }
 
-  return { items, paging, itemFilter, saveItem, deleteItem, navigateTo, applyFilter }
+  return { items, paging, itemFilter, saveItem, deleteItem, navigateTo, reloadItems }
 
   // --------------------------------------------------
   // Internal implementation

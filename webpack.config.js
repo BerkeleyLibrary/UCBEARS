@@ -5,10 +5,12 @@ const { VueLoaderPlugin } = require('vue-loader')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
+const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+
 const extensionRe = /\.(?:js|ts)$/
 
 module.exports = {
-  mode: 'production',
+  mode,
   devtool: 'source-map',
   entry: Object.fromEntries(
     glob.sync('./app/javascript/*.{js,ts}')
@@ -22,6 +24,9 @@ module.exports = {
     filename: '[name].js',
     sourceMapFilename: '[file].map',
     path: path.resolve(__dirname, 'app/assets/builds')
+  },
+  optimization: {
+    moduleIds: 'deterministic'
   },
   module: {
     rules: [
@@ -57,7 +62,7 @@ module.exports = {
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({
-      async: false,
+      async: true,
       typescript: {
         diagnosticOptions: {
           syntactic: true,

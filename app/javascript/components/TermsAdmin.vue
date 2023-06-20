@@ -4,8 +4,15 @@ import { useTermsStore } from "../stores/terms";
 import FlashAlerts from "./FlashAlerts.vue";
 import TermFilter from "./TermFilter.vue";
 import TermRow from "./TermRow.vue";
+import { onMounted } from "vue"
 
 const { terms } = storeToRefs(useTermsStore())
+
+onMounted(() => {
+  console.log('TermsAdmin mounted')
+  const { reloadTerms } = useTermsStore()
+  reloadTerms()
+})
 
 </script>
 

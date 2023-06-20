@@ -14,6 +14,7 @@ export const useTermsApi = defineStore('terms-api', () => {
   }
 
   function findTerms(filter: TermFilter = {}): Promise<Term[]> {
+    console.log('findTerms(%o)', filter)
     const url = termsUrl.value;
     const requestConfig: AxiosRequestConfig = { headers: { Accept: 'application/json' } } // TODO: global Axios config?
     if (filter) {
