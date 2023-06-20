@@ -4,6 +4,10 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "noEmitOnError": false,
+    "noErrorTruncation": true,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
@@ -16,13 +20,13 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
+    "outDir": "app/assets/builds"
   },
   "include": [
-    "app/**/*.d.ts",
-    "app/**/*.svg",
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "app/**/*.vue",
+    "app/assets/**/*.svg",
+    "app/javascript/**/*.ts",
+    "app/javascript/**/*.d.ts",
+    "app/javascript/**/*.vue",
   ],
   "references": [
     {

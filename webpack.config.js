@@ -3,6 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const extensionRe = /\.(?:js|ts)$/
 
@@ -27,7 +28,11 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: 'ts-loader',
-        options: { appendTsSuffixTo: [/\.vue$/] }
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true
+        },
+        exclude: /node_modules/
       },
       {
         test: /\.vue$/,
@@ -51,6 +56,18 @@ module.exports = {
     extensions: ['.js', '.ts', '...']
   },
   plugins: [
+    new ForkTsCheckerWebpackPlugin({
+      async: false,
+      typescript: {
+        diagnosticOptions: {
+          syntactic: true,
+          semantic: true,
+          declaration: true,
+          global: true
+        },
+        profile: true
+      }
+    }),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     }),
@@ -62,5 +79,8 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new NodePolyfillPlugin()
-  ]
+  ],
+  watchOptions: {
+    ignored: /node_modules/
+  }
 }

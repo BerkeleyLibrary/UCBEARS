@@ -24,6 +24,7 @@ public/*profile*.html
 
 # ?
 Procfile.dev
+tsconfig.tsbuildinfo
 
 ############################################################
 # Generated ignores
