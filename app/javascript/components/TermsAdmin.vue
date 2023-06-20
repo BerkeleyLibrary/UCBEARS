@@ -5,6 +5,7 @@ import FlashAlerts from "./FlashAlerts.vue";
 import TermFilter from "./TermFilter.vue";
 import TermRow from "./TermRow.vue";
 import { onMounted } from "vue"
+import AddTermWidget from "./AddTermWidget.vue"
 
 const { terms } = storeToRefs(useTermsStore())
 
@@ -35,6 +36,7 @@ onMounted(() => {
       <tbody>
         <TermRow v-for="term in terms" :key="`term-${term.id}`" :term="term"/>
       </tbody>
+      <AddTermWidget/>
     </table>
   </section>
 </template>

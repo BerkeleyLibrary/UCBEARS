@@ -16,11 +16,13 @@ export const useItemsStore = defineStore('items', () => {
   const itemFilter: Ref<ItemFilter> = ref({})
 
   function saveItem(item: Item) {
+    console.log('saveItem(%o)', item)
     const itemsApi = useItemsApi()
     return itemsApi.update(item).then(setItem)
   }
 
   function deleteItem(item: Item) {
+    console.log('deleteItem(%o)', item)
     const itemsApi = useItemsApi()
     return itemsApi.delete(item).then(removeItem)
   }

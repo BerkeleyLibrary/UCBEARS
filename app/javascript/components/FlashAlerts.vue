@@ -13,7 +13,7 @@ const hasMessages: ComputedRef<boolean> = computed(() => {
 </script>
 
 <template>
-  <aside v-if="hasMessages">
+  <aside v-if="hasMessages" class="flash">
     <div v-for="(message, index) in messages" :key="message.text" class="flash-message">
       <input
         :id="`flash-dismiss-${index}`"

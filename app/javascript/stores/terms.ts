@@ -12,10 +12,12 @@ export const useTermsStore = defineStore('terms', () => {
   const termFilter: Ref<TermFilter> = ref({})
 
   function saveTerm(term: TermEdit) {
+    console.log('saveTerm(%o)', term)
     return doSave(term).then(setTerm)
   }
 
   function deleteTerm(term: Term) {
+    console.log('deleteTerm(%o)', term)
     const termsApi = useTermsApi()
     return termsApi.delete(term).then(removeTerm)
   }

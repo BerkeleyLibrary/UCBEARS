@@ -53,6 +53,17 @@ function confirmDelete(): boolean {
   return window.confirm(msg)
 }
 
+const defaultTerm: WritableComputedRef<boolean> = computed({
+  get() {
+    return termPatch.value.default_term
+  },
+  set(v) {
+    const patch = termPatch.value;
+    patch.default_term = v
+    saveTerm(patch)
+  }
+})
+
 function doDelete() {
   if (confirmDelete()) {
     deleteTerm(termPatch.value)
@@ -65,7 +76,7 @@ function doDelete() {
   <!-- TODO: client-side validation -->
   <tr :id="`term-${term.id}`" class="term">
     <td class="control">
-      <input :id="`term-${term.id}-default_term`" v-model.lazy="termPatch.default_term" type="checkbox">
+      <input :id="`term-${term.id}-default_term`" v-model.lazy="defaultTerm" type="checkbox">
     </td>
     <td><input :id="`term-${term.id}-name`" v-model.lazy="termPatch.name" type="text"></td>
     <td><input :id="`term-${term.id}-start-date`" v-model.lazy="startDate" type="date" @keyup.enter="commitStartDate" @blur="commitStartDate"></td>
