@@ -82,6 +82,8 @@ services:
         aliases:
           - selenium.test
     ports:
+      - 4442:4442
+      - 4443:4443
       - 4444:4444
     volumes:
       - ./:/build:rw
@@ -90,8 +92,10 @@ services:
     depends_on:
       - selenium
     environment:
-      HUB_HOST: selenium
-    image: selenium/node-chrome-debug
+      - SE_EVENT_BUS_HOST=selenium
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    image: selenium/node-chromium
     ports:
       # @note Use `open vnc://localhost:55900` to view the chrome session.
       #       Doesn't work if you pass the "headless" option via Capybara.
