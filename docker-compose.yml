@@ -43,7 +43,7 @@ services:
     environment:
       POSTGRES_PASSWORD: root
       POSTGRES_USER: root
-    image: postgres:12.2
+    image: postgres:16
     networks:
       default:
         aliases:
