@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      target: production
+      target: development
 #    platform: linux/amd64
     depends_on:
       - db
@@ -12,6 +12,7 @@ services:
     environment: &app-environment
       LIT_LENDING_ROOT: spec/data/lending
       LIT_IIIF_BASE_URL: http://iipsrv.test/iiif/
+      SECRET_KEY_BASE: 408b3d3d3e0074ad2bb33515767b334730141529c65f87f605e7cd915fd4b23f97667a78fd961aed9881b0e6d247863f699118b4bd165a23fc3be441435eff65
     init: true
     networks:
       default:
@@ -19,9 +20,25 @@ services:
           - app.test
     volumes:
       - ./:/opt/app
+      - ./app/assets/builds:/opt/app/app/assets/builds
     ports:
       - 3000:3000
     restart: always
+
+  webpacker:
+    build:
+      context: .
+      target: development
+    command: yarn start
+    volumes:
+      - .:/opt/app
+    working_dir: /opt/app
+    ports:
+      - "3035:3035"   # webpack-dev-server port
+    depends_on:
+      - app
+
+
 
 # Uncomment this to build and run a ucbears-collector container
 #
@@ -56,7 +73,8 @@ services:
       - ./:/build:rw
 
   iipsrv:
-    image: containers.lib.berkeley.edu/lap/iipsrv/main:latest
+    image: ghcr.io/berkeleylibrary/iipsrv:sha-0526c0f-build-17961677153_1
+    # image: ghcr.io/berkeleylibrary/iipsrv:gha-pipeline
     init: true
     environment:
       - VERBOSITY=6
@@ -69,19 +87,22 @@ services:
         target: /iipsrv-data
     ports:
       - 80:80
-    platform: linux/amd64
+    # platform: linux/amd64
+    platform: linux/arm64
     networks:
       default:
         aliases:
           - iipsrv.test
 
   selenium:
-    image: selenium/hub
+    image: seleniarm/hub:latest
     networks:
       default:
         aliases:
           - selenium.test
     ports:
+      - 4442:4442
+      - 4443:4443
       - 4444:4444
     volumes:
       - ./:/build:rw
@@ -90,8 +111,10 @@ services:
     depends_on:
       - selenium
     environment:
-      HUB_HOST: selenium
-    image: selenium/node-chrome-debug
+      - SE_EVENT_BUS_HOST=selenium
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    image: seleniarm/node-chromium:latest
     ports:
       # @note Use `open vnc://localhost:55900` to view the chrome session.
       #       Doesn't work if you pass the "headless" option via Capybara.

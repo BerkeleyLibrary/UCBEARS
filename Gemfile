@@ -39,6 +39,7 @@ end
 
 group :development do
   gem 'dotenv', '~> 2.7', require: false
+  gem 'listen'
   gem 'rubocop', '~> 1.26.0'
   gem 'rubocop-rails', '~> 2.13.2'
   gem 'rubocop-rspec', '~> 2.4.0'
