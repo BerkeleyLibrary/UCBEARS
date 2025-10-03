@@ -148,6 +148,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    foreman (0.89.1)
     globalid (1.1.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -403,6 +404,7 @@ DEPENDENCIES
   dotenv (~> 2.7)
   dotiw (~> 5.3)
   factory_bot_rails
+  foreman
   iiif-presentation (~> 1.0)
   jbuilder (~> 2.5)
   jsbundling-rails
