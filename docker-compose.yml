@@ -4,6 +4,8 @@ services:
       context: .
       target: development
 #    platform: linux/amd64
+    env_file:
+      - .env
     depends_on:
       - db
       - iipsrv
@@ -12,7 +14,6 @@ services:
     environment: &app-environment
       LIT_LENDING_ROOT: spec/data/lending
       LIT_IIIF_BASE_URL: http://iipsrv.test/iiif/
-      SECRET_KEY_BASE: 408b3d3d3e0074ad2bb33515767b334730141529c65f87f605e7cd915fd4b23f97667a78fd961aed9881b0e6d247863f699118b4bd165a23fc3be441435eff65
     init: true
     networks:
       default:
@@ -24,21 +25,7 @@ services:
     ports:
       - 3000:3000
     restart: always
-
-  webpacker:
-    build:
-      context: .
-      target: development
-    command: yarn start
-    volumes:
-      - .:/opt/app
-    working_dir: /opt/app
-    ports:
-      - "3035:3035"   # webpack-dev-server port
-    depends_on:
-      - app
-
-
+    command: ./bin/dev
 
 # Uncomment this to build and run a ucbears-collector container
 #
