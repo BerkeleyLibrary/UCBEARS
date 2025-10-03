@@ -60,8 +60,9 @@ services:
       - ./:/build:rw
 
   iipsrv:
-    image: ghcr.io/berkeleylibrary/iipsrv:sha-0526c0f-build-17961677153_1
+    # image: ghcr.io/berkeleylibrary/iipsrv:sha-0526c0f-build-17961677153_1
     # image: ghcr.io/berkeleylibrary/iipsrv:gha-pipeline
+    image: ghcr.io/berkeleylibrary/iipsrv:latest
     init: true
     environment:
       - VERBOSITY=6
@@ -74,8 +75,6 @@ services:
         target: /iipsrv-data
     ports:
       - 80:80
-    # platform: linux/amd64
-    platform: linux/arm64
     networks:
       default:
         aliases:
