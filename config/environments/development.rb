@@ -64,12 +64,10 @@ Rails.application.configure do
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   # config.assets.compile = false
 
-  # TRYING like hell to get things to reload when I refresh the browser
-  # Having to clobber/precompile assets after every change is...ungood.
+  # A few tweaks to help with hotloading:
   config.assets.debug = true
   config.assets.check_precompiled_asset = false
   config.assets.compile = true
-
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
