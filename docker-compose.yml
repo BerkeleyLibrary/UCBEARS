@@ -60,8 +60,6 @@ services:
       - ./:/build:rw
 
   iipsrv:
-    # image: ghcr.io/berkeleylibrary/iipsrv:sha-0526c0f-build-17961677153_1
-    # image: ghcr.io/berkeleylibrary/iipsrv:gha-pipeline
     image: ghcr.io/berkeleylibrary/iipsrv:latest
     init: true
     environment:
@@ -81,7 +79,7 @@ services:
           - iipsrv.test
 
   selenium:
-    image: seleniarm/hub:latest
+    image: selenium/hub
     networks:
       default:
         aliases:

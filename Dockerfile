@@ -43,9 +43,9 @@ RUN apt-get install -y --no-install-recommends \
 
 # Install Node.js and Yarn from their own repositories
 
-# Add Node.js package repository (version 16 LTS release) & install Node.js
+# Add Node.js package repository (version 20 LTS release) & install Node.js
 # -- note that the Node.js setup script takes care of updating the package list
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs
 
 # Add Yarn package repository, update package list, & install Yarn
@@ -74,8 +74,7 @@ RUN mkdir -p /opt/app/tmp \
     && ln -s /opt/app/artifacts/screenshots /opt/app/tmp/screenshots
 
 # Add binstubs to the path.
-ENV PATH="/opt/app/bin:$PATH"
-ENV PATH="/usr/bin:$PATH"
+ENV PATH="/usr/bin:/opt/app/bin:$PATH"
 
 # If run with no other arguments, the image will start the rails server by
 # default. Note that we must bind to all interfaces (0.0.0.0) because when
