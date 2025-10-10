@@ -33,7 +33,7 @@
         <label for="itemFilter-active">Active only</label>
 
         <input id="itemFilter-inactive" v-model="itemFilter.active" type="checkbox" true-value="false" :false-value="null" @change="apply()">
-        <label for="itemFilter-active">Inactive only</label>
+        <label for="itemFilter-inactive">Inactive only</label>
       </fieldset>
 
       <fieldset>
@@ -43,7 +43,7 @@
         <label for="itemFilter-complete">Complete only</label>
 
         <input id="itemFilter-incomplete" v-model="itemFilter.complete" type="checkbox" true-value="false" :false-value="null" @change="apply()">
-        <label for="itemFilter-complete">Incomplete only</label>
+        <label for="itemFilter-incomplete">Incomplete only</label>
       </fieldset>
     </form>
   </div>
