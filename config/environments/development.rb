@@ -58,8 +58,16 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  # Use simple polling
+  config.file_watcher = ActiveSupport::FileUpdateChecker
+
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   # config.assets.compile = false
+
+  # A few tweaks to help with hotloading:
+  config.assets.debug = true
+  config.assets.check_precompiled_asset = false
+  config.assets.compile = true
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

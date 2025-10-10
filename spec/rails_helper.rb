@@ -16,14 +16,27 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, type: :system) do
+    # System specs need truncation since Selenium runs in a separate process
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
+  end
+
+  config.after(:each, type: :system) do
+    # Ensure browser session doesn’t bleed into the next test
+    Capybara.reset_sessions!
   end
 
   config.include(SystemSpecHelper, type: :system)

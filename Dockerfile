@@ -43,9 +43,9 @@ RUN apt-get install -y --no-install-recommends \
 
 # Install Node.js and Yarn from their own repositories
 
-# Add Node.js package repository (version 16 LTS release) & install Node.js
+# Add Node.js package repository (version 20 LTS release) & install Node.js
 # -- note that the Node.js setup script takes care of updating the package list
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs
 
 # Add Yarn package repository, update package list, & install Yarn
@@ -55,13 +55,9 @@ RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr
     && apt-get update -qq \
     && apt-get install -y --no-install-recommends yarn
 
-# Remove packages we only needed as part of the Node.js / Yarn repository
-# setup and installation -- note that the Node.js setup scripts installs
-# a full version of Python, but at runtime we only need a minimal version
-RUN apt-mark manual python3-minimal \
-    && apt-get autoremove --purge -y \
-      curl \
-      python3
+# Remove only curl (safe to remove, we don't need it at runtime).
+RUN apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
 
 # ------------------------------------------------------------
 # Run configuration
@@ -78,7 +74,7 @@ RUN mkdir -p /opt/app/tmp \
     && ln -s /opt/app/artifacts/screenshots /opt/app/tmp/screenshots
 
 # Add binstubs to the path.
-ENV PATH="/opt/app/bin:$PATH"
+ENV PATH="/usr/bin:/opt/app/bin:$PATH"
 
 # If run with no other arguments, the image will start the rails server by
 # default. Note that we must bind to all interfaces (0.0.0.0) because when
@@ -106,9 +102,11 @@ FROM base AS development
 USER root
 
 # Install system packages needed to build gems with C extensions.
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     g++ \
-    make
+    make \
+    gcc \
+ && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
 # Install Ruby gems

@@ -58,13 +58,18 @@ for instructions on integrating Docker Desktop with WSL.
 
 ### Instructions
 
+#### Add ENV File
+Create a .env file and add  
+```SECRET_KEY_BASE=[your key]```  
+(Your key can be generated locally using ```rake secret``` or a completely fabricated string)
+
 #### Building the Docker stack
 
 To build a Docker stack based on the included
 [`docker-compose.yml`](docker-compose.yml) file, run the command:
 
 ```sh
-docker-compose build --pull
+docker compose build --pull
 ```
 
 This will build or pull images for the following services:
@@ -87,7 +92,7 @@ from outside the Docker stack).
 To start up the Docker stack, run the command:
 
 ```sh
-docker-compose up
+docker compose up
 ```
 
 **Note:** If anything else is already running on one of the ports listed
@@ -112,9 +117,9 @@ it with the command, e.g.:
 
 | command                                       | purpose                                 |
 | ---                                           | ---                                     |
-| `docker-compose exec app rake -T`             | list available Rake tasks               |
-| `docker-compose exec app rails console`       | open the running server's Rails console |
-| `docker-compose exec app bundle exec rubocop` | run RuboCop style checks                |
+| `docker compose exec app rake -T`             | list available Rake tasks               |
+| `docker compose exec app rails console`       | open the running server's Rails console |
+| `docker compose exec app bundle exec rubocop` | run RuboCop style checks                |
 
 #### Debugging system test failures
 
@@ -125,7 +130,7 @@ any other VNC client.
 To launch your own instance of Chrome inside the Selenium node:
 
 ```sh
-docker-compose exec -u root selenium-chrome \
+docker compose exec -u root selenium-chrome \
   sudo -u seluser google-chrome \
     --disable-dev-shm-usage \
     --disable-gpu \
@@ -138,7 +143,7 @@ ignored.)
 To run just the system tests in the app container:
 
 ```sh
-docker-compose exec -e RAILS_ENV=test app rake spec:system
+docker compose exec -e RAILS_ENV=test app rake spec:system
 ```
 
 It may be convenient to also include `-e CAPYBARA_SERVER_PORT=<some port>` so it's

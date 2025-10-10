@@ -22,8 +22,6 @@ public/*profile*.html
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
-# ?
-Procfile.dev
 
 ############################################################
 # Generated ignores
@@ -370,3 +368,7 @@ flycheck_*.el
 .pnp.*
 
 /node_modules
+
+# Some vue/js asset whatever artifacts we don't want to check in
+*.log
+_update-notifier-last-checked

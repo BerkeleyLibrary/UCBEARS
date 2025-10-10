@@ -32,6 +32,10 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "build:css": "sass ./app/assets/stylesheets/:./app/assets/builds/ --no-source-map --load-path=node_modules"
+    "build:css": "sass ./app/assets/stylesheets/:./app/assets/builds/ --no-source-map --load-path=node_modules",
+    "start": "webpack-dev-server --config webpack.config.js --hot --progress --color --port 3035"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^5.2.2"
   }
 }

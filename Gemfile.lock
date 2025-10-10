@@ -148,6 +148,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    foreman (0.89.1)
     globalid (1.1.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -168,6 +169,9 @@ GEM
       railties (>= 6.0.0)
     json (2.6.3)
     jwt (2.7.0)
+    listen (3.9.0)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.12.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -267,6 +271,9 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    rb-fsevent (0.11.2)
+    rb-inotify (0.11.1)
+      ffi (~> 1.0)
     regexp_parser (2.8.0)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -397,10 +404,12 @@ DEPENDENCIES
   dotenv (~> 2.7)
   dotiw (~> 5.3)
   factory_bot_rails
+  foreman
   iiif-presentation (~> 1.0)
   jbuilder (~> 2.5)
   jsbundling-rails
   jwt (~> 2.2)
+  listen
   non-stupid-digest-assets!
   omniauth-cas (~> 2.0)
   pagy (~> 5.6)
