@@ -9,7 +9,7 @@
         <th>Link</th>
         <th>Updated</th>
         <th>Complete</th>
-        <th>Copies</th>
+        <th id="head-copies">Copies</th>
         <th>Term</th>
         <th>Active</th>
         <th>Delete</th>
