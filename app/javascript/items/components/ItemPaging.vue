@@ -2,6 +2,7 @@
   <nav
     v-if="paging"
     class="pagination"
+    aria-label="Pagination"
   >
     <ul>
       <li>
