@@ -11,7 +11,7 @@
         <th>Complete</th>
         <th id="head-copies">Copies</th>
         <th>Term</th>
-        <th>Active</th>
+        <th id="head-active">Active</th>
         <th>Delete</th>
       </tr>
     </thead>
