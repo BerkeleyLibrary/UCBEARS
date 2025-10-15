@@ -147,6 +147,11 @@ section.admin {
     width: auto;
   }
 
+  input::placeholder {
+    color: #555;
+    opacity: 1;
+  }
+
   a.icon-link {
     display: contents;
   }
