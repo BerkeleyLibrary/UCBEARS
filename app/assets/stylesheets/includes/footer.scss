@@ -14,7 +14,6 @@ footer {
     transition: color 0.25s;
 
     &:hover, &:focus {
-      color: $color-anchor-highlight;
       background-color: transparent;
     }
   }
