@@ -26,7 +26,7 @@
     <td v-else key="complete?" :title="item.reason_incomplete" class="control">No</td>
     <td class="control">
       <!-- TODO: client-side validation -->
-      <input 
+      <input
         v-model.number.lazy="copies"
         type="number"
         aria-labelledby="head-copies"
