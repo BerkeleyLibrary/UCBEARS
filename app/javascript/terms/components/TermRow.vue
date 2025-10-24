@@ -14,10 +14,19 @@
         :id="`term-${term.id}-name`"
         v-model.lazy="name"
         type="text"
-        :aria-label="'Term name'"
+        aria-label="Term name"
       >
     </td>
-    <td><input :id="`term-${term.id}-start-date`" v-model.lazy="startDate" type="date" @keyup.enter="commitStartDate" @blur="commitStartDate"></td>
+    <td>
+      <input
+        :id="`term-${term.id}-start-date`"
+        v-model.lazy="startDate"
+        type="date"
+        @keyup.enter="commitStartDate"
+        @blur="commitStartDate"
+        aria-label="Start date"
+      >
+    </td>
     <td><input :id="`term-${term.id}-end-date`" v-model.lazy="endDate" type="date" @keyup.enter="commitEndDate" @blur="commitEndDate"></td>
     <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
