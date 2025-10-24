@@ -2,7 +2,12 @@
   <!-- TODO: client-side validation -->
   <tr :id="`term-${term.id}`" class="term">
     <td class="control">
-      <input :id="`term-${term.id}-default_term`" v-model.lazy="default_term" type="checkbox">
+      <input
+        :id="`term-${term.id}-default_term`"
+        v-model.lazy="default_term"
+        type="checkbox"
+        :aria-label="`Set ${term.name} as default term`"
+      >
     </td>
     <td><input :id="`term-${term.id}-name`" v-model.lazy="name" type="text"></td>
     <td><input :id="`term-${term.id}-start-date`" v-model.lazy="startDate" type="date" @keyup.enter="commitStartDate" @blur="commitStartDate"></td>
