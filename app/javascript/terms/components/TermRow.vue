@@ -27,7 +27,16 @@
         aria-label="Start date"
       >
     </td>
-    <td><input :id="`term-${term.id}-end-date`" v-model.lazy="endDate" type="date" @keyup.enter="commitEndDate" @blur="commitEndDate"></td>
+    <td>
+      <input
+        :id="`term-${term.id}-end-date`"
+        v-model.lazy="endDate"
+        type="date"
+        @keyup.enter="commitEndDate"
+        @blur="commitEndDate"
+        aria-label="End date"
+      >
+    </td>
     <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
