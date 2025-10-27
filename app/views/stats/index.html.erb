@@ -18,8 +18,8 @@
 <section class="stats">
   <!-- Session stats -->
   <section class="stats-subsection" id="stats-sessions">
-    <h2>Sessions</h2>
     <table class="stats-table">
+      <caption>Sessions</caption>
       <tbody>
         <% all_session_stats = presenter.all_session_stats %>
         <% all_session_stats.each_with_index do |stats, i| %>
@@ -70,8 +70,8 @@
 
   <!-- Item stats -->
   <section class="stats-subsection" id="stats-items">
-    <h2>Items</h2>
     <table class="stats-table">
+      <caption>Items</caption>
       <% counts = presenter.item_counts_by_state %>
       <tbody>
         <% counts.each_with_index do |(title, count), i| %>
@@ -95,8 +95,8 @@
 
   <!-- Loan stats -->
   <section class="stats-subsection" id="stats-loans">
-    <h2>Loans</h2>
     <table class="stats-table">
+      <caption>Loans</caption>
       <tbody>
         <tr>
           <th rowspan="4">

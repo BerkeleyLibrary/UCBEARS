@@ -53,6 +53,16 @@ table.stats-table {
   font-size: $font-size-small;
   line-height: $line-height;
 
+  caption {
+    background: $color-background-reversed;
+    color: white;
+    padding: $margin-small $margin;
+    font-size: $font-size-normal;
+    line-height: $line-height;
+    font-weight: $font-weight-normal;
+    text-align: left;
+  }
+
   thead {
     th {
       background-color: inherit;

@@ -372,3 +372,5 @@ flycheck_*.el
 # Some vue/js asset whatever artifacts we don't want to check in
 *.log
 _update-notifier-last-checked
+
+.local/
