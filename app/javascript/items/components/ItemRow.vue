@@ -35,8 +35,8 @@
     <td>
       <ul>
         <li v-for="term in allTerms" :key="`term-${term.id}`">
-          <input :id="`term-${term.id}`" v-model.lazy="term_ids" type="checkbox" :value="term.id">
-          <label :for="`term-${term.id}`">{{ term.name }}</label>
+          <input :id="`row-${item.id}-term-${term.id}`" v-model.lazy="term_ids" type="checkbox" :value="term.id">
+          <label :for="`row-${item.id}-term-${term.id}`">{{ term.name }}</label>
         </li>
       </ul>
     </td>
