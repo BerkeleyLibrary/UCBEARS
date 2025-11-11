@@ -21,37 +21,37 @@
         :id="`name-error-${term.id}`"
         class="visually-hidden"
         aria-live="assertive"
-      ></span>
+      />
     </td>
     <td>
       <input
         :id="`term-${term.id}-start-date`"
         v-model.lazy="startDate"
         type="date"
+        aria-label="Start date"
         @keyup.enter="commitStartDate"
         @blur="commitStartDate($event)"
-        aria-label="Start date"
       >
       <span
         :id="`start-error-${term.id}`"
         class="visually-hidden"
         aria-live="assertive"
-      ></span>
+      />
     </td>
     <td>
       <input
         :id="`term-${term.id}-end-date`"
         v-model.lazy="endDate"
         type="date"
+        aria-label="End date"
         @keyup.enter="commitEndDate"
         @blur="commitEndDate($event)"
-        aria-label="End date"
       >
       <span
         :id="`end-error-${term.id}`"
         class="visually-hidden"
         aria-live="assertive"
-      ></span>
+      />
     </td>
     <td class="date">{{ formatDateTime(term.updated_at) }}</td>
     <td class="control">{{ term.item_count }}</td>
@@ -157,13 +157,10 @@ export default {
 
       let hasError = false
 
-      // Validation 1: must not be blank
+      // Validation: must not be blank and must be after start date
       if (!endDateVal) {
         hasError = announceError('End date must have an end date.')
-      }
-
-      // Validation 2: must be after start date
-      else if (startDateVal && new Date(endDateVal) < new Date(startDateVal)) {
+      } else if (startDateVal && new Date(endDateVal) < new Date(startDateVal)) {
         hasError = announceError('End date cannot be before start date.')
       }
 
@@ -173,22 +170,23 @@ export default {
         this.edited({ end_date: this.shadowEndDate })
       }
 
-      // Prevent accidental multiple announcements
-      if (hasError) return
+      if (hasError) {
+        // skip further logic because error was already announced
+      }
     },
     edited (edit) {
       console.log(`TermRow.edited(${JSON.stringify(edit)})`)
       this.$emit('edited', edit)
     },
     deleteTerm () { this.$emit('removed') },
-    
+
     async checkName (event) {
       await this.$nextTick()
-      
+
       const nameValue = event.target.value.trim()
       const errorEl = document.getElementById(`name-error-${this.term.id}`)
       const inputEl = event.target
-      
+
       if (!nameValue) {
         // Move focus back first, before announcing the error
         inputEl.focus()
