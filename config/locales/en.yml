@@ -52,9 +52,9 @@ en:
             name:
               blank: 'must have a name'
             start_date:
-              blank: 'must have a start date'
+              blank: 'must have a valid start date'
             end_date:
-              blank: 'must have an end date'
+              blank: 'must have a valid end date'
         image:
           directory:
             no_page_images: 'No page images found in %{dir}'
