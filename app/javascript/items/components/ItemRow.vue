@@ -46,7 +46,6 @@
         type="checkbox"
         aria-labelledby="head-active"
         :disabled="!item.complete"
-        :title="item.reason_incomplete"
       >
     </td>
     <td class="control">
