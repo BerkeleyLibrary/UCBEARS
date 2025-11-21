@@ -23,13 +23,14 @@
         <template v-for="term in terms">
           <input
             :id="`term-${term.id}`"
+            :key="`${term.id}-checkbox`"
             v-model="itemFilter.terms"
             type="checkbox"
             :value="term.name"
             :aria-label="`List only items for ${term.name}`"
             @change="apply()"
           >
-          <label :for="`term-${term.id}`">{{ term.name }}</label>
+          <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
 
