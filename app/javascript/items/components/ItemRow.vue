@@ -29,13 +29,19 @@
       <input
         v-model.number.lazy="copies"
         type="number"
-        aria-labelledby="head-copies"
+        aria-label="number of copies"
       >
     </td>
     <td>
       <ul>
         <li v-for="term in allTerms" :key="`term-${term.id}`">
-          <input :id="`row-${item.id}-term-${term.id}`" v-model.lazy="term_ids" type="checkbox" :value="term.id">
+          <input
+            :id="`row-${item.id}-term-${term.id}`"
+            v-model.lazy="term_ids"
+            type="checkbox"
+            :value="term.id"
+            :aria-label="`Assign '${item.title}' to ${term.name}`"
+          >
           <label :for="`row-${item.id}-term-${term.id}`">{{ term.name }}</label>
         </li>
       </ul>
@@ -44,8 +50,8 @@
       <input
         v-model.lazy="active"
         type="checkbox"
-        aria-labelledby="head-active"
         :disabled="!item.complete"
+        :aria-label="`Set '${item.title}' as active`"
       >
     </td>
     <td class="control">

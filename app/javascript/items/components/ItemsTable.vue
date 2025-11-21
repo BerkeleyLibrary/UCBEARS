@@ -9,9 +9,9 @@
         <th>Link</th>
         <th>Updated</th>
         <th>Complete</th>
-        <th id="head-copies">Copies</th>
+        <th>Copies</th>
         <th>Term</th>
-        <th id="head-active">Active</th>
+        <th>Active</th>
         <th>Delete</th>
       </tr>
     </thead>

@@ -21,28 +21,67 @@
         <legend>Term</legend>
 
         <template v-for="term in terms">
-          <input :id="`term-${term.id}`" :key="`${term.id}-checkbox`" v-model="itemFilter.terms" type="checkbox" :value="term.name" @change="apply()">
-          <label :key="`${term.id}-label`" :for="`term-${term.id}`">{{ term.name }}</label>
+          <input
+            :id="`term-${term.id}`"
+            v-model="itemFilter.terms"
+            type="checkbox"
+            :value="term.name"
+            :aria-label="`List only items for ${term.name}`"
+            @change="apply()"
+          >
+          <label :for="`term-${term.id}`">{{ term.name }}</label>
         </template>
       </fieldset>
 
       <fieldset>
         <legend>Status</legend>
 
-        <input id="itemFilter-active" v-model="itemFilter.active" type="checkbox" true-value="true" :false-value="null" @change="apply()">
+        <input
+          id="itemFilter-active"
+          v-model="itemFilter.active"
+          type="checkbox"
+          true-value="true"
+          :false-value="null"
+          :aria-label="'List only active items'"
+          @change="apply()"
+        >
         <label for="itemFilter-active">Active only</label>
 
-        <input id="itemFilter-inactive" v-model="itemFilter.active" type="checkbox" true-value="false" :false-value="null" @change="apply()">
+        <input
+          id="itemFilter-inactive"
+          v-model="itemFilter.active"
+          type="checkbox"
+          true-value="false"
+          aria-label="List only inactive items"
+          :false-value="null"
+          @change="apply()"
+        >
         <label for="itemFilter-inactive">Inactive only</label>
       </fieldset>
 
       <fieldset>
         <legend>Complete?</legend>
 
-        <input id="itemFilter-complete" v-model="itemFilter.complete" type="checkbox" true-value="true" :false-value="null" @change="apply()">
+        <input
+          id="itemFilter-complete"
+          v-model="itemFilter.complete"
+          type="checkbox"
+          true-value="true"
+          aria-label="List only complete items"
+          :false-value="null"
+          @change="apply()"
+        >
         <label for="itemFilter-complete">Complete only</label>
 
-        <input id="itemFilter-incomplete" v-model="itemFilter.complete" type="checkbox" true-value="false" :false-value="null" @change="apply()">
+        <input
+          id="itemFilter-incomplete"
+          v-model="itemFilter.complete"
+          type="checkbox"
+          true-value="false"
+          aria-label="List only incomplete items"
+          :false-value="null"
+          @change="apply()"
+        >
         <label for="itemFilter-incomplete">Incomplete only</label>
       </fieldset>
     </form>
