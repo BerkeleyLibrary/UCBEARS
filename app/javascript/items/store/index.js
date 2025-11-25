@@ -15,12 +15,12 @@ export default new Vuex.Store({
   state: {
     ...terms.state(),
     ...flash.state(),
-    table: { items: null, paging: null }  
+    table: { items: null, paging: null }
   },
   mutations: {
     ...terms.mutations(),
     ...flash.mutations(),
-    setTable(state, table) {
+    setTable (state, table) {
       state.table = {
         ...table,
         items: Array.isArray(table.items)

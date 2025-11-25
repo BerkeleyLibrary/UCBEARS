@@ -1,5 +1,5 @@
 <template>
-  <table id="items-table" v-if="items" tabindex="-1">
+  <table v-if="items" id="items-table" tabindex="-1">
     <caption v-if="paging">Viewing results {{ paging.fromItem }} to {{ paging.toItem }} of {{ paging.totalItems }}</caption>
     <thead>
       <tr>

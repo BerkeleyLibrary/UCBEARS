@@ -7,7 +7,7 @@
       id="items-status-message"
       aria-live="polite"
       class="visually-hidden"
-    ></div>
+    />
     <items-table :table="table" :terms="terms" @edited="patchItem" @removed="deleteItem"/>
     <item-paging :paging="table.paging" @page-selected="navigateTo"/>
   </section>
@@ -41,7 +41,7 @@ export default {
     getAllItems () {
       itemsApi.getAll().then(this.setTable)
     },
-    filterItems(itemFilter) {
+    filterItems (itemFilter) {
       itemsApi.findItems(itemFilter).then(table => {
         this.setTable(table)
 
