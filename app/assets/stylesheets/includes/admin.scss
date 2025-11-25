@@ -153,7 +153,18 @@ section.admin {
   }
 
   a.icon-link {
-    display: contents;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: none !important;
+    background: none !important;
+  }
+
+  a.icon-link:hover,
+  a.icon-link:focus {
+    text-decoration: none;
+    box-shadow: none !important;
+    background: none !important;
   }
 
   button.delete {
