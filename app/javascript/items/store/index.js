@@ -15,19 +15,30 @@ export default new Vuex.Store({
   state: {
     ...terms.state(),
     ...flash.state(),
-    table: { items: null, paging: null }
+    table: { items: null, paging: null }  
   },
   mutations: {
     ...terms.mutations(),
     ...flash.mutations(),
-    setTable (state, table) {
-      state.table = table
+    setTable(state, table) {
+      state.table = {
+        ...table,
+        items: Array.isArray(table.items)
+          ? table.items
+          : Object.values(table.items || {})
+      }
     },
     setItem (state, item) {
-      state.table.items[item.directory] = item
+      const index = state.table.items.findIndex(i => i.directory === item.directory)
+      if (index !== -1) {
+        Vue.set(state.table.items, index, item)
+      }
     },
     removeItem (state, item) {
-      Vue.delete(state.table.items, item.directory)
+      const index = state.table.items.findIndex(i => i.directory === item.directory)
+      if (index !== -1) {
+        state.table.items.splice(index, 1)
+      }
     }
   }
 })
