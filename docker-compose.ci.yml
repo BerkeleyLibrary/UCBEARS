@@ -31,3 +31,5 @@ services:
 
 volumes:
   artifacts:
+  selenium_downloads:
+  iipsrv_data:
