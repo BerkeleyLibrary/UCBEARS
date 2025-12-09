@@ -5,7 +5,7 @@ services:
     build: !reset
     environment:
       - CAPYBARA_SAVE_PATH=/opt/app/artifacts
-    env_file: !reset[]
+    env_file: !reset []
     image: ${DOCKER_APP_IMAGE}
     depends_on:
       - selenium
@@ -14,21 +14,17 @@ services:
       - selenium_downloads:/opt/app/tmp/selenium_downloads
   
   db:
-    env_file: !reset[]
     volumes: !reset
 
   iipsrv: 
-    env_file: !reset[]
     volumes: !override
       - iipsrv_data:/iipsrv-data
 
   selenium:
-    env_file: !reset[]
     volumes: !override
       - artifacts:/build
 
   selenium-chrome:
-    env_file: !reset[]
     depends_on:
       -selenium
 
