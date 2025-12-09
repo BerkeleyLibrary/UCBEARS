@@ -11,6 +11,21 @@ services:
     volumes: !override
       - artifacts:/opt/app/artifacts
       - selenium_downloads:/opt/app/tmp/selenium_downloads
+  
+  db:
+    volumes: !reset
+
+  iipsrv: !reset
+
+  selenium:
+    volumes: !override
+      - artifacts:/build
+
+  selenium-chrome:
+    depends_on:
+      -selenium
+
+  adminer: !reset
 
 volumes:
   artifacts:
