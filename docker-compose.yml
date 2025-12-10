@@ -68,9 +68,7 @@ services:
       - FILESYSTEM_PREFIX=/iipsrv-data/
       - CORS=*
     volumes:
-      - type: bind
-        source: ./iipsrv-data
-        target: /iipsrv-data
+      - ./iipsrv-data:/iipsrv-data:ro
     ports:
       - 80:80
     networks:
