@@ -17,8 +17,6 @@ services:
     volumes: !reset
 
   iipsrv: 
-    volumes: !override
-      - iipsrv_data:/iipsrv-data
 
   selenium:
     volumes: !override
