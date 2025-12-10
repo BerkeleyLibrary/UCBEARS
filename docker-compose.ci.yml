@@ -24,7 +24,7 @@ services:
 
   selenium-chrome:
     depends_on:
-      -selenium
+      - selenium
 
   adminer: !reset
 
