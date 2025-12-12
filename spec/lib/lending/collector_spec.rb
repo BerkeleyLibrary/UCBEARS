@@ -84,6 +84,7 @@ module Lending
         expect(collector.stopped?).to eq(false)
       end
 
+      # rubocop:disable RSpec/ExampleLength
       it 'finds the next file' do
         processing_dirs = []
         final_dirs = []
@@ -120,6 +121,7 @@ module Lending
         final_dirs.each { |fdir| expect(fdir).to exist }
         expect(collector.stopped?).to eq(false)
       end
+      # rubocop:enable RSpec/ExampleLength
 
       # rubocop:disable RSpec/ExampleLength
       it 'skips single-item processing failures' do
