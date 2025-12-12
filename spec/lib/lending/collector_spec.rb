@@ -91,6 +91,9 @@ module Lending
 
         logger = BerkeleyLibrary::Logging.logger
 
+        # This should reset any and all stubs from logger.info
+        RSpec::Mocks.space.proxy_for(logger).reset
+
         # Collect all logs in an array
         logs = []
 
