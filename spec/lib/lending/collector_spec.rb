@@ -113,6 +113,16 @@ module Lending
 
         collector.collect!
 
+        # rubocop:disable Rails/Output
+        # ---- TEMPORARY DEBUG ----
+        puts "\n=== DEBUG DUMP (info messages) ==="
+        logs.each_with_index do |msg, i|
+          puts "#{i}: #{msg}"
+        end
+        puts "=== END DEBUG DUMP ===\n"
+        # -------------------------
+        # rubocop:enable Rails/Output
+
         start_index = logs.index { |l| l =~ /starting/ }
         end_index = logs.index { |l| l =~ /nothing left to process/ }
 
