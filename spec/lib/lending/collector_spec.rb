@@ -84,44 +84,25 @@ module Lending
         expect(collector.stopped?).to eq(false)
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it 'finds the next file' do
         processing_dirs = []
         final_dirs = []
 
-        logger = BerkeleyLibrary::Logging.logger
-
-        # Collect all logs in an array
-        logs = []
-
-        # Allow all other info calls to pass through unchanged
-        allow(logger).to receive(:info).and_call_original
-
-        # Capture only the two specific log lines we assert on
-        allow(logger).to receive(:info).with(/starting|nothing left to process/) do |msg|
-          logs << msg
-        end
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
 
         %w[b12345678_c12345678 b86753090_c86753090].each do |item_dir|
           pdir, fdir = expect_to_process(item_dir)
           processing_dirs << pdir
           final_dirs << fdir
         end
-
-        collector.collect!
-
-        start_index = logs.index { |l| l =~ /starting/ }
-        end_index = logs.index { |l| l =~ /nothing left to process/ }
-
-        expect(start_index).not_to be_nil
-        expect(end_index).not_to be_nil
-        expect(start_index).to be < end_index
+        
+        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+        collector.collect! 
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
         final_dirs.each { |fdir| expect(fdir).to exist }
         expect(collector.stopped?).to eq(false)
       end
-      # rubocop:enable RSpec/ExampleLength
 
       # rubocop:disable RSpec/ExampleLength
       it 'skips single-item processing failures' do
