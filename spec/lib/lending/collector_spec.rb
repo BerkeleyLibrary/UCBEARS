@@ -97,7 +97,7 @@ module Lending
         end
 
         expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
-        collector.collect! 
+        collector.collect!
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
         final_dirs.each { |fdir| expect(fdir).to exist }
