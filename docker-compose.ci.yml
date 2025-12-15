@@ -14,15 +14,18 @@ services:
       - selenium_downloads:/opt/app/tmp/selenium_downloads
   
   db:
+    env_file: !reset[]
     volumes: !reset
 
   iipsrv: 
 
   selenium:
+    env_file: !reset[]
     volumes: !override
       - artifacts:/build
 
   selenium-chrome:
+    env_file: !reset[]
     depends_on:
       - selenium
 
