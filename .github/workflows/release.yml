@@ -37,7 +37,7 @@ jobs:
         env:
           BASE_IMAGE: ${{ steps.get-base-image.outputs.tags }}
         run: |
-          docker pull "$BASE_IMAGE"
+          docker manifest inspect "$BASE_IMAGE"
 
       - name: Produce release tags
         id: tag-meta
@@ -51,9 +51,11 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{version}}
 
+
       - name: Retag the pulled image
         env:
           BASE_IMAGE: ${{ steps.get-base-image.outputs.tags }}
         run: |
-          echo "$DOCKER_METADATA_OUTPUT_TAGS" | tr ' ' '\n' | xargs -n1 docker tag "$BASE_IMAGE"
-          docker push --all-tags "$(echo "$BASE_IMAGE" | cut -f1 -d:)"
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("--tag " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            "$(echo "$BASE_IMAGE" | cut -f1 -d:)"
