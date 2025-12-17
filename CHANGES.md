@@ -1,3 +1,37 @@
+# 1.7.4 (2025-12-17)
+
+* AP-494 move to github
+
+# 1.7.3 (2025-11-25)
+
+* ADA-314 fix icons in items table to make them tab friendly
+* Fix ESLint issues
+* ADA-323 item keyword search accessibility fixes
+* ADA-325 add aria required to term start date field
+* ADA-324 add aria required to term name field
+* Add key back to term facet template
+* Improve aria labels for facets and item table
+* ADA-311 remove title to avoid redundancy w/aria-labelledby
+* Removing unneeded keys from v-if-else lines
+* ADA-321 add note to clarify that the table acts as a form and saves changes automatically
+* fix eslinting issues
+* ADA-327 fix accessibility issues with term form fields
+* ADA-321 Fix items term column in table to function properly
+* ADA-332 fix table cell headers for stats page
+* Change heading before table to a caption IN table to hopefully pass accessiblity  checks
+* ADA-331 add aria-label for term end date
+* ADA-330 add aria-label for term start date
+* ADA-329 add term name aria-label
+* ADA-328 add aria-label for term default checkbox
+* Removing trailing space eslint found
+* ADA-322 make search box placeholder text darker gray
+* ADA-313 remove highlight color from footer anchor tags to fix contrast ratio 
+* ADA-312 add aria label to Items pagination nav
+* ADA-311 add aria-labelledby for Active column checkboxes
+* ADA-310 Add aria label for copies column
+* ADA-308 Status and Complete? had misnamed labels
+* ADA 307: fix dev environment issues for iipsrv and vue hotloading
+
 # 1.7.2 (2022-04-26)
 
 Functional:
