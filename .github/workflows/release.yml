@@ -57,5 +57,5 @@ jobs:
           BASE_IMAGE: ${{ steps.get-base-image.outputs.tags }}
         run: |
           docker buildx imagetools create \
-            "$(jq -cr '.tags | map("--tag " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")" \
+            $(jq -cr '.tags | map("--tag " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             "$(echo "$BASE_IMAGE" | cut -f1 -d:)"

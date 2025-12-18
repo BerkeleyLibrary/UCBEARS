@@ -1,3 +1,7 @@
+# 1.7.5 (2025-12-17)
+
+* Hotfix for release workflow issue
+
 # 1.7.4 (2025-12-17)
 
 * AP-494 move to github
