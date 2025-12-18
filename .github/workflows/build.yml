@@ -56,10 +56,22 @@ jobs:
         run: |
           echo "registry=$(echo '${{ steps.build-meta.outputs.tags }}' | cut -f1 -d:)" | tee -a "$GITHUB_OUTPUT"
 
+      - id: set_build_url
+        name: Set BUILD_URL
+        run: |
+          echo "build_url=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" | tee -a "$GITHUB_OUTPUT"
+
       - id: build
         name: Build/push the arch-specific image
         uses: docker/build-push-action@v6
         with:
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            BUILD_TIMESTAMP=${{ github.event.repository.updated_at }}
+            BUILD_URL=${{ steps.set_build_url.outputs.build_url }}
+            GIT_REF_NAME=${{ github.ref_name }}
+            GIT_SHA=${{ github.sha }}
+            GIT_REPOSITORY_URL=${{ github.repositoryUrl }}
           cache-from: type=registry,ref=${{ steps.cache-meta.outputs.tags }}
           cache-to: type=registry,ref=${{ steps.cache-meta.outputs.tags }},mode=max
           labels: ${{ steps.build-meta.outputs.labels }}
@@ -74,13 +86,15 @@ jobs:
           echo "image-${RUNNER_ARCH,,}=${{ steps.get-registry.outputs.registry }}@${{ steps.build.outputs.digest }}" | tee -a "$GITHUB_OUTPUT"
 
   merge:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     needs: build
     env:
       DOCKER_APP_IMAGE_ARM64: ${{ needs.build.outputs.image-arm64 }}
       DOCKER_APP_IMAGE_X64: ${{ needs.build.outputs.image-x64 }}
     outputs:
       image: ${{ steps.meta.outputs.tags }}
+      build-image-arm: ${{ needs.build.outputs.image-arm64 }}
+      build-image-x64: ${{ needs.build.outputs.image-x64 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -109,7 +123,7 @@ jobs:
             "$DOCKER_APP_IMAGE_ARM64" "$DOCKER_APP_IMAGE_X64"
 
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     needs: merge
     env:
       COMPOSE_FILE: docker-compose.yml:docker-compose.ci.yml
@@ -157,17 +171,19 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Build Report (${{ github.run_id }}_${{ github.run_attempt }})
+          name: UCBEARS Test Report (${{ github.run_id }}_${{ github.run_attempt }})
           path: artifacts/*
           if-no-files-found: error
 
   push:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     needs:
       - merge
       - test
     env:
       DOCKER_APP_IMAGE: ${{ needs.merge.outputs.image }}
+      DOCKER_APP_IMAGE_ARM64: ${{ needs.merge.outputs.build-image-arm }}
+      DOCKER_APP_IMAGE_X64: ${{ needs.merge.outputs.build-image-x64 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -190,6 +206,6 @@ jobs:
 
       - name: Retag and push the image
         run: |
-          docker pull "$DOCKER_APP_IMAGE"
-          echo "$DOCKER_METADATA_OUTPUT_TAGS" | tr ' ' '\n' | xargs -n1 docker tag "$DOCKER_APP_IMAGE"
-          docker push --all-tags "$(echo "$DOCKER_APP_IMAGE" | cut -f1 -d:)"
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("--tag " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $DOCKER_APP_IMAGE_ARM64  $DOCKER_APP_IMAGE_X64
