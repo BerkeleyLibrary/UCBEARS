@@ -10,9 +10,9 @@ describe BuildInfo do
         BUILD_TIMESTAMP: '2021-03-22T21:57:07+0000',
         BUILD_URL: 'https://jenkins.lib.berkeley.edu/job/gitlab/job/lap/job/lap%252Fucbears/job/LIT-2266-build-args/1/',
         DOCKER_TAG: 'containers.lib.berkeley.edu/lap/ucbears/lit-2266-build-args:build-1',
-        GIT_BRANCH: 'LIT-2266-build-args',
-        GIT_COMMIT: 'e2493452b7e6ebe98856fa3aff6b2c8f24063586',
-        GIT_URL: 'git@git.lib.berkeley.edu:lap/ucbears.git'
+        GIT_REF_NAME: 'LIT-2266-build-args',
+        GIT_SHA: 'e2493452b7e6ebe98856fa3aff6b2c8f24063586',
+        GIT_REPOSITORY_URL: 'git@git.lib.berkeley.edu:lap/ucbears.git'
       }.freeze
     end
 
