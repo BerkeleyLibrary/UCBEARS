@@ -1,10 +1,6 @@
 Rails.application.routes.draw do
   root 'sessions#index'
 
-  defaults format: 'json' do
-    get 'health', to: 'health#index'
-  end
-
   # Omniauth automatically handles requests to /auth/:provider. We need only
   # implement the callback.
   get '/login', to: 'sessions#new', as: :login
@@ -48,4 +44,7 @@ Rails.application.routes.draw do
   defaults format: 'json' do
     get '/:directory/manifest', to: 'lending#manifest', as: :lending_manifest, constraints: valid_dirname
   end
+
+  # Map OkComputer's /health/all.json to /health
+  get '/health', to: 'ok_computer/ok_computer#index', defaults: { format: :json }
 end

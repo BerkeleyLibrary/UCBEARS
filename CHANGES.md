@@ -1,3 +1,7 @@
+# 1.7.6 (2026-01-16)
+
+* Replace old health checks with OKComputer
+
 # 1.7.5 (2025-12-17)
 
 * Hotfix for release workflow issue

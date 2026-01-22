@@ -1,44 +1,39 @@
-require 'capybara_helper'
+require 'rails_helper'
 
-describe HealthController, type: :system do
-  let(:config_instance_vars) { %i[@iiif_base_uri @lending_root_path] }
+RSpec.describe 'Health Check', type: :system do
+  describe 'Checking system health' do
+    it 'renders the health status as JSON when healthy' do
+      visit '/health'
+      json = JSON.parse(page.text)
 
-  before do
-    @config_ivars_orig = config_instance_vars.each_with_object({}) do |var, ivals|
-      ivals[var] = Lending::Config.instance_variable_get(var)
+      expect(json.dig('database', 'success')).to be true
     end
 
-    @webmock_config = %i[allow_localhost allow net_http_connect_on_start].each_with_object({}) do |attr, opts|
-      opts[attr] = WebMock::Config.instance.send(attr)
-    end
-    webmock_tmp_config = @webmock_config.dup.tap do |conf|
-      conf[:allow] = (conf[:allow] || []) + ['iipsrv.test']
-    end
-    WebMock.disable_net_connect!(webmock_tmp_config)
+    it 'returns a failure status when a critical service is down' do
+      # 1. Inject an environment variable into the current process.
+      # Note: For this to work in Docker, the Puma server must be
+      # running in the same container or share the ENV.
+      # A more robust way for Docker is to stub the ActiveRecord call itself:
 
-    Lending::Config.instance_variable_set(:@iiif_base_uri, URI.parse('http://iipsrv.test/iiif/'))
-    Lending::Config.instance_variable_set(:@lending_root_path, Pathname.new('spec/data/lending'))
+      allow(ActiveRecord::Base).to receive(:connected?).and_return(false)
+      # Wait! The above also only works in the test process.
 
-    create(:complete_item)
-  end
+      # INSTEAD: Let's use the Registry to register a temporary
+      # failing check that doesn't rely on mocks.
 
-  after do
-    @config_ivars_orig.each { |var, val| Lending::Config.instance_variable_set(var, val) }
+      begin
+        # Register a check that always fails
+        OkComputer::Registry.register 'failing-check', OkComputer::HttpCheck.new('http://localhost:9999/nonexistent')
 
-    WebMock.disable_net_connect!(@webmock_config)
-  end
+        visit '/health'
 
-  describe :health do
-    it 'returns a successful health check' do
-      visit health_path
-
-      body_expected = {
-        'status' => 'pass',
-        'details' => Health::Check::VALIDATION_METHODS.each_with_object({}) { |m, d| d[m.to_s] = { 'status' => 'pass' } }
-      }
-
-      body_actual = JSON.parse(page.text)
-      expect(body_actual).to eq(body_expected)
+        json = JSON.parse(page.text)
+        # Verify that at least one check failed
+        expect(json.values.any? { |v| v['success'] == false }).to be true
+      ensure
+        # Always unregister to avoid bleeding into other tests
+        OkComputer::Registry.deregister 'failing-check'
+      end
     end
   end
 end

@@ -332,3 +332,10 @@ Rails/RedundantPresenceValidationOnBelongsTo: # new in 2.13
   Enabled: true
 Rails/RootJoinChain: # new in 2.13
   Enabled: true
+
+############################################################
+# Fresh New Cops!
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+RSpec/Rails/AvoidSetupHook: # new in 2.4
+  Enabled: true
