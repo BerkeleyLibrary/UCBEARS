@@ -1,5 +1,5 @@
 module HealthChecks
-  class IiifServerCheck < OkComputer::Check
+  class IIIFServerCheck < OkComputer::Check
     include BerkeleyLibrary::Logging
 
     def check

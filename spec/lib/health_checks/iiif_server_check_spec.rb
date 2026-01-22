@@ -1,7 +1,7 @@
 # spec/lib/health_checks/iiif_server_check_spec.rb
 require 'rails_helper'
 
-RSpec.describe HealthChecks::IiifServerCheck do
+RSpec.describe HealthChecks::IIIFServerCheck do
   subject(:check) { described_class.new }
 
   def run_check

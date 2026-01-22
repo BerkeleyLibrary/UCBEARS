@@ -14,7 +14,7 @@ OkComputer::Registry.register 'database-migrations', OkComputer::ActiveRecordMig
 # Not sure about this.... seems I need to do this in order to stub in RSPEC
 unless Rails.env.test?
   # Custom IIIF server check
-  OkComputer::Registry.register 'iiif-server', HealthChecks::IiifServerCheck.new
+  OkComputer::Registry.register 'iiif-server', HealthChecks::IIIFServerCheck.new
 
   # TODO: Custom Test Item Exists
   OkComputer::Registry.register 'test-item-exists', HealthChecks::TestItemExists.new
