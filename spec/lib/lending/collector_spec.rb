@@ -90,16 +90,10 @@ module Lending
         final_dirs = []
 
         logger = BerkeleyLibrary::Logging.logger
-
-        # Collect all logs in an array
         logs = []
 
-        # Allow all other info calls to pass through unchanged
-        allow(logger).to receive(:info).and_call_original
-
-        # Capture only the two specific log lines we assert on
-        allow(logger).to receive(:info).with(/starting|nothing left to process/) do |msg|
-          logs << msg
+        allow(logger).to receive(:info) do |msg|
+          logs << msg if msg.match?(/starting|nothing left to process/)
         end
 
         %w[b12345678_c12345678 b86753090_c86753090].each do |item_dir|
