@@ -5,12 +5,31 @@ RSpec.describe 'Health Checks', type: :request do
     let(:health_path) { '/health' }
 
     context 'when all systems are functional' do
+      before do
+        iiif = OkComputer::Registry.fetch('iiif-server')
+        test_item = OkComputer::Registry.fetch('test-item-exists')
+
+        allow(iiif).to receive(:run) do
+          iiif.instance_variable_set(:@success, true)
+          iiif.instance_variable_set(:@message, 'OK')
+          iiif
+        end
+
+        allow(test_item).to receive(:run) do
+          test_item.instance_variable_set(:@success, true)
+          test_item.instance_variable_set(:@message, 'OK')
+          test_item
+        end
+      end
+
       it 'returns 200 OK and success in JSON' do
         get health_path
         expect(response).to have_http_status(:ok)
 
         json = JSON.parse(response.body)
         expect(json.dig('database', 'success')).to be true
+        expect(json.dig('iiif-server', 'success')).to be true
+        expect(json.dig('test-item-exists', 'success')).to be true
       end
     end
 
@@ -26,7 +45,9 @@ RSpec.describe 'Health Checks', type: :request do
         end
 
         # Ensure the collection sees a failure:
-        allow_any_instance_of(OkComputer::CheckCollection).to receive(:success?).and_return(false)
+        allow_any_instance_of(OkComputer::CheckCollection)
+          .to receive(:success?)
+          .and_return(false)
       end
 
       it 'returns a 500 Internal Server Error' do
