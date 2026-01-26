@@ -109,7 +109,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
-# Install Ruby gems
+# Install Ruby gems and Yarn packages
 
 # Drop back to $APP_USER.
 USER $APP_USER
@@ -126,6 +126,12 @@ RUN bundle install
 # changes unrelated to the gemset don't invalidate the cache and force a slow
 # re-install.
 COPY --chown=$APP_USER:$APP_USER . .
+
+RUN yarn install
+
+# Remove cached YARN packages
+# TODO: change this to .yarn/cache once we're on Yarn 3.x
+RUN rm -r .cache/yarn
 
 # =============================================================================
 # Target: production
@@ -159,16 +165,12 @@ RUN bundle install --local
 
 # TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
 #       *before* Sprockets reads app/assets/config/manifest.js
-RUN yarn install && yarn build
+RUN yarn build
 
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
 RUN SECRET_KEY_BASE=1 rails assets:precompile --trace
-
-# Remove cached YARN packages
-# TODO: change this to .yarn/cache once we're on Yarn 3.x
-RUN rm -r .cache/yarn
 
 # ------------------------------------------------------------
 # Preserve build arguments
