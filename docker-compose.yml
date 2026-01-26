@@ -20,7 +20,7 @@ services:
         aliases:
           - app.test
     volumes:
-      - ./:/opt/app
+      - .:/opt/app
       - ./app/assets/builds:/opt/app/app/assets/builds
     ports:
       - 3000:3000

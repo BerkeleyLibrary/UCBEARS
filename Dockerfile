@@ -50,7 +50,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 
 # Add Yarn package repository, update package list, & install Yarn
 # TODO: why are we installing Yarn 1.22 instead of 3.x?
-RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
+# RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
+RUN curl -sL https://keys.openpgp.org/vks/v1/by-fingerprint/72ECF46A56B4AD39C907BBB71646B01B86E50310 | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
     && apt-get install -y --no-install-recommends yarn
@@ -74,7 +75,7 @@ RUN mkdir -p /opt/app/tmp \
     && ln -s /opt/app/artifacts/screenshots /opt/app/tmp/screenshots
 
 # Add binstubs to the path.
-ENV PATH="/usr/bin:/opt/app/bin:$PATH"
+ENV PATH="/usr/bin:/opt/app/bin:/usr/local/yarn/node_modules:$PATH"
 
 # If run with no other arguments, the image will start the rails server by
 # default. Note that we must bind to all interfaces (0.0.0.0) because when
@@ -108,8 +109,12 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     gcc \
  && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /usr/local/yarn \
+    && chown -R $APP_USER:$APP_USER /usr/local/yarn
+COPY ./webpack.config.js ./package.json /usr/local/yarn
+
 # ------------------------------------------------------------
-# Install Ruby gems
+# Install Ruby gems and Yarn packages
 
 # Drop back to $APP_USER.
 USER $APP_USER
@@ -126,6 +131,15 @@ RUN bundle install
 # changes unrelated to the gemset don't invalidate the cache and force a slow
 # re-install.
 COPY --chown=$APP_USER:$APP_USER . .
+
+WORKDIR /usr/local/yarn
+RUN yarn install
+
+WORKDIR /opt/app
+
+# Remove cached YARN packages
+# TODO: change this to .yarn/cache once we're on Yarn 3.x
+RUN rm -r .cache/yarn
 
 # =============================================================================
 # Target: production
@@ -149,6 +163,7 @@ ENV RAILS_SERVE_STATIC_FILES=true
 # Copy the built codebase from the dev stage
 COPY --from=development --chown=$APP_USER /opt/app /opt/app
 COPY --from=development --chown=$APP_USER /usr/local/bundle /usr/local/bundle
+COPY --from=development --chown=$APP_USER /usr/local/yarn /usr/local/yarn
 
 # Ensure the bundle is installed and the Gemfile.lock is synced.
 RUN bundle config set frozen 'true'
@@ -159,16 +174,14 @@ RUN bundle install --local
 
 # TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
 #       *before* Sprockets reads app/assets/config/manifest.js
-RUN yarn install && yarn build
+WORKDIR /usr/local/yarn
+RUN yarn build
 
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
+WORKDIR /opt/app
 RUN SECRET_KEY_BASE=1 rails assets:precompile --trace
-
-# Remove cached YARN packages
-# TODO: change this to .yarn/cache once we're on Yarn 3.x
-RUN rm -r .cache/yarn
 
 # ------------------------------------------------------------
 # Preserve build arguments
