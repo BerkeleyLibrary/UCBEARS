@@ -5,10 +5,10 @@ module HealthChecks
     def check
       result = validate_iiif_server
       mark_message result[:message]
-      mark_failure if result[:warning]
+      mark_failure if result[:failure]
     rescue StandardError => e
       logger.error(e)
-      mark_message "#{e.class}: #{e.message}"
+      mark_message e.class.name
       mark_failure
     end
 
@@ -35,18 +35,18 @@ module HealthChecks
       )
     end
 
-    # Returns a hash with :message and :warning keys
+    # Returns a hash with :message and :failure keys
     def validate_iiif_server
       test_uri = iiif_test_uri
-      return { message: 'Unable to construct test image URI', warning: true } unless test_uri
+      return { message: 'Unable to construct test image URI', failure: true } unless test_uri
 
       response = iiif_connection.head(test_uri)
-      return { message: "HEAD #{test_uri} returned status #{response.status}", warning: true } unless response.success?
+      return { message: "HEAD #{test_uri} returned status #{response.status}", failure: true } unless response.success?
 
       acao_header = response.headers['Access-Control-Allow-Origin']
-      return { message: "HEAD #{test_uri} missing Access-Control-Allow-Origin header", warning: true } if acao_header.blank?
+      return { message: "HEAD #{test_uri} missing Access-Control-Allow-Origin header", failure: true } if acao_header.blank?
 
-      { message: 'IIIF server reachable', warning: false }
+      { message: 'IIIF server reachable', failure: false }
     end
   end
 end

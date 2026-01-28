@@ -62,19 +62,19 @@ module Lending
         Config.instance_variable_set(:@lending_root_path, nil)
       end
 
-      it 'raises ConfigException when ENV IIIF base URL is invalid (covers line 70)' do
+      it 'raises ConfigException when ENV IIIF base URL is invalid' do
         ENV[Config::ENV_IIIF_BASE] = 'http://exa mple.org/bad uri'
 
         expect { Config.iiif_base_uri }.to raise_error(Lending::ConfigException, /Invalid IIIF base URI:/)
       end
 
-      it 'raises ConfigException when ENV lending root is not a directory (covers lines 76-79 / 77)' do
+      it 'raises ConfigException when ENV lending root is not a directory' do
         ENV[Config::ENV_ROOT] = '/definitely/not/a/real/path'
 
         expect { Config.lending_root_path }.to raise_error(Lending::ConfigException, /Invalid lending root:/)
       end
 
-      it 'reads IIIF base from Rails config when ENV is unset (covers rails_iiif_base / line 52 and rails_config_value / 85-88)' do
+      it 'reads IIIF base from Rails config when ENV is unset' do
         ENV[Config::ENV_IIIF_BASE] = nil
         Config.instance_variable_set(:@iiif_base_uri, nil)
 
@@ -82,7 +82,7 @@ module Lending
         expect(Config.iiif_base_uri).to eq(expected)
       end
 
-      it 'reads lending root from Rails config when ENV is unset (covers rails_lending_root / lines 61-62 and rails_config_value / 85-88)' do
+      it 'reads lending root from Rails config when ENV is unset' do
         ENV[Config::ENV_ROOT] = nil
         Config.instance_variable_set(:@lending_root_path, nil)
 
@@ -90,7 +90,7 @@ module Lending
         expect(Config.lending_root_path).to eq(expected)
       end
 
-      it 'returns nil from rails_config_value when Rails is not defined (covers rails_config / 92-95)' do
+      it 'returns nil from rails_config_value when Rails is not defined' do
         ENV[Config::ENV_IIIF_BASE] = nil
         Config.instance_variable_set(:@iiif_base_uri, nil)
 
@@ -104,7 +104,7 @@ module Lending
         end
       end
 
-      it 'returns nil from rails_config when Rails.application is nil (covers rails_config / 92-95)' do
+      it 'returns nil from rails_config when Rails.application is nil' do
         ENV[Config::ENV_IIIF_BASE] = nil
         Config.instance_variable_set(:@iiif_base_uri, nil)
 

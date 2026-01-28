@@ -152,7 +152,7 @@ RSpec.describe HealthChecks::IIIFServerCheck do
 
       run_check
 
-      expect(check.message).to match(/StandardError: boom/)
+      expect(check.message).to match('StandardError')
 
       if check.respond_to?(:failure?)
         expect(check.failure?).to be(true)
@@ -203,15 +203,15 @@ RSpec.describe HealthChecks::IIIFServerCheck do
     end
 
     describe '#validate_iiif_server' do
-      it 'returns a warning when it cannot construct test uri' do
+      it 'returns a failure when it cannot construct test uri' do
         allow(Lending::Config).to receive(:iiif_base_uri).and_return(nil)
 
         result = check.send(:validate_iiif_server)
 
-        expect(result).to eq(message: 'Unable to construct test image URI', warning: true)
+        expect(result).to eq(message: 'Unable to construct test image URI', failure: true)
       end
 
-      it 'returns a warning when the HEAD response is not successful' do
+      it 'returns a failure when the HEAD response is not successful' do
         base_uri = URI('http://example.test/iiif/')
         allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
 
@@ -235,11 +235,11 @@ RSpec.describe HealthChecks::IIIFServerCheck do
 
         result = check.send(:validate_iiif_server)
 
-        expect(result[:warning]).to be(true)
+        expect(result[:failure]).to be(true)
         expect(result[:message]).to match(/returned status 503/)
       end
 
-      it 'returns a warning when Access-Control-Allow-Origin header is missing/blank' do
+      it 'returns a failure when Access-Control-Allow-Origin header is missing/blank' do
         base_uri = URI('http://example.test/iiif/')
         allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
 
@@ -265,7 +265,7 @@ RSpec.describe HealthChecks::IIIFServerCheck do
 
         expect(result).to eq(
           message: "HEAD #{test_uri} missing Access-Control-Allow-Origin header",
-          warning: true
+          failure: true
         )
       end
 
@@ -293,7 +293,7 @@ RSpec.describe HealthChecks::IIIFServerCheck do
 
         result = check.send(:validate_iiif_server)
 
-        expect(result).to eq(message: 'IIIF server reachable', warning: false)
+        expect(result).to eq(message: 'IIIF server reachable', failure: false)
       end
     end
   end

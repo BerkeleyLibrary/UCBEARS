@@ -45,7 +45,7 @@ RSpec.describe HealthChecks::TestItemExists do
 
       run_check
 
-      expect(check.message).to eq(described_class::ERR_NO_COMPLETE_ITEM)
+      expect(check.message).to eq('Unable to locate complete item')
       expect_failed
     end
 
@@ -73,7 +73,7 @@ RSpec.describe HealthChecks::TestItemExists do
 
       run_check
 
-      expect(check.message).to eq('Failed to check item: boom')
+      expect(check.message).to eq('Error: failed to check item')
       expect_failed
     end
   end

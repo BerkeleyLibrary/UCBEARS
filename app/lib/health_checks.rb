@@ -1,3 +1,13 @@
+# frozen_string_literal: true
+
 module HealthChecks
-  Dir[File.join(__dir__, 'health_checks', '*.rb')].each { |f| require f }
+  CHECK_FILES = %w[
+    iiif_server_check
+    lending_root_path
+    test_item_exists
+  ].freeze
+
+  CHECK_FILES.each do |name|
+    require File.join(__dir__, "health_checks/#{name}")
+  end
 end

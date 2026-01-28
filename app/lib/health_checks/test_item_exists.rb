@@ -2,17 +2,16 @@ module HealthChecks
   class TestItemExists < OkComputer::Check
     include BerkeleyLibrary::Logging
 
-    ERR_NO_COMPLETE_ITEM = 'Unable to locate complete item'.freeze
-
     def check
       if complete_item
         mark_message 'Test item lookup succeeded'
       else
-        mark_message ERR_NO_COMPLETE_ITEM
+        mark_message 'Unable to locate complete item'
         mark_failure
       end
     rescue StandardError => e
-      mark_message "Failed to check item: #{e.message}"
+      logger.error(e)
+      mark_message 'Error: failed to check item'
       mark_failure
     end
 

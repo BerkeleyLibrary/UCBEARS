@@ -78,7 +78,7 @@ RSpec.describe HealthChecks::LendingRootPath do
 
       run_check
 
-      expect(check.message).to match(/StandardError: boom/)
+      expect(check.message).to match('Error: StandardError')
       expect_failed
     end
   end
@@ -98,12 +98,12 @@ RSpec.describe HealthChecks::LendingRootPath do
   end
 
   describe '#validate_lending_root' do
-    it 'returns a warning when lending root is not a Pathname' do
+    it 'returns a failure when lending root is not a Pathname' do
       allow(Lending::Config).to receive(:lending_root_path).and_return('/tmp/not_a_pathname')
 
       result = check.send(:validate_lending_root)
 
-      expect(result[:warning]).to be(true)
+      expect(result[:failure]).to be(true)
       expect(result[:message]).to match(/Not a pathname/)
     end
   end
