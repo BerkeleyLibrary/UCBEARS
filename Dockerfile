@@ -50,8 +50,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 
 # Add Yarn package repository, update package list, & install Yarn
 # TODO: why are we installing Yarn 1.22 instead of 3.x?
-# RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
-RUN curl -sL https://keys.openpgp.org/vks/v1/by-fingerprint/72ECF46A56B4AD39C907BBB71646B01B86E50310 | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
+# RUN curl -sL https://keys.openpgp.org/vks/v1/by-fingerprint/72ECF46A56B4AD39C907BBB71646B01B86E50310 | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
     && apt-get install -y --no-install-recommends yarn
