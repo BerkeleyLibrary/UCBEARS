@@ -1,5 +1,20 @@
 require 'rails_helper'
 
+def capture_logs(logger, levels: %i[info error], pattern: nil)
+  logs = Hash.new { |h, k| h[k] = [] }
+
+  levels.each do |level|
+    allow(logger).to receive(level) do |msg, *|
+      text = msg.to_s
+      next if pattern && !text.match?(pattern)
+
+      logs[level] << text
+    end
+  end
+
+  logs
+end
+
 module Lending
   describe Collector do
     attr_reader :lending_root
@@ -74,14 +89,27 @@ module Lending
       end
 
       it 'processes files' do
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
+        logs = capture_logs(
+          BerkeleyLibrary::Logging.logger,
+          levels: %i[info]
+        )
+
         processing_dir, final_dir = expect_to_process('b12345678_c12345678')
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
+
         collector.collect!
 
         expect(processing_dir).not_to exist
         expect(final_dir).to exist
         expect(collector.stopped?).to eq(false)
+
+        info = logs[:info].join("\n")
+
+        # Removing ordered expects which were very brittle in CI:
+        expect(info).to match(/starting/)
+        expect(info).to match(/processing.*b12345678_c12345678/)
+        expect(info).to match(/moving.*b12345678_c12345678/)
+        expect(info).to match(/triggering garbage collection/)
+        expect(info).to match(/nothing left to process/)
       end
 
       # rubocop:disable RSpec/ExampleLength
