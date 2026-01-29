@@ -74,7 +74,7 @@ module Lending
 
         unless File.directory?(lending_root_dirname)
           raise ConfigException,
-                "Invalid lending root: #{lending_root.inspect} is not a directory"
+                "Invalid lending root: #{lending_root_dirname.inspect} is not a directory"
         end
 
         Pathname.new(lending_root_dirname)

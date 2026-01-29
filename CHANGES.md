@@ -1,3 +1,7 @@
+# 1.7.6 (xxxx-xx-xx)
+
+* Implement OKComputer for healthchecks
+
 # 1.7.5 (2025-12-17)
 
 * Hotfix for release workflow issue
