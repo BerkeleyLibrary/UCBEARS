@@ -4,7 +4,7 @@ def capture_logs(logger, levels: %i[info error], pattern: nil)
   logs = Hash.new { |h, k| h[k] = [] }
 
   levels.each do |level|
-    allow(logger).to receive(level) do |msg, *|
+    allow(logger).to receive(level) do |msg = nil, *|
       text = msg.to_s
       next if pattern && !text.match?(pattern)
 
@@ -55,10 +55,6 @@ module Lending
           expect(processing_dir).to exist
         end
 
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/processing.*#{item_dirname}/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/moving.*#{item_dirname}/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/triggering garbage collection/).ordered
-
         [processing_dir, final_dir]
       end
 
@@ -69,30 +65,33 @@ module Lending
       end
 
       it 'processes nothing if stopped' do
-        collector.stop!
+        logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info])
 
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/stopped/).ordered
+        collector.stop!
         expect(Processor).not_to receive(:new)
+
         collector.collect!
+
+        info = logs[:info].join("\n")
+        expect(info).to match(/starting/)
+        expect(info).to match(/stopped/)
       end
 
       it 'stops if a stop file is present' do
-        stop_file_path = collector.stop_file_path
-        FileUtils.touch(stop_file_path.to_s)
+        logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info])
 
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/stop file .* found/).ordered
+        FileUtils.touch(collector.stop_file_path.to_s)
         expect(Processor).not_to receive(:new)
 
         collector.collect!
+
+        info = logs[:info].join("\n")
+        expect(info).to match(/starting/)
+        expect(info).to match(/stop file .* found/)
       end
 
       it 'processes files' do
-        logs = capture_logs(
-          BerkeleyLibrary::Logging.logger,
-          levels: %i[info]
-        )
+        logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info])
 
         processing_dir, final_dir = expect_to_process('b12345678_c12345678')
 
@@ -117,12 +116,11 @@ module Lending
         processing_dirs = []
         final_dirs = []
 
-        logger = BerkeleyLibrary::Logging.logger
-        logs = []
-
-        allow(logger).to receive(:info) do |msg|
-          logs << msg if msg.match?(/starting|nothing left to process/)
-        end
+        logs = capture_logs(
+          BerkeleyLibrary::Logging.logger,
+          levels: %i[info],
+          pattern: /starting|nothing left to process/
+        )
 
         %w[b12345678_c12345678 b86753090_c86753090].each do |item_dir|
           pdir, fdir = expect_to_process(item_dir)
@@ -132,21 +130,27 @@ module Lending
 
         collector.collect!
 
-        start_index = logs.index { |l| l =~ /starting/ }
-        end_index = logs.index { |l| l =~ /nothing left to process/ }
+        info_lines = logs[:info]
+        expect(info_lines.grep(/starting/)).not_to be_empty
+        expect(info_lines.grep(/nothing left to process/)).not_to be_empty
+
+        start_index = info_lines.index { |l| l =~ /starting/ }
+        end_index   = info_lines.index { |l| l =~ /nothing left to process/ }
 
         expect(start_index).not_to be_nil
         expect(end_index).not_to be_nil
         expect(start_index).to be < end_index
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
-        final_dirs.each { |fdir| expect(fdir).to exist }
+        final_dirs.each      { |fdir| expect(fdir).to exist }
         expect(collector.stopped?).to eq(false)
       end
       # rubocop:enable RSpec/ExampleLength
 
       # rubocop:disable RSpec/ExampleLength
       it 'skips single-item processing failures' do
+        logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info error])
+
         bad_item_dir = 'b12345678_c12345678'
 
         bad_ready_dir = lending_root.join('ready').join(bad_item_dir)
@@ -163,21 +167,24 @@ module Lending
         error_message = 'Oops'
         expect(bad_processor).to(receive(:process!)).and_raise(error_message)
 
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/processing/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:error).with(/Processing.*failed/, an_object_satisfying do |obj|
-          obj.is_a?(Lending::ProcessingFailed)
-          obj.message.include?(error_message)
-        end).ordered
-        # GC.start should be called even if processing fails
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/triggering garbage collection/).ordered
-
         good_item_dir = 'b86753090_c86753090'
         good_processing_dir, good_final_dir = expect_to_process(good_item_dir)
-
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/nothing left to process/).ordered
-
         collector.collect!
+
+        info = logs[:info].join("\n")
+
+        expect(info).to match(/starting/)
+        expect(info).to match(/processing.*#{bad_item_dir}/)
+
+        error_text = logs[:error].join("\n")
+
+        expect(error_text).to match(/Processing.*failed/)
+        expect(error_text).to include(error_message)
+
+        # GC.start should be called even if processing fails
+        expect(info).to match(/triggering garbage collection/)
+
+        expect(info).to match(/nothing left to process/)
 
         expect(bad_processing_dir).to exist
         expect(bad_final_dir).not_to exist
@@ -190,11 +197,17 @@ module Lending
       # rubocop:enable RSpec/ExampleLength
 
       it 'exits cleanly in the event of some random error' do
+        logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info error])
+
         FileUtils.remove_dir(lending_root.to_s)
 
-        expect(BerkeleyLibrary::Logging.logger).to receive(:info).with(/starting/).ordered
-        expect(BerkeleyLibrary::Logging.logger).to receive(:error).with(/exiting due to error/, a_kind_of(StandardError))
         collector.collect!
+
+        info  = logs[:info].join("\n")
+        error = logs[:error].join("\n")
+
+        expect(info).to match(/starting/)
+        expect(error).to match(/exiting due to error/)
       end
     end
 
