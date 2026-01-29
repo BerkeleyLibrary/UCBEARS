@@ -1,4 +1,3 @@
-# initializers/okcomputer.rb
 require 'health_checks'
 
 OkComputer.logger = Rails.logger

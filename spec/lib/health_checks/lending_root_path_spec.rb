@@ -1,4 +1,3 @@
-# spec/lib/health_checks/lending_root_path_spec.rb
 require 'rails_helper'
 
 RSpec.describe HealthChecks::LendingRootPath do

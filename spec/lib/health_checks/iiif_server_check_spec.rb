@@ -1,4 +1,3 @@
-# spec/lib/health_checks/iiif_server_check_spec.rb
 require 'rails_helper'
 
 RSpec.describe HealthChecks::IIIFServerCheck do
