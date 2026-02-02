@@ -64,7 +64,7 @@ body > header {
           &.site-name {
             font-size: $font-size-normal;
             padding-left: $margin;
-            padding-top: $sitename-baseline-adjust;
+            padding-top: 0.65rem; 
           }
         }
       }
