@@ -17,6 +17,7 @@ gem 'jsbundling-rails'
 gem 'jwt', '~> 2.2'
 # Workaround for https://github.com/alexspeller/non-stupid-digest-assets/issues/54
 gem 'non-stupid-digest-assets', git: 'https://github.com/BerkeleyLibrary/non-stupid-digest-assets.git', ref: '1de0c38'
+gem 'okcomputer', '~> 1.19', '>= 1.19.1'
 gem 'omniauth-cas', '~> 2.0'
 gem 'pagy', '~> 5.6'
 gem 'pg', '~> 1.2'
