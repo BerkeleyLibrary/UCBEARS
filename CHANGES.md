@@ -1,6 +1,7 @@
-# 1.7.6 (xxxx-xx-xx)
+# 1.7.8 (xxxx-xx-xx)
 
 * Implement OKComputer for healthchecks
+* Refactor collector_spec to not include brittle ".ordered" expectations
 
 # 1.7.5 (2025-12-17)
 
