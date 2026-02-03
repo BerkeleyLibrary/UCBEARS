@@ -74,7 +74,7 @@ RUN mkdir -p /opt/app/tmp \
     && ln -s /opt/app/artifacts/screenshots /opt/app/tmp/screenshots
 
 # Add binstubs to the path.
-ENV PATH="/usr/bin:/opt/app/bin:/usr/local/yarn/node_modules/bin:$PATH"
+ENV PATH="/usr/bin:/opt/app/bin:/usr/local/yarn/node_modules/.bin:$PATH"
 
 # If run with no other arguments, the image will start the rails server by
 # default. Note that we must bind to all interfaces (0.0.0.0) because when
