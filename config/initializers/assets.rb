@@ -13,6 +13,13 @@ Rails.application.config.assets.version = '1.0'
 # folder are already added.
 Rails.application.config.assets.precompile += %w[*.png]
 
+Rails.application.config.assets.precompile += %w[
+  application.js
+  items.js
+  terms.js
+  viewer.js
+  marc-reload.js
+]
 # Rails.application.config.assets.configure do |env|
 #   env.css_compressor = :sass
 # end

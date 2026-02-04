@@ -176,7 +176,7 @@ WORKDIR /opt/app
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
-RUN SECRET_KEY_BASE=1 rails assets:precompile --trace
+RUN SECRET_KEY_BASE=1 bundle exec rails assets:precompile --trace
 
 # ------------------------------------------------------------
 # Preserve build arguments

@@ -9,8 +9,7 @@
     <%= csp_meta_tag %>
 
     <link rel="stylesheet" href="https://use.typekit.net/rxa5jay.css">
-
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
     <%= javascript_include_tag "items", "data-turbo-track": "reload", defer: true %>
     <%= javascript_include_tag "terms", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
