@@ -1,7 +1,11 @@
-# 1.7.8 (xxxx-xx-xx)
+# 1.7.8 (2026-02-05)
 
 * Implement OKComputer for healthchecks
 * Refactor collector_spec to not include brittle ".ordered" expectations
+* fixes 1.7.7 and runs yarn build in target=prod 
+
+# 1.7.7 (xxxx-xx-xx)
+* update Dockerfile so yarn is installed in /usr/local/yarn
 
 # 1.7.5 (2025-12-17)
 
