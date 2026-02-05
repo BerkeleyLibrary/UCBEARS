@@ -134,7 +134,7 @@ RUN bundle install
 # re-install.
 COPY --chown=$APP_USER:$APP_USER . .
 
-RUN yarn install --cwd /usr/local/yarn
+RUN yarn install --frozen-lockfile --cwd /usr/local/yarn
 
 # =============================================================================
 # Target: production
@@ -163,16 +163,15 @@ COPY --from=development --chown=$APP_USER /usr/local/yarn /usr/local/yarn
 # Ensure the bundle is installed and the Gemfile.lock is synced.
 RUN bundle config set frozen 'true'
 RUN bundle install --local
-
+RUN ln -s /usr/local/yarn/node_modules /opt/app/node_modules
 # ------------------------------------------------------------
 # Precompile production assets
 
 # TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
 #       *before* Sprockets reads app/assets/config/manifest.js
-WORKDIR /usr/local/yarn
+WORKDIR /opt/app
 RUN yarn build
 
-WORKDIR /opt/app
 # Pre-compile assets so we don't have to do it after deployment.
 # NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
 #       -- see https://github.com/rails/rails/issues/32947
