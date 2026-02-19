@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/iiif_check_helper'
 
 RSpec.describe HealthChecks::IIIFServerCheck do
   subject(:check) { described_class.new }
@@ -8,21 +9,13 @@ RSpec.describe HealthChecks::IIIFServerCheck do
     check
   end
 
-  def stub_items(active_first:, inactive_first:)
-    active_relation = instance_double('ActiveRelation', first: active_first)
-    inactive_relation = instance_double('InactiveRelation', first: inactive_first)
-
-    allow(Item).to receive(:active).and_return(active_relation)
-    allow(Item).to receive(:inactive).and_return(inactive_relation)
-  end
-
   describe '#check' do
     it 'fails and sets message when the IIIF test uri cannot be constructed' do
       allow(Lending::Config).to receive(:iiif_base_uri).and_return(nil)
 
       run_check
 
-      expect(check.message).to eq('Unable to construct test image URI')
+      expect(check.message).to eq('Unable to construct healthcheck URI')
 
       if check.respond_to?(:failure?)
         expect(check.failure?).to be(true)
@@ -31,132 +24,40 @@ RSpec.describe HealthChecks::IIIFServerCheck do
       end
     end
 
-    it 'fails and sets message when the HEAD response is not successful' do
-      base_uri = URI('http://example.test/iiif/')
-      allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
+    context 'with a valid IIIF base URI' do
+      include_context 'with a valid IIIF base_uri'
 
-      iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-      item = instance_double('Item', iiif_directory: iiif_dir)
-      stub_items(active_first: item, inactive_first: nil)
+      it 'fails and sets message when the GET request is not successful' do
+        response = instance_double('Faraday::Response',
+                                   success?: false,
+                                   status: 503,
+                                   headers: {})
 
-      test_uri = 'http://example.test/info.json'
-      allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-        .with(base_uri, 'some/path', 'info.json')
-        .and_return(test_uri)
+        allow(connection).to receive(:get).with(test_uri).and_return(response)
 
-      response = instance_double('Faraday::Response',
-                                 success?: false,
-                                 status: 503,
-                                 headers: {})
+        run_check
 
-      connection = instance_double('Faraday::Connection')
-      allow(Faraday).to receive(:new).and_return(connection)
-      allow(connection).to receive(:head).with(test_uri).and_return(response)
+        expect(check.message).to match(/returned status 503/)
 
-      run_check
-
-      expect(check.message).to match(/returned status 503/)
-
-      if check.respond_to?(:failure?)
-        expect(check.failure?).to be(true)
-      else
-        expect(check.instance_variable_get(:@failure_occurred)).to be(true)
+        if check.respond_to?(:failure?)
+          expect(check.failure?).to be(true)
+        else
+          expect(check.instance_variable_get(:@failure_occurred)).to be(true)
+        end
       end
-    end
 
-    it 'fails and sets message when Access-Control-Allow-Origin header is missing/blank' do
-      base_uri = URI('http://example.test/iiif/')
-      allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
+      it 'fails and sets message when an exception is raised' do
+        allow(connection).to receive(:get).with(test_uri).and_raise(StandardError, 'boom')
 
-      iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-      item = instance_double('Item', iiif_directory: iiif_dir)
-      stub_items(active_first: item, inactive_first: nil)
+        run_check
 
-      test_uri = 'http://example.test/info.json'
-      allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-        .with(base_uri, 'some/path', 'info.json')
-        .and_return(test_uri)
+        expect(check.message).to match('StandardError')
 
-      response = instance_double('Faraday::Response',
-                                 success?: true,
-                                 status: 200,
-                                 headers: { 'Access-Control-Allow-Origin' => '' })
-
-      connection = instance_double('Faraday::Connection')
-      allow(Faraday).to receive(:new).and_return(connection)
-      allow(connection).to receive(:head).with(test_uri).and_return(response)
-
-      run_check
-
-      expect(check.message).to eq(
-        "HEAD #{test_uri} missing Access-Control-Allow-Origin header"
-      )
-
-      if check.respond_to?(:failure?)
-        expect(check.failure?).to be(true)
-      else
-        expect(check.instance_variable_get(:@failure_occurred)).to be(true)
-      end
-    end
-
-    it 'does not fail when reachable and ACAO header present' do
-      base_uri = URI('http://example.test/iiif/')
-      allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
-
-      iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-      item = instance_double('Item', iiif_directory: iiif_dir)
-      stub_items(active_first: item, inactive_first: nil)
-
-      test_uri = 'http://example.test/info.json'
-      allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-        .with(base_uri, 'some/path', 'info.json')
-        .and_return(test_uri)
-
-      response = instance_double('Faraday::Response',
-                                 success?: true,
-                                 status: 200,
-                                 headers: { 'Access-Control-Allow-Origin' => '*' })
-
-      connection = instance_double('Faraday::Connection')
-      allow(Faraday).to receive(:new).and_return(connection)
-      allow(connection).to receive(:head).with(test_uri).and_return(response)
-
-      run_check
-
-      expect(check.message).to eq('IIIF server reachable')
-
-      if check.respond_to?(:failure?)
-        expect(check.failure?).to be(false)
-      else
-        expect(check.instance_variable_get(:@failure_occurred)).not_to be(true)
-      end
-    end
-
-    it 'fails and sets message when an exception is raised' do
-      base_uri = URI('http://example.test/iiif/')
-      allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
-
-      iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-      item = instance_double('Item', iiif_directory: iiif_dir)
-      stub_items(active_first: item, inactive_first: nil)
-
-      test_uri = 'http://example.test/info.json'
-      allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-        .with(base_uri, 'some/path', 'info.json')
-        .and_return(test_uri)
-
-      connection = instance_double('Faraday::Connection')
-      allow(Faraday).to receive(:new).and_return(connection)
-      allow(connection).to receive(:head).with(test_uri).and_raise(StandardError, 'boom')
-
-      run_check
-
-      expect(check.message).to match('StandardError')
-
-      if check.respond_to?(:failure?)
-        expect(check.failure?).to be(true)
-      else
-        expect(check.instance_variable_get(:@failure_occurred)).to be(true)
+        if check.respond_to?(:failure?)
+          expect(check.failure?).to be(true)
+        else
+          expect(check.instance_variable_get(:@failure_occurred)).to be(true)
+        end
       end
     end
   end
@@ -178,121 +79,55 @@ RSpec.describe HealthChecks::IIIFServerCheck do
         expect(check.send(:iiif_test_uri)).to be_nil
       end
 
-      it 'returns nil when no Item exists' do
-        allow(Lending::Config).to receive(:iiif_base_uri).and_return(URI('http://example.test/iiif/'))
-        stub_items(active_first: nil, inactive_first: nil)
-
-        expect(check.send(:iiif_test_uri)).to be_nil
-      end
-
-      it 'builds a test uri from an active item (or inactive fallback)' do
+      it 'builds a default test uri' do
         base_uri = URI('http://example.test/iiif/')
         allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
 
-        iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-        item = instance_double('Item', iiif_directory: iiif_dir)
-        stub_items(active_first: item, inactive_first: nil)
+        expect(URI).to receive(:join)
+          .with(base_uri, '/health')
+          .and_return('http://example.test/health')
 
-        expect(BerkeleyLibrary::Util::URIs).to receive(:append)
-          .with(base_uri, 'some/path', 'info.json')
-          .and_return('http://example.test/iiif/some/path/info.json')
-
-        expect(check.send(:iiif_test_uri)).to eq('http://example.test/iiif/some/path/info.json')
+        expect(check.send(:iiif_test_uri)).to eq('http://example.test/health')
       end
     end
 
-    describe '#validate_iiif_server' do
+    describe '#perform_request' do
       it 'returns a failure when it cannot construct test uri' do
         allow(Lending::Config).to receive(:iiif_base_uri).and_return(nil)
 
-        result = check.send(:validate_iiif_server)
+        result = check.send(:perform_request)
 
-        expect(result).to eq(message: 'Unable to construct test image URI', failure: true)
+        expect(result).to eq(message: 'Unable to construct healthcheck URI', failure: true, rsp: nil)
       end
 
-      it 'returns a failure when the HEAD response is not successful' do
-        base_uri = URI('http://example.test/iiif/')
-        allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
+      context 'with a valid IIIF base URI' do
+        include_context 'with a valid IIIF base_uri'
+        it 'returns a failure when the GET request is not successful' do
+          response = instance_double('Faraday::Response',
+                                     success?: false,
+                                     status: 503,
+                                     headers: {})
 
-        iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-        item = instance_double('Item', iiif_directory: iiif_dir)
-        stub_items(active_first: item, inactive_first: nil)
+          allow(connection).to receive(:get).with(test_uri).and_return(response)
 
-        test_uri = 'http://example.test/info.json'
-        allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-          .with(base_uri, 'some/path', 'info.json')
-          .and_return(test_uri)
+          result = check.send(:perform_request)
 
-        response = instance_double('Faraday::Response',
-                                   success?: false,
-                                   status: 503,
-                                   headers: {})
+          expect(result[:failure]).to be(true)
+          expect(result[:message]).to match(/returned status 503/)
+        end
 
-        connection = instance_double('Faraday::Connection')
-        allow(Faraday).to receive(:new).and_return(connection)
-        allow(connection).to receive(:head).with(test_uri).and_return(response)
+        it 'returns ok when reachable and ACAO header present' do
+          response = instance_double('Faraday::Response',
+                                     success?: true,
+                                     status: 200,
+                                     headers: { 'Access-Control-Allow-Origin' => '*' })
 
-        result = check.send(:validate_iiif_server)
+          allow(connection).to receive(:get).with(test_uri).and_return(response)
 
-        expect(result[:failure]).to be(true)
-        expect(result[:message]).to match(/returned status 503/)
-      end
+          result = check.send(:perform_request)
 
-      it 'returns a failure when Access-Control-Allow-Origin header is missing/blank' do
-        base_uri = URI('http://example.test/iiif/')
-        allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
-
-        iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-        item = instance_double('Item', iiif_directory: iiif_dir)
-        stub_items(active_first: item, inactive_first: nil)
-
-        test_uri = 'http://example.test/info.json'
-        allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-          .with(base_uri, 'some/path', 'info.json')
-          .and_return(test_uri)
-
-        response = instance_double('Faraday::Response',
-                                   success?: true,
-                                   status: 200,
-                                   headers: { 'Access-Control-Allow-Origin' => '' })
-
-        connection = instance_double('Faraday::Connection')
-        allow(Faraday).to receive(:new).and_return(connection)
-        allow(connection).to receive(:head).with(test_uri).and_return(response)
-
-        result = check.send(:validate_iiif_server)
-
-        expect(result).to eq(
-          message: "HEAD #{test_uri} missing Access-Control-Allow-Origin header",
-          failure: true
-        )
-      end
-
-      it 'returns ok when reachable and ACAO header present' do
-        base_uri = URI('http://example.test/iiif/')
-        allow(Lending::Config).to receive(:iiif_base_uri).and_return(base_uri)
-
-        iiif_dir = instance_double('IiifDirectory', first_image_url_path: 'some/path')
-        item = instance_double('Item', iiif_directory: iiif_dir)
-        stub_items(active_first: item, inactive_first: nil)
-
-        test_uri = 'http://example.test/info.json'
-        allow(BerkeleyLibrary::Util::URIs).to receive(:append)
-          .with(base_uri, 'some/path', 'info.json')
-          .and_return(test_uri)
-
-        response = instance_double('Faraday::Response',
-                                   success?: true,
-                                   status: 200,
-                                   headers: { 'Access-Control-Allow-Origin' => '*' })
-
-        connection = instance_double('Faraday::Connection')
-        allow(Faraday).to receive(:new).and_return(connection)
-        allow(connection).to receive(:head).with(test_uri).and_return(response)
-
-        result = check.send(:validate_iiif_server)
-
-        expect(result).to eq(message: 'IIIF server reachable', failure: false)
+          expect(result).to eq(message: 'HTTP check successful', failure: false, rsp: response)
+        end
       end
     end
   end

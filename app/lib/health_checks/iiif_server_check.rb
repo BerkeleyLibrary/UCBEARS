@@ -3,7 +3,7 @@ module HealthChecks
     include BerkeleyLibrary::Logging
 
     def check
-      result = validate_iiif_server
+      result = perform_request
       mark_message result[:message]
       mark_failure if result[:failure]
     rescue StandardError => e
@@ -21,32 +21,25 @@ module HealthChecks
       end
     end
 
-    def iiif_test_uri
-      base_uri = Lending::Config.iiif_base_uri
-      return unless base_uri
-
-      item = Item.active.first || Item.inactive.first
-      return unless item
-
-      BerkeleyLibrary::Util::URIs.append(
-        base_uri,
-        item.iiif_directory.first_image_url_path,
-        'info.json'
-      )
+    def iiif_base_uri
+      @iiif_base_uri ||= begin
+        base_uri = Lending::Config.iiif_base_uri
+        base_uri
+      end
     end
 
-    # Returns a hash with :message and :failure keys
-    def validate_iiif_server
-      test_uri = iiif_test_uri
-      return { message: 'Unable to construct test image URI', failure: true } unless test_uri
+    def iiif_test_uri
+      @iiif_test_uri ||= (URI.join(iiif_base_uri, '/health') if iiif_base_uri)
+    end
 
-      response = iiif_connection.head(test_uri)
-      return { message: "HEAD #{test_uri} returned status #{response.status}", failure: true } unless response.success?
+    # Returns a hash with :message, :failure, and :rsp keys
+    def perform_request
+      return { message: 'Unable to construct healthcheck URI', failure: true, rsp: nil } unless iiif_test_uri
 
-      acao_header = response.headers['Access-Control-Allow-Origin']
-      return { message: "HEAD #{test_uri} missing Access-Control-Allow-Origin header", failure: true } if acao_header.blank?
+      response = iiif_connection.get(iiif_test_uri)
+      return { message: "GET #{iiif_test_uri} returned status #{response.status}", failure: true, rsp: response } unless response.success?
 
-      { message: 'IIIF server reachable', failure: false }
+      { message: 'HTTP check successful', failure: false, rsp: response }
     end
   end
 end
