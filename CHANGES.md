@@ -1,3 +1,7 @@
+# 1.7.9 (2026-02-19)
+
+* Refactor healthchecks, in part to use new iipsrv healthcheck
+
 # 1.7.8 (2026-02-05)
 
 * Implement OKComputer for healthchecks
