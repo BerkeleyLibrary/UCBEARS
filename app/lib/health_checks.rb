@@ -2,6 +2,7 @@
 
 module HealthChecks
   CHECK_FILES = %w[
+    iiif_item_check
     iiif_server_check
     lending_root_path
     test_item_exists

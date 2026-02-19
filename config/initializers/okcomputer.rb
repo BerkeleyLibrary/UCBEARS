@@ -9,8 +9,9 @@ OkComputer::Registry.register 'database', OkComputer::ActiveRecordCheck.new
 # Check that DB migrations have run
 OkComputer::Registry.register 'database-migrations', OkComputer::ActiveRecordMigrationsCheck.new
 
-# Custom IIIF server check
+# Custom IIIF server checks
 OkComputer::Registry.register 'iiif-server', HealthChecks::IIIFServerCheck.new
+OkComputer::Registry.register 'iiif-item', HealthChecks::IIIFItemCheck.new
 
 # TODO: Custom Test Item Exists
 OkComputer::Registry.register 'test-item-exists', HealthChecks::TestItemExists.new
