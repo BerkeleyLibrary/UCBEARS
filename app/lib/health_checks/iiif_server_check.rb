@@ -22,10 +22,7 @@ module HealthChecks
     end
 
     def iiif_base_uri
-      @iiif_base_uri ||= begin
-        base_uri = Lending::Config.iiif_base_uri
-        base_uri
-      end
+      @iiif_base_uri ||= Lending::Config.iiif_base_uri
     end
 
     def iiif_test_uri

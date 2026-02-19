@@ -18,7 +18,6 @@ RSpec.shared_context 'with a valid IIIF base_uri', shared_context: :metadata do
 end
 
 RSpec.shared_context 'IIIF item checks', shared_context: :metadata do
-  # include_context "with a valid IIIF base_uri"
   let!(:base_uri) { URI('http://example.test/iiif/') }
   let!(:test_uri) { URI('http://example.test/info.json') }
   let(:iiif_dir) do

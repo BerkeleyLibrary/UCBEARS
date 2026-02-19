@@ -26,9 +26,9 @@ module HealthChecks
 
       acao_header = response[:rsp].headers['Access-Control-Allow-Origin']
       if acao_header.blank?
-        return {
-          message: "GET #{iiif_test_uri} missing Access-Control-Allow-Origin header", failure: true, rsp: response[:rsp]
-        }
+        response.merge!({
+                          message: "GET #{iiif_test_uri} missing Access-Control-Allow-Origin header", failure: true
+                        })
       end
       response
     end
