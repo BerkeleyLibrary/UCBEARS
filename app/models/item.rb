@@ -244,7 +244,7 @@ class Item < ApplicationRecord
       title: marc_metadata.title,
       publisher: marc_metadata.publisher,
       physical_desc: marc_metadata.physical_desc
-    }.filter { |_, v| v.present? }
+    }.compact_blank
     assign_attributes(attrs)
   end
 
@@ -291,7 +291,8 @@ class Item < ApplicationRecord
     return Item::MSG_INACTIVE unless active?
     return msg_not_current_term unless for_current_term?
     return msg_unavailable if copies_available <= 0
-    return Item::MSG_INCOMPLETE unless complete?
+
+    Item::MSG_INCOMPLETE unless complete?
   end
 
   delegate :reason_incomplete, to: :iiif_directory

@@ -209,7 +209,7 @@ RSpec.describe '/terms', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_a(Hash)
 
-        expect(parsed_response['success']).to eq(false)
+        expect(parsed_response['success']).to be(false)
 
         parsed_error = parsed_response['error']
         expect(parsed_error).to be_a(Hash)
@@ -253,7 +253,7 @@ RSpec.describe '/terms', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_a(Hash)
 
-        expect(parsed_response['success']).to eq(false)
+        expect(parsed_response['success']).to be(false)
 
         parsed_error = parsed_response['error']
         expect(parsed_error).to be_a(Hash)
@@ -361,7 +361,7 @@ RSpec.describe '/terms', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_a(Hash)
 
-        expect(parsed_response['success']).to eq(false)
+        expect(parsed_response['success']).to be(false)
 
         parsed_error = parsed_response['error']
         expect(parsed_error).to be_a(Hash)
@@ -398,7 +398,6 @@ RSpec.describe '/terms', type: :request do
         expect(Settings.default_term).to eq(term)
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it 'does not accept duplicate names' do
         terms = Term.all
         expect(terms.size).to be > 1 # just to be sure
@@ -425,7 +424,7 @@ RSpec.describe '/terms', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_a(Hash)
 
-        expect(parsed_response['success']).to eq(false)
+        expect(parsed_response['success']).to be(false)
 
         parsed_error = parsed_response['error']
         expect(parsed_error).to be_a(Hash)
@@ -437,7 +436,6 @@ RSpec.describe '/terms', type: :request do
         expect(messages.first).to match(expected_msg_re)
       end
     end
-    # rubocop:enable RSpec/ExampleLength
 
     describe :destroy do
       it 'deletes a term' do

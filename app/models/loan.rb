@@ -24,7 +24,7 @@ class Loan < ApplicationRecord
   scope :loaned_on, ->(date) do
     from_time = Time.zone.local(date.year, date.month, date.day)
     until_time = from_time + 1.days
-    where('loans.loan_date >= ? AND loans.loan_date < ?', from_time, until_time)
+    where(loans: { loan_date: from_time...until_time })
   end
 
   # ------------------------------------------------------------
@@ -78,7 +78,7 @@ class Loan < ApplicationRecord
 
   def ok_to_check_out?
     # TODO: clean this up
-    item.available? && !(active? || already_checked_out? || checkout_limit_reached)
+    item.available? && !(active? || already_checked_out? || checkout_limit_reached?)
   end
 
   def reason_unavailable
@@ -86,7 +86,7 @@ class Loan < ApplicationRecord
 
     item.reason_unavailable ||
       (Item::MSG_CHECKED_OUT if already_checked_out?) ||
-      (Item::MSG_CHECKOUT_LIMIT_REACHED if checkout_limit_reached)
+      (Item::MSG_CHECKOUT_LIMIT_REACHED if checkout_limit_reached?)
   end
 
   def seconds_remaining
@@ -110,7 +110,7 @@ class Loan < ApplicationRecord
     return if complete?
 
     errors.add(:base, Item::MSG_CHECKED_OUT) if already_checked_out?
-    errors.add(:base, Item::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached
+    errors.add(:base, Item::MSG_CHECKOUT_LIMIT_REACHED) if checkout_limit_reached?
   end
 
   def item_available
@@ -135,7 +135,7 @@ class Loan < ApplicationRecord
     due_date && due_date <= Time.current.utc
   end
 
-  def checkout_limit_reached
+  def checkout_limit_reached?
     other_checkouts.count >= Item::MAX_CHECKOUTS_PER_PATRON
   end
 

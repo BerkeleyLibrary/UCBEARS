@@ -81,7 +81,7 @@ describe Loan do
     attr_reader :loans_by_date
 
     before do
-      @env_tz_actual = ENV['TZ']
+      @env_tz_actual = ENV.fetch('TZ', nil)
       @rails_tz_actual = Time.zone
 
       Time.zone = 'America/Los_Angeles'

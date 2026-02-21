@@ -60,8 +60,8 @@ module BerkeleyLibrary
     # @param silence_errors [Boolean] whether to warn when the eslint command returns a nonzero exit status.
     # @return [Integer] 0 for success, nonzero value for failure
     # @yieldparam exit_status [Integer] 0 for success, nonzero value for failure
-    def write_to_console(silence_errors: true, &block)
-      run_cmd(eslint_cmd, silence_errors:, &block)
+    def write_to_console(silence_errors: true, &)
+      run_cmd(eslint_cmd, silence_errors:, &)
     end
 
     # Fixes any detected problems that can be auto-fixed.
@@ -76,7 +76,7 @@ module BerkeleyLibrary
 
     def ensure_report_path!
       report_path.tap do |p|
-        FileUtils.rm(p) if File.exist?(p)
+        FileUtils.rm_f(p)
         report_dir = File.dirname(p)
         FileUtils.mkdir_p(report_dir) unless File.directory?(report_dir)
       end
@@ -85,7 +85,7 @@ module BerkeleyLibrary
     def eslint_cmd(*args)
       %w[yarn eslint].tap do |cmd|
         cmd.concat(args)
-        cmd.concat(%w[--ext .js,.vue])
+        cmd.push('--ext', '.js,.vue')
         cmd.concat(js_dirs)
       end
     end

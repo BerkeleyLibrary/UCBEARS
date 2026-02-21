@@ -11,16 +11,14 @@ class LendingItemViewPresenter < LendingItemPresenterBase
     )
 
     @loan = loan
-    @show_copyright_warning = (!loan.active? && item.available?)
+    @show_copyright_warning = !loan.active? && item.available?
   end
 
   def action
     return action_return if loan.active?
     return action_check_out if loan.ok_to_check_out?
 
-    # rubocop:disable Rails/OutputSafety
     tag.a(class: 'btn primary disabled') { t('loan.actions.check_out') }.html_safe
-    # rubocop:enable Rails/OutputSafety
   end
 
   def build_fields

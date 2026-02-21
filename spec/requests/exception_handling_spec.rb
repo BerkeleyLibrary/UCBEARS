@@ -34,7 +34,7 @@ describe ExceptionHandling, type: :request do
     after { logout! }
 
     it 'returns 404 not found for JSON requests' do
-      expected_msg = "Couldn't find Item with 'id'=#{bad_id}"
+      expected_msg = "Couldn't find Item with 'id'=\"#{bad_id}\""
 
       get item_url(id: bad_id), as: :json
       expect_json_error(:not_found, expected_msg)

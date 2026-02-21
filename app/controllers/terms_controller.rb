@@ -42,7 +42,7 @@ class TermsController < ApplicationController
     return render_term_errors(status: :forbidden) unless @term.destroy
 
     logger.info("Deleted term #{@term.name} (#{@term.start_date}–#{@term.end_date})”, id: #{term_id})")
-    render body: nil, status: :no_content
+    head :no_content
   end
 
   private
@@ -83,14 +83,16 @@ class TermsController < ApplicationController
     @term = Term.find(term_id)
   end
 
+  # rubocop:disable Rails/StrongParametersExpect
   def term_params
     params.require(:term).permit(:name, :start_date, :end_date).tap do |pp|
       logger.info("#{self.class}.term_params", pp)
     end
   end
+  # rubocop:enable Rails/StrongParametersExpect
 
   def term_default?
-    @term_default ||= params.require(:term).permit(:default_term)[:default_term]
+    @term_default ||= params.require(:term).permit(:default_term)[:default_term] # rubocop:disable Rails/StrongParametersExpect
   end
 
   def query_params

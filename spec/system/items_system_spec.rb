@@ -18,7 +18,7 @@ describe ItemsController, type: :system do
   before do
     # NOTE: we're deliberately not validating here, because we want some invalid items
     @items = factory_names.each_with_object([]) do |fn, items|
-      items << build(fn).tap { |it| it.save!(validate: false) }
+      items << build(fn).tap { |i| i.save!(validate: false) }
     end
   end
 
@@ -32,7 +32,7 @@ describe ItemsController, type: :system do
       it 'displays the items' do
         visit items_path
 
-        expected_count = [Item.count, Pagy::DEFAULT[:items]].min
+        expected_count = [Item.count, Pagy.options[:limit]].min
         expected_items = Item.take(expected_count)
         expect(expected_items).not_to be_empty
 

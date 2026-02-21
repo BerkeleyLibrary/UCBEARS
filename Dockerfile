@@ -4,7 +4,7 @@
 # The base stage scaffolds elements which are common to building and running
 # the application, such as installing ca-certificates, creating the app user,
 # and installing runtime system dependencies.
-FROM ruby:3.2.2-slim AS base
+FROM ruby:3.3-slim AS base
 
 # ------------------------------------------------------------
 # Declarative metadata
@@ -35,9 +35,14 @@ RUN apt-get update -qq
 
 # Install standard packages from the Debian repository
 RUN apt-get install -y --no-install-recommends \
+    build-essential \
     curl \
     git \
     gpg \
+    pkg-config \
+    libyaml-dev \
+    libxml2-dev \
+    libxslt1-dev \
     libpq-dev \
     libvips42
 

@@ -175,7 +175,7 @@ describe StatsPresenter do
         end
 
         it 'returns the correct loans for each item' do
-          sp.item_lending_stats_by_date.each do |_, stats_for_date|
+          sp.item_lending_stats_by_date.each do |_, stats_for_date| # rubocop:disable Style/HashEachMethods
             stats_for_date.each do |item_stats|
               item = item_stats.item
               item_stats.loans.each do |loan|

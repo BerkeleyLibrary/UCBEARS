@@ -26,7 +26,7 @@ module CapybaraHelper
     end
 
     def local_save_path
-      File.join(Rails.root, SAVE_PATH)
+      Rails.root.join(SAVE_PATH)
     end
 
     def browser_save_path
@@ -112,15 +112,9 @@ module CapybaraHelper
       end
 
       Capybara.register_driver(driver_name) do |app|
-        capabilities = [
-          chrome_options,
-          ::Selenium::WebDriver::Remote::Capabilities.chrome(
-            'goog:loggingPrefs' => {
-              browser: 'ALL', driver: 'ALL'
-            }
-          )
-        ]
-        options = { capabilities: }.merge(driver_opts)
+        opts = chrome_options
+        opts.add_option('goog:loggingPrefs', { browser: 'ALL', driver: 'ALL' })
+        options = { capabilities: [opts] }.merge(driver_opts)
         Capybara::Selenium::Driver.new(app, **options)
       end
 

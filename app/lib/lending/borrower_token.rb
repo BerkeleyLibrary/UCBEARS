@@ -77,7 +77,7 @@ module Lending
       private
 
       def hmac_secret
-        @hmac_secret ||= Rails.application.secrets.fetch(:secret_key_base) { raise ArgumentError, 'Rails secret_key_base not set' }.to_s
+        @hmac_secret ||= Rails.application.secret_key_base.to_s { raise ArgumentError, 'Rails secret_key_base not set' }
       end
 
       def decode(token_str)

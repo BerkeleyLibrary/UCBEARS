@@ -48,8 +48,7 @@ RSpec.describe HealthChecks::LendingRootPath do
 
     it 'fails when directory is not readable' do
       pn = Pathname.new('/tmp/lending-root')
-      allow(pn).to receive(:directory?).and_return(true)
-      allow(pn).to receive(:readable?).and_return(false)
+      allow(pn).to receive_messages(directory?: true, readable?: false)
 
       allow(Lending::Config).to receive(:lending_root_path).and_return(pn)
 
@@ -61,8 +60,7 @@ RSpec.describe HealthChecks::LendingRootPath do
 
     it 'does not fail when directory exists and is readable' do
       pn = Pathname.new('/tmp/lending-root')
-      allow(pn).to receive(:directory?).and_return(true)
-      allow(pn).to receive(:readable?).and_return(true)
+      allow(pn).to receive_messages(directory?: true, readable?: true)
 
       allow(Lending::Config).to receive(:lending_root_path).and_return(pn)
 

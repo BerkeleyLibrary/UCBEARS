@@ -3,7 +3,7 @@
 # rubocop:disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include ExceptionHandling
-  include Pagy::Backend
+  include Pagy::Method
 
   # ------------------------------------------------------------
   # Global controller configuration
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   # Global hooks
 
   after_action do
-    pagy_headers_merge(@pagy) if @pagy
+    response.headers.merge!(@pagy.headers_hash) if @pagy
     merge_link_header
   end
 
@@ -137,7 +137,7 @@ class ApplicationController < ActionController::Base
     return if performed?
 
     flash_now!(:danger, t('application.profile.failed', msg: e.message))
-    render('application/standard_error', locals: { exception: e })
+    render('application/standard_error', status: :internal_server_error, locals: { status: :internal_server_error, exception: e, message: e.message })
   end
 
   # ------------------------------
@@ -150,7 +150,7 @@ class ApplicationController < ActionController::Base
 
   def render_422(view, errors, locals: {})
     flash_now!(:danger, errors.full_messages)
-    render(view, status: :unprocessable_entity, locals:)
+    render(view, status: :unprocessable_content, locals:)
   end
 
   # ------------------------------
@@ -184,23 +184,27 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_flash_array(flash_obj, lvl)
-    return (flash_obj[lvl] = []) unless (current = flash_obj[lvl])
+    return flash_obj[lvl] = [] unless (current = flash_obj[lvl])
 
     current.is_a?(Array) ? current : (flash_obj[lvl] = Array(current))
   end
 
   def do_profile(report_filename, &block)
-    RubyProf.stop if RubyProf.running?
-    RubyProf.start
+    raise ArgumentError, 'block is required' unless block
+
+    profile = RubyProf::Profile.new
+    profile.start
+
     begin
       block.call
     ensure
-      write_profile_report(report_filename) if RubyProf.running?
+      result = profile.stop
     end
+
+    write_profile_report(report_filename, result)
   end
 
-  def write_profile_report(report_filename)
-    result = RubyProf.stop
+  def write_profile_report(report_filename, result)
     File.open(File.join(public_dir, report_filename), 'w') do |f|
       RubyProf::GraphHtmlPrinter.new(result).print(f, min_percent: 2)
     end

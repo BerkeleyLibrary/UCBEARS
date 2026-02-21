@@ -63,7 +63,7 @@ def expect_json_error(expected_status, expected_message)
 
   parsed_response = JSON.parse(response.body)
   expect(parsed_response).to be_a(Hash)
-  expect(parsed_response['success']).to eq(false)
+  expect(parsed_response['success']).to be(false)
 
   parsed_error = parsed_response['error']
   expect(parsed_error).to be_a(Hash)
@@ -92,7 +92,7 @@ module CalnetHelper
   }.freeze
 
   def cas_logout_url
-    "https://#{Rails.application.config.cas_host}/cas/logout"
+    "https://#{Rails.application.config.x.cas_host}/cas/logout"
   end
 
   def mock_login(type)

@@ -5,6 +5,8 @@ services:
     build: !reset
     environment:
       - CAPYBARA_SAVE_PATH=/opt/app/artifacts
+    secrets:
+      - SECRET_KEY_BASE
     env_file: !reset []
     image: ${DOCKER_APP_IMAGE}
     depends_on:
@@ -22,11 +24,11 @@ services:
     volumes: !override
       - artifacts:/build
 
-  selenium-chrome:
-    depends_on:
-      - selenium
-
   adminer: !reset
+
+secrets:
+  SECRET_KEY_BASE:
+    file: /tmp/secret_key_base
 
 volumes:
   artifacts:

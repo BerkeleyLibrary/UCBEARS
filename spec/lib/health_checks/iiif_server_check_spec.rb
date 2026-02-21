@@ -9,6 +9,13 @@ RSpec.describe HealthChecks::IIIFServerCheck do
     check
   end
 
+  def stub_items(active_first:, inactive_first:)
+    active_relation = instance_double(ActiveRecord::Relation, first: active_first)
+    inactive_relation = instance_double(ActiveRecord::Relation, first: inactive_first)
+
+    allow(Item).to receive_messages(active: active_relation, inactive: inactive_relation)
+  end
+
   describe '#check' do
     it 'fails and sets message when the IIIF test uri cannot be constructed' do
       allow(Lending::Config).to receive(:iiif_base_uri).and_return(nil)

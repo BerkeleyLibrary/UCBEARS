@@ -24,7 +24,7 @@ describe ItemQueryFactory do
 
     # NOTE: we're deliberately not validating here, because we want some invalid items
     @items = factory_names.each_with_object([]) do |fn, items|
-      items << build(fn).tap { |it| it.save!(validate: false) }
+      items << build(fn).tap { |i| i.save!(validate: false) }
     end
   end
 
@@ -32,7 +32,7 @@ describe ItemQueryFactory do
     query = ItemQueryFactory.create_query(complete: true)
 
     expected_items = Item.where(complete: true)
-    expect(expected_items.any?).to eq(true) # just to be sure
+    expect(expected_items.any?).to be(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
@@ -42,7 +42,7 @@ describe ItemQueryFactory do
     query = ItemQueryFactory.create_query(complete: false)
 
     expected_items = Item.where(complete: false)
-    expect(expected_items.any?).to eq(true) # just to be sure
+    expect(expected_items.any?).to be(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
@@ -52,7 +52,7 @@ describe ItemQueryFactory do
     query = ItemQueryFactory.create_query(active: true)
 
     expected_items = Item.where(active: true)
-    expect(expected_items.any?).to eq(true) # just to be sure
+    expect(expected_items.any?).to be(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
@@ -62,7 +62,7 @@ describe ItemQueryFactory do
     query = ItemQueryFactory.create_query(active: false)
 
     expected_items = Item.where(active: false)
-    expect(expected_items.any?).to eq(true) # just to be sure
+    expect(expected_items.any?).to be(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
@@ -72,7 +72,7 @@ describe ItemQueryFactory do
     query = ItemQueryFactory.create_query(active: false, complete: true)
 
     expected_items = Item.where(active: false).where(complete: true)
-    expect(expected_items.any?).to eq(true) # just to be sure
+    expect(expected_items.any?).to be(true) # just to be sure
 
     actual_items = query.to_a
     expect(actual_items).to contain_exactly(*expected_items)
@@ -86,11 +86,11 @@ describe ItemQueryFactory do
       @term_fall_2021 = create(:term_fall_2021)
       @term_spring_2022 = create(:term_spring_2022)
 
-      items.each_with_index do |it, ix|
-        expect(it.terms).to be_empty # just to be sure
+      items.each_with_index do |i, ix|
+        expect(i.terms).to be_empty # just to be sure
 
         term = ix.even? ? term_fall_2021 : term_spring_2022
-        it.terms << term
+        i.terms << term
       end
     end
 
@@ -137,10 +137,10 @@ describe ItemQueryFactory do
 
       expected_items = []
       term_names = [term_spring_2021.name]
-      Item.where('title LIKE ?', "%#{keyword}%").find_each do |it|
-        it.terms.pluck(:name).each { |tn| term_names << tn unless term_names.include?(tn) }
-        it.terms << term_spring_2021
-        expected_items << it
+      Item.where('title LIKE ?', "%#{keyword}%").find_each do |i|
+        i.terms.pluck(:name).each { |tn| term_names << tn unless term_names.include?(tn) }
+        i.terms << term_spring_2021
+        expected_items << i
       end
 
       query = ItemQueryFactory.create_query(keywords: keyword, terms: term_names)

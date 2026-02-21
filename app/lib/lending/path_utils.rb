@@ -97,11 +97,11 @@ module Lending
       raise ArgumentError, format(MSG_BAD_DIRNAME, path) unless match_data
 
       barcode = match_data[:barcode]
-      raise ArgumentError, format(MSG_INVALID_BARCODE) unless barcode =~ SEGMENT_RE
+      raise ArgumentError, MSG_INVALID_BARCODE unless barcode =~ SEGMENT_RE
 
       # TODO: do we care about check digits?
       record_id = match_data[:record_id].downcase
-      raise ArgumentError, format(MSG_INVALID_RECORD_ID) unless barcode =~ SEGMENT_RE
+      raise ArgumentError, MSG_INVALID_RECORD_ID unless barcode =~ SEGMENT_RE
 
       [record_id, barcode]
     end

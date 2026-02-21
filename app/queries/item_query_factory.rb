@@ -74,7 +74,7 @@ class ItemQueryFactory
 
   def keywords_or_nil(opt)
     keywords = opt.to_s.strip
-    return keywords unless keywords.empty?
+    keywords unless keywords.empty?
   end
 
   def strings_or_nil(opt)

@@ -1,4 +1,4 @@
-require 'health_checks'
+require Rails.root.join('app/lib/health_checks')
 
 OkComputer.logger = Rails.logger
 OkComputer.check_in_parallel = true

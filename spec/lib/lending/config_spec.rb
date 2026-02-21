@@ -8,7 +8,7 @@ module Lending
     attr_reader :attr_values_orig
 
     before do
-      @env_values_orig = [Config::ENV_IIIF_BASE, Config::ENV_ROOT].to_h { |var| [var, ENV[var]] }
+      @env_values_orig = [Config::ENV_IIIF_BASE, Config::ENV_ROOT].to_h { |var| [var, ENV.fetch(var, nil)] }
       @attr_values_orig = config_instance_vars.to_h { |var| [var, Config.instance_variable_get(var)] }
     end
 
@@ -95,13 +95,8 @@ module Lending
         Config.instance_variable_set(:@iiif_base_uri, nil)
 
         # Temporarily hide Rails constant so `defined?(Rails)` is false
-        rails_const = Object.const_get(:Rails)
-        Object.send(:remove_const, :Rails)
-        begin
-          expect { Config.iiif_base_uri }.to raise_error(Lending::ConfigException, /IIIF base URL not set/)
-        ensure
-          Object.const_set(:Rails, rails_const)
-        end
+        hide_const('Rails')
+        expect { Config.iiif_base_uri }.to raise_error(Lending::ConfigException, /IIIF base URL not set/)
       end
 
       it 'returns nil from rails_config when Rails.application is nil' do

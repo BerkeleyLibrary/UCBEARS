@@ -142,6 +142,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Generate secret key base
+        run: |
+          docker run --rm "${DOCKER_APP_IMAGE}" rails secret > /tmp/secret_key_base
+
       - name: Setup the stack
         run: |
           docker compose build --quiet

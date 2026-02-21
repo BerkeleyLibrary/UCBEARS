@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_12_29_223302) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_192157) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "items", force: :cascade do |t|
     t.string "directory"

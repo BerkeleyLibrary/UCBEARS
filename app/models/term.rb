@@ -40,7 +40,7 @@ class Term < ApplicationRecord
   # Synthetic accessors
 
   def current?
-    Date.current >= start_date && Date.current <= end_date
+    Date.current.between?(start_date, end_date)
   end
 
   def default?

@@ -50,7 +50,7 @@ module Lending
 
         it 'rejects an existing non-TIFF file' do
           txt_path = tiff_path.sub(/\.tif$/, '.txt')
-          expect(File.exist?(txt_path)).to eq(true) # just to be sure
+          expect(File.exist?(txt_path)).to be(true) # just to be sure
           expect { Page.new(txt_path) }.to raise_error(ArgumentError)
         end
 

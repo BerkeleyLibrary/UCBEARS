@@ -115,11 +115,16 @@ class User
     affiliations&.include?('EMPLOYEE-TYPE-STAFF')
   end
 
+  # rubocop:disable Naming/PredicateMethod
+  # rubocop:disable Style/ReturnNilInPredicateMethodDefinition
+  # returning false could affect entries already in the db that are nil
   def ucb_student?
     return unless affiliations
 
     STUDENT_AFFILIATIONS.any? { |a9n| affiliations.include?(a9n) }
   end
+  # rubocop:enable Style/ReturnNilInPredicateMethodDefinition
+  # rubocop:enable Naming/PredicateMethod
 
   # Whether the user is a member of the Framework lending admin CalGroup
   # @return [Boolean]

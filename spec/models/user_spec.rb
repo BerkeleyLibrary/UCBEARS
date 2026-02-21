@@ -73,7 +73,7 @@ describe User do
         auth_yml = File.read('spec/data/calnet/LIT-2700.json')
         auth_hash = JSON.parse(auth_yml)
         user = User.from_omniauth(auth_hash)
-        expect(user.ucb_student?).to eq(true)
+        expect(user.ucb_student?).to be(true)
       end
     end
   end

@@ -22,10 +22,8 @@ RSpec.describe HealthChecks::TestItemExists do
       inactive_relation = double('InactiveRelation')
       item = instance_double(Item)
 
-      allow(Item).to receive(:active).and_return(active_relation)
+      allow(Item).to receive_messages(active: active_relation, inactive: inactive_relation)
       allow(active_relation).to receive(:first).and_return(item)
-
-      allow(Item).to receive(:inactive).and_return(inactive_relation)
       allow(inactive_relation).to receive(:first).and_return(nil)
 
       run_check
@@ -37,10 +35,8 @@ RSpec.describe HealthChecks::TestItemExists do
       active_relation = double('ActiveRelation')
       inactive_relation = double('InactiveRelation')
 
-      allow(Item).to receive(:active).and_return(active_relation)
+      allow(Item).to receive_messages(active: active_relation, inactive: inactive_relation)
       allow(active_relation).to receive(:first).and_return(nil)
-
-      allow(Item).to receive(:inactive).and_return(inactive_relation)
       allow(inactive_relation).to receive(:first).and_return(nil)
 
       run_check
@@ -54,10 +50,8 @@ RSpec.describe HealthChecks::TestItemExists do
       inactive_relation = double('InactiveRelation')
       item = instance_double(Item)
 
-      allow(Item).to receive(:active).and_return(active_relation)
+      allow(Item).to receive_messages(active: active_relation, inactive: inactive_relation)
       allow(active_relation).to receive(:first).and_return(nil)
-
-      allow(Item).to receive(:inactive).and_return(inactive_relation)
       allow(inactive_relation).to receive(:first).and_return(item)
 
       run_check
