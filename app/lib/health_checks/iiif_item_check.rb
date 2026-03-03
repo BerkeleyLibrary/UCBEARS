@@ -1,4 +1,4 @@
-require 'health_checks/iiif_server_check'
+require_relative 'iiif_server_check'
 
 module HealthChecks
   class IIIFItemCheck < IIIFServerCheck
