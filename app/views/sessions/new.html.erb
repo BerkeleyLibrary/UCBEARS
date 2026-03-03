@@ -1,0 +1,5 @@
+<%= form_with url: '/auth/calnet', method: :post, local: true, data: { turbo: false }, html: { id: 'calnet_login_form' } do |f| %>
+  <%= hidden_field_tag :origin, @origin %>
+  <p>Continue to CalNet to sign in.</p>
+  <%= f.submit 'Continue to CalNet' %>
+<% end %>

@@ -37,15 +37,15 @@ class LendingItemPresenterBase
     @pub_metadata ||= {
       t('activerecord.attributes.item.publisher') => item.publisher,
       t('activerecord.attributes.item.phys_desc') => item.physical_desc
-    }.filter { |_, v| v.present? }
+    }.compact_blank
   end
 
   delegate :directory, to: :item
 
   protected
 
-  def t(key, **options)
-    I18n.t(key, **options)
+  def t(key, **)
+    I18n.t(key, **)
   end
 
   def action_edit

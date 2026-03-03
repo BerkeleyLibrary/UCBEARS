@@ -23,7 +23,7 @@ RSpec.describe '/items', type: :request do
 
   context 'without credentials' do
     before do
-      %i[complete_item active_item].each { |it| create(it) }
+      %i[complete_item active_item].each { |i| create(i) }
     end
 
     describe 'GET /index' do
@@ -45,7 +45,7 @@ RSpec.describe '/items', type: :request do
 
   context 'with patron credentials' do
     before do
-      %i[complete_item active_item].each { |it| create(it) }
+      %i[complete_item active_item].each { |i| create(i) }
       mock_login(:student)
     end
 
@@ -128,17 +128,17 @@ RSpec.describe '/items', type: :request do
       before do
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object([]) do |fn, items|
-          items << build(fn).tap { |it| it.save!(validate: false) }
+          items << build(fn).tap { |i| i.save!(validate: false) }
         end
 
         @term_fall_2021 = create(:term_fall_2021)
         @term_spring_2022 = create(:term_spring_2022)
 
-        items.each_with_index do |it, ix|
-          expect(it.terms).to be_empty # just to be sure
+        items.each_with_index do |i, ix|
+          expect(i.terms).to be_empty # just to be sure
 
           term = ix.even? ? term_fall_2021 : term_spring_2022
-          it.terms << term
+          i.terms << term
         end
       end
 
@@ -150,7 +150,7 @@ RSpec.describe '/items', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_an(Array)
 
-        expected_items = Item.order(:title)
+        expected_items = Item.order(:title).first(Pagy.options[:limit])
         expect(parsed_response.size).to eq(expected_items.size)
 
         expected_items.each_with_index do |item, i|
@@ -167,7 +167,7 @@ RSpec.describe '/items', type: :request do
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.complete
-        expect(expected_items.any?).to eq(true) # just to be sure
+        expect(expected_items.any?).to be(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.size)
 
         # noinspection RubyUnusedLocalVariable
@@ -185,7 +185,7 @@ RSpec.describe '/items', type: :request do
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.incomplete
-        expect(expected_items.any?).to eq(true) # just to be sure
+        expect(expected_items.any?).to be(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.size)
 
         # noinspection RubyUnusedLocalVariable
@@ -203,7 +203,7 @@ RSpec.describe '/items', type: :request do
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.where(active: true)
-        expect(expected_items.exists?).to eq(true) # just to be sure
+        expect(expected_items.exists?).to be(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.count)
 
         # noinspection RubyUnusedLocalVariable
@@ -221,7 +221,7 @@ RSpec.describe '/items', type: :request do
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.where(active: false)
-        expect(expected_items.exists?).to eq(true) # just to be sure
+        expect(expected_items.exists?).to be(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.count)
 
         # noinspection RubyUnusedLocalVariable
@@ -239,7 +239,7 @@ RSpec.describe '/items', type: :request do
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.inactive.complete
-        expect(expected_items.any?).to eq(true) # just to be sure
+        expect(expected_items.any?).to be(true) # just to be sure
         expect(parsed_response.size).to eq(expected_items.count)
 
         # noinspection RubyUnusedLocalVariable
@@ -340,7 +340,7 @@ RSpec.describe '/items', type: :request do
           parsed_response = JSON.parse(response.body)
           expect(parsed_response).to be_a(Hash)
 
-          expect(parsed_response['success']).to eq(false)
+          expect(parsed_response['success']).to be(false)
 
           parsed_error = parsed_response['error']
           expect(parsed_error).to be_a(Hash)
@@ -367,7 +367,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
       end
 
-      it 'will not delete a complete item' do
+      it 'does not delete a complete item' do
         item = create(:complete_item)
 
         expect do
@@ -380,7 +380,7 @@ RSpec.describe '/items', type: :request do
         parsed_response = JSON.parse(response.body)
         expect(parsed_response).to be_a(Hash)
 
-        expect(parsed_response['success']).to eq(false)
+        expect(parsed_response['success']).to be(false)
 
         parsed_error = parsed_response['error']
         expect(parsed_error).to be_a(Hash)
@@ -449,7 +449,7 @@ RSpec.describe '/items', type: :request do
 
           expect(result['path']).to eq(l.to_s)
           expect(result['directory']).to eq(directory)
-          expect(result['exists']).to eq(true)
+          expect(result['exists']).to be(true)
           actual_mtime = Time.parse(result['mtime'])
           expect(actual_mtime).to be_within(1.second).of(l.mtime)
 

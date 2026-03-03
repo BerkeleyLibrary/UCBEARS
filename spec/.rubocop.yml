@@ -1,7 +1,8 @@
 inherit_from: ../.rubocop.yml
 
-require:
+plugins: 
   - rubocop-rspec
+  - rubocop-rspec_rails
 
 # Sometimes we're testing the operator
 Lint/BinaryOperatorWithIdenticalOperands:
@@ -37,8 +38,19 @@ Rails/TimeZone:
 RSpec/AnyInstance:
   Enabled: false
 
+# This is used as plain Ruby not ActiveRecord. Pluck not available
+# in the context used 
+Rails/Pluck:
+  Enabled: false
+
+RSpec/VerifiedDoubleReference:
+  Enabled: false
+
 # we meant to do that
 RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ContainExactly:
   Enabled: false
 
 # more words != more readable
@@ -59,7 +71,7 @@ RSpec/DescribeSymbol:
 
 # setup cost / time >>> failure granularity
 RSpec/ExampleLength:
-  Max: 20
+  Max: 25
   CountAsOne:
     - array
     - hash
@@ -70,7 +82,13 @@ RSpec/ExpectInHook:
   Enabled: false
 
 # your naming scheme is not in possession of all the facts
-RSpec/FilePath:
+# RSpec/FilePath:
+#  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/SpecFilePathSuffix:
   Enabled: false
 
 # explicit >>> implicit
@@ -117,5 +135,5 @@ RSpec/VerifiedDoubles:
 RSpec/IdenticalEqualityAssertion: # new in 2.4
   Enabled: true
 
-RSpec/Rails/AvoidSetupHook: # new in 2.4
+RSpecRails/AvoidSetupHook: # new in 2.4
   Enabled: true

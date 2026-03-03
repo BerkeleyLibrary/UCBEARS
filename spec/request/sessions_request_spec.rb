@@ -33,7 +33,7 @@ describe SessionsController, type: :request do
 
     mock_login(:staff)
     counter = SessionCounter.find_by(uid:)
-    expect(counter.staff?).to eq(true)
+    expect(counter.staff?).to be(true)
     expect(counter.count).to eq(count_before + 1)
   end
 

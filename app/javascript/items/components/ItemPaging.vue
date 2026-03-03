@@ -19,11 +19,11 @@
       </li>
       <li>
         <a
-          v-if="paging.prev && paging.currentPage > 1"
+          v-if="paging.previous && paging.currentPage > 1"
           href="#"
           rel="prev"
           title="Previous page"
-          @click="navigateTo(paging.prev)"
+          @click="navigateTo(paging.previous)"
         >&lt;</a>
         <template v-else>
           &lt;

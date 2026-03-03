@@ -54,7 +54,7 @@ module Lending
 
         expected_tiffs.each do |expected_tiff|
           actual_tiff = processor.outdir.join(expected_tiff.basename)
-          expect(actual_tiff.exist?).to eq(true)
+          expect(actual_tiff.exist?).to be(true)
 
           Page.assert_equal!(expected_tiff, actual_tiff)
         end
@@ -72,7 +72,7 @@ module Lending
       it 'generates the manifest' do
         expected_manifest = expected_dir.join(Lending::IIIFManifest::MANIFEST_NAME)
         actual_manifest = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
-        expect(actual_manifest.exist?).to eq(true)
+        expect(actual_manifest.exist?).to be(true)
 
         expect(actual_manifest.read.strip).to eq(expected_manifest.read.strip)
       end
@@ -83,9 +83,11 @@ module Lending
         manifest_path = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
 
         manifest = instance_double(IIIFManifest)
-        allow(manifest).to receive(:manifest_path).and_return(manifest_path)
-        allow(manifest).to receive(:has_manifest?).and_return(true)
-        allow(manifest).to receive(:to_json_manifest).and_return('{ something that is not valid JSON }')
+        allow(manifest).to receive_messages(
+          manifest_path:,
+          has_manifest?: true,
+          to_json_manifest: '{ something that is not valid JSON }'
+        )
 
         expect { processor.verify(manifest) }.to raise_error(ProcessingFailed) do |e|
           expect(e.cause).to be_a(JSON::ParserError)
@@ -107,7 +109,7 @@ module Lending
 
       expected_manifest = expected_dir.join(Lending::IIIFManifest::MANIFEST_NAME)
       actual_manifest = processor.outdir.join(Lending::IIIFManifest::MANIFEST_NAME)
-      expect(actual_manifest.exist?).to eq(true)
+      expect(actual_manifest.exist?).to be(true)
 
       expect(actual_manifest.read.strip).to eq(expected_manifest.read.strip)
     end

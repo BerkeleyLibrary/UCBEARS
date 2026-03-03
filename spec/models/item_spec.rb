@@ -42,7 +42,7 @@ describe Item, type: :model do
 
         modified_values = original_values.transform_values { |v| "not #{v}" }
         original_item.update!(**modified_values)
-        expect(original_item.persisted?).to eq(true) # just to be sure
+        expect(original_item.persisted?).to be(true) # just to be sure
         modified_values.each { |attr, v| expect(original_item.send(attr)).to eq(v) } # just to be sure
 
         refreshed_item = Item.find(original_item.id).tap(&:refresh_marc_metadata!)
@@ -75,7 +75,7 @@ describe Item, type: :model do
       it "doesn't blow up on incomplete items" do
         items = factory_names
           .select { |n| n.to_s.start_with?('incomplete') }
-          .map { |n| build(n).tap { |it| it.save(validate: false) } }
+          .map { |n| build(n).tap { |i| i.save(validate: false) } }
 
         sleep(1)
 
@@ -95,7 +95,7 @@ describe Item, type: :model do
           attrs[:directory] = 'I am not a valid directory'
         end
         item = Item.create(attributes)
-        expect(item.persisted?).to eq(false)
+        expect(item.persisted?).to be(false)
         messages = item.errors.full_messages.map { |msg| CGI.unescapeHTML(msg) }
         expect(messages).to include(Item::MSG_INVALID_DIRECTORY)
       end
@@ -210,7 +210,7 @@ describe Item, type: :model do
           expected_dirs = Lending
             .stage_root_path(:final).children
             .select do |d|
-            Lending::PathUtils.item_dir?(d) &&
+              Lending::PathUtils.item_dir?(d) &&
               d.join(Lending::MARC_XML_NAME).file?
           end
           items = Item.scan_for_new_items!
@@ -219,7 +219,7 @@ describe Item, type: :model do
 
         it 'populates the publication metadata' do
           items = Item.scan_for_new_items!
-          items.each { |it| expect(it.publisher).not_to be_nil }
+          items.each { |i| expect(i.publisher).not_to be_nil }
         end
 
         it 'sets the default term' do
@@ -253,7 +253,7 @@ describe Item, type: :model do
 
           item.reload
           expect(item.author).to be_nil
-          expect(item.active?).to eq(true)
+          expect(item.active?).to be(true)
         end
       end
     end
@@ -265,7 +265,7 @@ describe Item, type: :model do
         expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
-          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+          items[fn] = build(fn).tap { |i| i.save!(validate: false) }
         end
       end
 
@@ -278,20 +278,20 @@ describe Item, type: :model do
       describe :active? do
         it 'returns true for active items' do
           item = items[:active_item]
-          expect(item.active).to eq(true) # just to be sure
+          expect(item.active).to be(true) # just to be sure
           expect(item).to be_active
         end
 
         it 'returns false for inactive items' do
           item = items[:inactive_item]
-          expect(item.active).to eq(false) # just to be sure
+          expect(item.active).to be(false) # just to be sure
           expect(item.copies).to eq(0) # just to be sure
           expect(item).not_to be_active
         end
 
         it 'returns false for inactive items with copies' do
           item = items[:inactive_item]
-          expect(item.active).to eq(false) # just to be sure
+          expect(item.active).to be(false) # just to be sure
           expect(item.copies).to eq(0) # just to be sure
           item.update!(copies: 2)
           expect(item).not_to be_active
@@ -302,49 +302,49 @@ describe Item, type: :model do
         it 'returns false for items without IIIF directories' do
           item = items[:incomplete_no_directory]
           iiif_directory = item.iiif_directory
-          expect(iiif_directory.exists?).to eq(false)
-          expect(iiif_directory.page_images?).to eq(false)
-          expect(iiif_directory.marc_record?).to eq(false)
-          expect(iiif_directory.manifest?).to eq(false)
+          expect(iiif_directory.exists?).to be(false)
+          expect(iiif_directory.page_images?).to be(false)
+          expect(iiif_directory.marc_record?).to be(false)
+          expect(iiif_directory.manifest?).to be(false)
           expect(item).not_to be_complete
         end
 
         it 'returns false for items without page images' do
           item = items[:incomplete_no_images]
           iiif_directory = item.iiif_directory
-          expect(iiif_directory.exists?).to eq(true)
-          expect(iiif_directory.page_images?).to eq(false)
-          expect(iiif_directory.marc_record?).to eq(true)
-          expect(iiif_directory.manifest?).to eq(true)
+          expect(iiif_directory.exists?).to be(true)
+          expect(iiif_directory.page_images?).to be(false)
+          expect(iiif_directory.marc_record?).to be(true)
+          expect(iiif_directory.manifest?).to be(true)
           expect(item).not_to be_complete
         end
 
         it 'returns false for items without MARC records' do
           item = items[:incomplete_no_marc]
           iiif_directory = item.iiif_directory
-          expect(iiif_directory.exists?).to eq(true)
-          expect(iiif_directory.page_images?).to eq(true)
-          expect(iiif_directory.marc_record?).to eq(false)
-          expect(iiif_directory.manifest?).to eq(true)
+          expect(iiif_directory.exists?).to be(true)
+          expect(iiif_directory.page_images?).to be(true)
+          expect(iiif_directory.marc_record?).to be(false)
+          expect(iiif_directory.manifest?).to be(true)
           expect(item).not_to be_complete
         end
 
         it 'returns false for items without manifests' do
           item = items[:incomplete_no_manifest]
           iiif_directory = item.iiif_directory
-          expect(iiif_directory.exists?).to eq(true)
-          expect(iiif_directory.page_images?).to eq(true)
-          expect(iiif_directory.marc_record?).to eq(true)
-          expect(iiif_directory.manifest?).to eq(false)
+          expect(iiif_directory.exists?).to be(true)
+          expect(iiif_directory.page_images?).to be(true)
+          expect(iiif_directory.marc_record?).to be(true)
+          expect(iiif_directory.manifest?).to be(false)
           expect(item).not_to be_complete
         end
 
         it 'returns false for items without manifests or page images' do
           item = items[:incomplete_marc_only]
-          expect(item.iiif_directory.exists?).to eq(true)
-          expect(item.iiif_directory.page_images?).to eq(false)
-          expect(item.iiif_directory.marc_record?).to eq(true)
-          expect(item.iiif_directory.manifest?).to eq(false)
+          expect(item.iiif_directory.exists?).to be(true)
+          expect(item.iiif_directory.page_images?).to be(false)
+          expect(item.iiif_directory.marc_record?).to be(true)
+          expect(item.iiif_directory.manifest?).to be(false)
           expect(item).not_to be_complete
         end
 
@@ -352,10 +352,10 @@ describe Item, type: :model do
           %i[inactive_item active_item].each do |fn|
             item = items[fn]
 
-            expect(item.iiif_directory.exists?).to eq(true)
-            expect(item.iiif_directory.page_images?).to eq(true)
-            expect(item.iiif_directory.marc_record?).to eq(true)
-            expect(item.iiif_directory.manifest?).to eq(true)
+            expect(item.iiif_directory.exists?).to be(true)
+            expect(item.iiif_directory.page_images?).to be(true)
+            expect(item.iiif_directory.marc_record?).to be(true)
+            expect(item.iiif_directory.manifest?).to be(true)
             expect(item).to be_complete
           end
         end
@@ -412,7 +412,7 @@ describe Item, type: :model do
 
           item.update!(terms: [future_term])
           expect(item.terms.count).to eq(1) # just to be sure
-          expect(item.for_current_term?).to eq(false)
+          expect(item.for_current_term?).to be(false)
           expect(item.next_active_term).to eq(future_term)
 
           expect(item).not_to be_available
@@ -443,7 +443,7 @@ describe Item, type: :model do
           items.each do |fn, item|
             next if with_manifest.include?(fn)
 
-            expect(item.iiif_directory.manifest?).to eq(false)
+            expect(item.iiif_directory.manifest?).to be(false)
           end
         end
       end
@@ -582,7 +582,7 @@ describe Item, type: :model do
           actual = Item.complete.search_by_metadata(keyword)
           expect(actual).to contain_exactly(*expected)
 
-          actual.each { |it| expect(it).to be_complete } # just to be sure
+          actual.each { |i| expect(i).to be_complete } # just to be sure
         end
 
         it 'ignores case' do
@@ -641,7 +641,7 @@ describe Item, type: :model do
     describe :scan_for_new_items! do
       it 'sets the default term' do
         items = Item.scan_for_new_items!
-        expect(Item.exists?).to eq(true) # just to be sure
+        expect(Item.exists?).to be(true) # just to be sure
 
         items.each do |item|
           expect(item.terms.count).to eq(1)
@@ -664,7 +664,7 @@ describe Item, type: :model do
     describe :scan_for_new_items! do
       it "doesn't set a term" do
         items = Item.scan_for_new_items!
-        expect(Item.exists?).to eq(true) # just to be sure
+        expect(Item.exists?).to be(true) # just to be sure
         items.each do |item|
           expect(item.terms.count).to eq(0)
           expect(item.next_active_term).to be_nil
@@ -703,8 +703,8 @@ describe Item, type: :model do
     it 'reads an ERB manifest' do
       item = create(:complete_item)
       mf = item.iiif_manifest
-      expect(mf.manifest_path.file?).not_to eq(true), "#{mf.manifest_path} should not exist" # just to be sure
-      expect(mf.erb_path.file?).to eq(true) # just to be sure
+      expect(mf.manifest_path.file?).not_to be(true), "#{mf.manifest_path} should not exist" # just to be sure
+      expect(mf.erb_path.file?).to be(true) # just to be sure
 
       expected_manifest_path = Pathname.new("spec/data/iiif/#{item.directory}.json")
       expected_manifest = expected_manifest_path.read
@@ -721,7 +721,7 @@ describe Item, type: :model do
     it 'reads a plain JSON manifest' do
       item = create(:active_item)
       mf = item.iiif_manifest
-      expect(mf.manifest_path.file?).to eq(true) # just to be sure
+      expect(mf.manifest_path.file?).to be(true) # just to be sure
 
       expected_manifest_path = Pathname.new("spec/data/iiif/#{item.directory}.json")
       expected_manifest = expected_manifest_path.read

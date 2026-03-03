@@ -44,7 +44,7 @@ module Lending
       end
 
       def env_iiif_base
-        iiif_base_uri_from(ENV[ENV_IIIF_BASE])
+        iiif_base_uri_from(ENV.fetch(ENV_IIIF_BASE, nil))
       end
 
       def rails_iiif_base
@@ -52,7 +52,7 @@ module Lending
       end
 
       def env_lending_root
-        env_root = ENV[ENV_ROOT]
+        env_root = ENV.fetch(ENV_ROOT, nil)
         lending_root_path_from(env_root)
       end
 

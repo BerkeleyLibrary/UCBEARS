@@ -10,10 +10,18 @@
 #
 # @see https://github.com/omniauth/omniauth
 class SessionsController < ApplicationController
+  # Require login, then:
+  # - redirect administrators to "Manage Items"
+  # - return 403 Forbidden for other users
+  def index
+    require_lending_admin!
+
+    redirect_to(items_path)
+  end
+
   # Redirect the user to Calnet for authentication
   def new
-    redirect_args = { origin: params[:url] || request.base_url }.to_query
-    redirect_to("/auth/calnet?#{redirect_args}", allow_other_host: true)
+    @origin = params[:url].presence || request.base_url
   end
 
   # Generate a new user session using data returned from a valid Calnet login
@@ -25,7 +33,7 @@ class SessionsController < ApplicationController
       log_signin(user)
     end
 
-    redirect_url = (request.env['omniauth.origin'] || root_path) # TODO: better default redirect path
+    redirect_url = request.env['omniauth.origin'] || root_path # TODO: better default redirect path
     redirect_to(redirect_url, allow_other_host: true)
   end
 
@@ -37,15 +45,6 @@ class SessionsController < ApplicationController
     redirect_to(cas_logout_url, allow_other_host: true)
   end
 
-  # Require login, then:
-  # - redirect administrators to "Manage Items"
-  # - return 403 Forbidden for other users
-  def index
-    require_lending_admin!
-
-    redirect_to(items_path)
-  end
-
   private
 
   def auth_params
@@ -53,7 +52,7 @@ class SessionsController < ApplicationController
   end
 
   def cas_base_uri
-    cas_host = Rails.application.config.cas_host
+    cas_host = Rails.application.config.x.cas_host
     URI.parse("https://#{cas_host}")
   end
 

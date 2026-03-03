@@ -119,7 +119,7 @@ describe LendingController, type: :system do
         expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
-          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+          items[fn] = build(fn).tap { |i| i.save!(validate: false) }
         end
         @item = active.first
 
@@ -140,17 +140,17 @@ describe LendingController, type: :system do
         before do
           @alma_items = []
 
-          Item.find_each do |it|
-            sru_data_path = sru_data_path_for(it.record_id)
+          Item.find_each do |i|
+            sru_data_path = sru_data_path_for(i.record_id)
             next unless File.exist?(sru_data_path)
 
-            stub_sru_request(it.record_id)
-            alma_items << it
+            stub_sru_request(i.record_id)
+            alma_items << i
           end
         end
 
         it 'displays all due dates' do
-          item = active.find { |it| it.copies > 1 }
+          item = active.find { |i| i.copies > 1 }
           loans = item.copies.times.with_object([]) do |i, ll|
             loan = item.check_out_to!("patron-#{i}")
             loan.due_date = loan.due_date + i.days # just to differentiate
@@ -271,7 +271,7 @@ describe LendingController, type: :system do
       expect(Item.count).to eq(0) # just to be sure
       # NOTE: we're deliberately not validating here, because we want some invalid items
       @items = factory_names.each_with_object({}) do |fn, items|
-        items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+        items[fn] = build(fn).tap { |i| i.save!(validate: false) }
       end
     end
 
@@ -420,7 +420,8 @@ describe LendingController, type: :system do
         end
 
         # TODO: figure out what we really intended here
-        xit 'updates the user token from the URL' do
+        it 'updates the user token from the URL' do
+          skip('Need to figure out what is intended')
           original_user = user
           item.check_out_to(original_user.borrower_id)
 

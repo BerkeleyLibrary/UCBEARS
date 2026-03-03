@@ -63,14 +63,7 @@ RSpec.describe 'Health Checks', type: :request do
         allow_any_instance_of(HealthChecks::IIIFServerCheck)
           .to receive(:iiif_test_uri).and_return(test_uri)
 
-        stub_request(:get, test_uri)
-          .with(
-            headers: {
-              'Accept' => '*/*',
-              'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-              'User-Agent' => 'Faraday v2.7.5'
-            }
-          ).to_return(status: 200, body: '')
+        stub_request(:get, test_uri).to_return(status: 200, body: '')
       end
 
       it 'returns a 500 Internal Server Error' do

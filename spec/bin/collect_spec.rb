@@ -11,7 +11,7 @@ describe 'collect.rb' do
 
   it 'collects' do
     collect_rb_path = File.expand_path('../../bin/lending/collect.rb', __dir__)
-    expect(File.executable?(collect_rb_path)).to eq(true)
+    expect(File.executable?(collect_rb_path)).to be(true)
 
     Dir.mktmpdir(File.basename(__FILE__, '.rb')) do |tmpdir|
       lending_root = File.join(tmpdir, 'ucbears')
@@ -28,7 +28,7 @@ describe 'collect.rb' do
       system(collect_env, collect_rb_path)
 
       item_dir_final = File.join(stage_dirs[:final], 'b152240925_C070359919')
-      expect(File.directory?(item_dir_final)).to eq(true)
+      expect(File.directory?(item_dir_final)).to be(true)
 
       manifest = Lending::IIIFManifest.new(
         title: 'Tagebuch der Kulturwissenschaftlichen Bibliothek Warburg',

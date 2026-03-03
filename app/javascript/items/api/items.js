@@ -58,7 +58,7 @@ function pagingFromResponse (response) {
   const paging = {
     currentPage: getInt(headers, 'current-page', 1),
     totalPages: getInt(headers, 'total-pages', 1),
-    itemsPerPage: getInt(headers, 'page-items', 0),
+    itemsPerPage: getInt(headers, 'page-limit', 0),
     currentPageItems: getInt(headers, 'current-page-items', 0),
     totalItems: getInt(headers, 'total-count', 0)
   }
@@ -71,7 +71,7 @@ function pagingFromResponse (response) {
   }
 
   const links = Link.parse(linkHeader)
-  for (const rel of ['first', 'prev', 'next', 'last']) {
+  for (const rel of ['first', 'previous', 'next', 'last']) {
     if (links.has('rel', rel)) {
       const urlStr = links.get('rel', rel)[0].uri
       paging[rel] = new URL(urlStr)

@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
     return render_item_errors(status: :forbidden) unless @item.destroy
 
     logger.info("Deleted item #{@item.directory} (“#{@item.title}”, id: #{item_id})")
-    render body: nil, status: :no_content
+    head :no_content
   end
 
   # GET /processing.json
@@ -55,7 +55,7 @@ class ItemsController < ApplicationController
   def paginate_items
     Item.scan_for_new_items!
 
-    @pagy, @items = pagy(items)
+    @pagy, @items = pagy(:offset, items)
     response.headers['Current-Page-Items'] = @items.count
   end
 
@@ -80,7 +80,7 @@ class ItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def item_params
-    params.require(:item).permit(:directory, :title, :author, :copies, :active, :publisher, :physical_desc, term_ids: [])
+    params.expect(item: [:directory, :title, :author, :copies, :active, :publisher, :physical_desc, { term_ids: [] }])
   end
 
   def query_params

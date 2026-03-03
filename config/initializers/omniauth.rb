@@ -19,10 +19,12 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :cas,
            name: :calnet,
-           host: Rails.application.config.cas_host,
+           host: Rails.application.config.x.cas_host,
            login_url: '/cas/login',
            service_validate_url: '/cas/p3/serviceValidate',
            fetch_raw_info: fetch_raw_info
+
+  OmniAuth.config.allowed_request_methods = %i[post]
 
   # Override the default 'puts' logger that Omniauth uses.
   OmniAuth.config.logger = Rails.logger

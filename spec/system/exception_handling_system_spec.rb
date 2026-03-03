@@ -31,9 +31,7 @@ describe ExceptionHandling, type: :system do
 
     before do
       user = instance_double(User)
-      allow(user).to receive(:authenticated?).and_return(true)
-      allow(user).to receive(:uid).and_return('12345')
-      allow(user).to receive(:ucb_student?).and_return(true)
+      allow(user).to receive_messages(authenticated?: true, uid: '12345', ucb_student?: true)
       %i[ucb_staff? ucb_faculty? lending_admin?].each do |m|
         allow(user).to receive(m).and_return(false)
       end
@@ -42,7 +40,7 @@ describe ExceptionHandling, type: :system do
     end
 
     it 'returns 404 not found for JSON requests' do
-      expected_msg = "Couldn't find Item with 'id'=#{bad_id}"
+      expected_msg = "Couldn't find Item with 'id'=\"#{bad_id}\""
 
       raw_get item_url(id: bad_id), as: :json
       expect_json_error(:not_found, expected_msg)

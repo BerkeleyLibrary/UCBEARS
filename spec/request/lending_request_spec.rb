@@ -65,7 +65,7 @@ describe LendingController, type: :request do
         expect(Item.count).to eq(0) # just to be sure
         # NOTE: we're deliberately not validating here, because we want some invalid items
         @items = factory_names.each_with_object({}) do |fn, items|
-          items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+          items[fn] = build(fn).tap { |i| i.save!(validate: false) }
         end
         @item = active.first
       end
@@ -83,8 +83,10 @@ describe LendingController, type: :request do
           expect(response.status).to eq(404)
         end
 
-        it 'raises RoutingError for /lending' do
-          expect { get '/lending' }.to raise_error(ActionController::RoutingError)
+        # This is now treated as an http error in Rails 8
+        it 'returns 404 not found for /lending' do
+          get '/lending'
+          expect(response.status).to eq(404)
         end
       end
 
@@ -140,7 +142,7 @@ describe LendingController, type: :request do
 
         describe 'invalid updates' do
           it 'returns 422 for activating an inactive item' do
-            item = incomplete.find { |it| !it.active? }
+            item = incomplete.find { |i| !i.active? }
             expect(item).not_to be_nil # just to be sure
 
             patch lending_update_path(directory: item.directory), params: { item: { active: true, copies: 17 } }
@@ -181,7 +183,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item now active.')
 
           item.reload
-          expect(item.active?).to eq(true)
+          expect(item.active?).to be(true)
         end
 
         it 'is successful for an already active item' do
@@ -192,7 +194,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item already active.')
 
           item.reload
-          expect(item.active?).to eq(true)
+          expect(item.active?).to be(true)
         end
 
         it 'defaults to 1 copy for an item with zero copies' do
@@ -205,7 +207,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item now active.')
 
           item.reload
-          expect(item.active?).to eq(true)
+          expect(item.active?).to be(true)
           expect(item.copies).to eq(1)
         end
 
@@ -226,7 +228,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item now inactive.')
 
           item.reload
-          expect(item.active?).to eq(false)
+          expect(item.active?).to be(false)
         end
 
         it 'is successful even for an already inactive item' do
@@ -240,7 +242,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item already inactive.')
 
           item.reload
-          expect(item.active?).to eq(false)
+          expect(item.active?).to be(false)
         end
 
         it 'makes any checkouts inactive' do
@@ -251,7 +253,7 @@ describe LendingController, type: :request do
           expect(response.body).to include('Item now inactive.')
 
           loan.reload
-          expect(loan.active?).to eq(false)
+          expect(loan.active?).to be(false)
 
           expect(item.loans.active).to be_empty
         end
@@ -350,7 +352,7 @@ describe LendingController, type: :request do
         end
 
         it 'shows an error for items without MARC metadata' do
-          item = incomplete.find { |it| !it.iiif_directory.marc_record? }
+          item = incomplete.find { |i| !i.iiif_directory.marc_record? }
           expect(item).not_to be_nil # just to be sure
 
           get lending_reload_path(directory: item.directory)
@@ -370,7 +372,7 @@ describe LendingController, type: :request do
       expect(Item.count).to eq(0) # just to be sure
       # NOTE: we're deliberately not validating here, because we want some invalid items
       @items = factory_names.each_with_object({}) do |fn, items|
-        items[fn] = build(fn).tap { |it| it.save!(validate: false) }
+        items[fn] = build(fn).tap { |i| i.save!(validate: false) }
       end
       @item = available.first
     end
@@ -438,8 +440,8 @@ describe LendingController, type: :request do
             due_date:
           )
           loan.reload
-          expect(loan.complete?).to eq(true)
-          expect(loan.active?).to eq(false)
+          expect(loan.complete?).to be(true)
+          expect(loan.active?).to be(false)
 
           expect do
             get lending_view_path(directory: item.directory)
@@ -519,7 +521,7 @@ describe LendingController, type: :request do
       context 'checkout limits' do
         before do
           # make sure we actually have multiple possible checkouts
-          inactive.each { |it| it.update!(copies: 2, active: true) }
+          inactive.each { |i| i.update!(copies: 2, active: true) }
         end
 
         it 'fails if this user has already hit the checkout limit' do
@@ -702,7 +704,7 @@ describe LendingController, type: :request do
         get lending_activate_path(directory: item.directory)
 
         item.reload
-        expect(item.active).to eq(false)
+        expect(item.active).to be(false)
       end
 
       it 'returns 403 forbidden even for nonexistent items' do
@@ -717,7 +719,7 @@ describe LendingController, type: :request do
         expect(response.status).to eq(403)
 
         item.reload
-        expect(item.active).to eq(true)
+        expect(item.active).to be(true)
       end
 
       it 'returns 403 forbidden even for nonexistent items' do

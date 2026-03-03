@@ -11,7 +11,7 @@ module Lending
     describe :== do
       it 'returns true for identical objects' do
         token = BorrowerToken.new_token_for(uid)
-        expect(token == token).to eq(true)
+        expect(token == token).to be(true)
       end
 
       it 'returns true for equal objects' do
@@ -21,15 +21,15 @@ module Lending
           token.instance_variable_set(:@borrower_id, token1.borrower_id)
           token.instance_variable_set(:@token_str, token1.token_str)
         end
-        expect(token1 == token2).to eq(true)
-        expect(token2 == token1).to eq(true)
+        expect(token1 == token2).to be(true)
+        expect(token2 == token1).to be(true)
       end
 
       it 'returns false for unequal objects' do
         token1 = BorrowerToken.new_token_for(uid)
         token2 = BorrowerToken.new_token_for('other uid')
-        expect(token1 == token2).to eq(false)
-        expect(token2 == token1).to eq(false)
+        expect(token1 == token2).to be(false)
+        expect(token2 == token1).to be(false)
       end
 
       it 'returns false for different tokens for the same UID' do
@@ -37,15 +37,15 @@ module Lending
         token2 = BorrowerToken.new_token_for(uid)
         expect(token1.borrower_id).not_to eq(token2.borrower_id) # just to be sure
 
-        expect(token1 == token2).to eq(false)
-        expect(token2 == token1).to eq(false)
+        expect(token1 == token2).to be(false)
+        expect(token2 == token1).to be(false)
       end
     end
 
     describe :eql? do
       it 'returns true for identical objects' do
         token = BorrowerToken.new_token_for(uid)
-        expect(token.eql?(token)).to eq(true)
+        expect(token.eql?(token)).to be(true)
       end
 
       it 'returns true for equal objects' do
@@ -55,24 +55,24 @@ module Lending
           token.instance_variable_set(:@borrower_id, token1.borrower_id)
           token.instance_variable_set(:@token_str, token1.token_str)
         end
-        expect(token1.eql?(token2)).to eq(true)
-        expect(token2.eql?(token1)).to eq(true)
+        expect(token1.eql?(token2)).to be(true)
+        expect(token2.eql?(token1)).to be(true)
       end
 
       it 'returns false for unequal objects' do
         token1 = BorrowerToken.new_token_for(uid)
         token2 = BorrowerToken.new_token_for('other uid')
-        expect(token1.eql?(token2)).to eq(false)
-        expect(token2.eql?(token1)).to eq(false)
+        expect(token1.eql?(token2)).to be(false)
+        expect(token2.eql?(token1)).to be(false)
       end
 
       it 'returns false for different tokens for the same UID' do
         token1 = BorrowerToken.new_token_for(uid)
         token2 = BorrowerToken.new_token_for(uid)
-        expect(token1.borrower_id).not_to eq(token2.borrower_id) # just to be sure
+        expect(token1.borrower_id).not_to be(token2.borrower_id) # just to be sure
 
-        expect(token1.eql?(token2)).to eq(false)
-        expect(token2.eql?(token1)).to eq(false)
+        expect(token1.eql?(token2)).to be(false)
+        expect(token2.eql?(token1)).to be(false)
       end
     end
 

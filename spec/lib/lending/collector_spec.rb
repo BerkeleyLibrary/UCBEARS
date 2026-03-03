@@ -99,7 +99,7 @@ module Lending
 
         expect(processing_dir).not_to exist
         expect(final_dir).to exist
-        expect(collector.stopped?).to eq(false)
+        expect(collector.stopped?).to be(false)
 
         info = logs[:info].join("\n")
 
@@ -143,11 +143,9 @@ module Lending
 
         processing_dirs.each { |pdir| expect(pdir).not_to exist }
         final_dirs.each      { |fdir| expect(fdir).to exist }
-        expect(collector.stopped?).to eq(false)
+        expect(collector.stopped?).to be(false)
       end
-      # rubocop:enable RSpec/ExampleLength
 
-      # rubocop:disable RSpec/ExampleLength
       it 'skips single-item processing failures' do
         logs = capture_logs(BerkeleyLibrary::Logging.logger, levels: %i[info error])
 
@@ -192,7 +190,7 @@ module Lending
         expect(good_processing_dir).not_to exist
         expect(good_final_dir).to exist
 
-        expect(collector.stopped?).to eq(false)
+        expect(collector.stopped?).to be(false)
       end
       # rubocop:enable RSpec/ExampleLength
 
@@ -215,7 +213,7 @@ module Lending
       let(:env_vars) { [Lending::Config::ENV_ROOT, Collector::ENV_STOP_FILE] }
 
       before do
-        @env_vals = env_vars.each_with_object({}) { |var, vals| vals[var] = ENV[var] }
+        @env_vals = env_vars.each_with_object({}) { |var, vals| vals[var] = ENV.fetch(var, nil) }
       end
 
       after do

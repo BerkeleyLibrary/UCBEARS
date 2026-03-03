@@ -29,7 +29,7 @@ describe ItemLendingStats do
     describe :all do
       it 'is empty' do
         all_stats = ItemLendingStats.all
-        expect(all_stats.any?).to eq(false)
+        expect(all_stats.any?).to be(false)
       end
     end
 
@@ -89,7 +89,7 @@ describe ItemLendingStats do
 
     describe :to_csv do
       it 'returns a CSV' do
-        ItemLendingStats.all.each do |stats|
+        ItemLendingStats.all.each do |stats| # rubocop:disable Rails/FindEach
           stats_csv = stats.to_csv
           expect(stats_csv).to be_a(String)
 
@@ -125,7 +125,7 @@ describe ItemLendingStats do
       end
 
       it 'returns the correct date group even when the Ruby time zone is UTC' do
-        tz_actual = ENV['TZ']
+        tz_actual = ENV.fetch('TZ', nil)
         begin
           ENV['TZ'] = 'UTC'
 

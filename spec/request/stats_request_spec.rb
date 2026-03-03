@@ -67,7 +67,7 @@ RSpec.describe StatsController, type: :request do
       it 'generates a profile' do
         get stats_profile_path
 
-        expect(File.exist?(profile_file)).to eq(true)
+        expect(File.exist?(profile_file)).to be(true)
 
         get "/#{StatsController::PROFILE_STATS_HTML}"
         expect(response).to be_successful

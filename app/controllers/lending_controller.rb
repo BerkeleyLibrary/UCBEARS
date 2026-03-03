@@ -19,11 +19,11 @@ class LendingController < ApplicationController
   # ------------------------------------------------------------
   # Controller actions
 
-  # TODO: merge 'edit' and 'show'
-  def edit; end
-
   # Admin view
   def show; end
+
+  # TODO: merge 'edit' and 'show'
+  def edit; end
 
   # Patron view
   # TODO: separate actions for with/without token,
@@ -163,7 +163,9 @@ class LendingController < ApplicationController
   end
 
   def active_loan
-    @active_loan ||= Loan.active.find_by(**loan_args)
+    return @active_loan if defined?(@active_loan)
+
+    @active_loan = Loan.active.find_by(**loan_args)
   end
 
   def most_recent_loan
@@ -184,7 +186,7 @@ class LendingController < ApplicationController
 
   # create/update parameters
   def lending_item_params # TODO: better/more consistent name
-    params.require(:item).permit(:directory, :title, :author, :publisher, :physical_desc, :copies, :active, term_ids: [])
+    params.expect(item: [:directory, :title, :author, :publisher, :physical_desc, :copies, :active, { term_ids: [] }])
   end
 
   # loan lookup parameters

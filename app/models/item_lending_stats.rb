@@ -103,7 +103,7 @@ class ItemLendingStats
         .connection
         .exec_query(stmt, SELECT_DISTINCT_LOAN_DATES_STMT, prepare: true)
         .rows
-        .map { |row| Date.parse(row[0]) }
+        .map { |row| row[0].is_a?(Date) ? row[0] : Date.parse(row[0]) }
     end
 
     def median_loan_duration

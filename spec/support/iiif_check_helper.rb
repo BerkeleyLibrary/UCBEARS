@@ -31,8 +31,7 @@ RSpec.shared_context 'IIIF item checks', shared_context: :metadata do
     active_relation = instance_double('ActiveRelation', first: active_first)
     inactive_relation = instance_double('InactiveRelation', first: inactive_first)
 
-    allow(Item).to receive(:active).and_return(active_relation)
-    allow(Item).to receive(:inactive).and_return(inactive_relation)
+    allow(Item).to receive_messages(active: active_relation, inactive: inactive_relation)
   end
 
   before do

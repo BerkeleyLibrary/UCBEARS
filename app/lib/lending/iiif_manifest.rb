@@ -29,11 +29,11 @@ module Lending
       dir_path.basename.to_s
     end
 
-    # rubocop:disable Naming/PredicateName
+    # rubocop:disable Naming/PredicatePrefix
     def has_manifest?
       json_template? || erb_template?
     end
-    # rubocop:enable Naming/PredicateName
+    # rubocop:enable Naming/PredicatePrefix
 
     def to_json_manifest(manifest_uri, image_root_uri)
       image_dir_uri = BerkeleyLibrary::Util::URIs.append(image_root_uri, ERB::Util.url_encode(dir_basename))

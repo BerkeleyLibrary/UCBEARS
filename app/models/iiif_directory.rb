@@ -46,8 +46,8 @@ class IIIFDirectory
     # @return [ActiveSupport::Cache::MemoryStore]
     def cache
       @cache ||= ActiveSupport::Cache::MemoryStore.new(
-        coder: ActiveSupport::Cache::NullCoder,
-        expires_in: CACHE_EXPIRY
+        expires_in: CACHE_EXPIRY,
+        coder: nil
       )
     end
 
@@ -65,7 +65,8 @@ class IIIFDirectory
     return "#{MSG_NO_IIIF_DIR}: #{path}" unless exists?
     return MSG_NO_PAGE_IMAGES unless page_images?
     return MSG_NO_MARC_XML unless marc_record?
-    return MSG_NO_MANIFEST unless manifest?
+
+    MSG_NO_MANIFEST unless manifest?
   end
 
   def exists?

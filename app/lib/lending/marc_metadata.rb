@@ -28,7 +28,7 @@ module Lending
 
       def load_marc_record(marc_path)
         marc_record = MARC::XMLReader.read(marc_path.to_s, freeze: true).first
-        return MarcMetadata.new(marc_record) if marc_record
+        MarcMetadata.new(marc_record) if marc_record
       end
     end
 

@@ -293,7 +293,7 @@ describe TermsController, type: :system do
           button.click
 
           expect_no_name_field(term)
-          expect(Term.exists?(term.id)).to eq(false)
+          expect(Term.exists?(term.id)).to be(false)
 
           expect_alert('success', 'Term deleted.')
         end
@@ -318,7 +318,7 @@ describe TermsController, type: :system do
               button.click
             end
             expect_no_name_field(term)
-            expect(Term.exists?(term.id)).to eq(false)
+            expect(Term.exists?(term.id)).to be(false)
             expect(item.terms).not_to exist
           end
 
@@ -331,7 +331,7 @@ describe TermsController, type: :system do
             end
 
             expect_name_field(term)
-            expect(Term.exists?(term.id)).to eq(true)
+            expect(Term.exists?(term.id)).to be(true)
             expect(item.terms).to include(term)
           end
         end
