@@ -57,7 +57,7 @@
     <td class="control">{{ term.item_count }}</td>
     <td class="control">
       <button :id="`term-${term.id}-delete`" :disabled="term.default_term" class="delete" :title="term.default_term ? 'The current default term cannot be deleted.' : `Delete term “${term.name}”`" @click="deleteTerm">
-        <img class="action" :alt="`Delete “${term.name}”`" src="/assets/icons/trash-alt.svg">
+        <img class="action" :alt="`Delete “${term.name}”`" :src="trashIcon">
       </button>
     </td>
   </tr>
@@ -66,6 +66,11 @@
 <script>
 import i18n from '../../shared/mixins/i18n.js'
 
+const iconPath = function (name) {
+  const icons = window.UCBEARS_ASSETS?.icons
+  return icons?.[name] || `/assets/icons/${name}.svg`
+}
+
 export default {
   mixins: [i18n],
   props: {
@@ -73,6 +78,7 @@ export default {
   },
   data: function () {
     return ({
+      trashIcon: iconPath('trash_alt'),
       shadowStartDate: this.term.start_date,
       shadowEndDate: this.term.end_date
     })
