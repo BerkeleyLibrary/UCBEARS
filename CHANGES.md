@@ -1,3 +1,7 @@
+# 1.8.0 (2026-03-04)
+* Upgraded depencies.
+* Includes upgrade to Rails 8 and using ruby 3.3 image base
+
 # 1.7.9 (2026-02-19)
 
 * Refactor healthchecks, in part to use new iipsrv healthcheck
