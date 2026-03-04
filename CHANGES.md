@@ -1,3 +1,9 @@
+# 1.8.0 (2026-03-04)
+* Upgraded to Rails 8.0.4 (from Rails 7) and Ruby 3.3 (from 3.2)
+* Updated Puma to 7.x
+* Updated Faraday to 2.14.x
+* Updated various other gem and JavaScript dependencies
+
 # 1.7.9 (2026-02-19)
 
 * Refactor healthchecks, in part to use new iipsrv healthcheck
