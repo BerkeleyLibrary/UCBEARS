@@ -1,7 +1,7 @@
 <template>
   <tr class="item">
     <td class="control">
-      <a :href="item.edit_url" class="icon-link" target="_blank" :title="`Edit “${item.title}”`"><img src="/assets/icons/edit.svg" :alt="`Edit “${item.title}”`" class="action"></a>
+      <a :href="item.edit_url" class="icon-link" target="_blank" :title="`Edit “${item.title}”`"><img :src="icons.edit" :alt="`Edit “${item.title}”`" class="action"></a>
     </td>
     <td>
       <p class="title">
@@ -16,10 +16,10 @@
       </p>
     </td>
     <td class="control">
-      <a :href="item.show_url" class="icon-link" target="_blank" :title="`Admin view of “${item.title}”`"><img src="/assets/icons/eye.svg" :alt="`Admin view of “${item.title}”`" class="action"></a>
+      <a :href="item.show_url" class="icon-link" target="_blank" :title="`Admin view of “${item.title}”`"><img :src="icons.eye" :alt="`Admin view of “${item.title}”`" class="action"></a>
     </td>
     <td class="control">
-      <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to “${item.title}” patron view`"><img src="/assets/icons/link.svg" :alt="`Permalink to “${item.title}” patron view`" class="action"></a>
+      <a :href="item.view_url" class="icon-link" target="_blank" :title="`Permalink to “${item.title}” patron view`"><img :src="icons.link" :alt="`Permalink to “${item.title}” patron view`" class="action"></a>
     </td>
     <td class="date">{{ formatDateTime(item.updated_at) }}</td>
     <td v-if="item.complete" class="control">Yes</td>
@@ -56,7 +56,7 @@
     </td>
     <td class="control">
       <button class="delete" :disabled="item.complete" :title="item.complete ? 'Only incomplete items can be deleted.' : `Delete “${item.title}”`" @click="deleteItem">
-        <img class="action" :alt="`Delete “${item.title}”`" src="/assets/icons/trash-alt.svg">
+        <img class="action" :alt="`Delete “${item.title}”`" :src="icons.trash_alt">
       </button>
     </td>
   </tr>
@@ -65,8 +65,23 @@
 <script>
 import i18n from '../../shared/mixins/i18n.js'
 
+const iconPath = function (name) {
+  const icons = window.UCBEARS_ASSETS?.icons
+  return icons?.[name] || `/assets/icons/${name}.svg`
+}
+
 export default {
   mixins: [i18n],
+  data: function () {
+    return {
+      icons: {
+        edit: iconPath('edit'),
+        eye: iconPath('eye'),
+        link: iconPath('link'),
+        trash_alt: iconPath('trash_alt')
+      }
+    }
+  },
   props: {
     item: { type: Object, default: () => {} },
     allTerms: { type: Array, default: () => [] }

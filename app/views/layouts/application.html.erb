@@ -9,6 +9,16 @@
     <%= csp_meta_tag %>
 
     <link rel="stylesheet" href="https://use.typekit.net/rxa5jay.css">
+    <% icon_assets = {
+      edit: asset_path('icons/edit.svg'),
+      eye: asset_path('icons/eye.svg'),
+      link: asset_path('icons/link.svg'),
+      times_circle: asset_path('icons/times-circle.svg'),
+      trash_alt: asset_path('icons/trash-alt.svg')
+    } %>
+    <%= javascript_tag nonce: true do %>
+      window.UCBEARS_ASSETS = <%= raw json_escape({ icons: icon_assets }.to_json) %>;
+    <% end %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
     <%= javascript_include_tag "items", "data-turbo-track": "reload", defer: true %>
     <%= javascript_include_tag "terms", "data-turbo-track": "reload", defer: true %>

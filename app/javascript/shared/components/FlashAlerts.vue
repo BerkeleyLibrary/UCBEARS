@@ -11,7 +11,7 @@
       >
       <div :class="`flash ${message.level}`">
         <label :for="`flash-dismiss-${index}`" class="flash-dismiss-label">
-          <img src="/assets/icons/times-circle.svg" class="flash-dismiss-icon" alt="Hide alert">
+          <img :src="timesCircleIcon" class="flash-dismiss-icon" alt="Hide alert">
         </label>
         <p class="flash" role="alert">{{ message.text }}</p>
       </div>
@@ -21,7 +21,17 @@
 
 <script>
 
+const iconPath = function (name) {
+  const icons = window.UCBEARS_ASSETS?.icons
+  return icons?.[name] || `/assets/icons/${name}.svg`
+}
+
 export default {
+  data: function () {
+    return {
+      timesCircleIcon: iconPath('times_circle')
+    }
+  },
   props: {
     messages: { type: Array, default: () => [] }
   },
