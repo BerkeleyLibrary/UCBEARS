@@ -1,3 +1,8 @@
+# 1.8.1 (2026-03-30)
+* Added puma-plugin-delayed_stop gem
+* Added delayed_stop plugin to puma.rb to utilize the new plugin
+* Addresses AP-622. graceful termination of docker services.
+
 # 1.8.0 (2026-03-04)
 * Upgraded to Rails 8.0.4 (from Rails 7) and Ruby 3.3 (from 3.2)
 * Updated Puma to 7.x
