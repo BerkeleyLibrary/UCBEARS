@@ -33,6 +33,10 @@ port ENV.fetch('PORT', 3000)
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
+# Adds a drain period during shutdown so swarm can elegantly remove it from 
+# the routing mesh
+plugin :delayed_stop
+
 # Run the Solid Queue supervisor inside of Puma for single-server deployments
 plugin :solid_queue if ENV['SOLID_QUEUE_IN_PUMA']
 
