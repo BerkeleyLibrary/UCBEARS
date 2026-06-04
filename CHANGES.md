@@ -1,3 +1,6 @@
+# 1.8.2 (2026-06-03)
+* Updated Gems for security fixes.
+
 # 1.8.1 (2026-03-30)
 * Added puma-plugin-delayed_stop gem
 * Added delayed_stop plugin to puma.rb to utilize the new plugin
