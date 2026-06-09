@@ -24,8 +24,6 @@ services:
     volumes: !override
       - artifacts:/build
 
-  adminer: !reset
-
 secrets:
   SECRET_KEY_BASE:
     file: /tmp/secret_key_base

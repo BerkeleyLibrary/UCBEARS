@@ -3,7 +3,6 @@ services:
     build:
       context: .
       target: development
-#    platform: linux/amd64
     env_file:
       - .env
     depends_on:
@@ -87,12 +86,6 @@ services:
     shm_size: 512mb
     volumes:
       - ./:/build:rw
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
 
 volumes:
   postgres_data: { }
