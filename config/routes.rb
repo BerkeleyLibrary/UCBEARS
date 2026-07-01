@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   root 'sessions#index'
 
@@ -48,3 +49,4 @@ Rails.application.routes.draw do
   # Map OkComputer's /health/all.json to /health
   get '/health', to: 'ok_computer/ok_computer#index', defaults: { format: :json }
 end
+# rubocop:enable Metrics/BlockLength

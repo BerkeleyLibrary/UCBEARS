@@ -71,14 +71,16 @@ module Lending
     end
 
     describe :tileize_all do
+      # rubocop:disable RSpec/LeakyLocalVariable
       sample_root = 'spec/data/lending/samples'
+      # rubocop:enable RSpec/LeakyLocalVariable
 
       context 'with TIFF files' do
-        include_examples :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_TIFF')
+        it_behaves_like :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_TIFF')
       end
 
       context 'with JPEG files' do
-        include_examples :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_JPEG')
+        it_behaves_like :tileize_all_examples, File.join(sample_root, 'b135297126_C068087930_JPEG')
       end
     end
   end

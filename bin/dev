@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-# bin/dev: run Rails and JS bundler together in development
-
-exec foreman start -f Procfile.dev "$@"
+#!/usr/bin/env ruby
+exec './bin/rails', 'server', *ARGV

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Term, type: :model do
+describe Term do
   describe :create do
     it 'requires a name' do
       term = Term.create(start_date: Date.current, end_date: Date.current + 1.days)

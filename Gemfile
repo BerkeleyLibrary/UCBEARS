@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.3'
+ruby '~> 3.4'
 
 gem 'addressable', '~> 2.8'
 gem 'awesome_print', '~> 1.9'
@@ -28,14 +28,14 @@ gem 'pg', '~> 1.2'
 gem 'pg_search', '~> 2.3'
 gem 'puma', '~> 7.2'
 gem 'puma-plugin-delayed_stop', '~> 0.1.2'
-gem 'rails', '~> 8.0.5'
+gem 'rails', '~> 8.1.3'
 gem 'ruby-vips', '~> 2.3'
 gem 'sprockets-rails', '~> 3.5.0'
 
 group :development, :test do
   gem 'brakeman'
   gem 'bundle-audit'
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: %i[mri windows]
   gem 'colorize'
   gem 'factory_bot_rails'
   gem 'rspec-rails', '~> 8.0'

@@ -1,4 +1,7 @@
-plugins: rubocop-rails
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
 AllCops:
   UseCache: false
@@ -294,6 +297,8 @@ Rails/NegateInclude: # new in 2.7
   Enabled: true
 Rails/Pluck: # new in 2.7
   Enabled: true
+  Exclude:
+    - 'spec/**/*'
 Rails/PluckInWhere: # new in 2.7
   Enabled: true
 Rails/RenderInline: # new in 2.7
@@ -594,3 +599,152 @@ Rails/WhereNotWithMultipleConditions: # new in 2.17
   Enabled: true
 Rails/WhereRange: # new in 2.25
   Enabled: true
+RSpec/IncludeExamples: # new in 3.6
+  Enabled: true
+RSpec/LeakyLocalVariable: # new in 3.8
+  Enabled: true
+RSpecRails/HaveHttpStatus: # new in 2.12
+  Enabled: true
+RSpecRails/MinitestAssertions: # new in 2.17
+  Enabled: true
+RSpecRails/NegationBeValid: # new in 2.23
+  Enabled: true
+RSpecRails/TravelAround: # new in 2.19
+  Enabled: true
+
+############################################################
+# rubocop-rspec
+
+# believe me, it wasn't by choice
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/VerifiedDoubleReference:
+  Enabled: false
+
+# we meant to do that
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ContainExactly:
+  Enabled: false
+
+# more words != more readable
+RSpec/ContextWording:
+  Enabled: false
+
+# not everything we test is a class
+RSpec/DescribeClass:
+  Enabled: false
+
+# explicit >>> implicit
+RSpec/DescribedClass:
+  Enabled: false
+
+# more punctuation != more readable
+RSpec/DescribeSymbol:
+  Enabled: false
+
+# setup cost / time >>> failure granularity
+RSpec/ExampleLength:
+  Max: 25
+  CountAsOne:
+    - array
+    - hash
+    - heredoc
+
+# we meant to do that
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/SpecFilePathSuffix:
+  Enabled: false
+
+# Requests are not inferred properly without explicit typing.
+# Similarly, system tests don't pick up Selenium without explicit typing.
+RSpecRails/InferredSpecType:
+  Enabled: true
+  Exclude:
+    - 'spec/requests/*.rb'
+    - 'spec/system/*.rb'
+
+# explicit >>> implicit
+RSpec/InstanceVariable:
+  Enabled: false
+
+# maybe when 'all' has a corresponding 'none' matcher
+RSpec/IteratedExpectation:
+  Enabled: false
+
+# we meant to do that
+RSpec/MessageSpies:
+  Enabled: false
+
+# too late now
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+# setup cost / time >>> failure granularity
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# cure is worse than the disease
+RSpec/NestedGroups:
+  Enabled: false
+
+# more quotation marks != more readable
+RSpec/SharedExamples:
+  Enabled: false
+
+# we meant to do that
+RSpec/StubbedMock:
+  Enabled: false
+
+# we meant to do that
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+############################################################
+# rubocop-rspec
+
+# enable newer rubocop-rspec cops
+
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+
+RSpecRails/AvoidSetupHook: # new in 2.4
+  Enabled: true
+
+# Sometimes we're testing the operator
+Lint/BinaryOperatorWithIdenticalOperands:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/**/*'
+
+# we meant to do that
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'spec/**/*'
+
+# we meant to do that
+Rails/TimeZone:
+  Exclude:
+    - 'spec/**/*'

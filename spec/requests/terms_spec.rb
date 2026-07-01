@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe '/terms', type: :request do
+describe '/terms', type: :request do
   def expected_json(term)
     renderer = ApplicationController.renderer.new(http_host: request.host)
     expected_json = renderer.render(template: 'terms/show', assigns: { term: })
@@ -65,7 +65,7 @@ RSpec.describe '/terms', type: :request do
     describe 'GET /index' do
       it 'returns 403 Forbidden for HTML requests' do
         get terms_url, as: :html
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to start_with('text/html')
         expect(response.body).to include('restricted to UC BEARS administrators')
       end
@@ -76,7 +76,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_terms = Term.all
@@ -101,7 +101,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_terms = Term.all
@@ -121,7 +121,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to eq(expected_json(term))
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to match(%r{^application/json})
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expected = {
@@ -206,7 +206,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expect(parsed_response['success']).to be(false)
@@ -250,7 +250,7 @@ RSpec.describe '/terms', type: :request do
         expected_msg = I18n.t('activerecord.errors.messages.taken')
         expected_msg_re = /#{Regexp.escape(expected_msg)}/
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expect(parsed_response['success']).to be(false)
@@ -286,7 +286,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to match(%r{^application/json})
 
-        actual_json = JSON.parse(response.body)
+        actual_json = response.parsed_body
         expect(actual_json).to eq(expected_json(term))
       end
 
@@ -341,7 +341,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to match(%r{^application/json})
 
-        actual_json = JSON.parse(response.body)
+        actual_json = response.parsed_body
         expect(actual_json).to eq(expected_json(term))
       end
 
@@ -358,7 +358,7 @@ RSpec.describe '/terms', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expect(parsed_response['success']).to be(false)
@@ -421,7 +421,7 @@ RSpec.describe '/terms', type: :request do
         expected_msg = I18n.t('activerecord.errors.messages.taken')
         expected_msg_re = /#{Regexp.escape(expected_msg)}/
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expect(parsed_response['success']).to be(false)

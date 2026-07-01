@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Item, type: :model do
+describe Item do
   let(:factory_names) do
     %i[
       inactive_item

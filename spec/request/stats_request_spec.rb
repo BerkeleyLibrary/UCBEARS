@@ -112,13 +112,13 @@ RSpec.describe StatsController, type: :request do
 
         it 'rejects a non-date argument' do
           get stats_download_path(date: 'not a date')
-          expect(response.status).to eq(400)
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to be_empty
         end
 
         it 'rejects a bad date' do
           get stats_download_path(date: '9999-99-99')
-          expect(response.status).to eq(400)
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to be_empty
         end
       end

@@ -80,13 +80,13 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_show_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
 
         # This is now treated as an http error in Rails 8
         it 'returns 404 not found for /lending' do
           get '/lending'
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -102,7 +102,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_edit_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -118,7 +118,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_manifest_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -146,7 +146,7 @@ describe LendingController, type: :request do
             expect(item).not_to be_nil # just to be sure
 
             patch lending_update_path(directory: item.directory), params: { item: { active: true, copies: 17 } }
-            expect(response.status).to eq(422)
+            expect(response).to have_http_status(:unprocessable_content)
 
             item.reload
             expect(item).not_to be_active
@@ -158,7 +158,7 @@ describe LendingController, type: :request do
             expect(item).not_to be_nil # just to be sure
 
             patch lending_update_path(directory: item.directory), params: { item: { active: true, copies: -1 } }
-            expect(response.status).to eq(422)
+            expect(response).to have_http_status(:unprocessable_content)
 
             item.reload
             expect(item).not_to be_active
@@ -167,7 +167,7 @@ describe LendingController, type: :request do
 
           it 'returns 404 not found for nonexistent items' do
             patch lending_update_path(directory: 'not_a_directory'), params: { item: { active: true, copies: 17 } }
-            expect(response.status).to eq(404)
+            expect(response).to have_http_status(:not_found)
           end
         end
       end
@@ -213,7 +213,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_activate_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -260,7 +260,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_deactivate_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -296,7 +296,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_destroy_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
 
         it 'works for incomplete items that differ from complete items only by "file extension"' do
@@ -340,7 +340,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_reload_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
 
         it 'succeeds for unchanged items' do
@@ -382,12 +382,12 @@ describe LendingController, type: :request do
     describe :show do
       it 'returns 403 Forbidden' do
         get lending_show_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_deactivate_path(directory: 'not_a_directory')
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -405,7 +405,7 @@ describe LendingController, type: :request do
 
         it 'returns 404 not found for nonexistent items' do
           get lending_view_path(directory: 'not_a_directory')
-          expect(response.status).to eq(404)
+          expect(response).to have_http_status(:not_found)
         end
 
         it 'shows a loan if one exists' do
@@ -503,7 +503,7 @@ describe LendingController, type: :request do
 
       it 'returns 404 not found for nonexistent items' do
         get lending_check_out_path(directory: 'not_a_directory')
-        expect(response.status).to eq(404)
+        expect(response).to have_http_status(:not_found)
       end
 
       it 'fails if this user has already checked out the item' do
@@ -514,7 +514,7 @@ describe LendingController, type: :request do
           get lending_check_out_path(directory: item.directory)
         end.not_to change(Loan, :count)
 
-        expect(response.status).to eq(422) # unprocessable entity
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include(Item::MSG_CHECKED_OUT)
       end
 
@@ -534,7 +534,7 @@ describe LendingController, type: :request do
             get lending_check_out_path(directory: item.directory)
           end.not_to change(Loan, :count)
 
-          expect(response.status).to eq(422) # unprocessable entity
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include(Item::MSG_CHECKOUT_LIMIT_REACHED)
         end
 
@@ -610,7 +610,7 @@ describe LendingController, type: :request do
           get lending_check_out_path(directory: item.directory)
         end.not_to change(Loan, :count)
 
-        expect(response.status).to eq(422) # unprocessable entity
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include(Item::MSG_UNAVAILABLE)
       end
 
@@ -621,7 +621,7 @@ describe LendingController, type: :request do
           get lending_check_out_path(directory: item.directory)
         end.not_to change(Loan, :count)
 
-        expect(response.status).to eq(422) # unprocessable entity
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include(Item::MSG_INACTIVE)
       end
     end
@@ -657,7 +657,7 @@ describe LendingController, type: :request do
 
       it 'returns 404 not found for nonexistent items' do
         get lending_return_path(directory: 'not_a_directory')
-        expect(response.status).to eq(404)
+        expect(response).to have_http_status(:not_found)
       end
 
     end
@@ -671,31 +671,31 @@ describe LendingController, type: :request do
 
       it 'returns 403 Forbidden if the item has not been checked out' do
         get lending_manifest_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns 404 not found for nonexistent items' do
         get lending_manifest_path(directory: 'not_a_directory')
-        expect(response.status).to eq(404)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
     describe :edit do
       it 'returns 403 forbidden' do
         get lending_edit_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_edit_path(directory: 'not_a_directory')
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
     describe :activate do
       it 'returns 403 forbidden' do
         get lending_activate_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it "doesn't activate the item" do
@@ -709,14 +709,14 @@ describe LendingController, type: :request do
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_activate_path(directory: 'not_a_directory')
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
     describe :inactivate do
       it 'returns 403 forbidden' do
         get lending_deactivate_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
 
         item.reload
         expect(item.active).to be(true)
@@ -724,14 +724,14 @@ describe LendingController, type: :request do
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_deactivate_path(directory: 'not_a_directory')
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
     describe :reload do
       it 'returns 403 forbidden' do
         get lending_reload_path(directory: item.directory)
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it "doesn't reload the MARC metadata" do
@@ -747,7 +747,7 @@ describe LendingController, type: :request do
 
       it 'returns 403 forbidden even for nonexistent items' do
         get lending_reload_path(directory: 'not_a_directory')
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -815,34 +815,34 @@ describe LendingController, type: :request do
 
     it 'GET lending_manifest_path returns 403 Forbidden' do
       get lending_manifest_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'GET lending_edit_path returns 403 Forbidden' do
       get lending_edit_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'GET lending_view_path returns 403 Forbidden' do
       get lending_view_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'DELETE lending_destroy_path returns 403 Forbidden' do
       delete lending_destroy_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
 
     # TODO: use PATCH
     it 'GET lending_activate_path returns 403 Forbidden' do
       get lending_activate_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
 
     # TODO: use PATCH
     it 'GET lending_deactivate_path returns 403 Forbidden' do
       get lending_deactivate_path(directory: item.directory)
-      expect(response.status).to eq(403)
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

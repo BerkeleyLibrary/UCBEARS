@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe '/items', type: :request do
+describe '/items', type: :request do
 
   def expected_json(item)
     renderer = ApplicationController.renderer.new(http_host: request.host)
@@ -54,7 +54,7 @@ RSpec.describe '/items', type: :request do
     describe 'GET /index' do
       it 'returns 403 Forbidden for HTML requests' do
         get items_url, as: :html
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to start_with('text/html')
         expect(response.body).to include('restricted to UC BEARS administrators')
       end
@@ -65,7 +65,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.order(:title)
@@ -88,7 +88,7 @@ RSpec.describe '/items', type: :request do
           links = link_header.split(', ')
           expect(links).to include('<http://www.example.com/items-profile.html>; rel="profile"')
 
-          parsed_response = JSON.parse(response.body)
+          parsed_response = response.parsed_body
           expect(parsed_response).to be_an(Array)
 
           expected_items = Item.order(:title)
@@ -147,7 +147,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.order(:title).first(Pagy.options[:limit])
@@ -163,7 +163,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.complete
@@ -181,7 +181,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.incomplete
@@ -199,7 +199,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.where(active: true)
@@ -217,7 +217,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.where(active: false)
@@ -235,7 +235,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = Item.inactive.complete
@@ -253,7 +253,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to be_successful
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_an(Array)
 
         expected_items = term_fall_2021.items.incomplete.where(active: true)
@@ -321,7 +321,7 @@ RSpec.describe '/items', type: :request do
 
           item.reload
 
-          actual_json = JSON.parse(response.body)
+          actual_json = response.parsed_body
           expect(actual_json).to eq(expected_json(item))
 
           expect(response.content_type).to start_with('application/json')
@@ -337,7 +337,7 @@ RSpec.describe '/items', type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to start_with('application/json')
 
-          parsed_response = JSON.parse(response.body)
+          parsed_response = response.parsed_body
           expect(parsed_response).to be_a(Hash)
 
           expect(parsed_response['success']).to be(false)
@@ -377,7 +377,7 @@ RSpec.describe '/items', type: :request do
         expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to start_with('application/json')
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Hash)
 
         expect(parsed_response['success']).to be(false)
@@ -437,7 +437,7 @@ RSpec.describe '/items', type: :request do
         get processing_url, as: :json
         expect(response).to be_successful
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response).to be_a(Array)
         expect(parsed_response.size).to eq(symlinks.size)
 
