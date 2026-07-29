@@ -28,7 +28,7 @@ gem 'pg', '~> 1.2'
 gem 'pg_search', '~> 2.3'
 gem 'puma', '~> 7.2'
 gem 'puma-plugin-delayed_stop', '~> 0.1.2'
-gem 'rails', '~> 8.1.3'
+gem 'rails', '~> 8.1.3', '>= 8.1.3.1'
 gem 'ruby-vips', '~> 2.3'
 gem 'sprockets-rails', '~> 3.5.0'
 
