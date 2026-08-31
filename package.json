@@ -38,5 +38,12 @@
   "devDependencies": {
     "baseline-browser-mapping": "^2.10.0",
     "webpack-dev-server": "^5.2.2"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.20.0",
+      "onFail": "download"
+    }
   }
 }
