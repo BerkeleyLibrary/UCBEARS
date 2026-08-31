@@ -20,6 +20,7 @@ services:
     volumes:
       - .:/opt/app
       - ./app/assets/builds:/opt/app/app/assets/builds
+      - node_modules_ucbears:/opt/app/node_modules
     ports:
       - 3000:3000
     restart: always
@@ -89,3 +90,4 @@ services:
 
 volumes:
   postgres_data: { }
+  node_modules_ucbears: { }
