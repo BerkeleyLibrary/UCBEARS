@@ -44,25 +44,21 @@ RUN apt-get install -y --no-install-recommends \
     libxml2-dev \
     libxslt1-dev \
     libpq-dev \
-    libvips42
+    libvips42 && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js and Yarn from their own repositories
+ENV PNPM_HOME="/usr/local/pnpm"
 
-# Add Node.js package repository (version 20 LTS release) & install Node.js
-# -- note that the Node.js setup script takes care of updating the package list
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs
-
-# Add Yarn package repository, update package list, & install Yarn
-# TODO: why are we installing Yarn 1.22 instead of 3.x?
-RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update -qq \
-    && apt-get install -y --no-install-recommends yarn
-
-# Remove only curl (safe to remove, we don't need it at runtime).
-RUN apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-
+RUN arch="$(uname -m)"; \
+    case "$arch" in \
+      aarch*) export pnpmArch="arm64";; \
+      x86_64) export pnpmArch="x64";; \
+      *) printf "Unsupported architecture %s\n" "$arch"; exit 1;; \
+    esac; \
+    pnpmVersion="12.0.0-rc.11"; \
+    mkdir -p /tmp/pnpm; \
+    curl -L https://github.com/pnpm/pnpm/releases/download/v${pnpmVersion}/pnpm-linux-${pnpmArch}.tar.gz | tar -C /tmp/pnpm -xzf -; \
+    /usr/bin/env SHELL="sh" /tmp/pnpm/pnpm setup --force; \
+    rm -rf /tmp/pnpm
 
 # ------------------------------------------------------------
 # Run configuration
@@ -73,16 +69,10 @@ WORKDIR /opt/app
 # Run as the application user to minimize risk to the host.
 USER $APP_USER
 
-# Workaround for https://github.com/rails/rails/issues/41828
-RUN mkdir -p /opt/app/tmp \
-    && mkdir -p /opt/app/artifacts/screenshots \
-    && ln -s /opt/app/artifacts/screenshots /opt/app/tmp/screenshots
+RUN mkdir -p /opt/app/artifacts
 
 # Add binstubs to the path.
-ENV PATH="/usr/bin:/opt/app/bin:/usr/local/yarn/node_modules/.bin:$PATH"
-
-# Add path to node_modules
-ENV NODE_PATH=/usr/local/yarn/node_modules
+ENV PATH="/usr/bin:/opt/app/bin:$PNPM_HOME/bin:$PATH"
 
 # If run with no other arguments, the image will start the rails server by
 # default. Note that we must bind to all interfaces (0.0.0.0) because when
@@ -116,12 +106,8 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     gcc \
  && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /usr/local/yarn \
-    && chown -R $APP_USER:$APP_USER /usr/local/yarn
-COPY ./webpack.config.js ./package.json /usr/local/yarn
-
 # ------------------------------------------------------------
-# Install Ruby gems and Yarn packages
+# Install Ruby gems and JavaScript packages
 
 # Drop back to $APP_USER.
 USER $APP_USER
@@ -139,7 +125,7 @@ RUN bundle install
 # re-install.
 COPY --chown=$APP_USER:$APP_USER . .
 
-RUN yarn install --frozen-lockfile --cwd /usr/local/yarn
+RUN pnpm install --frozen-lockfile
 
 # =============================================================================
 # Target: production
@@ -163,24 +149,16 @@ ENV RAILS_SERVE_STATIC_FILES=true
 # Copy the built codebase from the dev stage
 COPY --from=development --chown=$APP_USER /opt/app /opt/app
 COPY --from=development --chown=$APP_USER /usr/local/bundle /usr/local/bundle
-COPY --from=development --chown=$APP_USER /usr/local/yarn /usr/local/yarn
 
 # Ensure the bundle is installed and the Gemfile.lock is synced.
 RUN bundle config set frozen 'true'
 RUN bundle install --local
-RUN ln -s /usr/local/yarn/node_modules /opt/app/node_modules
+RUN pnpm install --frozen-lockfile -P
 # ------------------------------------------------------------
 # Precompile production assets
 
-# TODO: Figure out why jsbundling-rails doesn't invoke `yarn build`
-#       *before* Sprockets reads app/assets/config/manifest.js
-WORKDIR /opt/app
-RUN yarn build
-
 # Pre-compile assets so we don't have to do it after deployment.
-# NOTE: dummy SECRET_KEY_BASE to prevent spurious initializer issues
-#       -- see https://github.com/rails/rails/issues/32947
-RUN SECRET_KEY_BASE=1 bundle exec rails assets:precompile --trace
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile --trace
 
 # ------------------------------------------------------------
 # Preserve build arguments
