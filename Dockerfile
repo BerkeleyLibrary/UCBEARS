@@ -127,7 +127,7 @@ COPY ./webpack.config.js ./package.json /usr/local/yarn
 USER $APP_USER
 
 # Base image ships with an older version of bundler
-RUN gem install bundler --version 2.4.10
+RUN gem install bundler --version 4.0.15
 
 # Install gems. We don't enforce the validity of the Gemfile.lock until the
 # final (production) stage.
