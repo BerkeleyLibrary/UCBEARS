@@ -23,7 +23,6 @@ services:
     ports:
       - 3000:3000
     restart: always
-    command: ./bin/dev
 
 # Uncomment this to build and run a ucbears-collector container
 #
@@ -45,7 +44,7 @@ services:
     environment:
       POSTGRES_PASSWORD: root
       POSTGRES_USER: root
-    image: postgres:12.2
+    image: postgres:16
     networks:
       default:
         aliases:
