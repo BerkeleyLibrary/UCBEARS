@@ -23,7 +23,6 @@ services:
     ports:
       - 3000:3000
     restart: always
-    command: ./bin/dev -b 0.0.0.0
 
 # Uncomment this to build and run a ucbears-collector container
 #
