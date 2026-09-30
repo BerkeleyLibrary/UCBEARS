@@ -9,7 +9,7 @@ on:
 
 jobs:
   release:
-    uses: BerkeleyLibrary/.github/.github/workflows/docker-release.yml@v2.0.0
+    uses: BerkeleyLibrary/.github/.github/workflows/docker-release.yml@3.2.0
     with:
       image: ghcr.io/${{ github.repository }}
     secrets: inherit
