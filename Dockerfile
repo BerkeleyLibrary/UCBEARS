@@ -6,7 +6,7 @@ ARG PNPM_VERSION="12.4.0"
 # The base stage scaffolds elements which are common to building and running
 # the application, such as installing ca-certificates, creating the app user,
 # and installing runtime system dependencies.
-FROM ruby:3.4-slim AS base
+FROM ruby:3.4.13-slim AS base
 
 # ------------------------------------------------------------
 # Declarative metadata
@@ -119,7 +119,7 @@ RUN gem install bundler --version 4.0.15
 
 # Install gems. We don't enforce the validity of the Gemfile.lock until the
 # final (production) stage.
-COPY --chown=$APP_USER:$APP_USER Gemfile* ./
+COPY --chown=$APP_USER:$APP_USER Gemfile* .ruby-version ./
 RUN bundle install
 
 # Copy the rest of the codebase. We do this after bundle-install so that
