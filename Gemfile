@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.4'
+ruby File.read('.ruby-version').strip
 
 gem 'addressable', '~> 2.8'
 gem 'awesome_print', '~> 1.9'
