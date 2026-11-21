@@ -76,7 +76,7 @@
           <% if item.iiif_directory.marc_record? %>
             <%# TODO: something less clunky %>
             <% content_for(:head_additional) do %>
-              <%= javascript_include_tag('marc-reload') %>
+              <%= javascript_include_tag 'marc-reload.js' %>
             <% end %>
             <%=
               button_to(
