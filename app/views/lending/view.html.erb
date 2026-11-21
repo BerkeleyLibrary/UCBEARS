@@ -14,8 +14,8 @@
         redirect_url = lending_view_url(directory: @loan.item.directory)
     %>
       <meta http-equiv="Refresh" content="<%= "#{redirect_s}; URL=#{redirect_url}" %>">
-      <%= javascript_include_tag('viewer') %>
-      <%= stylesheet_link_tag('viewer') %>
+      <%= javascript_include_tag 'viewer.js' %>
+      <%= stylesheet_link_tag 'viewer.css' %>
     <% end %>
 
     <%=

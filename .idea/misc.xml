@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectRootManager" version="2" project-jdk-name="RVM: ruby-3.0.3" project-jdk-type="RUBY_SDK" />
+  <component name="RbsRubysigsRootManager">
+    <isRbsGemPresent>true</isRbsGemPresent>
+  </component>
   <component name="ReaderModeSettings">
     <option name="enabled" value="false" />
     <option name="showRenderedDocs" value="false" />

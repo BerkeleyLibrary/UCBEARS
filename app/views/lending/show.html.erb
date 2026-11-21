@@ -12,8 +12,8 @@
 <section class="item">
   <% if presenter.show_viewer? %>
     <% content_for(:head_additional) do %>
-      <%= javascript_include_tag('viewer') %>
-      <%= stylesheet_link_tag('viewer') %>
+      <%= javascript_include_tag 'viewer.js' %>
+      <%= stylesheet_link_tag 'viewer.css' %>
     <% end %>
     <%=
       render(

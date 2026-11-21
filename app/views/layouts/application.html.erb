@@ -19,10 +19,10 @@
     <%= javascript_tag nonce: true do %>
       window.UCBEARS_ASSETS = <%= raw json_escape({ icons: icon_assets }.to_json) %>;
     <% end %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
-    <%= javascript_include_tag "items", "data-turbo-track": "reload", defer: true %>
-    <%= javascript_include_tag "terms", "data-turbo-track": "reload", defer: true %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application.js", "data-turbo-track": "reload", defer: true, type: "module" %>
+    <%= javascript_include_tag "items.js", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "terms.js", "data-turbo-track": "reload", defer: true %>
+    <%= stylesheet_link_tag "application.css", "data-turbo-track": "reload" %>
 
 
     <%= render(partial: 'controller_assets') %>
