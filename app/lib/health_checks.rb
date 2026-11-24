@@ -2,7 +2,7 @@
 
 module HealthChecks
   CHECK_FILES = %w[
-    compiled_assets_check
+    login_check
     iiif_item_check
     iiif_server_check
     lending_root_path

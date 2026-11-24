@@ -10,9 +10,9 @@ RSpec.describe 'Health Checks', type: :request do
         iiif_server = OkComputer::Registry.fetch('iiif-server')
         iiif_item = OkComputer::Registry.fetch('iiif-item')
         test_item = OkComputer::Registry.fetch('test-item-exists')
-        allow(OkComputer::Registry.fetch('compiled-assets')).to receive(:check) do
-          check = OkComputer::Registry.fetch('compiled-assets')
-          check.mark_message 'Required assets are compiled'
+        allow(OkComputer::Registry.fetch('login')).to receive(:check) do
+          check = OkComputer::Registry.fetch('login')
+          check.mark_message 'GET /login returned status 200'
         end
 
         allow(iiif_item).to receive(:run) do
@@ -34,16 +34,24 @@ RSpec.describe 'Health Checks', type: :request do
         end
       end
 
-      it 'returns 500 when compiled assets are missing' do
-        allow(OkComputer::Registry.fetch('compiled-assets')).to receive(:check) do
-          check = OkComputer::Registry.fetch('compiled-assets')
+      it 'checks the real login page through the health endpoint' do
+        allow(OkComputer::Registry.fetch('login')).to receive(:check).and_call_original
+
+        get health_path
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).dig('login', 'success')).to be true
+      end
+
+      it 'returns 500 when the login page fails' do
+        allow(OkComputer::Registry.fetch('login')).to receive(:check) do
+          check = OkComputer::Registry.fetch('login')
           check.mark_failure
-          check.mark_message 'Missing compiled assets: application.js'
+          check.mark_message 'GET /login returned status 500'
         end
 
         get health_path
         expect(response).to have_http_status(:internal_server_error)
-        expect(JSON.parse(response.body).dig('compiled-assets', 'success')).to be false
+        expect(JSON.parse(response.body).dig('login', 'success')).to be false
       end
 
       it 'returns 200 OK and success in JSON' do
