@@ -18,3 +18,5 @@ OkComputer::Registry.register 'test-item-exists', HealthChecks::TestItemExists.n
 
 # TODO: Custom Lending Root Path
 OkComputer::Registry.register 'lending-root-path', HealthChecks::LendingRootPath.new
+
+OkComputer::Registry.register 'login', HealthChecks::LoginCheck.new
