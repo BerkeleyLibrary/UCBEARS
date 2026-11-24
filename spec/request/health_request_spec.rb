@@ -10,6 +10,10 @@ RSpec.describe 'Health Checks', type: :request do
         iiif_server = OkComputer::Registry.fetch('iiif-server')
         iiif_item = OkComputer::Registry.fetch('iiif-item')
         test_item = OkComputer::Registry.fetch('test-item-exists')
+        allow(OkComputer::Registry.fetch('compiled-assets')).to receive(:check) do
+          check = OkComputer::Registry.fetch('compiled-assets')
+          check.mark_message 'Required assets are compiled'
+        end
 
         allow(iiif_item).to receive(:run) do
           iiif_item.instance_variable_set(:@success, true)
@@ -28,6 +32,18 @@ RSpec.describe 'Health Checks', type: :request do
           test_item.instance_variable_set(:@message, 'OK')
           test_item
         end
+      end
+
+      it 'returns 500 when compiled assets are missing' do
+        allow(OkComputer::Registry.fetch('compiled-assets')).to receive(:check) do
+          check = OkComputer::Registry.fetch('compiled-assets')
+          check.mark_failure
+          check.mark_message 'Missing compiled assets: application.js'
+        end
+
+        get health_path
+        expect(response).to have_http_status(:internal_server_error)
+        expect(JSON.parse(response.body).dig('compiled-assets', 'success')).to be false
       end
 
       it 'returns 200 OK and success in JSON' do
